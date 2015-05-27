@@ -1,0 +1,205 @@
+[
+    {
+        "taskFlow": "0",
+        "recordId": "220R0000000101142960722900000",
+        "model":[
+            {
+                "id": 1,
+                "title": "合約",
+                "detail": "合約(資費 or 綁約) 合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)合約(資費 or 綁約)",
+                "keywords": [
+                    {"name": "q 號"},
+                    {"name": "您 的 after 郵箱"}
+                ],
+                "items": [
+                    {
+                        "id": 1,
+                        "title": "國際漫遊",
+                        "detail": "國際 or 國際電話",
+                        "keywords": [
+                            {"name": "中間 near 四位"},
+                            {"name": "方案"}
+                        ],
+                        "items": [{
+                            "id": 1,
+                            "title": "國際漫遊",
+                            "detail": "國際 or 國際電話",
+                            "keywords": [
+                                {"name": "綁約"},
+                                {"name": "方案"}
+                            ],
+                            "items": []
+                        }]
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "title": "國際漫遊",
+                "detail": "國際 or 國際電話",
+                "items": []
+            },
+            {
+                "id": 3,
+                "title": "iphone業務詢問",
+                "detail": "iphone",
+                "items": []
+            },
+            {
+                "id": 4,
+                "title": "訊號不良",
+                "detail": "信號(訊號 or 不良)",
+                "items": []
+            }
+        ],
+        "callRange": "00:03:16",
+        "muteRange": "00:00:10",
+        "callSpeed": "5.16",
+        "mutePercentage": "4.36%"
+    },
+    {
+        "taskFlow": "1",
+        "model":[
+            {
+                "id": 1,
+                "title": "合約",
+                "detail": "合約(資費 or 綁約)",
+                "keywords": [
+                    {"name": "綁約"},
+                    {"name": "方案"}
+                ],
+                "items": [
+                    {
+                        "id": 1,
+                        "title": "國際漫遊",
+                        "detail": "國際 or 國際電話",
+                        "keywords": [
+                            {"name": "綁約"},
+                            {"name": "方案"}
+                        ],
+                        "items": []
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "title": "國際漫遊",
+                "detail": "國際 or 國際電話",
+                "items": []
+            },
+            {
+                "id": 3,
+                "title": "iphone業務詢問",
+                "detail": "iphone",
+                "items": []
+            },
+            {
+                "id": 4,
+                "title": "訊號不良",
+                "detail": "信號(訊號 or 不良)",
+                "items": []
+            }
+        ],
+        "callRange": "00:03:16",
+        "muteRange": "00:00:10",
+        "callSpeed": "5.16",
+        "mutePercentage": "4.36%"
+    },
+    {
+        "taskFlow": "2",
+        "model":[
+            {
+                "id": 1,
+                "title": "合約",
+                "detail": "合約(資費 or 綁約)",
+                "keywords": [
+                    {"name": "綁約"},
+                    {"name": "方案"}
+                ],
+                "items": [
+                    {
+                        "id": 1,
+                        "title": "國際漫遊",
+                        "detail": "國際 or 國際電話",
+                        "keywords": [
+                            {"name": "綁約"},
+                            {"name": "方案"}
+                        ],
+                        "items": []
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "title": "國際漫遊",
+                "detail": "國際 or 國際電話",
+                "items": []
+            },
+            {
+                "id": 3,
+                "title": "iphone業務詢問",
+                "detail": "iphone",
+                "items": []
+            },
+            {
+                "id": 4,
+                "title": "訊號不良",
+                "detail": "信號(訊號 or 不良)",
+                "items": []
+            }
+        ],
+        "callRange": "00:03:16",
+        "muteRange": "00:00:10",
+        "callSpeed": "5.16",
+        "mutePercentage": "4.36%"
+    },
+    {
+        "taskFlow": "3",
+        "model":[
+            {
+                "id": 1,
+                "title": "合約",
+                "detail": "合約(資費 or 綁約)",
+                "keywords": [
+                    {"name": "綁約"},
+                    {"name": "方案"}
+                ],
+                "items": [
+                    {
+                        "id": 1,
+                        "title": "國際漫遊",
+                        "detail": "國際 or 國際電話",
+                        "keywords": [
+                            {"name": "綁約"},
+                            {"name": "方案"}
+                        ],
+                        "items": []
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "title": "國際漫遊",
+                "detail": "國際 or 國際電話",
+                "items": []
+            },
+            {
+                "id": 3,
+                "title": "iphone業務詢問",
+                "detail": "iphone",
+                "items": []
+            },
+            {
+                "id": 4,
+                "title": "訊號不良",
+                "detail": "信號(訊號 or 不良)",
+                "items": []
+            }
+        ],
+        "callRange": "00:03:16",
+        "muteRange": "00:00:10",
+        "callSpeed": "5.16",
+        "mutePercentage": "4.36%"
+    }
+
+]

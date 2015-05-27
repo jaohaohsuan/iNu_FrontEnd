@@ -10,7 +10,7 @@ function config($translateProvider) {
         prefix:'language/locale-',
         suffix:'.json'
     });
-    $translateProvider.preferredLanguage('en');
+    $translateProvider.preferredLanguage('ch');
     //$translateProvider.translations('en', translateEn);
     //$translateProvider.translations('ch', translateCh);
     //$translateProvider.preferredLanguage('en');
