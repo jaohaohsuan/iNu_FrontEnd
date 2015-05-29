@@ -55,9 +55,28 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         })
         .state('main.buildModel',{
             url: '/buildModel',
-            templateUrl: "views/buildModel.html",
-            controller: 'buildModelController',
-            controllerAs: 'buildModelCtrl',
+            views:{
+                '':{
+                    templateUrl: "views/buildModel.html",
+                    controller: 'buildModelController',
+                    controllerAs: 'buildModelCtrl'
+                },
+                'createComponent@main.buildModel':{
+                    templateUrl:'views/buildModel_createComponent.html'
+                },
+                'createModule@main.buildModel':{
+                    templateUrl:'views/buildModel_createModule.html'
+                },
+                'callList@main.buildModel':{
+                    templateUrl:'views/buildModel_callList.html'
+                },
+                'associateWords@main.buildModel':{
+                    templateUrl:'views/buildModel_associateWords.html'
+                },
+                'modules@main.buildModel':{
+                    templateUrl:'views/buildModel_modules.html'
+                }
+            },
             resolve:{
                 loadPlugin: function($ocLazyLoad){
                     return $ocLazyLoad.load([
@@ -69,46 +88,46 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-        .state('main.buildModel.createComponent',{
-            url:'/createComponent',
-            views:{
-                'createComponent':{
-                    templateUrl:'views/buildModel_createComponent.html'
-                }
-            }
-        })
-        .state('main.buildModel.createModule',{
-            url:'/createModule',
-            views:{
-                'createModule':{
-                    templateUrl:'views/buildModel_createModule.html'
-                }
-            }
-        })
-        .state('main.buildModel.callList',{
-            url:'/callList',
-            views:{
-                'callList':{
-                    templateUrl:'views/buildModel_callList.html'
-                }
-            }
-        })
-        .state('main.buildModel.associateWords',{
-            url:'/associateWords',
-            views:{
-                'associateWords':{
-                    templateUrl:'views/buildModel_associateWords.html'
-                }
-            }
-        })
-        .state('main.buildModel.modules',{
-            url:'/modules',
-            views:{
-                'modules':{
-                    templateUrl:'views/buildModel_modules.html'
-                }
-            }
-        })
+        //.state('main.buildModel.createComponent',{
+        //    url:'/createComponent',
+        //    views:{
+        //        'createComponent':{
+        //            templateUrl:'views/buildModel_createComponent.html'
+        //        }
+        //    }
+        //})
+        //.state('main.buildModel.createModule',{
+        //    url:'/createModule',
+        //    views:{
+        //        'createModule':{
+        //            templateUrl:'views/buildModel_createModule.html'
+        //        }
+        //    }
+        //})
+        //.state('main.buildModel.callList',{
+        //    url:'/callList',
+        //    views:{
+        //        'callList':{
+        //            templateUrl:'views/buildModel_callList.html'
+        //        }
+        //    }
+        //})
+        //.state('main.buildModel.associateWords',{
+        //    url:'/associateWords',
+        //    views:{
+        //        'associateWords':{
+        //            templateUrl:'views/buildModel_associateWords.html'
+        //        }
+        //    }
+        //})
+        //.state('main.buildModel.modules',{
+        //    url:'/modules',
+        //    views:{
+        //        'modules':{
+        //            templateUrl:'views/buildModel_modules.html'
+        //        }
+        //    }
+        //})
 }
 
     angular
@@ -118,4 +137,4 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             //$rootScope.$state = $state;
         });
 
-})()
+})();
