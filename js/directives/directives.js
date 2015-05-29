@@ -1,6 +1,25 @@
 (function () {
 
+    function numberPicker (){
+        var directive ={
+            restrict:'E',
+            scope:{
+                number:'='
+            },
+            controller:numberPickerController,
+            template:'<table><tbody><tr><th rowspan="2"><input type="text" size="1" ng-model="number" value="0" class="border-radius  text-center"onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57"></th><th><a href="javascript: void(0)" class="fa fa-caret-up fa-lg" ng-click="up()"></a></th></tr><tr><td><a href="javascript: void(0)" class="fa fa-caret-down fa-lg" ng-click="down()"></a></td></tr></tbody></table>'
 
+        }
+        function numberPickerController($scope){
+            $scope.up = function(){
+                $scope.number++;
+            }
+            $scope.down = function(){
+                $scope.number--;
+            }
+        }
+        return directive;
+    }
 
 ///////////////////////////////////////////////////////////////
     function pageTitle($rootScope,$translate) {
@@ -368,5 +387,6 @@
         .directive('customValid', customValid)
         .directive('fullScroll', fullScroll)
         .directive('closeOffCanvas', closeOffCanvas)
+        .directive('numberPicker',numberPicker)
 
 })();
