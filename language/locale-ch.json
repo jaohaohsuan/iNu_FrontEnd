@@ -7,8 +7,12 @@
     "TREND": "业务趋势",
     "EXPLORE": "业务探索",
     "CROSSANALYSIS": "交叉分析",
-    "CALLLIST": "通话列表",
+    "callList": "通话列表",
     "MODEL": "业务建模",
     "MODELBUILD": "新建模型",
-    "MODELMANAGE": "模型管理"
+    "MODELMANAGE": "模型管理",
+    "createComponent":"创建组件",
+    "createModule":"创建模型",
+    "associateWords":"联想词",
+    "modules":"模型组"
 }

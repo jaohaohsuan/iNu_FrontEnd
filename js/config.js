@@ -1,7 +1,7 @@
 (function(){
 	
 function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider){
-    $urlRouterProvider.otherwise("/login");
+    $urlRouterProvider.otherwise("/main");
     // Configure Idle settings
 //    IdleProvider.idle(5); // in seconds
 //    IdleProvider.timeout(120); // in seconds
@@ -69,14 +69,53 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-
+        .state('main.buildModel.createComponent',{
+            url:'/createComponent',
+            views:{
+                'createComponent':{
+                    templateUrl:'views/buildModel_createComponent.html'
+                }
+            }
+        })
+        .state('main.buildModel.createModule',{
+            url:'/createModule',
+            views:{
+                'createModule':{
+                    templateUrl:'views/buildModel_createModule.html'
+                }
+            }
+        })
+        .state('main.buildModel.callList',{
+            url:'/callList',
+            views:{
+                'callList':{
+                    templateUrl:'views/buildModel_callList.html'
+                }
+            }
+        })
+        .state('main.buildModel.associateWords',{
+            url:'/associateWords',
+            views:{
+                'associateWords':{
+                    templateUrl:'views/buildModel_associateWords.html'
+                }
+            }
+        })
+        .state('main.buildModel.modules',{
+            url:'/modules',
+            views:{
+                'modules':{
+                    templateUrl:'views/buildModel_modules.html'
+                }
+            }
+        })
 }
 
-angular
-    .module('iNu')
-    .config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider',config])
-    .run(function($rootScope, $state) {
-        //$rootScope.$state = $state;
-    });
+    angular
+        .module('iNu')
+        .config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider',config])
+        .run(function($rootScope, $state) {
+            //$rootScope.$state = $state;
+        });
 
 })()

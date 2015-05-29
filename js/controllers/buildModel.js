@@ -1,7 +1,15 @@
-(function(){
+(function () {
     angular.module('iNu')
-        .controller('buildModelController',[function(){
-            var self = this;
+        .controller('buildModelController', ['$scope',buildModelController]);
 
-        }])
-})()
+        function buildModelController($scope){
+            var self = this;
+            self.tabs =[
+                {title:'createComponent',active:true},
+                {title:'createModule'},
+                {title:'callList'},
+                {title:'associateWords'},
+                {title:'modules'}
+            ]
+        }
+})();
