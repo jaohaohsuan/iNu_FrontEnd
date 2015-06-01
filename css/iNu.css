@@ -1,12 +1,26 @@
 
-.border-radius{
-    border-radius:6px
+.border-radius {
+    border-radius: 6px
 }
-a.fa.fa-caret-up{
+
+a.fa.fa-caret-up {
     position: relative;
-    top:1px
+    top: 1px
 }
-a.fa.fa-caret-down{
+
+a.fa.fa-caret-down {
     position: relative;
-    bottom:4px
+    bottom: 4px
+}
+
+.float-e-margins {
+    margin-left: -36px;
+}
+
+.inline-table {
+    display: inline;
+}
+
+td a:link ,tr a:link {
+    color: #328F7B;
 }

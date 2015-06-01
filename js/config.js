@@ -82,7 +82,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     return $ocLazyLoad.load([
                         {
                             name: ['ngDragDrop'],
-                            files: ['js/plugins/dragdrop/angular-dragdrop.min.js']
+                            files: ['js/plugins/dragdrop/angular-dragdrop.min.js','css/plugins/iCheck/custom.css','js/plugins/iCheck/icheck.min.js']
                         }
                     ])
                 }
@@ -136,5 +136,4 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         .run(function($rootScope, $state) {
             //$rootScope.$state = $state;
         });
-
 })();
