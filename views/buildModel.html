@@ -1,6 +1,6 @@
-<div>
+<div class="wrapper wrapper-content animated fadeInRight">
     <tabset>
-        <tab ng-repeat="tab in buildModelCtrl.tabs" heading="{{tab.title|translate}}" active="tab.active">
+        <tab ng-repeat="tab in buildModelCtrl.tabs" heading="{{tab.title|translate}}" active="tab.active" ng-click="buildModelCtrl.modelBroadcast(tab)">
             <div ui-view="{{tab.title}}"></div>
         </tab>
     </tabset>
