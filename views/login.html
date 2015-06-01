@@ -9,15 +9,15 @@
         <form class="m-t" role="form" style="color:  #151515">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input type="text" class="form-control" placeholder="{{'ACCOUNT'|translate}}" required="" ng-model="loginCtrl.account">
+                <input type="text" class="form-control" placeholder="{{'account'|translate}}" required="" ng-model="loginCtrl.account">
             </div>
             <p>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                <input type="password" class="form-control" placeholder="{{'PASSWORD'|translate}}" required="" ng-model="loginCtrl.password">
+                <input type="password" class="form-control" placeholder="{{'password'|translate}}" required="" ng-model="loginCtrl.password">
             </div>
             <p></p>
-            <button type="submit" class="btn btn-primary btn-block full-width m-b" ng-click="loginCtrl.login()">{{'LOGIN'|translate}}</button>
+            <button type="submit" class="btn btn-primary btn-block full-width m-b" ng-click="loginCtrl.login()">{{'login'|translate}}</button>
         </form>
         <div class="bg-danger" ngif="loginCtrl.errorMsg">{{loginCtrl.errorMsg}}</div>
         <p class="m-t">

@@ -62,10 +62,14 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     controllerAs: 'buildModelCtrl'
                 },
                 'createComponent@main.buildModel':{
-                    templateUrl:'views/buildModel_createComponent.html'
+                    templateUrl:'views/buildModel_createModule.html',
+                    controller: 'createModelController',
+                    controllerAs: 'createModelCtrl'
                 },
                 'createModule@main.buildModel':{
-                    templateUrl:'views/buildModel_createModule.html'
+                    templateUrl:'views/buildModel_createModule.html',
+                    controller: 'createModelController',
+                    controllerAs: 'createModelCtrl'
                 },
                 'callList@main.buildModel':{
                     templateUrl:'views/buildModel_callList.html'

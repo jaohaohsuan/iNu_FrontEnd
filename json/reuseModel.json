@@ -1,0 +1,22 @@
+[
+    {
+        "name": "提及分期",
+        "content": "分期 near 付款",
+        "role": "A"
+    },
+    {
+        "name": "誘導客戶",
+        "content": "同意 or 簽約 or 合作",
+        "role": "B"
+    },
+    {
+        "name": "私下聯繫",
+        "content": "信箱 or LINE or 微信",
+        "role": "全部"
+    },
+    {
+        "name": "禁語",
+        "keywords": "神經病 or 有病",
+        "role": "B"
+    }
+]
