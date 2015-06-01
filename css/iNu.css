@@ -2,3 +2,11 @@
 .border-radius{
     border-radius:6px
 }
+a.fa.fa-caret-up{
+    position: relative;
+    top:1px
+}
+a.fa.fa-caret-down{
+    position: relative;
+    bottom:4px
+}
