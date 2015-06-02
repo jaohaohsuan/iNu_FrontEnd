@@ -2,9 +2,10 @@
 .border-radius {
     border-radius: 6px
 }
-
-
-
+.module-preview{
+    height: 180px;
+    overflow: auto;
+}
 .float-e-margins {
     margin-left: -36px;
 }
@@ -40,4 +41,11 @@ span> a:link  {
     margin-left:1px;
     margin-top:-8px;
     top: -5px;
+}
+.number-input{
+
+    height: 30px;
+    padding-top: 4px;
+    padding-bottom: 7px;
+    margin-bottom: 0;
 }
