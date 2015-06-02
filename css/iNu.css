@@ -3,24 +3,41 @@
     border-radius: 6px
 }
 
-a.fa.fa-caret-up {
-    position: relative;
-    top: 1px
-}
 
-a.fa.fa-caret-down {
-    position: relative;
-    bottom: 4px
-}
 
 .float-e-margins {
     margin-left: -36px;
 }
 
-.inline-table {
+.inline-div {
     display: inline;
 }
 
-td a:link ,tr a:link {
+span> a:link  {
     color: #328F7B;
+}
+.scroll{
+    overflow: auto;
+    height: 180px;
+    width: 100%;
+}
+
+.number-picker {
+    display: inline;
+    width: 50px;
+    height: 50px;
+}
+.number-arrow {
+    position: relative;
+    display: inline-table;
+}
+.number-arrow >span>a{
+    position: relative;
+    color: #328F7B;
+    display: block;
+    float: none;
+    padding: 1px;
+    margin-left:1px;
+    margin-top:-8px;
+    top: -5px;
 }

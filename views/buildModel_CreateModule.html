@@ -24,8 +24,7 @@
                 <div class="checkbox"><label><input icheck type="checkbox" name="radioTest"
                                                     ng-model="createModelCtrl.limitDistanceChecked">
                     {{"wordDistance"|translate}}：
-                </label><input type="number" placeholder="請輸入數字.."
-                               class="form-control" ng-model="createModelCtrl.distance"></div>
+                </label><number-picker number="createModelCtrl.distance" size="2"></number-picker></div>
                 <div class="checkbox" ng-if="createModelCtrl.limitDistanceChecked"><h4><label><input icheck
                                                                                                      type="checkbox"
                                                                                                      name="radioTest"

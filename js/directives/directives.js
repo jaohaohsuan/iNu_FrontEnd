@@ -8,7 +8,7 @@
                 size:'='
             },
             controller:numberPickerController,
-            template:'<table><tbody><tr><th rowspan="2"><input type="text" size="{{size||2}}" ng-model="number" value="0" class="border-radius  text-center"onkeypress="return event.charCode >= 48 && event.charCode <= 57"></th><th><a href="javascript: void(0)" class="fa fa-caret-up fa-lg" ng-click="up()"></a></th></tr><tr><td><a href="javascript: void(0)" class="fa fa-caret-down fa-lg" ng-click="down()"></a></td></tr></tbody></table>'
+            template:'<div class="number-picker"><input type="text" size="{{size||2}}" ng-model="number" value="0"  class="form-control border-radius text-center" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/><div class="number-arrow"><span><a href="javascript: void(0)" ng-click="up()" class="fa fa-caret-up fa-2x"></a></span><span><a href="javascript: void(0)" ng-click="down()" class="fa fa-caret-down fa-2x"></a></span></div></div>'
 
         }
         function numberPickerController($scope){
