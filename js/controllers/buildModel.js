@@ -55,7 +55,7 @@
             data.role = role.content;
             self[modelArea].push(data);
             self.keywords = "";
-            self.distance = "";
+            self.distance = 5;
             self.selectedRole = self.roles[0];
             self.selectedReuseModel = [];
             self.canAdd = false;
