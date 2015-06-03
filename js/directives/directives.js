@@ -1,35 +1,41 @@
 (function () {
 
-    function numberPicker (){
-        var directive ={
-            restrict:'E',
-            scope:{
-                number:'=',
-                size:'='
+    function numberPicker() {
+        var directive = {
+            restrict: 'E',
+            scope: {
+                number: '=',
+                size: '='
             },
-            controller:numberPickerController,
-            template:'<div class="number-picker"><input type="text" size="{{size||2}}" ng-model="number" value="0"  class="number-input  text-center" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/><div class="number-arrow"><span><a href="javascript: void(0)" ng-click="up()" class="fa fa-caret-up fa-2x"></a></span><span><a href="javascript: void(0)" ng-click="down()" class="fa fa-caret-down fa-2x"></a></span></div></div>'
+            controller: numberPickerController,
+            template: '<div class="number-picker"><input id="numberInput" type="text" size="{{size||2}}" ng-model="number" value="0"  class="number-input  text-center" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/><div class="number-arrow"><span><a href="javascript: void(0)" ng-click="up()" class="fa fa-caret-up fa-2x"></a></span><span><a href="javascript: void(0)" ng-click="down()" class="fa fa-caret-down fa-2x"></a></span></div></div>'
 
         }
-        function numberPickerController($scope){
 
-
+        function numberPickerController($scope) {
             $scope.down = down;
-            $scope.up =up;
-
-            function down(){
-                $scope.number--;
+            $scope.up = up;
+            $('#numberInput').bind("mousewheel", function (event, delta) {
+                if (delta > 0) up();
+                else down();
+                $scope.$apply();
+                return false;
+            });
+            function down() {
+                if ($scope.number > 0)$scope.number--;
             }
-            function up(){
+
+            function up() {
                 $scope.number++;
             }
         }
+
         return directive;
     }
 
 ///////////////////////////////////////////////////////////////
-    function pageTitle($rootScope,$translate) {
-        var directive ={
+    function pageTitle($rootScope, $translate) {
+        var directive = {
             link: function (scope, ele) {
                 var listener = function (event, toState, toParams, fromState, fromParams) {
                     var title = 'iNu';
@@ -57,9 +63,9 @@
     function sideNavigation($timeout) {
         return {
             restrict: 'A',
-            link: function(scope, element) {
+            link: function (scope, element) {
                 // Call the metsiMenu plugin and plug it to sidebar navigation
-                $timeout(function(){
+                $timeout(function () {
                     element.metisMenu();
 
                 });
@@ -73,7 +79,7 @@
     function responsiveVideo() {
         return {
             restrict: 'A',
-            link:  function(scope, element) {
+            link: function (scope, element) {
                 var figure = element;
                 var video = element.children();
                 video
@@ -82,7 +88,7 @@
                     .removeAttr('width')
 
                 //We can use $watch on $window.innerWidth also.
-                $(window).resize(function() {
+                $(window).resize(function () {
                     var newWidth = figure.width();
                     video
                         .width(newWidth)
@@ -142,7 +148,7 @@
                             function () {
                                 $('#side-menu').fadeIn(500);
                             }, 100);
-                    } else if ($('body').hasClass('fixed-sidebar')){
+                    } else if ($('body').hasClass('fixed-sidebar')) {
                         $('#side-menu').hide();
                         setTimeout(
                             function () {
@@ -177,7 +183,7 @@
         return {
             restrict: 'A',
             scope: {
-                myMapData: '=',
+                myMapData: '='
             },
             link: function (scope, element, attrs) {
                 element.vectorMap({
@@ -200,7 +206,7 @@
                                 normalizeFunction: 'polynomial'
                             }
                         ]
-                    },
+                    }
                 });
             }
         }
@@ -215,13 +221,13 @@
             restrict: 'A',
             scope: {
                 sparkData: '=',
-                sparkOptions: '=',
+                sparkOptions: '='
             },
             link: function (scope, element, attrs) {
                 scope.$watch(scope.sparkData, function () {
                     render();
                 });
-                scope.$watch(scope.sparkOptions, function(){
+                scope.$watch(scope.sparkOptions, function () {
                     render();
                 });
                 var render = function () {
@@ -238,12 +244,12 @@
         return {
             restrict: 'A',
             require: 'ngModel',
-            link: function($scope, element, $attrs, ngModel) {
-                return $timeout(function() {
+            link: function ($scope, element, $attrs, ngModel) {
+                return $timeout(function () {
                     var value;
                     value = $attrs['value'];
 
-                    $scope.$watch($attrs['ngModel'], function(newValue){
+                    $scope.$watch($attrs['ngModel'], function (newValue) {
                         $(element).iCheck('update');
                     })
 
@@ -251,14 +257,14 @@
                         checkboxClass: 'icheckbox_square-green',
                         radioClass: 'iradio_square-green'
 
-                    }).on('ifChanged', function(event) {
+                    }).on('ifChanged', function (event) {
                         if ($(element).attr('type') === 'checkbox' && $attrs['ngModel']) {
-                            $scope.$apply(function() {
+                            $scope.$apply(function () {
                                 return ngModel.$setViewValue(event.target.checked);
                             });
                         }
                         if ($(element).attr('type') === 'radio' && $attrs['ngModel']) {
-                            return $scope.$apply(function() {
+                            return $scope.$apply(function () {
                                 return ngModel.$setViewValue(value);
                             });
                         }
@@ -287,23 +293,23 @@
      * dropZone - Directive for Drag and drop zone file upload plugin
      */
     function dropZone() {
-        return function(scope, element, attrs) {
+        return function (scope, element, attrs) {
             element.dropzone({
                 url: "/upload",
                 maxFilesize: 100,
                 paramName: "uploadfile",
                 maxThumbnailFilesize: 5,
-                init: function() {
+                init: function () {
                     scope.files.push({file: 'added'});
-                    this.on('success', function(file, json) {
+                    this.on('success', function (file, json) {
                     });
-                    this.on('addedfile', function(file) {
-                        scope.$apply(function(){
+                    this.on('addedfile', function (file) {
+                        scope.$apply(function () {
                             alert(file);
                             scope.files.push({file: 'added'});
                         });
                     });
-                    this.on('drop', function(file) {
+                    this.on('drop', function (file) {
                         alert('file');
                     });
                 }
@@ -317,8 +323,8 @@
     function chatSlimScroll($timeout) {
         return {
             restrict: 'A',
-            link: function(scope, element) {
-                $timeout(function(){
+            link: function (scope, element) {
+                $timeout(function () {
                     element.slimscroll({
                         height: '234px',
                         railOpacity: 0.4
@@ -332,18 +338,18 @@
     /**
      * customValid - Directive for custom validation example
      */
-    function customValid(){
+    function customValid() {
         return {
             require: 'ngModel',
-            link: function(scope, ele, attrs, c) {
-                scope.$watch(attrs.ngModel, function() {
+            link: function (scope, ele, attrs, c) {
+                scope.$watch(attrs.ngModel, function () {
 
                     // You can call a $http method here
                     // Or create custom validation
 
                     var validText = "Inspinia";
 
-                    if(scope.extras == validText) {
+                    if (scope.extras == validText) {
                         c.$setValidity('cvalid', true);
                     } else {
                         c.$setValidity('cvalid', false);
@@ -358,11 +364,11 @@
     /**
      * fullScroll - Directive for slimScroll with 100%
      */
-    function fullScroll($timeout){
+    function fullScroll($timeout) {
         return {
             restrict: 'A',
-            link: function(scope, element) {
-                $timeout(function(){
+            link: function (scope, element) {
+                $timeout(function () {
                     element.slimscroll({
                         height: '100%',
                         railOpacity: 0.9
@@ -393,6 +399,5 @@
         .directive('customValid', customValid)
         .directive('fullScroll', fullScroll)
         .directive('closeOffCanvas', closeOffCanvas)
-        .directive('numberPicker',numberPicker)
-
+        .directive('numberPicker', numberPicker)
 })();
