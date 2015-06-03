@@ -26,11 +26,12 @@ span> a:link  {
 .number-picker {
     display: inline;
     width: 50px;
-    height: 50px;
+    height: 60px;
 }
 .number-arrow {
     position: relative;
-    display: inline-table;
+    display: inline-block;
+    top:15px;
 }
 .number-arrow >span>a{
     position: relative;
@@ -39,13 +40,17 @@ span> a:link  {
     float: none;
     padding: 1px;
     margin-left:1px;
-    margin-top:-8px;
-    top: -5px;
+    margin-top:-11px;
+
 }
 .number-input{
-
     height: 30px;
     padding-top: 4px;
     padding-bottom: 7px;
     margin-bottom: 0;
+}
+
+
+body{
+    font-family:Georgia,Microsoft JhengHei,sans-serif;
 }
