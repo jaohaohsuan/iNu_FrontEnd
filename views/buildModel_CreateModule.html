@@ -79,7 +79,7 @@
             </h2>
         </div>
         <div class="ibox-content">
-            <div class="btn-group btn-group-vertical btn-block ">
+            <div class="btn-group btn-group-vertical btn-block "  ng-class="{true:'module-preview'}[createModelCtrl.reuseModel.length>5]">
                 <div class="btn btn-success btn-outline" ng-repeat="model in createModelCtrl.reuseModel"
                      ng-model="checked"
                      ng-click="createModelCtrl.toggleSelection(createModelCtrl.selectedReuseModel,model)"
