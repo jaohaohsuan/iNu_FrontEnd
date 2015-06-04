@@ -22,8 +22,6 @@
     function createModelController($scope, jsonMethodService) {
         var self = this;
         self.addModelArea = addModelArea;
-        self.canAdd = false;
-        self.distance = 5;
         self.deleteItem = deleteItem;
         self.isComponent = true;
         self.isRounded=isRounded;
@@ -44,9 +42,8 @@
             {"name": "角色：B", "content": "B"}
         ]
         self.should = [];
-        self.selectedRole = self.roles[0];
-        self.selectedReuseModel = [];
         self.toggleSelection = toggleSelection;
+        initialSetting();
         setReuseModel();
         function addModelArea(content, logicword, distance, role, modelArea) {
             var data = {};
@@ -55,18 +52,21 @@
             data.logicWord = logicword;
             data.role = role.content;
             self[modelArea].push(data);
-            self.keywords = "";
-            self.distance = 5;
-            self.selectedRole = self.roles[0];
-            self.selectedReuseModel = [];
-            self.canAdd = false;
+            initialSetting();
         }
 
         function deleteItem(source, item) {
             var index = source.indexOf(item);
             source.splice(index, 1);
         }
-
+        function initialSetting(){
+            self.keywords = "";
+            self.distance = 5;
+            self.selectedRole = self.roles[0];
+            self.selectedReuseModel = [];
+            self.canAdd = false;
+            self.inputFocus = true;
+        }
         function setReuseModel() {
             jsonMethodService.getJson('json/reuseModel.json').then(
                 function (data) {//success

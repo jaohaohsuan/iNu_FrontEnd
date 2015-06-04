@@ -1,5 +1,21 @@
 (function () {
-
+    function focus($parse,$timeout){
+        return {
+            link: function(scope, element, attrs) {
+                var model = $parse(attrs.focus);
+                scope.$watch(model, function(value) {
+                    if(value === true) {
+                        $timeout(function() {
+                            element[0].focus();
+                        });
+                    }
+                });
+                element.bind('blur', function() {
+                    scope.$apply(model.assign(scope, false));
+                });
+            }
+        };
+    }
     function numberPicker() {
         var directive = {
             restrict: 'E',
@@ -400,4 +416,5 @@
         .directive('fullScroll', fullScroll)
         .directive('closeOffCanvas', closeOffCanvas)
         .directive('numberPicker', numberPicker)
+        .directive('focus',focus)
 })();
