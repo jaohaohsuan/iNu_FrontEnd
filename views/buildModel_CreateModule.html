@@ -3,7 +3,7 @@
     <div class="col-md-5 col-xs-12 col-sm-12">
         <div class="ibox">
             <div class="ibox-title"><h2>{{"logicWord"|translate}}</h2></div>
-            <div class="ibox-content">
+            <div class="row ibox-content">
                 <h4>{{"keywordTitle"|translate}}：</h4>
 
                 <p></p><input type="text" class="form-control" placeholder="{{'keywordPlaceholder'|translate}}"
@@ -83,7 +83,7 @@
                     <button class="btn btn-primary btn-sm pull-right">{{"update"|translate}}</button>
                 </h2>
             </div>
-            <div class="ibox-content">
+            <div class="row ibox-content">
                 <div class="btn-group btn-group-vertical btn-block "
                      ng-class="{true:'module-preview'}[createModelCtrl.reuseModel.length>5]">
                     <div class="btn btn-success btn-outline" ng-repeat="model in createModelCtrl.reuseModel"
