@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$state', buildModelController])
-        .controller('createModelController', ['$scope','jsonMethodService',createModelController]);
+        .controller('createModelController', ['$scope', 'jsonMethodService', createModelController]);
 
     function buildModelController($scope, $state) {
         var self = this;
@@ -13,19 +13,20 @@
             {title: 'associateWords'},
             {title: 'modules'}
         ]
-        function modelBroadcast(tab){
+        function modelBroadcast(tab) {
             var isComopnent = (tab.title == self.tabs[0].title);
             $scope.$broadcast('isComponent', isComopnent);
         }
     }
 
-    function createModelController($scope,jsonMethodService) {
+    function createModelController($scope, jsonMethodService) {
         var self = this;
         self.addModelArea = addModelArea;
         self.canAdd = false;
         self.distance = 5;
         self.deleteItem = deleteItem;
         self.isComponent = true;
+        self.isRounded=isRounded;
         self.logicWord = 'and';
         $scope.$on('isComponent', function (event, isComponent) {
             self.isComponent = isComponent;
@@ -38,9 +39,9 @@
         self.mustHave = [];
         self.mustNot = [];
         self.roles = [
-            {"name": "角色：全部","content": "ALL"},
-            {"name": "角色：A","content": "A"},
-            {"name": "角色：B","content": "B"}
+            {"name": "角色：全部", "content": "ALL"},
+            {"name": "角色：A", "content": "A"},
+            {"name": "角色：B", "content": "B"}
         ]
         self.should = [];
         self.selectedRole = self.roles[0];
@@ -65,7 +66,8 @@
             var index = source.indexOf(item);
             source.splice(index, 1);
         }
-        function setReuseModel(){
+
+        function setReuseModel() {
             jsonMethodService.getJson('json/reuseModel.json').then(
                 function (data) {//success
                     self.reuseModel = data;
@@ -74,17 +76,19 @@
                 }
             );
         }
-        function toggleSelection(selectedItems,item){
+
+        function toggleSelection(selectedItems, item) {
             var idx = selectedItems.indexOf(item);
-            if (idx != -1) selectedItems.splice(idx,1);
+            if (idx != -1) selectedItems.splice(idx, 1);
             else selectedItems.push(item);
         }
+
         /**
          *檢查輸入規則
          * @param textcontent
          */
         function keywordCheck(textcontent) {
-            if (!textcontent || textcontent.length <= 0){
+            if (!textcontent || textcontent.length <= 0) {
                 self.canAdd = false;
                 return;
             }
@@ -94,6 +98,9 @@
                 alert("錯誤位置：" + match.index + "，原因：,後面不可緊接著[" + match[2] + "]");
                 self.canAdd = false;
             } else self.canAdd = true;
+        }
+        function isRounded(){
+           return window.innerWidth<768
         }
     }
 })();

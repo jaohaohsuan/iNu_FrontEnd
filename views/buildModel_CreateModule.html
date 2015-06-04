@@ -61,15 +61,15 @@
 
                 <hr/>
 
-                <div class="btn-group">
-                    <label class="btn btn-success btn-rounded" ng-model="createModelCtrl.modelArea.basicModel"
+                <div  ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
+                    <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success " ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]" ng-model="createModelCtrl.modelArea.basicModel"
                            btn-radio="'mustHave'">{{"mustHave"|translate}}</label>
-                    <label class="btn btn-success" ng-model="createModelCtrl.modelArea.basicModel"
+                    <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success " ng-model="createModelCtrl.modelArea.basicModel"
                            btn-radio="'mustNot'">{{"mustNot"|translate}}</label>
-                    <label class="btn btn-success btn-rounded" ng-model="createModelCtrl.modelArea.basicModel"
+                    <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success " ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]" ng-model="createModelCtrl.modelArea.basicModel"
                            btn-radio="'should'">{{"should"|translate}}</label>
                 </div>
-                <button class="pull-right btn btn-success  btn-rounded "
+                <button class="col-xs-6 col-md-2 col-sm-4 col-lg-2 pull-right btn btn-success btn-rounded  "
                         ng-click="createModelCtrl.addModelArea('test','test','5','test',createModelCtrl.modelArea.basicModel)"
                         ng-disabled="!createModelCtrl.canAdd"><i
                         class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
@@ -94,15 +94,15 @@
                     </div>
                 </div>
                 <hr/>
-                <div class="btn-group">
-                    <label class="btn btn-success btn-rounded" ng-model="createModelCtrl.modelArea.reuseModel"
+                <div  ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
+                    <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success" ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]" ng-model="createModelCtrl.modelArea.reuseModel"
                            btn-radio="'mustHave'">{{"mustHave"|translate}}</label>
-                    <label class="btn btn-success" ng-model="createModelCtrl.modelArea.reuseModel"
+                    <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success" ng-model="createModelCtrl.modelArea.reuseModel"
                            btn-radio="'mustNot'">{{"mustNot"|translate}}</label>
-                    <label class="btn btn-success btn-rounded" ng-model="createModelCtrl.modelArea.reuseModel"
+                    <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success " ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]" ng-model="createModelCtrl.modelArea.reuseModel"
                            btn-radio="'should'">{{"should"|translate}}</label>
                 </div>
-                <button class="pull-right btn btn-success  btn-rounded "
+                <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2  pull-right btn btn-success  btn-rounded "
                         ng-disabled="createModelCtrl.selectedReuseModel.length <= 0"><i
                         class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
                 </button>
@@ -114,10 +114,12 @@
         <div class="ibox">
             <div class="ibox-title"><h2>{{"modelReview"|translate}}</h2></div>
             <div class="ibox-content">
+                <!--auto render-->
+                <div></div>
                 <!--必須成立-->
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        {{"mustHave"|translate}}
+                        {{"mustHave"|translate}} <span class="btn btn-default  dim btn-xs pull-right">全部清除</span>
                     </div>
                     <div class="panel-body" ng-class="{true:'module-preview'}[createModelCtrl.mustHave.length>4]">
                         <div data-drop="true" ng-model='createModelCtrl.mustHave'
