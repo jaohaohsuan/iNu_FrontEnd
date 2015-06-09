@@ -9,6 +9,13 @@
             link: buildSectionLink
         }
         function buildSectionLink(scope, element, attrs){
+            scope.setClass =setClass;
+
+
+            function setClass(index){
+                var className = ['panel panel-primary', 'panel panel-danger', 'panel panel-warning','panel panel-info'];
+                return className[index];
+            }
         }
         return directive;
     }

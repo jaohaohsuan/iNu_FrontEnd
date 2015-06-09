@@ -1,4 +1,4 @@
-<div class="panel panel-primary" ng-repeat="section in datasource">
+<div ng-class="setClass($index)" ng-repeat="section in datasource">
     <div class="panel-heading">
         {{section.prompt}}
     </div>
