@@ -65,18 +65,18 @@
                     <div ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
                         <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.modelArea.basicModel"
+                               ng-model="createModelCtrl.modelSection.basicModel"
                                btn-radio="'mustHave'">{{"mustHave"|translate}}</label>
                         <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
-                               ng-model="createModelCtrl.modelArea.basicModel"
+                               ng-model="createModelCtrl.modelSection.basicModel"
                                btn-radio="'mustNot'">{{"mustNot"|translate}}</label>
                         <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.modelArea.basicModel"
+                               ng-model="createModelCtrl.modelSection.basicModel"
                                btn-radio="'should'">{{"should"|translate}}</label>
                     </div>
                     <button class="col-xs-6 col-md-2 col-sm-4 col-lg-2 pull-right btn btn-success btn-rounded  "
-                            ng-click="createModelCtrl.addModelArea('test','test','5','test',createModelCtrl.modelArea.basicModel)"
+                            ng-click="createModelCtrl.addToBuildSection(createModelCtrl.modelSection.basicModel,createModelCtrl.keywords)"
                             ng-disabled="!createModelCtrl.canAdd"><i
                             class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
                     </button>
@@ -105,14 +105,14 @@
                     <div ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
                         <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success"
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.modelArea.reuseModel"
+                               ng-model="createModelCtrl.modelSection.reuseModel"
                                btn-radio="'mustHave'">{{"mustHave"|translate}}</label>
                         <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success"
-                               ng-model="createModelCtrl.modelArea.reuseModel"
+                               ng-model="createModelCtrl.modelSection.reuseModel"
                                btn-radio="'mustNot'">{{"mustNot"|translate}}</label>
                         <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success "
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.modelArea.reuseModel"
+                               ng-model="createModelCtrl.modelSection.reuseModel"
                                btn-radio="'should'">{{"should"|translate}}</label>
                     </div>
                     <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2  pull-right btn btn-success  btn-rounded "
@@ -129,84 +129,7 @@
             <div class="ibox-title"><h2>{{"modelReview"|translate}}</h2></div>
             <div class="ibox-content">
                 <!--auto render-->
-                <div></div>
-                <!--必須成立-->
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        {{"mustHave"|translate}} <span class="btn btn-default  dim btn-xs pull-right">全部清除</span>
-                    </div>
-                    <div class="panel-body" ng-class="{true:'module-preview'}[createModelCtrl.mustHave.length>4]">
-                        <div data-drop="true" ng-model='createModelCtrl.mustHave'
-                             jqyoui-droppable="{multiple:true}">
-                            <div ng-if="createModelCtrl.mustHave.length <= 0" class="panel-heading text-center">
-                            </div>
-                            <div class="btn btn-primary btn-outline btn-block"
-                                 ng-repeat="item in createModelCtrl.mustHave">
-                                <!--瀏覽區塊-->
-                                <div
-                                        ng-model="createModelCtrl.mustHave"
-                                        ng-click="item.editable = true"
-                                        >{{item.content}}
-                        <span class="btn btn-danger btn-xs  pull-right"
-                              ng-click="createModelCtrl.deleteItem(createModelCtrl.mustHave,item)"><i
-                                class="fa fa-close"></i></span>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--不可成立-->
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        {{"mustNot"|translate}}
-                    </div>
-                    <div class="panel-body" ng-class="{true:'module-preview'}[createModelCtrl.mustNot.length>4]">
-                        <div data-drop="true" ng-model='createModelCtrl.mustNot'
-                             jqyoui-droppable="{multiple:true}">
-                            <div ng-if="createModelCtrl.mustNot.length <= 0" class="panel-heading text-center">
-                            </div>
-                            <div class="btn btn-danger btn-outline btn-block"
-                                 ng-repeat="item in createModelCtrl.mustNot">
-                                <!--瀏覽區塊-->
-                                <div ng-model="createModelCtrl.mustNot"
-                                     ng-click="item.editable = true"
-                                        >{{item.content}}
-                        <span class="btn btn-danger btn-xs  pull-right"
-                              ng-click="createModelCtrl.deleteItem(createModelCtrl.mustNot,item)"><i
-                                class="fa fa-close"></i></span>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--擇一成立-->
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        {{"should"|translate}}
-                    </div>
-                    <div class="panel-body" ng-class="{true:'module-preview'}[createModelCtrl.should.length>4]">
-                        <div data-drop="true" ng-model='createModelCtrl.should'
-                             jqyoui-droppable="{multiple:true}">
-                            <div ng-if="createModelCtrl.should.length <= 0" class="panel-heading text-center">
-                            </div>
-                            <div class="btn btn-warning btn-outline btn-block"
-                                 ng-repeat="item in createModelCtrl.should">
-                                <!--瀏覽區塊-->
-                                <div
-                                        ng-model="createModelCtrl.should"
-                                        ng-click="item.editable = true"
-                                        >{{item.content}}
-                        <span class="btn btn-danger btn-xs  pull-right"
-                              ng-click="createModelCtrl.deleteItem(createModelCtrl.should,item)"><i
-                                class="fa fa-close"></i></span>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <build-section datasource="createModelCtrl.datasource"></build-section>
             </div>
         </div>
     </div>

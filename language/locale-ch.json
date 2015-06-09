@@ -12,7 +12,7 @@
     "modelBuild": "新建模型",
     "modelManage": "模型管理",
     "createComponent":"创建组件",
-    "createModule":"创建模型",
+    "createModel":"创建模型",
     "associateWords":"联想词",
     "modules":"模型组",
     "logicWord": "逻辑词组",

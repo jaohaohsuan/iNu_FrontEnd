@@ -1,0 +1,18 @@
+<div class="panel panel-primary" ng-repeat="section in datasource">
+    <div class="panel-heading">
+        {{section.prompt}}
+    </div>
+    <div class="panel-body" ng-class="{true:'module-preview'}[section.datas.length>4]">
+
+        <div ng-if="section.datas.length <= 0" class="panel-heading text-center">
+        </div>
+        <div class="btn btn-primary btn-outline btn-block animated fadeInRight"
+             ng-repeat="data in section.datas">
+            <!--瀏覽區塊-->
+
+            <div> {{data.name}}&nbsp;{{data.value}}
+                <span class="btn btn-danger btn-xs  pull-right"><i class="fa fa-close"></i></span>
+            </div>
+        </div>
+    </div>
+</div>

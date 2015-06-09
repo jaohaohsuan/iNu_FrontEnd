@@ -1,14 +1,14 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$state', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', createModelController]);
+        .controller('createModelController', ['$scope', 'jsonMethodService','jsonParseService', createModelController])
 
     function buildModelController($scope, $state) {
         var self = this;
         self.modelBroadcast = modelBroadcast;
         self.tabs = [
             {title: 'createComponent', active: true},
-            {title: 'createModule'},
+            {title: 'createModel'},
             {title: 'callList'},
             {title: 'associateWords'},
             {title: 'modules'}
@@ -19,10 +19,9 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService) {
+    function createModelController($scope, jsonMethodService,jsonParseService) {
         var self = this;
-        self.addModelArea = addModelArea;
-        self.deleteItem = deleteItem;
+        self.addToBuildSection = addToBuildSection;
         self.isComponent = true;
         self.isRounded=isRounded;
         self.logicWord = 'and';
@@ -30,35 +29,28 @@
             self.isComponent = isComponent;
         });
         self.keywordCheck = keywordCheck;
-        self.modelArea = {
+        self.modelSection = {
             "basicModel": "mustHave",
             "reuseModel": "mustHave"
         };
-        self.mustHave = [];
-        self.mustNot = [];
         self.roles = [
             {"name": "角色：全部", "content": "ALL"},
             {"name": "角色：A", "content": "A"},
             {"name": "角色：B", "content": "B"}
         ]
-        self.should = [];
         self.toggleSelection = toggleSelection;
-        initialSetting();
         setReuseModel();
-        function addModelArea(content, logicword, distance, role, modelArea) {
-            var data = {};
-            data.content = content;
-            data.distance = distance;
-            data.logicWord = logicword;
-            data.role = role.content;
-            self[modelArea].push(data);
+        setModelSection();
+
+        function addToBuildSection(modelSection) {
+            var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource,"name");
+            jsonMethodService.getJson('json/mustNotNew.json').then(function(collectionjson){
+                var datas = jsonParseService.getDatasFromCollectionJson(collectionjson);
+                kvDatasource[modelSection].datas = datas;
+            })
             initialSetting();
         }
 
-        function deleteItem(source, item) {
-            var index = source.indexOf(item);
-            source.splice(index, 1);
-        }
         function initialSetting(){
             self.keywords = "";
             self.distance = 5;
@@ -76,7 +68,17 @@
                 }
             );
         }
-
+        function setModelSection(){
+            jsonMethodService.getJson('json/buildSection.json').then(function(collectionjson){
+                self.datasource = jsonParseService.getRelTemplate(collectionjson.collection.links,"section");
+                angular.forEach( self.datasource,function(section){
+                    jsonMethodService.getJson('json/' + section.href).then(function(collectionjson){
+                        var datas = jsonParseService.getDatasFromCollectionJson(collectionjson);
+                        section.datas = datas;
+                    })
+                })
+            })
+        }
         function toggleSelection(selectedItems, item) {
             var idx = selectedItems.indexOf(item);
             if (idx != -1) selectedItems.splice(idx, 1);
@@ -92,15 +94,10 @@
                 self.canAdd = false;
                 return;
             }
-            var regExp = /(,| )((,+|and|after|near|not|or)( |$)|,+)/g
-            var match = regExp.exec(textcontent)
-            if (match != null) {
-                alert("錯誤位置：" + match.index + "，原因：,後面不可緊接著[" + match[2] + "]");
-                self.canAdd = false;
-            } else self.canAdd = true;
+            self.canAdd = true;
         }
         function isRounded(){
-           return window.innerWidth<768
+            return window.innerWidth<768
         }
     }
 })();

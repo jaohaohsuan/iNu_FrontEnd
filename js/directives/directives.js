@@ -1,4 +1,17 @@
 (function () {
+    function buildSection(){
+        var directive = {
+            restrict: 'E',
+            scope:{
+                datasource: '='
+            },
+            templateUrl: 'views/directives/buildSection.html',
+            link: buildSectionLink
+        }
+        function buildSectionLink(scope, element, attrs){
+        }
+        return directive;
+    }
     function focus($parse,$timeout){
         return {
             link: function(scope, element, attrs) {
@@ -417,4 +430,5 @@
         .directive('closeOffCanvas', closeOffCanvas)
         .directive('numberPicker', numberPicker)
         .directive('focus',focus)
+        .directive('buildSection',buildSection)
 })();

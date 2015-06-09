@@ -1,0 +1,21 @@
+{
+    "collection": {
+        "version": "1.0",
+        "href": "",
+        "links":[],
+        "items": [
+            {
+                "data": [
+                    {
+                        "name": "提及全部",
+                        "value": "A B C"
+                    },
+                    {
+                        "name": "提及任一",
+                        "value": "D E"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -62,12 +62,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     controllerAs: 'buildModelCtrl'
                 },
                 'createComponent@main.buildModel':{
-                    templateUrl:'views/buildModel_createModule.html',
+                    templateUrl:'views/buildModel_createModel.html',
                     controller: 'createModelController',
                     controllerAs: 'createModelCtrl'
                 },
-                'createModule@main.buildModel':{
-                    templateUrl:'views/buildModel_createModule.html',
+                "createModel@main.buildModel":{
+                    templateUrl:'views/buildModel_createModel.html',
                     controller: 'createModelController',
                     controllerAs: 'createModelCtrl'
                 },
@@ -77,8 +77,8 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 'associateWords@main.buildModel':{
                     templateUrl:'views/buildModel_associateWords.html'
                 },
-                'modules@main.buildModel':{
-                    templateUrl:'views/buildModel_modules.html'
+                "models@main.buildModel":{
+                    templateUrl:'views/buildModel_models.html'
                 }
             },
             resolve:{
@@ -128,7 +128,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         //    url:'/modules',
         //    views:{
         //        'modules':{
-        //            templateUrl:'views/buildModel_modules.html'
+        //            templateUrl:'views/buildModel_models.html'
         //        }
         //    }
         //})

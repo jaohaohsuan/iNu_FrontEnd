@@ -1,0 +1,31 @@
+{
+    "collection":{
+        "version": "1.0",
+        "href": "http://localhost/multiTemplate",
+        "links": [
+            {
+                "rel": "section",
+                "name": "mustHave",
+                "prompt": "Must必須成立",
+                "href": "must.json"
+            },
+            {
+                "rel": "section",
+                "name": "mustNot",
+                "prompt": "Must Not不可成立",
+                "href": "mustNot.json"
+            },
+            {
+                "rel": "section",
+                "name": "should",
+                "prompt": "Should 擇一成立",
+                "href": "should.json"
+            },
+            {
+                "rel": "creator",
+                "href": ""
+            }
+        ],
+        "items":[]
+    }
+}
