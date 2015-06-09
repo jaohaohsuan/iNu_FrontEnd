@@ -2,10 +2,12 @@
 .border-radius {
     border-radius: 6px
 }
-.module-preview{
+
+.module-preview {
     height: 180px;
     overflow: auto;
 }
+
 .float-e-margins {
     margin-left: -36px;
 }
@@ -14,10 +16,11 @@
     display: inline;
 }
 
-span> a:link  {
+span > a:link {
     color: #328F7B;
 }
-.scroll{
+
+.scroll {
     overflow: auto;
     height: 180px;
     width: 100%;
@@ -28,29 +31,37 @@ span> a:link  {
     width: 50px;
     height: 60px;
 }
+
 .number-arrow {
     position: relative;
     display: inline-block;
-    top:15px;
+    top: 15px;
 }
-.number-arrow >span>a{
+
+.number-arrow > span > a {
     position: relative;
     color: #328F7B;
     display: block;
     float: none;
     padding: 1px;
-    margin-left:1px;
-    margin-top:-11px;
+    margin-left: 1px;
+    margin-top: -11px;
 
 }
-.number-input{
+
+.number-input {
     height: 30px;
     padding-top: 4px;
     padding-bottom: 7px;
     margin-bottom: 0;
 }
 
+.clear-button {
 
-body{
-    font-family:Georgia,Microsoft JhengHei,sans-serif;
+    background: #988;
+    color: #fff;
+}
+
+body {
+    font-family: Georgia, Microsoft JhengHei, sans-serif;
 }

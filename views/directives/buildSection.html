@@ -1,6 +1,7 @@
 <div ng-class="setClass($index)" ng-repeat="section in datasource">
     <div class="panel-heading">
-        {{section.prompt}}
+       <h3> {{section.prompt}}
+        <span class="btn clear-button btn-xs pull-right glyphicon glyphicon-trash " title="全部清除"></span></h3>
     </div>
     <div class="panel-body" ng-class="{true:'module-preview'}[section.datas.length>4]">
 
