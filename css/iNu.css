@@ -57,11 +57,15 @@ span > a:link {
 }
 
 .clear-button {
-
-    background: #988;
+    position: relative;
+    margin-top: -5px;
+    background: rgba(0,0,0,0.25);
     color: #fff;
 }
-
+.clear-button:hover{
+    background-color: rgba(0,0,0,0.1);
+    color: #fff;
+}
 body {
     font-family: Georgia, Microsoft JhengHei, sans-serif;
 }

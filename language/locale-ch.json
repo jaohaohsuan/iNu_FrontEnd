@@ -17,7 +17,7 @@
     "modules":"模型组",
     "logicWord": "逻辑词组",
     "reuseModel": "可复用的模型组件",
-    "modelReview": "模型预览",
+    "queryConditions": "查询条件",
     "saveModel": "模型储存",
     "saveComponent": "组件储存",
     "keywordTitle": "关键词(以空白隔开)",
@@ -35,5 +35,6 @@
     "componentName": "组件名称",
     "componentNamePlaceholder": "请输入组件名称...",
     "modelName": "模型名称",
-    "modelNamePlaceholder": "请输入模型名称"
+    "modelNamePlaceholder": "请输入模型名称",
+	"clearAll":"全部清除"
 }
