@@ -1,0 +1,39 @@
+<div class="form-inline">
+    <label> 數據源：</label>
+    <select class="form-control m-b-xs">
+        <option>通話</option>
+        <option>本文</option>
+    </select>
+</div>
+<label> 模型組：</label>
+
+<div class="btn-group btn-group-vertical btn-block ">
+    <label class="btn btn-success btn-outline" ng-model="main.radioModel.a"
+           btn-checkbox>模型組A</label>
+    <label class="btn btn-success btn-outline" ng-model="main.radioModel.b"
+           btn-checkbox>模型組B</label>
+    <label class="btn btn-success btn-outline" ng-model="main.radioModel.c"
+           btn-checkbox>模型組C</label>
+</div>
+<p></p>
+
+
+<div>
+    啟用此模型?&nbsp;&nbsp;
+    <div class="btn-group">
+        <label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"
+               btn-radio="'Middle'">ON</label>
+        <label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"
+               btn-radio="'Right'">OFF</label>
+    </div>
+
+</div>
+<p></p>
+<div class="input-group">
+    <input type="text" class="form-control" ng-disabled="modelInstanceCtrl.disableEdit" placeholder="{{'modelNamePlaceholder'|translate}}"
+           ng-model="createModelCtrl.modelName"/><span class="input-group-btn">
+    <<button translate ng-class="{true:'btn btn-success',false:'btn btn-info'}[modelInstanceCtrl.disableEdit]" ng-click="modelInstanceCtrl.change()">{{modelInstanceCtrl.changeText}}</button>
+  </span></div>
+
+
+<button confirmed-click="deleteModel" confirm-click="{{'sureDelete'|translate}}" class="btn btn-danger  btn-block instance-button">{{'deleteComponent'|translate}}</button>

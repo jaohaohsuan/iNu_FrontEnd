@@ -23,8 +23,10 @@
         var self = this;
         self.addToBuildSection = addToBuildSection;
         self.clear = clear;
+        self.deleteComponent = deleteComponent;
         self.isComponent = true;
         self.isRounded = isRounded;
+
         self.logicWord = 'and';
         $scope.$on('isComponent', function (event, isComponent) {
             self.isComponent = isComponent;
@@ -34,6 +36,7 @@
             "basicModel": "mustHave",
             "reuseModel": "mustHave"
         };
+        self.renameComponent = renameComponent;
         self.roles = [
             {"name": "角色：全部", "content": "ALL"},
             {"name": "角色：A", "content": "A"},
@@ -59,6 +62,10 @@
             self.showUndo = true;
         }
 
+        function deleteComponent() {
+            alert('deleted');
+        }
+
         function initialSetting() {
             self.keywords = "";
             self.distance = 5;
@@ -66,6 +73,10 @@
             self.selectedReuseModel = [];
             self.canAdd = false;
             self.inputFocus = true;
+        }
+
+        function renameComponent() {
+                  alert('renamed');
         }
 
         function setReuseModel() {
@@ -97,7 +108,7 @@
         }
 
         function undo() {
-            self.showUndo=false;
+            self.showUndo = false;
         }
 
         /**

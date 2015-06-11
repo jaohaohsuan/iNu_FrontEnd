@@ -2,9 +2,6 @@
 .border-radius {
     border-radius: 6px
 }
-.component-instance-button{
-    margin-top: 2px;
-}
 .module-preview {
     height: 180px;
     overflow: auto;
@@ -18,6 +15,9 @@
     display: inline;
 }
 
+.instance-button{
+    margin-top: 2px;
+}
 span > a:link {
     color: #328F7B;
 }

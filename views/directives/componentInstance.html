@@ -1,7 +1,10 @@
 <div class="form-group">
-    <input type="text" class="form-control input-sm" placeholder="{{'componentNamePlaceholder'|translate}}"
-           ng-model="name"/>
+    <div class="input-group">
+        <input type="text" class="form-control" ng-disabled="componentInstanceCtrl.disableEdit" placeholder="{{'componentNamePlaceholder'|translate}}"/>
+        <span class="input-group-btn">
+            <button translate ng-class="{true:'btn btn-success',false:'btn btn-info'}[componentInstanceCtrl.disableEdit]" ng-click="componentInstanceCtrl.change('123')">{{componentInstanceCtrl.changeText}}</button>
+        </span>
 
-    <button class="btn btn-danger pull-left component-instance-button">{{'deleteComponent'|translate}}</button>
-    <button class="btn btn-success pull-right component-instance-button">{{'rename'|translate}}</button>
+    </div>
+    <button confirmed-click="deleteComponent" confirm-click="{{'sureDelete'|translate}}" class="btn btn-danger  btn-block instance-button">{{'deleteComponent'|translate}}</button>
 </div>

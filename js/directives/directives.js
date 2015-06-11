@@ -20,6 +20,26 @@
 
         return directive;
     }
+
+    function confirmClick(){
+        var directive={
+            link:confirmClickLink,
+            scope:{
+                confirmedClick:'='
+            }
+        }
+        function confirmClickLink(scope,element,attrs){
+           var msg = attrs.confirmClick||"Are you sure";
+            var clickAction = scope.confirmedClick;
+            element.bind('click',function(event){
+               if(window.confirm(msg)){
+                   scope.$eval(clickAction);
+               }
+            });
+        }
+        return directive;
+    }
+
     function componentInstance(){
         var directive = {
             restrict:'E',
@@ -28,8 +48,33 @@
                 renameComponent:'=',
                 deleteComponent:'='
             },
-            templateUrl:'views/directives/componentInstance.html'
+            templateUrl:'views/directives/componentInstance.html',
+            controller:componentInstanceController,
+            controllerAs:'componentInstanceCtrl'
+
         };
+        function componentInstanceController($scope){
+            var self = this;
+            self.disableEdit =true;
+            self.change = change;
+            self.changeText='change';
+            self.delete = deleteComponent;
+            function change(){
+                if(self.changeText==='change'){
+                    self.changeText='finished';
+                    self.disableEdit = false;
+
+                }
+                else{
+                    self.changeText='change';
+                    self.disableEdit = true;
+                    $scope.renameComponent();
+                }
+            }
+            function deleteComponent(data){
+
+            }
+        }
         return directive;
     }
     function focus($parse, $timeout) {
@@ -48,6 +93,39 @@
                 });
             }
         };
+    }
+    function modelInstance(){
+        var directive ={
+            restrict:'E',
+            scope:{
+                datasource:'=',
+                renameModel:'=',
+                deleteModel:'='
+            },
+            templateUrl:'views/directives/modelInstance.html',
+            controller:modelInstanceController,
+            controllerAs:'modelInstanceCtrl'
+        };
+        function modelInstanceController($scope){
+            var self = this;
+            self.disableEdit =true;
+            self.change = change;
+            self.changeText='change';
+
+            function change(){
+                if(self.changeText==='change'){
+                    self.changeText='finished';
+                    self.disableEdit = false;
+
+                }
+                else{
+                    self.changeText='change';
+                    self.disableEdit = true;
+                    $scope.renameModel();
+                }
+            }
+        }
+        return directive;
     }
 
     function numberPicker() {
@@ -453,4 +531,6 @@
         .directive('focus', focus)
         .directive('buildSection', buildSection)
         .directive('componentInstance',componentInstance)
+        .directive('modelInstance',modelInstance)
+        .directive('confirmClick',confirmClick)
 })();

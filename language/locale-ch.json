@@ -13,6 +13,7 @@
     "modelManage": "模型管理",
     "createComponent":"创建组件",
     "createModel":"创建模型",
+	"deleteModel": "删除模型",
     "associateWords":"联想词",
     "modules":"模型组",
     "logicWord": "逻辑词组",
@@ -20,7 +21,7 @@
     "queryConditions": "查询条件",
     "saveModel": "模型储存",
     "saveComponent": "另存组件",
-	"deleteComponent": "删除组件",
+	"deleteComponent": "删除此组件",
     "keywordTitle": "关键词(以空白隔开)",
     "keywordPlaceholder": "请以空白区隔关键词",
     "allAccord": "提及所有关键词",
@@ -38,6 +39,8 @@
     "modelName": "模型名称",
     "modelNamePlaceholder": "请输入模型名称",
 	"clearAll":"全部清除",
-	"rename":"更名",
-	"undo":"复原"
+	"change":"变更",
+	"finished":"完成",
+	"undo":"复原",
+	"sureDelete":"您是否确认进行删除？"
 }
