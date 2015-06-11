@@ -57,8 +57,8 @@
             var self = this;
             self.disableEdit =true;
             self.change = change;
-            self.changeText='change';
-            self.delete = deleteComponent;
+            self.changeText='change'; //button顯示名稱，多語系son的key
+
             function change(){
                 if(self.changeText==='change'){
                     self.changeText='finished';
@@ -68,13 +68,10 @@
                 else{
                     self.changeText='change';
                     self.disableEdit = true;
-                    $scope.renameComponent();
+                    $scope.renameComponent(); //在完成的時候給前端控制
                 }
             }
-            function deleteComponent(data){
-
-            }
-        }
+   }
         return directive;
     }
     function focus($parse, $timeout) {
