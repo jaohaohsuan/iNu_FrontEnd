@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$state', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService','jsonParseService', createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', createModelController])
 
     function buildModelController($scope, $state) {
         var self = this;
@@ -19,11 +19,12 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService,jsonParseService) {
+    function createModelController($scope, jsonMethodService, jsonParseService) {
         var self = this;
         self.addToBuildSection = addToBuildSection;
+        self.clearAll = clearAll;
         self.isComponent = true;
-        self.isRounded=isRounded;
+        self.isRounded = isRounded;
         self.logicWord = 'and';
         $scope.$on('isComponent', function (event, isComponent) {
             self.isComponent = isComponent;
@@ -43,15 +44,19 @@
         setModelSection();
 
         function addToBuildSection(modelSection) {
-            var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource,"name");
-            jsonMethodService.getJson('json/mustNotNew.json').then(function(collectionjson){
+            var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource, "name");
+            jsonMethodService.getJson('json/mustNotNew.json').then(function (collectionjson) {
                 var datas = jsonParseService.getDatasFromCollectionJson(collectionjson);
                 kvDatasource[modelSection].datas = datas;
             })
             initialSetting();
         }
 
-        function initialSetting(){
+        function clearAll(section) {
+            console.log(section)
+        }
+
+        function initialSetting() {
             self.keywords = "";
             self.distance = 5;
             self.selectedRole = self.roles[0];
@@ -59,6 +64,7 @@
             self.canAdd = false;
             self.inputFocus = true;
         }
+
         function setReuseModel() {
             jsonMethodService.getJson('json/reuseModel.json').then(
                 function (data) {//success
@@ -68,17 +74,19 @@
                 }
             );
         }
-        function setModelSection(){
-            jsonMethodService.getJson('json/buildSection.json').then(function(collectionjson){
-                self.datasource = jsonParseService.getRelTemplate(collectionjson.collection.links,"section");
-                angular.forEach( self.datasource,function(section){
-                    jsonMethodService.getJson('json/' + section.href).then(function(collectionjson){
+
+        function setModelSection() {
+            jsonMethodService.getJson('json/buildSection.json').then(function (collectionjson) {
+                self.datasource = jsonParseService.getRelTemplate(collectionjson.collection.links, "section");
+                angular.forEach(self.datasource, function (section) {
+                    jsonMethodService.getJson('json/' + section.href).then(function (collectionjson) {
                         var datas = jsonParseService.getDatasFromCollectionJson(collectionjson);
                         section.datas = datas;
                     })
                 })
             })
         }
+
         function toggleSelection(selectedItems, item) {
             var idx = selectedItems.indexOf(item);
             if (idx != -1) selectedItems.splice(idx, 1);
@@ -96,8 +104,9 @@
             }
             self.canAdd = true;
         }
-        function isRounded(){
-            return window.innerWidth<768
+
+        function isRounded() {
+            return window.innerWidth < 768
         }
     }
 })();
