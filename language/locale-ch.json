@@ -13,7 +13,7 @@
     "modelManage": "模型管理",
     "createComponent":"创建组件",
     "createModel":"创建模型",
-	"deleteModel": "删除模型",
+	"deleteModel": "删除此模型",
     "associateWords":"联想词",
     "modules":"模型组",
     "logicWord": "逻辑词组",

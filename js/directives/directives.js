@@ -530,7 +530,7 @@
         .directive('numberPicker', numberPicker)
         .directive('focus', focus)
         .directive('buildSection', buildSection)
-        .directive('componentInstance',componentInstance)
-        .directive('modelInstance',modelInstance)
-        .directive('confirmClick',confirmClick)
+        .directive('componentInstance',componentInstance) //組件實例視窗
+        .directive('modelInstance',modelInstance) //模型實例視窗
+        .directive('confirmClick',confirmClick) //刪除確認視窗
 })();
