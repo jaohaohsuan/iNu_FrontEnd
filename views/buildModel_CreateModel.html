@@ -6,10 +6,27 @@
             <div class="ibox-content">
                 <h4>{{"keywordTitle"|translate}}：</h4>
 
-                <p></p><input type="text" class="form-control" placeholder="{{'keywordPlaceholder'|translate}}"
-                              ng-model="createModelCtrl.keywords"
-                              focus="createModelCtrl.inputFocus"
-                              ng-change="createModelCtrl.keywordCheck(createModelCtrl.keywords)"/>
+                <p></p>
+                <tags-input ng-model="createModelCtrl.keywords"
+                            min-length = "0"
+                            add-on-space="true"
+                            add-on-paste="true"
+                            enable-editing-last-tag="true"
+                            paste-spilt-patterns="\s"
+                            add-on-enter="true"
+                            tags-repeat="true"
+                            chinese-mode="true"
+                            placeholder="{{'keywordPlaceholder'|translate}}"
+                            focus="createModelCtrl.inputFocus"
+                        >
+                    <auto-complete source="createModelCtrl.autoTips($query)"
+                                   min-length="0"
+                                   select-first-match="false"></auto-complete>
+                </tags-input>
+                <!--<input type="text" class="form-control" placeholder="{{'keywordPlaceholder'|translate}}"-->
+                              <!--ng-model="createModelCtrl.keywords"-->
+                              <!--focus="createModelCtrl.inputFocus"-->
+                              <!--ng-change="createModelCtrl.keywordCheck(createModelCtrl.keywords)"/>-->
 
 
                 <p></p>

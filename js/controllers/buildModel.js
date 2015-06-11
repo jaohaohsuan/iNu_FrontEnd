@@ -22,6 +22,7 @@
     function createModelController($scope, jsonMethodService, jsonParseService) {
         var self = this;
         self.addToBuildSection = addToBuildSection;
+        self.autoTips = autoTips;
         self.clear = clear;
         self.deleteComponent = deleteComponent;
         self.isComponent = true;
@@ -55,6 +56,28 @@
                 kvDatasource[modelSection].datas = datas;
             })
             initialSetting();
+        }
+        function autoTips(query){
+            var t = {
+                "i":["ibon","ipad","iphone1","iphone2"],
+                "ib":["ibon"],
+                "ibo":["ibon"],
+                "ibon":["ibon"],
+                "ip":["ipad","iphone1","iphone2"],
+                "ipa":["ipad"],
+                "iph":["iphone1","iphone2"],
+                "ipad":["ipad"],
+                "ipho":["iphone1","iphone2"],
+                "iphon":["iphone1","iphone2"],
+                "iphone":["iphone1","iphone2"],
+                "iphone1":["iphone1"],
+                "iphone2":["iphone2"],
+                "不":["不賠","不會"],
+                "不賠":["不賠"],
+                "不會":["不會"]
+
+            }
+            return t[query];
         }
 
         function clear(section) {

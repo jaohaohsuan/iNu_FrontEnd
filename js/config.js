@@ -85,8 +85,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 loadPlugin: function($ocLazyLoad){
                     return $ocLazyLoad.load([
                         {
-                            name: ['ngDragDrop'],
-                            files: ['js/plugins/dragdrop/angular-dragdrop.min.js','css/plugins/iCheck/custom.css','js/plugins/iCheck/icheck.min.js']
+                            files: ['css/plugins/iCheck/custom.css','js/plugins/iCheck/icheck.min.js']
+                        },
+                        {
+                            name: ['ngTagsInput'],
+                            files: ['js/plugins/tagsInput/ng-tags-input.min.js','css/plugins/tagsInput/ng-tags-input.min.css','css/plugins/tagsInput/ng-tags-input.bootstrap.min.css']
                         }
                     ])
                 }

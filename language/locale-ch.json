@@ -23,7 +23,7 @@
     "saveComponent": "另存组件",
 	"deleteComponent": "删除此组件",
     "keywordTitle": "关键词(以空白隔开)",
-    "keywordPlaceholder": "请以空白区隔关键词",
+    "keywordPlaceholder": "请输入关键词…",
     "allAccord": "提及所有关键词",
     "eitherAccord": "提及任一关键词",
     "wordDistance": "限定跨词距离",

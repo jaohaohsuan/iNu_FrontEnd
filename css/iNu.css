@@ -71,3 +71,6 @@ span > a:link {
 body {
     font-family: Georgia, Microsoft JhengHei, sans-serif;
 }
+.tag-list li a {
+    display: inline;
+}
