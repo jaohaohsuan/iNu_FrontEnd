@@ -1,40 +1,44 @@
 (function () {
-    function buildSection(){
+    function buildSection() {
         var directive = {
             restrict: 'E',
-            scope:{
+            scope: {
                 datasource: '=',
-                clearAll:'='
+                clear: '='
             },
             templateUrl: 'views/directives/buildSection.html',
             link: buildSectionLink
         }
-        function buildSectionLink(scope, element, attrs){
-            scope.setClass =setClass;
-            function setClass(index){
-                var className = ['panel panel-primary', 'panel panel-danger', 'panel panel-warning','panel panel-info'];
+
+        function buildSectionLink(scope, element, attrs) {
+            scope.setClass = setClass;
+            function setClass(index) {
+                var className = ['panel panel-primary', 'panel panel-danger', 'panel panel-warning', 'panel panel-info'];
                 return className[index];
             }
         }
+
         return directive;
     }
-    function focus($parse,$timeout){
+
+    function focus($parse, $timeout) {
         return {
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 var model = $parse(attrs.focus);
-                scope.$watch(model, function(value) {
-                    if(value === true) {
-                        $timeout(function() {
+                scope.$watch(model, function (value) {
+                    if (value === true) {
+                        $timeout(function () {
                             element[0].focus();
                         });
                     }
                 });
-                element.bind('blur', function() {
+                element.bind('blur', function () {
                     scope.$apply(model.assign(scope, false));
                 });
             }
         };
     }
+
     function numberPicker() {
         var directive = {
             restrict: 'E',
@@ -47,7 +51,7 @@
 
         }
 
-        function numberPickerController($scope,$element) {
+        function numberPickerController($scope, $element) {
             $scope.down = down;
             $scope.up = up;
             $element.bind("mousewheel", function (event, delta) {
@@ -435,6 +439,6 @@
         .directive('fullScroll', fullScroll)
         .directive('closeOffCanvas', closeOffCanvas)
         .directive('numberPicker', numberPicker)
-        .directive('focus',focus)
-        .directive('buildSection',buildSection)
+        .directive('focus', focus)
+        .directive('buildSection', buildSection)
 })();

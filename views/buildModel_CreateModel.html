@@ -123,13 +123,13 @@
             </div>
         </div>
     </div>
-    <!--模型編輯-->
+    <!--查詢條件-->
     <div class="col-md-4 col-xs-12  col-sm-12">
         <div class="ibox">
-            <div class="ibox-title"><h2>{{"queryConditions"|translate}}</h2></div>
+            <div class="ibox-title"><h2>{{"queryConditions"|translate}}<span title="undo" class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right" ng-click="createModelCtrl.undo()" ng-show="createModelCtrl.showUndo"></span></h2></div>
             <div class="ibox-content">
                 <!--auto render-->
-                <build-section datasource="createModelCtrl.datasource" clear-all="createModelCtrl.clearAll"></build-section>
+                <build-section datasource="createModelCtrl.datasource" clear="createModelCtrl.clear"></build-section>
             </div>
         </div>
     </div>

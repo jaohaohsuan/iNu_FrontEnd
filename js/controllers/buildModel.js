@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$state', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', createModelController])
 
     function buildModelController($scope, $state) {
         var self = this;
@@ -22,7 +22,7 @@
     function createModelController($scope, jsonMethodService, jsonParseService) {
         var self = this;
         self.addToBuildSection = addToBuildSection;
-        self.clearAll = clearAll;
+        self.clear = clear;
         self.isComponent = true;
         self.isRounded = isRounded;
         self.logicWord = 'and';
@@ -39,7 +39,9 @@
             {"name": "角色：A", "content": "A"},
             {"name": "角色：B", "content": "B"}
         ]
+        self.showUndo = false;
         self.toggleSelection = toggleSelection;
+        self.undo = undo;
         setReuseModel();
         setModelSection();
 
@@ -52,8 +54,9 @@
             initialSetting();
         }
 
-        function clearAll(section) {
+        function clear(section) {
             console.log(section)
+            self.showUndo = true;
         }
 
         function initialSetting() {
@@ -91,6 +94,10 @@
             var idx = selectedItems.indexOf(item);
             if (idx != -1) selectedItems.splice(idx, 1);
             else selectedItems.push(item);
+        }
+
+        function undo() {
+            self.showUndo=false;
         }
 
         /**
