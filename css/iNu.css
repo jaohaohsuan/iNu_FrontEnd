@@ -2,7 +2,9 @@
 .border-radius {
     border-radius: 6px
 }
-
+.component-instance-button{
+    margin-top: 2px;
+}
 .module-preview {
     height: 180px;
     overflow: auto;

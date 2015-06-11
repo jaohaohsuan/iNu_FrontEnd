@@ -19,7 +19,8 @@
     "reuseModel": "可复用的模型组件",
     "queryConditions": "查询条件",
     "saveModel": "模型储存",
-    "saveComponent": "组件储存",
+    "saveComponent": "另存组件",
+	"deleteComponent": "删除组件",
     "keywordTitle": "关键词(以空白隔开)",
     "keywordPlaceholder": "请以空白区隔关键词",
     "allAccord": "提及所有关键词",
@@ -36,5 +37,7 @@
     "componentNamePlaceholder": "请输入组件名称...",
     "modelName": "模型名称",
     "modelNamePlaceholder": "请输入模型名称",
-	"clearAll":"全部清除"
+	"clearAll":"全部清除",
+	"rename":"更名",
+	"undo":"复原"
 }

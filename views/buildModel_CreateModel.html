@@ -126,7 +126,7 @@
     <!--查詢條件-->
     <div class="col-md-4 col-xs-12  col-sm-12">
         <div class="ibox">
-            <div class="ibox-title"><h2>{{"queryConditions"|translate}}<span title="undo" class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right" ng-click="createModelCtrl.undo()" ng-show="createModelCtrl.showUndo"></span></h2></div>
+            <div class="ibox-title"><h2>{{"queryConditions"|translate}}<span title="{{'undo'|translate}}" class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right" ng-click="createModelCtrl.undo()"  ng-show="createModelCtrl.showUndo"></span></h2></div>
             <div class="ibox-content">
                 <!--auto render-->
                 <build-section datasource="createModelCtrl.datasource" clear="createModelCtrl.clear"></build-section>
@@ -138,16 +138,8 @@
         <div class="ibox">
             <div class="ibox-title"><h2>{{"saveModel"|translate}}</h2></div>
             <div class="ibox-content">
-                <div class="form-inline" ng-show="createModelCtrl.isComponent">
-                    <div class="form-group">
-                        {{"componentName"|translate}}：
-                        <input type="text" class="form-control input-sm"
-                               placeholder="{{'componentNamePlaceholder'|translate}}"
-                               ng-model="createModelCtrl.modelName"/>
+                <component-instance  ng-show="createModelCtrl.isComponent"></component-instance>
 
-                        <button class="btn btn-success btn-sm">{{"saveComponent"|translate}}</button>
-                    </div>
-                </div>
                 <!--創建模型顯示控件-->
                 <div class="form-inline" ng-hide="createModelCtrl.isComponent">
                     <div class="form-group">

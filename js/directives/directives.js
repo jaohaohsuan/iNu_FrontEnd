@@ -20,7 +20,18 @@
 
         return directive;
     }
-
+    function componentInstance(){
+        var directive = {
+            restrict:'E',
+            scope:{
+                datasource:'=',
+                renameComponent:'=',
+                deleteComponent:'='
+            },
+            templateUrl:'views/directives/componentInstance.html'
+        };
+        return directive;
+    }
     function focus($parse, $timeout) {
         return {
             link: function (scope, element, attrs) {
@@ -49,7 +60,7 @@
             controller: numberPickerController,
             template: '<div class="number-picker"><input type="text" size="{{size||2}}" ng-model="number" value="0"  class="number-input  text-center" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/><div class="number-arrow"><span><a href="javascript: void(0)" ng-click="up()" class="fa fa-caret-up fa-2x"></a></span><span><a href="javascript: void(0)" ng-click="down()" class="fa fa-caret-down fa-2x"></a></span></div></div>'
 
-        }
+        };
 
         function numberPickerController($scope, $element) {
             $scope.down = down;
@@ -441,4 +452,5 @@
         .directive('numberPicker', numberPicker)
         .directive('focus', focus)
         .directive('buildSection', buildSection)
+        .directive('componentInstance',componentInstance)
 })();
