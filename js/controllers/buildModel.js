@@ -48,7 +48,7 @@
         self.undo = undo;
         setReuseModel();
         setModelSection();
-
+        initialSetting();
         function addToBuildSection(modelSection) {
             var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource, "name");
             jsonMethodService.getJson('json/mustNotNew.json').then(function (collectionjson) {
