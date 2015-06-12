@@ -36,8 +36,8 @@
     <p></p>
 
     <div class="input-group">
-        <input type="text" class="form-control" ng-disabled="modelInstanceCtrl.disableEdit" required ng-required="componentInstanceCtrl.required" ng-model="componentInstanceCtrl.textName"
-               placeholder="{{'modelNamePlaceholder'|translate}}" ng-model="createModelCtrl.modelName"/>
+        <input type="text" class="form-control" ng-disabled="modelInstanceCtrl.disableEdit"  ng-required="modelInstanceCtrl.required" ng-model="modelInstanceCtrl.textName"
+               placeholder="{{'modelNamePlaceholder'|translate}}"/>
         <span class="input-group-btn">
             <<button translate ng-class="{true:'btn btn-success',false:'btn btn-info'}[modelInstanceCtrl.disableEdit]"
                      ng-click="modelInstanceCtrl.change()">{{modelInstanceCtrl.changeText}}

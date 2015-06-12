@@ -129,13 +129,11 @@
             self.change = change;
             self.changeText = 'change';
             self.disableEdit = true;
-            self.required = true;
+            self.required = false;
             function change() {
                 if (self.changeText === 'change') {
                     self.changeText = 'finished';
                     self.disableEdit = false;
-                    self.required = false;
-
                 }
                 else {
                     if (!self.textName||!self.textName.length)
@@ -143,7 +141,7 @@
                     else {
                         self.disableEdit = true;
                         self.changeText = 'change';
-                        self.renameComponent(); //在完成的時候給前端控制
+                        self.renameModel(); //在完成的時候給前端控制
                     }
                 }
             }
