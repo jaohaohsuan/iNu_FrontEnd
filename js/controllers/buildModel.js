@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout','SweetAlert','$translate', createModelController])
 
     function buildModelController($scope, $timeout) {
         var self = this;
@@ -23,7 +23,7 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService) {
+    function createModelController($scope, jsonMethodService, jsonParseService,$timeout,SweetAlert,$translate) {
         var self = this;
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
@@ -91,7 +91,22 @@
         }
 
         function deleteComponent() {
-            alert('deleted');
+            SweetAlert.swal({
+                    title: $translate.instant('sureDelete'), //讀取多語系key
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: $translate.instant('sure'),
+                    cancelButtonText: $translate.instant('cancel'),
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                function(isConfirm){
+                    if(isConfirm){
+                        SweetAlert.swal("deleted","","success");
+                    }
+
+                });
         }
 
         function initialSetting() {
@@ -104,7 +119,7 @@
         }
 
         function renameComponent() {
-                  alert('renamed');
+            SweetAlert.swal("renamed","","success");
         }
 
         function setReuseModel() {

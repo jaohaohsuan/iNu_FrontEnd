@@ -90,6 +90,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                         {
                             name: ['ngTagsInput'],
                             files: ['js/plugins/tagsInput/ng-tags-input.min.js','css/plugins/tagsInput/ng-tags-input.min.css','css/plugins/tagsInput/ng-tags-input.bootstrap.min.css']
+                        },
+                        {
+                            name:'oitozero.ngSweetAlert',
+                            files:['js/plugins/angular-sweetalert/AngularSweetAlert.min.js','js/plugins/angular-sweetalert/sweetalert.min.js','css/plugins/angular-sweetalert/sweetalert.css']
                         }
                     ])
                 }
