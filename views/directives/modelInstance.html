@@ -24,7 +24,7 @@
 </div>
 
 
-<div ng-show="isInstance">
+<div ng-show="modelInstanceCtrl.isInstance">
 
     啟用此模型?&nbsp;&nbsp;
     <div class="btn-group">
@@ -36,7 +36,7 @@
     <p></p>
 
     <div class="input-group">
-        <input type="text" class="form-control" ng-disabled="modelInstanceCtrl.disableEdit"
+        <input type="text" class="form-control" ng-disabled="modelInstanceCtrl.disableEdit" required ng-required="componentInstanceCtrl.required" ng-model="componentInstanceCtrl.textName"
                placeholder="{{'modelNamePlaceholder'|translate}}" ng-model="createModelCtrl.modelName"/>
         <span class="input-group-btn">
             <<button translate ng-class="{true:'btn btn-success',false:'btn btn-info'}[modelInstanceCtrl.disableEdit]"
@@ -46,6 +46,6 @@
     </div>
 
     <!-- confirmed-click:按下確認後綁定的事件 confirm-click:確認視窗內容的文字-->
-    <button ng-click="deleteModel()" class="btn btn-danger  btn-block instance-button">{{'deleteModel'|translate}}
+    <button ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-danger  btn-block instance-button">{{'deleteModel'|translate}}
     </button>
 </div>

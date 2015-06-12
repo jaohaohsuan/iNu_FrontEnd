@@ -17,62 +17,79 @@
                 return className[index % className.length];
             }
         }
+
         return directive;
     }
 
-    function confirmClick(){
-        var directive={
-            link:confirmClickLink,
-            scope:{
-                confirmedClick:'='
+    function confirmClick() {
+        var directive = {
+            link: confirmClickLink,
+            scope: {
+                confirmedClick: '='
             }
         }
-        function confirmClickLink(scope,element,attrs){
-           var msg = attrs.confirmClick||"Are you sure";
+
+        function confirmClickLink(scope, element, attrs) {
+            var msg = attrs.confirmClick || "Are you sure";
             var clickAction = scope.confirmedClick;
-            element.bind('click',function(event){
-               if(window.confirm(msg)){
-                   scope.$eval(clickAction);
-               }
+            element.bind('click', function (event) {
+                if (window.confirm(msg)) {
+                    scope.$eval(clickAction);
+                }
             });
         }
+
         return directive;
     }
 
-    function componentInstance(){
+    function componentInstance() {
         var directive = {
-            restrict:'E',
-            scope:{
-                datasource:'=',
-                renameComponent:'=',
-                deleteComponent:'='
+            restrict: 'E',
+            scope: {
+                datasource: '=',
+                renameComponent: '=',
+                deleteComponent: '='
             },
-            templateUrl:'views/directives/componentInstance.html',
-            controller:componentInstanceController,
-            controllerAs:'componentInstanceCtrl'
+            templateUrl: 'views/directives/componentInstance.html',
+            controller: componentInstanceController,
+            controllerAs: 'componentInstanceCtrl',
+            bindToController: true
+
 
         };
-        function componentInstanceController($scope){
-            var self = this;
-            self.disableEdit =true;
-            self.change = change;
-            self.changeText='change'; //button顯示名稱，多語系son的key
 
-            function change(){
-                if(self.changeText==='change'){
-                    self.changeText='finished';
+        function componentInstanceController($scope) {
+            var self = this;
+       
+            self.change = change;
+            self.changeText = 'change'; //button顯示名稱，多語系son的key
+            self.disableEdit = true;
+            self.required = false;
+
+            function change() {
+
+                if (self.changeText === 'change') {
+                    self.changeText = 'finished';
                     self.disableEdit = false;
 
                 }
-                else{
-                    self.changeText='change';
-                    self.disableEdit = true;
-                    $scope.renameComponent(); //在完成的時候給前端控制
+                else {
+
+                    if (!self.textName||!self.textName.length)
+                        self.required = true;
+                    else {
+                        self.disableEdit = true;
+                        self.changeText = 'change';
+                        self.renameComponent(); //在完成的時候給前端控制
+                    }
+
                 }
             }
-   }
+        }
+
         return directive;
     }
+
     function focus($parse, $timeout) {
         return {
             link: function (scope, element, attrs) {
@@ -91,38 +108,47 @@
             }
         };
     }
-    function modelInstance(){
-        var directive ={
-            restrict:'E',
-            scope:{
-                datasource:'=',
-                renameModel:'=',
-                deleteModel:'=',
-                isInstance:'='
-            },
-            templateUrl:'views/directives/modelInstance.html',
-            controller:modelInstanceController,
-            controllerAs:'modelInstanceCtrl'
-        };
-        function modelInstanceController($scope){
-            var self = this;
-            self.disableEdit =true;
-            self.change = change;
-            self.changeText='change';
 
-            function change(){
-                if(self.changeText==='change'){
-                    self.changeText='finished';
+    function modelInstance() {
+        var directive = {
+            restrict: 'E',
+            scope: {
+                datasource: '=',
+                renameModel: '=',
+                deleteModel: '=',
+                isInstance: '='
+            },
+            templateUrl: 'views/directives/modelInstance.html',
+            controller: modelInstanceController,
+            controllerAs: 'modelInstanceCtrl',
+            bindToController: true
+        };
+
+        function modelInstanceController($scope) {
+            var self = this;
+            self.change = change;
+            self.changeText = 'change';
+            self.disableEdit = true;
+            self.required = true;
+            function change() {
+                if (self.changeText === 'change') {
+                    self.changeText = 'finished';
                     self.disableEdit = false;
+                    self.required = false;
 
                 }
-                else{
-                    self.changeText='change';
-                    self.disableEdit = true;
-                    $scope.renameModel();
+                else {
+                    if (!self.textName||!self.textName.length)
+                        self.required = true;
+                    else {
+                        self.disableEdit = true;
+                        self.changeText = 'change';
+                        self.renameComponent(); //在完成的時候給前端控制
+                    }
                 }
             }
         }
+
         return directive;
     }
 
@@ -528,7 +554,7 @@
         .directive('numberPicker', numberPicker)
         .directive('focus', focus)
         .directive('buildSection', buildSection)
-        .directive('componentInstance',componentInstance) //組件實例視窗
-        .directive('modelInstance',modelInstance) //模型實例視窗
-        .directive('confirmClick',confirmClick) //刪除確認視窗
+        .directive('componentInstance', componentInstance) //組件實例視窗
+        .directive('modelInstance', modelInstance) //模型實例視窗
+        .directive('confirmClick', confirmClick) //刪除確認視窗
 })();

@@ -176,9 +176,9 @@
 
                 <h2 class="bg-info">{{'next'|translate}}</h2>
                 <hr/>
-                <div class="form-group" ng-show="createModelCtrl.isComponent">
+                <form class="form-group" ng-show="createModelCtrl.isComponent">
                     <div class="input-group">
-                        <input type="text" class="form-control"/> <span class="input-group-btn"><button ng-click="createModelCtrl.saveAs()"
+                        <input type="text" class="form-control" ng-model="createModelCtrl.saveAsName" ng-disabled="createModelCtrl.isNextTodo" required/> <span class="input-group-btn"  ><button ng-click="createModelCtrl.saveAs()"
                             class="btn btn-success">{{'saveComponent'|translate}}
                     </button></span>
                     </div>
@@ -187,12 +187,12 @@
                         <label class="btn btn-success ">{{'continueEditTemplate'|translate}}</label>
                         <label class="btn btn-success ">{{'editSaveComponent'|translate}}</label>
                     </div>
-                </div>
+                </form>
 
                 <!--創建模型顯示控件-->
-                <div class="form-group" ng-hide="createModelCtrl.isComponent">
+                <form class="form-group" ng-hide="createModelCtrl.isComponent">
                     <div class="input-group">
-                        <input type="text" class="form-control"/> <span class="input-group-btn"><button ng-click="createModelCtrl.saveAs()"
+                        <input type="text" class="form-control" ng-model="createModelCtrl.saveAsName" ng-disabled="createModelCtrl.isNextTodo" required/> <span class="input-group-btn"><button ng-click="createModelCtrl.saveAs()"
                             class="btn btn-success">{{'saveModel'|translate}}
                     </button></span>
                     </div>
@@ -202,7 +202,7 @@
                         <label class="btn btn-success">{{'editSaveModel'|translate}}</label>
                         <label class="btn btn-success">{{'enableSaveModel'|translate}}</label>
                     </div>
-                </div>
+                </form>
 
             </div>
         </div>

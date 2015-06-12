@@ -34,13 +34,13 @@
         self.isInstance = true;
         self.isNextTodo = false;
         self.isRounded = isRounded;
-
+        self.keywordCheck = keywordCheck;
         self.logicWord = 'and';
         $scope.$on('currentTab', function (event, tab) {
            self.isComponent = (tab.title == 'createComponent');
            self.componentOrModelName=tab.title === 'createComponent'? $translate.instant('components'): $translate.instant('models');
         });
-        self.keywordCheck = keywordCheck;
+
         self.modelSection = {
             "basicModel": "mustHave",
             "reuseModel": "mustHave"
@@ -52,6 +52,7 @@
             {"name": "角色：B", "content": "B"}
         ];
         self.saveAs =saveAs;
+        self.saveAsName ='';
         self.showUndo = false;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
@@ -127,6 +128,7 @@
             SweetAlert.swal("renamed","","success");
         }
         function saveAs(){
+            if(self.saveAsName)
             self.isNextTodo = true;
         }
         function setReuseModel() {
