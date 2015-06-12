@@ -79,7 +79,6 @@
                 var model = $parse(attrs.focus);
 
                 scope.$watch(model, function (value) {
-                    console.log(value)
                     if (value === true) {
                         $timeout(function () {
                             element.find('input').focus();

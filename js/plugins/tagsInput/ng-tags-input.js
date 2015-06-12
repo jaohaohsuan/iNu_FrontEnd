@@ -283,7 +283,7 @@
                 };
                 if (options.chineseMode){//中文模式
                     element.on('input', function (v) {
-                        var value = element.find('input').val();
+                        var value = input.val();
                         var regExp = /(\s)/g
                         var match = regExp.exec(value)
                         if (match != null) {//有空白則自動標籤
