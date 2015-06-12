@@ -74,3 +74,17 @@ body {
 .tag-list li a {
     display: inline;
 }
+.modelsSelect{
+    position: relative;
+    top: -25px;
+    left: 5px;
+}
+.modelsAdd{
+    position: relative;
+    bottom: -45px;
+    left: 15px;
+}
+.modelsLabel{
+    position: relative;
+    top:10px
+}

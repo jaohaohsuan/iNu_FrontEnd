@@ -8,7 +8,7 @@
 
                 <p></p>
                 <tags-input ng-model="createModelCtrl.keywords"
-                            min-length = "0"
+                            min-length="0"
                             add-on-space="true"
                             add-on-paste="true"
                             enable-editing-last-tag="true"
@@ -24,9 +24,9 @@
                                    select-first-match="false"></auto-complete>
                 </tags-input>
                 <!--<input type="text" class="form-control" placeholder="{{'keywordPlaceholder'|translate}}"-->
-                              <!--ng-model="createModelCtrl.keywords"-->
-                              <!--focus="createModelCtrl.inputFocus"-->
-                              <!--ng-change="createModelCtrl.keywordCheck(createModelCtrl.keywords)"/>-->
+                <!--ng-model="createModelCtrl.keywords"-->
+                <!--focus="createModelCtrl.inputFocus"-->
+                <!--ng-change="createModelCtrl.keywordCheck(createModelCtrl.keywords)"/>-->
 
 
                 <p></p>
@@ -143,7 +143,11 @@
     <!--查詢條件-->
     <div class="col-md-4 col-xs-12  col-sm-12">
         <div class="ibox">
-            <div class="ibox-title"><h2>{{"queryConditions"|translate}}<span title="{{'undo'|translate}}" class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right" ng-click="createModelCtrl.undo()"  ng-show="createModelCtrl.showUndo"></span></h2></div>
+            <div class="ibox-title"><h2>{{"queryConditions"|translate}}<span title="{{'undo'|translate}}"
+                                                                             class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right"
+                                                                             ng-click="createModelCtrl.undo()"
+                                                                             ng-show="createModelCtrl.showUndo"></span>
+            </h2></div>
             <div class="ibox-content">
                 <!--auto render-->
                 <build-section datasource="createModelCtrl.datasource" clear="createModelCtrl.clear"></build-section>
@@ -155,10 +159,22 @@
         <div class="ibox">
             <div class="ibox-title"><h2>{{"saveModel"|translate}}</h2></div>
             <div class="ibox-content">
-                <component-instance delete-component="createModelCtrl.deleteComponent" rename-component="createModelCtrl.renameComponent" ng-show="createModelCtrl.isComponent"></component-instance>
+                <component-instance delete-component="createModelCtrl.deleteComponent"
+                                    rename-component="createModelCtrl.renameComponent"
+                                    ng-show="createModelCtrl.isComponent"></component-instance>
                 <!--創建模型顯示控件-->
-                <model-instance delete-model="createModelCtrl.deleteComponent" rename-model="createModelCtrl.renameComponent"  ng-hide="createModelCtrl.isComponent"></model-instance>
+                <model-instance delete-model="createModelCtrl.deleteComponent"
+                                rename-model="createModelCtrl.renameComponent"
+                                ng-hide="createModelCtrl.isComponent"></model-instance>
 
+            </div>
+        </div>
+        <div class="ibox">
+            <div class="ibox-content">
+                <h3 translate="whatEditing"
+                    translate-values="{componentOrModelName:'{{createModelCtrl.componentOrModelName}}'}"></h3>
+                <h2 class="bg-info">{{'next'|translate}}</h2>
+                <hr/>
 
             </div>
         </div>

@@ -28,6 +28,7 @@
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
         self.clear = clear;
+        self.componentOrModelName= $translate.instant('components');
         self.deleteComponent = deleteComponent;
         self.isComponent = true;
         self.isRounded = isRounded;
@@ -35,6 +36,7 @@
         self.logicWord = 'and';
         $scope.$on('currentTab', function (event, tab) {
            self.isComponent = (tab.title == 'createComponent');
+           self.componentOrModelName=tab.title === 'createComponent'? $translate.instant('components'): $translate.instant('models');
         });
         self.keywordCheck = keywordCheck;
         self.modelSection = {

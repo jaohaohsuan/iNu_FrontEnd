@@ -98,7 +98,8 @@
             scope:{
                 datasource:'=',
                 renameModel:'=',
-                deleteModel:'='
+                deleteModel:'=',
+                isInstance:'='
             },
             templateUrl:'views/directives/modelInstance.html',
             controller:modelInstanceController,
