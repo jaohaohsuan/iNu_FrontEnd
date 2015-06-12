@@ -154,7 +154,7 @@
             </div>
         </div>
     </div>
-    <!--模型儲存-->
+    <!--配置-->
     <div class="col-md-3 col-xs-12 col-sm-12">
         <div class="ibox" ng-show="createModelCtrl.isInstance">
             <div class="ibox-title"><h2>{{"config"|translate}}</h2></div>
@@ -165,7 +165,7 @@
                 <!--創建模型顯示控件-->
                 <model-instance delete-model="createModelCtrl.deleteComponent"
                                 rename-model="createModelCtrl.renameComponent"
-                                ng-hide="createModelCtrl.isComponent"></model-instance>
+                                ng-hide="createModelCtrl.isComponent" is-instance="createModelCtrl.isInstance"></model-instance>
 
             </div>
         </div>
@@ -173,8 +173,36 @@
             <div class="ibox-content">
                 <h3 translate="whatEditing"
                     translate-values="{componentOrModelName:'{{createModelCtrl.componentOrModelName}}'}"></h3>
+
                 <h2 class="bg-info">{{'next'|translate}}</h2>
                 <hr/>
+                <div class="form-group" ng-show="createModelCtrl.isComponent">
+                    <div class="input-group">
+                        <input type="text" class="form-control"/> <span class="input-group-btn"><button ng-click="createModelCtrl.saveAs()"
+                            class="btn btn-success">{{'saveComponent'|translate}}
+                    </button></span>
+                    </div>
+                    <br/>
+                    <div class="btn-group btn-group-vertical animated fadeIn btn-block next-todo" ng-show="createModelCtrl.isNextTodo">
+                        <label class="btn btn-success ">{{'continueEditTemplate'|translate}}</label>
+                        <label class="btn btn-success ">{{'editSaveComponent'|translate}}</label>
+                    </div>
+                </div>
+
+                <!--創建模型顯示控件-->
+                <div class="form-group" ng-hide="createModelCtrl.isComponent">
+                    <div class="input-group">
+                        <input type="text" class="form-control"/> <span class="input-group-btn"><button ng-click="createModelCtrl.saveAs()"
+                            class="btn btn-success">{{'saveModel'|translate}}
+                    </button></span>
+                    </div>
+                    <br/>
+                    <div class="btn-group btn-group-vertical btn-block animated fadeIn next-todo" ng-show="createModelCtrl.isNextTodo">
+                        <label class="btn btn-success">{{'continueEditTemplate'|translate}}</label>
+                        <label class="btn btn-success">{{'editSaveModel'|translate}}</label>
+                        <label class="btn btn-success">{{'enableSaveModel'|translate}}</label>
+                    </div>
+                </div>
 
             </div>
         </div>

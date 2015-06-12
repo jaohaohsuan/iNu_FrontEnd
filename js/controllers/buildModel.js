@@ -32,6 +32,7 @@
         self.deleteComponent = deleteComponent;
         self.isComponent = true;
         self.isInstance = true;
+        self.isNextTodo = false;
         self.isRounded = isRounded;
 
         self.logicWord = 'and';
@@ -49,7 +50,8 @@
             {"name": "角色：全部", "content": "ALL"},
             {"name": "角色：A", "content": "A"},
             {"name": "角色：B", "content": "B"}
-        ]
+        ];
+        self.saveAs =saveAs;
         self.showUndo = false;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
@@ -124,7 +126,9 @@
         function renameComponent() {
             SweetAlert.swal("renamed","","success");
         }
-
+        function saveAs(){
+            self.isNextTodo = true;
+        }
         function setReuseModel() {
             jsonMethodService.getJson('json/reuseModel.json').then(
                 function (data) {//success

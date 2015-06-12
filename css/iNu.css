@@ -1,10 +1,33 @@
 
+/*¼ÐÅÒ°Ï*/
+
+body {
+    font-family: Georgia, Microsoft JhengHei, sans-serif;
+}
+
+
+span > a:link {
+    color: #328F7B;
+}
+
+
+
+
+/*Class°Ï*/
+
 .border-radius {
     border-radius: 6px
 }
-.module-preview {
-    height: 180px;
-    overflow: auto;
+
+.clear-button {
+    position: relative;
+    margin-top: -5px;
+    background: rgba(0,0,0,0.25);
+    color: #fff;
+}
+.clear-button:hover{
+    background-color: rgba(0,0,0,0.1);
+    color: #fff;
 }
 
 .float-e-margins {
@@ -18,14 +41,29 @@
 .instance-button{
     margin-top: 2px;
 }
-span > a:link {
-    color: #328F7B;
-}
 
-.scroll {
-    overflow: auto;
+
+.modelsSelect{
+    position: relative;
+    top: -25px;
+    left: 5px;
+}
+.modelsAdd{
+    position: relative;
+    bottom: -45px;
+    left: 15px;
+    z-index: 1;
+}
+.modelsLabel{
+    position: relative;
+    top:10px
+}
+.module-preview {
     height: 180px;
-    width: 100%;
+    overflow: auto;
+}
+.next-todo > .btn{
+    margin: 10px;
 }
 
 .number-picker {
@@ -58,34 +96,6 @@ span > a:link {
     margin-bottom: 0;
 }
 
-.clear-button {
-    position: relative;
-    margin-top: -5px;
-    background: rgba(0,0,0,0.25);
-    color: #fff;
-}
-.clear-button:hover{
-    background-color: rgba(0,0,0,0.1);
-    color: #fff;
-}
-body {
-    font-family: Georgia, Microsoft JhengHei, sans-serif;
-}
 .tag-list li a {
     display: inline;
-}
-.modelsSelect{
-    position: relative;
-    top: -25px;
-    left: 5px;
-}
-.modelsAdd{
-    position: relative;
-    bottom: -45px;
-    left: 15px;
-    z-index: 1;
-}
-.modelsLabel{
-    position: relative;
-    top:10px
 }
