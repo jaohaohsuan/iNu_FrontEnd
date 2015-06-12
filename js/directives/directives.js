@@ -14,10 +14,9 @@
             scope.setClass = setClass;
             function setClass(index) {
                 var className = ['panel panel-primary', 'panel panel-danger', 'panel panel-warning', 'panel panel-info'];
-                return className[index];
+                return className[index % className.length];
             }
         }
-
         return directive;
     }
 
@@ -78,7 +77,9 @@
         return {
             link: function (scope, element, attrs) {
                 var model = $parse(attrs.focus);
+
                 scope.$watch(model, function (value) {
+                    console.log(value)
                     if (value === true) {
                         $timeout(function () {
                             element.find('input').focus();

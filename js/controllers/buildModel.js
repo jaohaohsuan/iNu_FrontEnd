@@ -1,11 +1,12 @@
 (function () {
     angular.module('iNu')
-        .controller('buildModelController', ['$scope', '$state', buildModelController])
+        .controller('buildModelController', ['$scope', '$timeout', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', createModelController])
 
-    function buildModelController($scope, $state) {
+    function buildModelController($scope, $timeout) {
         var self = this;
         self.modelBroadcast = modelBroadcast;
+
         self.tabs = [
             {title: 'createComponent', active: true},
             {title: 'createModel'},
@@ -13,9 +14,12 @@
             {title: 'associateWords'},
             {title: 'modules'}
         ]
+//        $timeout (function() {
+//            modelBroadcast(self.tabs[0]);
+//        },50);
+
         function modelBroadcast(tab) {
-            var isComopnent = (tab.title == self.tabs[0].title);
-            $scope.$broadcast('isComponent', isComopnent);
+            $scope.$broadcast('currentTab', tab);
         }
     }
 
@@ -29,8 +33,8 @@
         self.isRounded = isRounded;
 
         self.logicWord = 'and';
-        $scope.$on('isComponent', function (event, isComponent) {
-            self.isComponent = isComponent;
+        $scope.$on('currentTab', function (event, tab) {
+           self.isComponent = (tab.title == 'createComponent');
         });
         self.keywordCheck = keywordCheck;
         self.modelSection = {
@@ -46,9 +50,11 @@
         self.showUndo = false;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
+
         setReuseModel();
         setModelSection();
         initialSetting();
+
         function addToBuildSection(modelSection) {
             var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource, "name");
             jsonMethodService.getJson('json/mustNotNew.json').then(function (collectionjson) {
@@ -81,7 +87,6 @@
         }
 
         function clear(section) {
-            console.log(section)
             self.showUndo = true;
         }
 
