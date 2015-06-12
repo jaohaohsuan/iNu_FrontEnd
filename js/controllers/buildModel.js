@@ -31,6 +31,7 @@
         self.componentOrModelName= $translate.instant('components');
         self.deleteComponent = deleteComponent;
         self.isComponent = true;
+        self.isInstance = true;
         self.isRounded = isRounded;
 
         self.logicWord = 'and';

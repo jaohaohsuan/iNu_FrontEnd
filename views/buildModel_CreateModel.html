@@ -156,8 +156,8 @@
     </div>
     <!--模型儲存-->
     <div class="col-md-3 col-xs-12 col-sm-12">
-        <div class="ibox">
-            <div class="ibox-title"><h2>{{"saveModel"|translate}}</h2></div>
+        <div class="ibox" ng-show="createModelCtrl.isInstance">
+            <div class="ibox-title"><h2>{{"config"|translate}}</h2></div>
             <div class="ibox-content">
                 <component-instance delete-component="createModelCtrl.deleteComponent"
                                     rename-component="createModelCtrl.renameComponent"
