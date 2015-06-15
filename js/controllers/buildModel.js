@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout','SweetAlert','$translate', createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', createModelController])
 
     function buildModelController($scope, $timeout) {
         var self = this;
@@ -23,12 +23,12 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService,$timeout,SweetAlert,$translate) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate) {
         var self = this;
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
         self.clear = clear;
-        self.componentOrModelName= $translate.instant('components');
+        self.componentOrModelName = $translate.instant('components');
         self.deleteComponent = deleteComponent;
         self.isComponent = true;
         self.isInstance = true;
@@ -37,12 +37,12 @@
         self.keywordCheck = keywordCheck;
         self.logicWord = 'and';
         $scope.$on('currentTab', function (event, tab) {
-            if (tab.title === 'createComponent'){
+            if (tab.title === 'createComponent') {
                 self.isComponent = true;
-                $translate.instant('components');
-            }else{
+                self.componentOrModelName = $translate.instant('components');
+            } else {
                 self.isComponent = false;
-                $translate.instant('models');
+                self.componentOrModelName = $translate.instant('models');
             }
         });
 
@@ -56,8 +56,8 @@
             {"name": "角色：A", "content": "A"},
             {"name": "角色：B", "content": "B"}
         ];
-        self.saveAs =saveAs;
-        self.saveAsName ='';
+        self.saveAs = saveAs;
+        self.saveAsName = '';
         self.showUndo = false;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
@@ -74,24 +74,25 @@
             })
             initialSetting();
         }
-        function autoTips(query){
+
+        function autoTips(query) {
             var t = {
-                "i":["ibon","ipad","iphone1","iphone2"],
-                "ib":["ibon"],
-                "ibo":["ibon"],
-                "ibon":["ibon"],
-                "ip":["ipad","iphone1","iphone2"],
-                "ipa":["ipad"],
-                "iph":["iphone1","iphone2"],
-                "ipad":["ipad"],
-                "ipho":["iphone1","iphone2"],
-                "iphon":["iphone1","iphone2"],
-                "iphone":["iphone1","iphone2"],
-                "iphone1":["iphone1"],
-                "iphone2":["iphone2"],
-                "不":["不賠","不會"],
-                "不賠":["不賠"],
-                "不會":["不會"]
+                "i": ["ibon", "ipad", "iphone1", "iphone2"],
+                "ib": ["ibon"],
+                "ibo": ["ibon"],
+                "ibon": ["ibon"],
+                "ip": ["ipad", "iphone1", "iphone2"],
+                "ipa": ["ipad"],
+                "iph": ["iphone1", "iphone2"],
+                "ipad": ["ipad"],
+                "ipho": ["iphone1", "iphone2"],
+                "iphon": ["iphone1", "iphone2"],
+                "iphone": ["iphone1", "iphone2"],
+                "iphone1": ["iphone1"],
+                "iphone2": ["iphone2"],
+                "不": ["不賠", "不會"],
+                "不賠": ["不賠"],
+                "不會": ["不會"]
 
             }
             return t[query];
@@ -112,9 +113,9 @@
                     closeOnConfirm: false,
                     closeOnCancel: true
                 },
-                function(isConfirm){
-                    if(isConfirm){
-                        SweetAlert.swal("deleted","","success");
+                function (isConfirm) {
+                    if (isConfirm) {
+                        SweetAlert.swal("deleted", "", "success");
                     }
 
                 });
@@ -130,12 +131,14 @@
         }
 
         function renameComponent() {
-            SweetAlert.swal("renamed","","success");
+            SweetAlert.swal("renamed", "", "success");
         }
-        function saveAs(){
-            if(self.saveAsName)
-            self.isNextTodo = true;
+
+        function saveAs() {
+            if (self.saveAsName)
+                self.isNextTodo = true;
         }
+
         function setReuseModel() {
             jsonMethodService.getJson('json/reuseModel.json').then(
                 function (data) {//success
