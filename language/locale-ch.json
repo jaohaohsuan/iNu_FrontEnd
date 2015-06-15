@@ -40,7 +40,7 @@
 	"modules": "模型组",
 	"mustHave": "必须皆成立",
 	"mustNot": "不可成立",
-	"next":"接下来您可以将样板转存",
+	"next":"接下来您可以将样板转存...",
 	"password": "密码",
 	"queryConditions": "查询条件",
 	"reuseModel": "可复用的模型组件",
@@ -53,6 +53,6 @@
 	"undo": "复原",
 	"update": "更新",
 	"welcome": "欢迎进入如意系统，您当前登陆的用户组为：",
-	"whatEditing":"您正在编辑的是[{{componentOrModelName}}]的样板...",
+	"whatEditing":"您正在编辑的是[{{componentOrModelName}}]的样板",
 	"wordDistance": "限定跨词距离"
 }

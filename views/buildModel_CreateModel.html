@@ -170,19 +170,20 @@
             </div>
         </div>
         <div class="ibox">
+            <div class="ibox-title">
+                <h2 translate="whatEditing"
+                    translate-values="{componentOrModelName:'{{createModelCtrl.componentOrModelName}}'}"></h2>
+                <h3 class="" ng-click="createModelCtrl.nextView = true"><i class="fa fa-arrow-circle-o-down"></i>&nbsp;{{'next'|translate}}</h3>
+            </div>
             <div class="ibox-content">
-                <h3 translate="whatEditing"
-                    translate-values="{componentOrModelName:'{{createModelCtrl.componentOrModelName}}'}"></h3>
 
-                <h2 class="bg-info">{{'next'|translate}}</h2>
-                <hr/>
+
                 <form class="form-group" ng-show="createModelCtrl.isComponent">
                     <div class="input-group">
                         <input type="text" class="form-control" ng-model="createModelCtrl.saveAsName" ng-disabled="createModelCtrl.isNextTodo" required/> <span class="input-group-btn"  ><button ng-click="createModelCtrl.saveAs()"
                             class="btn btn-success">{{'saveComponent'|translate}}
                     </button></span>
                     </div>
-                    <br/>
                     <div class="btn-group btn-group-vertical animated fadeIn btn-block next-todo" ng-show="createModelCtrl.isNextTodo">
                         <label class="btn btn-success ">{{'continueEditTemplate'|translate}}</label>
                         <label class="btn btn-success ">{{'editSaveComponent'|translate}}</label>
@@ -196,7 +197,6 @@
                             class="btn btn-success">{{'saveModel'|translate}}
                     </button></span>
                     </div>
-                    <br/>
                     <div class="btn-group btn-group-vertical btn-block animated fadeIn next-todo" ng-show="createModelCtrl.isNextTodo">
                         <label class="btn btn-success">{{'continueEditTemplate'|translate}}</label>
                         <label class="btn btn-success">{{'editSaveModel'|translate}}</label>

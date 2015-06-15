@@ -37,8 +37,13 @@
         self.keywordCheck = keywordCheck;
         self.logicWord = 'and';
         $scope.$on('currentTab', function (event, tab) {
-           self.isComponent = (tab.title == 'createComponent');
-           self.componentOrModelName=tab.title === 'createComponent'? $translate.instant('components'): $translate.instant('models');
+            if (tab.title === 'createComponent'){
+                self.isComponent = true;
+                $translate.instant('components');
+            }else{
+                self.isComponent = false;
+                $translate.instant('models');
+            }
         });
 
         self.modelSection = {
