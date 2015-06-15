@@ -71,16 +71,16 @@
         initialSetting();
 
         function addModel() {
-
             SweetAlert.swal({
                     title: $translate.instant('newModelsName'), //讀取多語系key
                     type: "input",
                     showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
+                    confirmButtonColor: "#1C84C6",
                     confirmButtonText: $translate.instant('sure'),
                     cancelButtonText: $translate.instant('cancel'),
                     closeOnConfirm: false,
-                    closeOnCancel: true
+                    closeOnCancel: true,
+                    animation:false
                 },
                 function (inputValue) {
                     if (inputValue === false) return false;
@@ -93,8 +93,6 @@
                         "name": inputValue
                     })
                 });
-
-
         }
 
         function addToBuildSection(modelSection) {
