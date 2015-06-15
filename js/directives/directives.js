@@ -113,7 +113,9 @@
         var directive = {
             restrict: 'E',
             scope: {
+                addModel:'=',
                 datasource: '=',
+                enableModel:'=',
                 renameModel: '=',
                 deleteModel: '=',
                 isInstance: '='
@@ -126,7 +128,7 @@
 
         function modelInstanceController($scope) {
             var self = this;
-            self.change = change;
+           self.change = change;
             self.changeText = 'change';
             self.disableEdit = true;
             self.required = false;

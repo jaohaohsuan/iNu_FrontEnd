@@ -25,6 +25,7 @@
 
     function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate) {
         var self = this;
+        self.addModel = addModel;
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
         self.clear = clear;
@@ -45,7 +46,9 @@
                 self.componentOrModelName = $translate.instant('models');
             }
         });
-
+        self.modelDatasource = {
+            models: []
+        };
         self.modelSection = {
             "basicModel": "mustHave",
             "reuseModel": "mustHave"
@@ -63,8 +66,36 @@
         self.undo = undo;
 
         setReuseModel();
+        setModels();
         setModelSection();
         initialSetting();
+
+        function addModel() {
+
+            SweetAlert.swal({
+                    title: $translate.instant('newModelsName'), //讀取多語系key
+                    type: "input",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: $translate.instant('sure'),
+                    cancelButtonText: $translate.instant('cancel'),
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                function (inputValue) {
+                    if (inputValue === false) return false;
+                    if (inputValue === ""||!inputValue.trim().length) {
+                        swal.showInputError("You need to write something!");
+                        return false
+                    }
+                    swal("Nice!", "You wrote: " + inputValue, "success");
+                    self.modelDatasource.models.push({
+                        "name": inputValue
+                    })
+                });
+
+
+        }
 
         function addToBuildSection(modelSection) {
             var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource, "name");
@@ -139,14 +170,13 @@
                 self.isNextTodo = true;
         }
 
-        function setReuseModel() {
-            jsonMethodService.getJson('json/reuseModel.json').then(
-                function (data) {//success
-                    self.reuseModel = data;
-                }, function (data) {//error
 
-                }
-            );
+        function setModels() {
+            jsonMethodService.getJson('json/models.json').then(
+                function (data) {
+                    self.modelDatasource.models = data;
+
+                })
         }
 
         function setModelSection() {
@@ -159,6 +189,17 @@
                     })
                 })
             })
+        }
+
+        function setReuseModel() {
+            jsonMethodService.getJson('json/reuseModel.json').then(
+                function (data) {//success
+                    self.reuseModel = data;
+                }, function (data) {//error
+
+
+                }
+            );
         }
 
         function toggleSelection(selectedItems, item) {
