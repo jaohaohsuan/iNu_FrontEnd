@@ -31,7 +31,7 @@
     </div>
     <p></p>
 
-    <div class="input-group">
+    <form class="input-group">
         <input type="text" class="form-control" ng-disabled="modelInstanceCtrl.disableEdit"  ng-required="modelInstanceCtrl.required" ng-model="modelInstanceCtrl.textName"
                placeholder="{{'modelNamePlaceholder'|translate}}"/>
         <span class="input-group-btn">
@@ -39,7 +39,7 @@
                      ng-click="modelInstanceCtrl.change()">{{modelInstanceCtrl.changeText}}
             </button>
         </span>
-    </div>
+    </form>
 
     <!-- confirmed-click:按下確認後綁定的事件 confirm-click:確認視窗內容的文字-->
     <button ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-danger  btn-block instance-button">{{'deleteModel'|translate}}
