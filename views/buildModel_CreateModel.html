@@ -104,7 +104,11 @@
         <div class="ibox">
             <div class="ibox-title">
                 <h2>{{"reuseModel"|translate}}
-                    <button class="btn btn-primary btn-sm pull-right">{{"update"|translate}}</button>
+                    <div class="btn-group btn-group-sm pull-right">
+                        <button class="btn btn-primary btn-sm pull-right">{{"update"|translate}}</button>
+                        <button class="btn btn-primary btn-sm pull-right" ng-click="createModelCtrl.addTab()">{{"create"|translate}}</button>
+                    </div>
+
                 </h2>
             </div>
             <div class="ibox-content">
@@ -167,7 +171,7 @@
                                 add-model="createModelCtrl.addModel"
                                 delete-model="createModelCtrl.deleteComponent"
                                 rename-model="createModelCtrl.renameComponent"
-                                ng-hide="createModelCtrl.isComponent" is-instance="createModelCtrl.isInstance">
+                                ng-hide="createModelCtrl.isComponent" >
 
                 </model-instance>
 
@@ -175,8 +179,7 @@
         </div>
         <div class="ibox">
             <div class="ibox-title">
-                <h2 translate="whatEditing"
-                    translate-values="{componentOrModelName:'{{createModelCtrl.componentOrModelName}}'}"></h2>
+                <h2 translate="whatEditing">{{'componentOrModelName'|translate}}</h2>
 
                 <h3 class="text-success" ng-click="createModelCtrl.nextView = true"><i class="fa fa-info-circle"></i>&nbsp;{{'next'|translate}}
                 </h3>

@@ -13,6 +13,7 @@
 	"componentNamePlaceholder": "请输入组件名称...",
 	"config": "配置",
 	"continueEditTemplate": "继续编辑样板",
+	"create":"创建",
 	"createComponent": "创建组件",
 	"createModel": "创建模型",
 	"crossAnalysis": "交叉分析",
@@ -37,6 +38,7 @@
 	"modelManage": "模型管理",
 	"modelName": "模型名称",
 	"modelNamePlaceholder": "请输入模型名称",
+	"modelNewNamePlaceholder": "请输入新模型名称",
 	"modules": "模型组",
 	"newModelsName": "请输入模型组名称",
 	"mustHave": "必须皆成立",
@@ -54,6 +56,6 @@
 	"undo": "复原",
 	"update": "更新",
 	"welcome": "欢迎进入如意系统，您当前登陆的用户组为：",
-	"whatEditing": "您正在编辑的是[{{componentOrModelName}}]的样板",
+	"whatEditing": "您正在编辑的是[模型]的样板",
 	"wordDistance": "限定跨词距离"
 }

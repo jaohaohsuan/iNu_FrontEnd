@@ -6,10 +6,9 @@
     function buildModelController($scope, $timeout) {
         var self = this;
         self.modelBroadcast = modelBroadcast;
-
+        self.removeTab = removeTab;
         self.tabs = [
-            {title: 'createComponent', active: true},
-            {title: 'createModel'},
+            {title: 'createModel', active: true},
             {title: 'callList'},
             {title: 'associateWords'},
             {title: 'modules'}
@@ -20,31 +19,30 @@
 
         function modelBroadcast(tab) {
             $scope.$broadcast('currentTab', tab);
+
+        }
+        function removeTab(tab){
+            console.log(self.tabs.indexOf(tab))
+            self.tabs.splice(self.tabs.indexOf(tab),1)
         }
     }
 
     function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate) {
+
         var self = this;
         self.addModel = addModel;
+        self.addTab = addTab;
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
         self.clear = clear;
-        self.componentOrModelName = $translate.instant('components');
         self.deleteComponent = deleteComponent;
-        self.isComponent = true;
         self.isInstance = true;
         self.isNextTodo = false;
         self.isRounded = isRounded;
         self.keywordCheck = keywordCheck;
         self.logicWord = 'and';
         $scope.$on('currentTab', function (event, tab) {
-            if (tab.title === 'createComponent') {
-                self.isComponent = true;
-                self.componentOrModelName = $translate.instant('components');
-            } else {
-                self.isComponent = false;
-                self.componentOrModelName = $translate.instant('models');
-            }
+            self.tabIndex = $scope.buildModelCtrl.tabs.indexOf(tab);
         });
         self.modelDatasource = {
             models: []
@@ -62,6 +60,7 @@
         self.saveAs = saveAs;
         self.saveAsName = '';
         self.showUndo = false;
+        self.tabIndex=0;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
 
@@ -75,6 +74,7 @@
                     title: $translate.instant('newModelsName'), //讀取多語系key
                     type: "input",
                     showCancelButton: true,
+                    inputPlaceholder:$translate.instant('newModelsName'),
                     confirmButtonColor: "#1C84C6",
                     confirmButtonText: $translate.instant('sure'),
                     cancelButtonText: $translate.instant('cancel'),
@@ -94,7 +94,10 @@
                     })
                 });
         }
-
+        function addTab(){
+            console.log(self.tabIndex)
+            $scope.buildModelCtrl.tabs.splice(self.tabIndex+1,0,{title:"createModel",active:false})
+        }
         function addToBuildSection(modelSection) {
             var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource, "name");
             jsonMethodService.getJson('json/mustNotNew.json').then(function (collectionjson) {
