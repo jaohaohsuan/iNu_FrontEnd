@@ -61,15 +61,14 @@
 
         function componentInstanceController($scope) {
             var self = this;
-       
             self.change = change;
-            self.changeText = 'change'; //button顯示名稱，多語系son的key
+            self.changeText = 'changeConfig'; //button顯示名稱，多語系son的key
             self.disableEdit = true;
             self.required = false;
 
             function change() {
 
-                if (self.changeText === 'change') {
+                if (self.changeText === 'changeConfig') {
                     self.changeText = 'finished';
                     self.disableEdit = false;
 
@@ -80,7 +79,7 @@
                         self.required = true;
                     else {
                         self.disableEdit = true;
-                        self.changeText = 'change';
+                        self.changeText = 'changeConfig';
                         self.renameComponent(); //在完成的時候給前端控制
                     }
 
@@ -130,20 +129,21 @@
         function modelInstanceController($scope) {
             var self = this;
            self.change = change;
-            self.changeText = 'change';
+            self.changeText = 'changeConfig';
             self.disableEdit = true;
+            self.modelName ="Test";
             self.required = false;
             function change() {
-                if (self.changeText === 'change') {
+                if (self.changeText === 'changeConfig') {
                     self.changeText = 'finished';
                     self.disableEdit = false;
                 }
                 else {
-                    if (!self.textName||!self.textName.length)
+                    if (!self.modelName||!self.modelName.length)
                         self.required = true;
                     else {
                         self.disableEdit = true;
-                        self.changeText = 'change';
+                        self.changeText = 'changeConfig';
                         self.renameModel(); //在完成的時候給前端控制
                     }
                 }

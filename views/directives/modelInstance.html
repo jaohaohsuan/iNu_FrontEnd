@@ -1,50 +1,55 @@
-<h2>{{modelInstanceCtrl.title}}</h2>
-<div  class="form-inline">
-    <!--<label>{{'modelName'|translate}}： </label>-->
-    <!--<input type="text" class="form-control  m-b-xs modelText " placeholder="{{'modelNewNamePlaceholder'|translate}}"/>-->
-    <label> 數據源：</label>
-    <select  class="form-control m-b-xs ">
-        <option>通話</option>
-        <option>文本</option>
-    </select>
-</div>
+<form class="form-horizontal">
+    <h2 ng-if="modelInstanceCtrl.title">{{modelInstanceCtrl.title}}</h2>
+    <button class="btn-block"
+            ng-class="{true:'btn btn-success',false:'btn btn-info'}[modelInstanceCtrl.disableEdit]"
+            ng-click="modelInstanceCtrl.change()" ng-if="modelInstanceCtrl.isInstance">
+        {{modelInstanceCtrl.changeText|translate}}
+    </button>
 
-<label class="models-label"> 模型組：</label>
-<div class="row">
-    <div class="col-xs-2 col-md-3 col-lg-2">
-        <span  class="btn btn-success fa fa-plus models-add" ng-click="modelInstanceCtrl.addModel()"></span>
+    <div class="field_set" ng-hide="modelInstanceCtrl.disableEdit && modelInstanceCtrl.isInstance">
+        <div class="form-inline" ng-if="modelInstanceCtrl.isInstance">
+            <label> {{'modelName'|translate}}:</label>
+            <input type="text" class="form-control" ng-required="modelInstanceCtrl.required"
+                   ng-model="modelInstanceCtrl.modelName"
+                   placeholder="{{'modelNamePlaceholder'|translate}}"/>
+        </div>
+
+        <div class="form-inline">
+            <h3> {{'models'|translate}}: <button class="btn btn-success btn-xs fa fa-plus " ng-click="modelInstanceCtrl.addModel()"></button></h3>
+            <div class="btn-group btn-group-vertical btn-block models-select ">
+                <button class="btn btn-success btn-outline animated fadeInLeft" ng-model="checked"
+                        ng-repeat="model in modelInstanceCtrl.datasource"
+                        btn-checkbox>{{model.name}}
+                </button>
+            </div>
+
+
+        </div>
+
     </div>
-    <div class="col-xs-10 col-md-9 col-lg-10 ">
-        <div class="btn-group btn-group-vertical btn-block models-select">
-            <label class="btn btn-success btn-outline  animated fadeInLeft" ng-model="checked" ng-repeat="model in modelInstanceCtrl.datasource"
-                   btn-checkbox>{{model.name}}</label>
-             </div>
-    </div>
-</div>
 
 
-<div >
+</form>
 
-    啟用此模型?&nbsp;&nbsp;
+<div class="clearfix"></div>
+<div ng-if="modelInstance.isManagement">
+    <label>{{'enableModel'|translate}}?</label>
+
     <div class="btn-group">
         <label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"
                btn-radio="'Middle'">ON</label>
         <label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"
                btn-radio="'Right'">OFF</label>
     </div>
-    <p></p>
-
-    <form class="input-group">
-        <input type="text" class="form-control" ng-disabled="modelInstanceCtrl.disableEdit"  ng-required="modelInstanceCtrl.required" ng-model="modelInstanceCtrl.textName"
-               placeholder="{{'modelNamePlaceholder'|translate}}"/>
-        <span class="input-group-btn">
-            <<button  ng-class="{true:'btn btn-success',false:'btn btn-info'}[modelInstanceCtrl.disableEdit]"
-                     ng-click="modelInstanceCtrl.change()">{{modelInstanceCtrl.changeText|translate}}
-            </button>
-        </span>
-    </form>
-
+    <button class="btn btn-success  pull-right">{{'saveAsModel'|translate}}</button>
+</div>
+<p></p>
+<div ng-if="modelInstanceCtrl.isInstance">
     <!-- confirmed-click:按下確認後綁定的事件 confirm-click:確認視窗內容的文字-->
-    <button ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-danger  btn-block instance-button">{{'deleteModel'|translate}}
+    <button ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-success  btn-block instance-button">
+        {{'enableModel'|translate}}
+    </button>
+    <button ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-danger  btn-block instance-button">
+        {{'deleteModel'|translate}}
     </button>
 </div>
