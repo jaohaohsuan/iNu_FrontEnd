@@ -46,7 +46,7 @@
 	"next": "接下来您可以将样板转存...",
 	"password": "密码",
 	"queryConditions": "查询条件",
-	"reuseModel": "可复用的模型组件",
+	"reuseModel": "公用组件",
 	"saveComponent": "另存组件",
 	"saveModel": "另存模型",
 	"should": "择一成立",

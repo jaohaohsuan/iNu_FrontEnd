@@ -102,22 +102,26 @@
         </div>
         <!--可復用的模型組件-->
         <div class="ibox">
-            <div class="ibox-title">
+            <div class="ibox-title ">
                 <h2>{{"reuseModel"|translate}}
-                    <div class="btn-group btn-group-sm pull-right">
-                        <button class="btn btn-primary btn-sm pull-right">{{"update"|translate}}</button>
-                        <button class="btn btn-primary btn-sm pull-right" ng-click="createModelCtrl.addTab()">{{"create"|translate}}</button>
+                    <div class="pull-right">
+                        <button class="btn btn-primary btn-rounded" ng-click="createModelCtrl.addTab()">
+                            {{"create"|translate}}
+                        </button>
+                        <button class="btn btn-primary btn-rounded">
+                            {{"update"|translate}}
+                        </button>
                     </div>
-
                 </h2>
             </div>
             <div class="ibox-content">
                 <div class="btn-group btn-group-vertical btn-block "
                      ng-class="{true:'model-preview'}[createModelCtrl.reuseModel.length>5]">
-                    <label class="btn btn-success btn-outline  animated fadeInLeft" ng-repeat="model in createModelCtrl.reuseModel"
-                         ng-model="checked"
-                         ng-click="createModelCtrl.toggleSelection(createModelCtrl.selectedReuseModel,model)"
-                         btn-checkbox>
+                    <label class="btn btn-success btn-outline  animated fadeInLeft"
+                           ng-repeat="model in createModelCtrl.reuseModel"
+                           ng-model="checked"
+                           ng-click="createModelCtrl.toggleSelection(createModelCtrl.selectedReuseModel,model)"
+                           btn-checkbox>
                         {{model.name}}
                     </label>
                 </div>
@@ -171,7 +175,7 @@
                                 add-model="createModelCtrl.addModel"
                                 delete-model="createModelCtrl.deleteComponent"
                                 rename-model="createModelCtrl.renameComponent"
-                                ng-hide="createModelCtrl.isComponent" >
+                                ng-hide="createModelCtrl.isComponent">
 
                 </model-instance>
 
