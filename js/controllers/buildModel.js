@@ -5,8 +5,9 @@
 
     function buildModelController($scope, $timeout) {
         var self = this;
-        self.modelBroadcast = modelBroadcast;
+        //self.modelBroadcast = modelBroadcast;
         self.removeTab = removeTab;
+        self.tabIndex=0;
         self.tabs = [
             {title: 'createModel', active: true},
             {title: 'callList'},
@@ -17,13 +18,17 @@
 //            modelBroadcast(self.tabs[0]);
 //        },50);
 
-        function modelBroadcast(tab) {
-            $scope.$broadcast('currentTab', tab);
-
-        }
-        function removeTab(tab){
-            console.log(self.tabs.indexOf(tab))
-            self.tabs.splice(self.tabs.indexOf(tab),1)
+        //function modelBroadcast(tab) {
+        //    $scope.$broadcast('currentTab', tab);
+        //
+        //}
+        $scope.$on('addTab',function(event,tab){
+            self.tabs.splice(self.tabIndex+1,0,tab);
+            self.tabIndex++;
+        })
+        function removeTab(tab) {
+            self.tabs.splice(self.tabs.indexOf(tab), 1);
+            self.tabIndex--;
         }
     }
 
@@ -60,7 +65,7 @@
         self.saveAs = saveAs;
         self.saveAsName = '';
         self.showUndo = false;
-        self.tabIndex=0;
+        self.tabIndex = 0;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
 
@@ -74,17 +79,17 @@
                     title: $translate.instant('newModelsName'), //讀取多語系key
                     type: "input",
                     showCancelButton: true,
-                    inputPlaceholder:$translate.instant('newModelsName'),
+                    inputPlaceholder: $translate.instant('newModelsName'),
                     confirmButtonColor: "#1C84C6",
                     confirmButtonText: $translate.instant('sure'),
                     cancelButtonText: $translate.instant('cancel'),
                     closeOnConfirm: false,
                     closeOnCancel: true,
-                    animation:false
+                    animation: false
                 },
                 function (inputValue) {
                     if (inputValue === false) return false;
-                    if (inputValue === ""||!inputValue.trim().length) {
+                    if (inputValue === "" || !inputValue.trim().length) {
                         swal.showInputError("You need to write something!");
                         return false
                     }
@@ -94,10 +99,11 @@
                     })
                 });
         }
-        function addTab(){
-            console.log(self.tabIndex)
-            $scope.buildModelCtrl.tabs.splice(self.tabIndex+1,0,{title:"createModel",active:false})
+
+        function addTab() {
+            $scope.$emit('addTab', {title: "createModel", active: false, addable: true});
         }
+
         function addToBuildSection(modelSection) {
             var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource, "name");
             jsonMethodService.getJson('json/mustNotNew.json').then(function (collectionjson) {
