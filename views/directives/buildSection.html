@@ -1,7 +1,7 @@
-<div ng-class="setClass($index)" ng-repeat="section in datasource">
+<div ng-class="self.setClass($index)" ng-repeat="section in self.datasource">
     <div class="panel-heading">
        <h4> {{section.prompt}}
-        <span class="btn clear-button  btn-sm pull-right" ng-click="clear(section)">{{'clearAll'|translate}}</span></h4>
+        <span class="btn clear-button  btn-sm pull-right" ng-click="self.clear(section)">{{'clearAll'|translate}}</span></h4>
     </div>
     <div class="panel-body" ng-class="{true:'model-preview'}[section.datas.length>4]">
 
@@ -12,7 +12,7 @@
             <!--瀏覽區塊-->
 
             <div> {{data.name}}&nbsp;{{data.value}}
-                <span class="btn btn-danger btn-xs  pull-right" ng-click="clear(data)"><i class="fa fa-close"></i></span>
+                <span class="btn btn-danger btn-xs  pull-right" ng-click="self.clear(data)"><i class="fa fa-close"></i></span>
             </div>
         </div>
     </div>

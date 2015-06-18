@@ -7,17 +7,18 @@
                 clear: '='
             },
             templateUrl: 'views/directives/buildSection.html',
-            link: buildSectionLink
+            controller: buildSectionController,
+            controllerAs: 'self',
+            bindToController: true
         }
-
-        function buildSectionLink(scope, element, attrs) {
-            scope.setClass = setClass;
+        function buildSectionController() {
+            var self = this;
+            self.setClass = setClass;
             function setClass(index) {
                 var className = ['panel panel-primary', 'panel panel-danger', 'panel panel-warning', 'panel panel-info'];
                 return className[index % className.length];
             }
         }
-
         return directive;
     }
 
