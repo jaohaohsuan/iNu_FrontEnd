@@ -7,7 +7,7 @@
         var self = this;
         //self.modelBroadcast = modelBroadcast;
         self.removeTab = removeTab;
-        self.tabIndex=0;
+        self.tabIndex = 0;
         self.tabs = [
             {title: 'createModel', active: true},
             {title: 'callList'},
@@ -25,10 +25,16 @@
         $scope.$on('addTab',function(event,tab){
             self.tabs.splice(self.tabIndex+1,0,tab);
             self.tabIndex++;
+
         });
         function removeTab(tab) {
-            self.tabs.splice(self.tabs.indexOf(tab), 1);
-            self.tabIndex--;
+            $timeout (function() {
+                self.tabIndex--;
+                self.tabs.splice(self.tabs.indexOf(tab), 1);
+                if (self.tabIndex == 0) {
+                    self.tabs[self.tabIndex].active = true;
+                }
+            },0);
         }
     }
 
