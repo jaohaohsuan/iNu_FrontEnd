@@ -1,9 +1,9 @@
 (function () {
     angular.module('iNu')
-        .controller('buildModelController', ['$scope', '$timeout', buildModelController])
+        .controller('buildModelController', ['$scope', '$timeout','$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', createModelController])
 
-    function buildModelController($scope, $timeout) {
+    function buildModelController($scope, $timeout,$translate) {
         var self = this;
         //self.modelBroadcast = modelBroadcast;
         self.removeTab = removeTab;
@@ -14,19 +14,12 @@
             {title: 'associateWords'},
             {title: 'modules'}
         ]
-//        $timeout (function() {
-//            modelBroadcast(self.tabs[0]);
-//        },50);
 
-        //function modelBroadcast(tab) {
-        //    $scope.$broadcast('currentTab', tab);
-        //
-        //}
         $scope.$on('addTab',function(event,tab){
             self.tabs.splice(self.tabIndex+1,0,tab);
             self.tabIndex++;
-
         });
+
         function removeTab(tab) {
             $timeout (function() {
                 self.tabIndex--;
@@ -107,7 +100,34 @@
         }
 
         function addTab() {
-            $scope.$emit('addTab', {title: "createModel", active: true, addable: true});
+            SweetAlert.swal({
+                    title: $translate.instant('newComponentName'), //讀取多語系key
+                    type: "input",
+                    showCancelButton: true,
+                    inputPlaceholder: $translate.instant('newComponentName'),
+                    confirmButtonColor: "#1C84C6",
+                    confirmButtonText: $translate.instant('sure'),
+                    cancelButtonText: $translate.instant('cancel'),
+                    closeOnConfirm: false,
+                    closeOnCancel: true,
+                    animation: false
+                },
+                function (inputValue) {
+                    if (inputValue === false) return false;
+                    if (inputValue === "" || !inputValue.trim().length) {
+                        swal.showInputError("You need to write something!");
+                        return false
+                    }
+                    swal({
+                        title: 'Nice!',
+                        text: "You wrote: " + inputValue,
+                        timer: 1000,
+                        type: "success",
+                        showConfirmButton: false
+                    });
+                    $scope.$emit('addTab', { title: 'createModel',active: true, addable: true,tabName: inputValue});
+                });
+
         }
 
         function addToBuildSection(modelSection) {
@@ -164,7 +184,6 @@
 
                 });
         }
-
         function initialSetting() {
             self.keywords = "";
             self.distance = 5;

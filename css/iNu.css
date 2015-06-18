@@ -1,4 +1,4 @@
-/*¼ÐÅÒ°Ï*/
+/*ï¿½ï¿½ï¿½Ò°ï¿½*/
 
 body {
     font-family: Georgia, Microsoft JhengHei, sans-serif;
@@ -8,7 +8,7 @@ span > a:link {
     color: #328F7B;
 }
 
-/*Class°Ï*/
+/*Classï¿½ï¿½*/
 
 .border-radius {
     border-radius: 6px
@@ -102,4 +102,7 @@ padding-top: 5px;
 
 .tag-list li a {
     display: inline;
+}
+.cursor-pointer{
+    cursor: pointer;
 }

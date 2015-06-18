@@ -1,8 +1,14 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <tabset>
         <tab class="animated fadeInUp" ng-repeat="tab in buildModelCtrl.tabs"  active="tab.active">
-           <tab-heading>
-              {{tab.title|translate}}<span ng-if="tab.addable" class=" glyphicon glyphicon-remove" ng-click="buildModelCtrl.removeTab(tab)"></span>
+           <tab-heading ng-switch on="tab.addable">
+               <span ng-switch-default>
+                   {{tab.title|translate}}
+               </span>
+              <span ng-switch-when="true">
+                {{tab.tabName}}
+                &nbsp;<span  class="glyphicon glyphicon-remove cursor-pointer" ng-click="buildModelCtrl.removeTab(tab)"></span>
+              </span>
 
            </tab-heading>
             <div ui-view="{{tab.title}}"></div>
