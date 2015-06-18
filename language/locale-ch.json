@@ -40,6 +40,7 @@
 	"modelNamePlaceholder": "请输入模型名称",
 	"modelNewNamePlaceholder": "请输入新模型名称",
 	"modules": "模型组",
+    "newComponentName":"请输入新组件名称",
 	"newModelsName": "请输入模型组名称",
 	"mustHave": "必须皆成立",
 	"mustNot": "不可成立",
