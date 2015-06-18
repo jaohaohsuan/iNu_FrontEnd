@@ -17,13 +17,11 @@
         <div class="form-inline">
             <h3> {{'models'|translate}}: <button class="btn btn-success btn-xs fa fa-plus " ng-click="modelInstanceCtrl.addModel()"></button></h3>
             <div class="btn-group btn-group-vertical btn-block models-select ">
-                <button class="btn btn-success btn-outline animated fadeInLeft" ng-model="checked"
+                <label class="btn btn-success btn-outline animated fadeInLeft" ng-model="checked"
                         ng-repeat="model in modelInstanceCtrl.datasource"
                         btn-checkbox>{{model.name}}
-                </button>
+                </label>
             </div>
-
-
         </div>
 
     </div>
