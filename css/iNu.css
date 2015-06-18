@@ -38,15 +38,15 @@ span > a:link {
     margin-top: 2px;
 }
 
-.modelsSelect {
+.models-select {
     overflow: auto;
     position: relative;
     top: -25px;
-    left: 5px;
+    left: 14px;
     height: 120px;
 }
 
-.modelsAdd {
+.models-add {
     position: relative;
     top: 12px;
     width: 50px;
@@ -54,7 +54,7 @@ span > a:link {
     z-index: 1;
 }
 
-.modelsLabel {
+.models-label {
     position: relative;
     top: 10px
 }

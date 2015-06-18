@@ -61,11 +61,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     controller: 'buildModelController',
                     controllerAs: 'buildModelCtrl'
                 },
-                'createComponent@main.buildModel':{
-                    templateUrl:'views/buildModel_createModel.html',
-                    controller: 'createModelController',
-                    controllerAs: 'createModelCtrl'
-                },
+                //'createComponent@main.buildModel':{
+                //    templateUrl:'views/buildModel_createModel.html',
+                //    controller: 'createModelController',
+                //    controllerAs: 'createModelCtrl'
+                //},
                 "createModel@main.buildModel":{
                     templateUrl:'views/buildModel_createModel.html',
                     controller: 'createModelController',

@@ -25,7 +25,7 @@
         $scope.$on('addTab',function(event,tab){
             self.tabs.splice(self.tabIndex+1,0,tab);
             self.tabIndex++;
-        })
+        });
         function removeTab(tab) {
             self.tabs.splice(self.tabs.indexOf(tab), 1);
             self.tabIndex--;
@@ -46,9 +46,9 @@
         self.isRounded = isRounded;
         self.keywordCheck = keywordCheck;
         self.logicWord = 'and';
-        $scope.$on('currentTab', function (event, tab) {
-            self.tabIndex = $scope.buildModelCtrl.tabs.indexOf(tab);
-        });
+        //$scope.$on('currentTab', function (event, tab) {
+        //    self.tabIndex = $scope.buildModelCtrl.tabs.indexOf(tab);
+        //});
         self.modelDatasource = {
             models: []
         };

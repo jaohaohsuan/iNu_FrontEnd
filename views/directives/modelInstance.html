@@ -1,18 +1,21 @@
+<h2>{{modelInstanceCtrl.title}}</h2>
 <div  class="form-inline">
+    <!--<label>{{'modelName'|translate}}： </label>-->
+    <!--<input type="text" class="form-control  m-b-xs modelText " placeholder="{{'modelNewNamePlaceholder'|translate}}"/>-->
     <label> 數據源：</label>
-    <select  class="form-control m-b-xs">
+    <select  class="form-control m-b-xs ">
         <option>通話</option>
         <option>文本</option>
     </select>
 </div>
 
-<label class="modelsLabel"> 模型組：</label>
+<label class="models-label"> 模型組：</label>
 <div class="row">
     <div class="col-xs-2 col-md-3 col-lg-2">
-        <span  class="btn btn-success fa fa-plus modelsAdd" ng-click="modelInstanceCtrl.addModel()"></span>
+        <span  class="btn btn-success fa fa-plus models-add" ng-click="modelInstanceCtrl.addModel()"></span>
     </div>
     <div class="col-xs-10 col-md-9 col-lg-10 ">
-        <div class="btn-group btn-group-vertical btn-block modelsSelect">
+        <div class="btn-group btn-group-vertical btn-block models-select">
             <label class="btn btn-success btn-outline  animated fadeInLeft" ng-model="checked" ng-repeat="model in modelInstanceCtrl.datasource"
                    btn-checkbox>{{model.name}}</label>
              </div>
@@ -20,7 +23,7 @@
 </div>
 
 
-<div ng-show="modelInstanceCtrl.isInstance">
+<div >
 
     啟用此模型?&nbsp;&nbsp;
     <div class="btn-group">
@@ -36,7 +39,7 @@
                placeholder="{{'modelNamePlaceholder'|translate}}"/>
         <span class="input-group-btn">
             <<button translate ng-class="{true:'btn btn-success',false:'btn btn-info'}[modelInstanceCtrl.disableEdit]"
-                     ng-click="modelInstanceCtrl.change()">{{modelInstanceCtrl.changeText}}
+                     ng-click="modelInstanceCtrl.change()">{{modelInstanceCtrl.changeText|translate}}
             </button>
         </span>
     </form>

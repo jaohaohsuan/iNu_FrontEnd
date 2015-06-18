@@ -2,7 +2,7 @@
     <div class="input-group">
         <input type="text" class="form-control"  ng-required="componentInstanceCtrl.required" ng-model="componentInstanceCtrl.textName"  ng-disabled="componentInstanceCtrl.disableEdit" placeholder="{{'componentNamePlaceholder'|translate}}"/>
         <span class="input-group-btn">
-            <button translate ng-class="{true:'btn btn-success',false:'btn btn-info'}[componentInstanceCtrl.disableEdit]" ng-click="componentInstanceCtrl.change()">{{componentInstanceCtrl.changeText}}</button>
+            <button  ng-class="{true:'btn btn-success',false:'btn btn-info'}[componentInstanceCtrl.disableEdit]" ng-click="componentInstanceCtrl.change()">{{componentInstanceCtrl.changeText|translate}}</button>
         </span>
 
     </div>
