@@ -101,7 +101,7 @@
         }
 
         function addTab() {
-            $scope.$emit('addTab', {title: "createModel", active: false, addable: true});
+            $scope.$emit('addTab', {title: "createModel", active: true, addable: true});
         }
 
         function addToBuildSection(modelSection) {
