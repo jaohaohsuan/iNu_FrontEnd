@@ -167,14 +167,13 @@
         <div class="ibox" ng-show="createModelCtrl.isInstance">
             <div class="ibox-title"><h2>{{"config"|translate}}</h2></div>
             <div class="ibox-content">
-                <component-instance delete-component="createModelCtrl.deleteComponent"
-                                    rename-component="createModelCtrl.renameComponent"
-                                    ng-show="createModelCtrl.isComponent"></component-instance>
+
                 <!--創建模型顯示控件-->
                 <model-instance datasource="createModelCtrl.modelDatasource.models"
                                 add-model="createModelCtrl.addModel"
                                 delete-model="createModelCtrl.deleteComponent"
                                 rename-model="createModelCtrl.renameComponent"
+                                is-instance="true"
                                 ng-hide="createModelCtrl.isComponent">
 
                 </model-instance>
