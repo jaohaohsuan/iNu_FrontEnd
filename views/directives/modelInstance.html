@@ -1,23 +1,23 @@
 <form class="form-horizontal">
     <h2 ng-if="modelInstanceCtrl.title">{{modelInstanceCtrl.title}}</h2>
-    <button class="btn-block"
-            ng-class="{true:'btn btn-success',false:'btn btn-info'}[modelInstanceCtrl.disableEdit]"
-            ng-click="modelInstanceCtrl.change()" ng-if="modelInstanceCtrl.isInstance">
-        {{modelInstanceCtrl.changeText|translate}}
-    </button>
+    <!--<button class="btn-block"-->
+            <!--ng-class="{true:'btn btn-success',false:'btn btn-info'}[modelInstanceCtrl.disableEdit]"-->
+            <!--ng-click="modelInstanceCtrl.change()" ng-if="modelInstanceCtrl.isInstance">-->
+        <!--{{modelInstanceCtrl.changeText|translate}}-->
+    <!--</button>-->
 
-    <div class="field_set" ng-hide="modelInstanceCtrl.disableEdit && modelInstanceCtrl.isInstance">
-        <div class="form-inline" ng-if="modelInstanceCtrl.isInstance">
-            <label> {{'modelName'|translate}}:</label>
+    <div class="field_set">
+        <div class="form-inline input-group" ng-if="modelInstanceCtrl.isInstance">
+
             <input type="text" class="form-control" ng-required="modelInstanceCtrl.required"
                    ng-model="modelInstanceCtrl.modelName"
-                   placeholder="{{'modelNamePlaceholder'|translate}}"/>
+                   placeholder="{{'modelNamePlaceholder'|translate}}"/><span class="input-group-btn"><button ng-click="modelInstanceCtrl.renameModel()" class="btn btn-success">{{'change'|translate}}</button></span>
         </div>
 
         <div class="form-inline">
             <h3> {{'models'|translate}}: <button class="btn btn-success btn-xs fa fa-plus " ng-click="modelInstanceCtrl.addModel()"></button></h3>
             <div class="btn-group btn-group-vertical btn-block models-select ">
-                <label class="btn btn-success btn-outline animated fadeInLeft" ng-model="checked"
+                <label class="btn btn-success btn-outline animated fadeInLeft" ng-model="model.selected"
                         ng-repeat="model in modelInstanceCtrl.datasource"
                         btn-checkbox>{{model.name}}
                 </label>
