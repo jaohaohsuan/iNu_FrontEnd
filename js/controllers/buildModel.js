@@ -32,7 +32,7 @@
     }
 
     function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate) {
-
+        var modelGroupSelectedTimeout;
         var self = this;
         self.addModel = addModel;
         self.addTab = addTab;
@@ -55,6 +55,7 @@
             "basicModel": "mustHave",
             "reuseModel": "mustHave"
         };
+        self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
         self.renameComponent = renameComponent;
         self.roles = [
             {"name": "角色：全部", "content": "ALL"},
@@ -72,7 +73,7 @@
         setModels();
         setModelSection();
         initialSetting();
-
+        $scope.$on("$destroy",destroyListener);
         function addModel() {
             SweetAlert.swal({
                     title: $translate.instant('newModelsName'), //讀取多語系key
@@ -184,6 +185,9 @@
 
                 });
         }
+        function destroyListener(event ) {
+            $timeout.cancel( modelGroupSelectedTimeout );
+        }
         function initialSetting() {
             self.keywords = "";
             self.distance = 5;
@@ -193,6 +197,12 @@
             self.inputFocus = true;
         }
 
+        function modelGroupsSelectedHandler(selectedModelGroups){
+            if (modelGroupSelectedTimeout) $timeout.cancel(modelGroupSelectedTimeout);
+            modelGroupSelectedTimeout = $timeout(function() {
+                console.log(selectedModelGroups)
+            }, 1000); // delay 1000 ms
+        }
         function renameComponent() {
             SweetAlert.swal("renamed", "", "success");
         }

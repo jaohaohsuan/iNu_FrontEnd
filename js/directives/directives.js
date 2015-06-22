@@ -115,6 +115,7 @@
             scope: {
                 addModel:'=',
                 datasource: '=',
+                selectedEventhandler: '=',
                 enableModel:'=',
                 renameModel: '=',
                 deleteModel: '=',
@@ -128,10 +129,12 @@
 
         function modelInstanceController($scope) {
             var self = this;
-           self.change = change;
+            self.change = change;
             self.changeText = 'changeConfig';
             self.disableEdit = true;
             self.modelName ="Test";
+            self.modelClicked = modelClicked;
+            self.selectedModelGroups = [];
             self.required = false;
             function change() {
                 if (self.changeText === 'changeConfig') {
@@ -147,6 +150,13 @@
                         self.renameModel(); //在完成的時候給前端控制
                     }
                 }
+            }
+            function modelClicked(model){
+                if (!self.selectedEventhandler) return;
+                var idx = self.selectedModelGroups.indexOf(model);
+                if (idx != -1) self.selectedModelGroups.splice(idx, 1);
+                else self.selectedModelGroups.push(model);
+                self.selectedEventhandler(self.selectedModelGroups);
             }
         }
 
