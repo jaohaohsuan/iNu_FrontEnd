@@ -187,14 +187,15 @@
             </div>
             <div class="ibox-content">
                 <button class="btn btn-success btn-block"
-                        ng-click="createModelCtrl.nextView = true"
+                        ng-click="createModelCtrl.nextToDo()"
                         ng-hide="createModelCtrl.nextView">
                     <i class="fa fa-info-circle"></i>&nbsp;{{'next'|translate}}
                 </button>
                 <!--創建模型顯示控件-->
                 <form class="form-group animated fadeIn" ng-show="createModelCtrl.nextView">
                         <input type="text" class="form-control btn-block" ng-model="createModelCtrl.saveAsName"
-                               placeholder="{{'modelNamePlaceholder'|translate}}" required/>
+                               placeholder="{{'modelNamePlaceholder'|translate}}"
+                               focus="createModelCtrl.saveAsNameInputFocus" required/>
                          <button  class="btn btn-success btn-block"
                                  ng-click="createModelCtrl.saveAs()">
                                 {{'saveModel'|translate}}

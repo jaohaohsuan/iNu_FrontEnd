@@ -55,6 +55,7 @@
             "reuseModel": "mustHave"
         };
         self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
+        self.nextToDo = nextToDo;
         self.renameComponent = renameComponent;
         self.roles = [
             {"name": "角色：全部", "content": "ALL"},
@@ -201,6 +202,10 @@
             modelGroupSelectedTimeout = $timeout(function() {
                 console.log(selectedModelGroups)
             }, 1000); // delay 1000 ms
+        }
+        function nextToDo(){
+            self.nextView = true;
+            self.saveAsNameInputFocus = true;
         }
         function renameComponent() {
             SweetAlert.swal("renamed", "", "success");
