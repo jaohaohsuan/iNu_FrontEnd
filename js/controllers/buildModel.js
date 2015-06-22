@@ -41,7 +41,6 @@
         self.clear = clear;
         self.deleteComponent = deleteComponent;
         self.isInstance = true;
-        self.isNextTodo = false;
         self.isRounded = isRounded;
         self.keywordCheck = keywordCheck;
         self.logicWord = 'and';
@@ -208,8 +207,7 @@
         }
 
         function saveAs() {
-            if (self.saveAsName)
-                self.isNextTodo = true;
+
         }
 
 

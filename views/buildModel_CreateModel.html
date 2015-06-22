@@ -162,13 +162,12 @@
             </div>
         </div>
     </div>
-    <!--配置-->
+
     <div class="col-md-3 col-xs-12 col-sm-12">
+        <!--配置-->
         <div class="ibox" ng-show="createModelCtrl.isInstance">
             <div class="ibox-title"><h2>{{"config"|translate}}</h2></div>
             <div class="ibox-content">
-
-                <!--創建模型顯示控件-->
                 <model-instance datasource="createModelCtrl.modelDatasource.models"
                                 selected-eventhandler="createModelCtrl.modelGroupsSelectedHandler"
                                 add-model="createModelCtrl.addModel"
@@ -181,46 +180,27 @@
 
             </div>
         </div>
+        <!--進階功能-->
         <div class="ibox">
             <div class="ibox-title">
                 <h2 translate="whatEditing">{{'componentOrModelName'|translate}}</h2>
-
-                <h3 class="text-success" ng-click="createModelCtrl.nextView = true"><i class="fa fa-info-circle"></i>&nbsp;{{'next'|translate}}
-                </h3>
             </div>
             <div class="ibox-content">
-
-
-                <form class="form-group" ng-show="createModelCtrl.isComponent">
-                    <div class="input-group">
-                        <input type="text" class="form-control" ng-model="createModelCtrl.saveAsName"
-                               ng-disabled="createModelCtrl.isNextTodo" required/> <span class="input-group-btn"><button
-                            ng-click="createModelCtrl.saveAs()"
-                            class="btn btn-success">{{'saveComponent'|translate}}
-                    </button></span>
-                    </div>
-                    <div class="btn-group btn-group-vertical animated fadeIn btn-block next-todo"
-                         ng-show="createModelCtrl.isNextTodo">
-                        <label class="btn btn-success ">{{'continueEditTemplate'|translate}}</label>
-                        <label class="btn btn-success ">{{'editSaveComponent'|translate}}</label>
-                    </div>
-                </form>
-
+                <button class="btn btn-success btn-block"
+                        ng-click="createModelCtrl.nextView = true"
+                        ng-hide="createModelCtrl.nextView">
+                    <i class="fa fa-info-circle"></i>&nbsp;{{'next'|translate}}
+                </button>
                 <!--創建模型顯示控件-->
-                <form class="form-group" ng-hide="createModelCtrl.isComponent">
-                    <div class="input-group">
-                        <input type="text" class="form-control" ng-model="createModelCtrl.saveAsName"
-                               ng-disabled="createModelCtrl.isNextTodo" required/> <span class="input-group-btn"><button
-                            ng-click="createModelCtrl.saveAs()"
-                            class="btn btn-success">{{'saveModel'|translate}}
-                    </button></span>
-                    </div>
-                    <div class="btn-group btn-group-vertical btn-block animated fadeIn next-todo"
-                         ng-show="createModelCtrl.isNextTodo">
-                        <label class="btn btn-success">{{'continueEditTemplate'|translate}}</label>
-                        <label class="btn btn-success">{{'editSaveModel'|translate}}</label>
-                        <label class="btn btn-success">{{'enableSaveModel'|translate}}</label>
-                    </div>
+                <form class="form-group animated fadeIn" ng-show="createModelCtrl.nextView">
+                        <input type="text" class="form-control btn-block" ng-model="createModelCtrl.saveAsName"
+                               placeholder="{{'modelNamePlaceholder'|translate}}" required/>
+                         <label  class="btn btn-success btn-block"
+                                 ng-click="createModelCtrl.saveAs()">
+                                {{'saveModel'|translate}}
+                         </label>
+                        <label class="btn btn-success btn-block">{{'saveModelAndOnline'|translate}}</label>
+                        <label class="btn btn-success btn-block">{{'saveModelAndEdit'|translate}}</label>
                 </form>
 
             </div>
