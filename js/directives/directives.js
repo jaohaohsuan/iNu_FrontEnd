@@ -11,6 +11,7 @@
             controllerAs: 'self',
             bindToController: true
         }
+
         function buildSectionController() {
             var self = this;
             self.setClass = setClass;
@@ -19,6 +20,7 @@
                 return className[index % className.length];
             }
         }
+
         return directive;
     }
 
@@ -75,7 +77,7 @@
                 }
                 else {
 
-                    if (!self.textName||!self.textName.length)
+                    if (!self.textName || !self.textName.length)
                         self.required = true;
                     else {
                         self.disableEdit = true;
@@ -113,10 +115,10 @@
         var directive = {
             restrict: 'E',
             scope: {
-                addModel:'=',
+                addModel: '=',
                 datasource: '=',
                 selectedEventhandler: '=',
-                enableModel:'=',
+                enableModel: '=',
                 renameModel: '=',
                 deleteModel: '=',
                 isInstance: '='
@@ -131,27 +133,21 @@
             var self = this;
             self.change = change;
             self.changeText = 'changeConfig';
-            self.disableEdit = true;
-            self.modelName ="Test";
+            self.modelName = "Test";
             self.modelClicked = modelClicked;
             self.selectedModelGroups = [];
             self.required = false;
             function change() {
-                if (self.changeText === 'changeConfig') {
-                    self.changeText = 'finished';
-                    self.disableEdit = false;
-                }
+
+                if (!self.modelName || !self.modelName.length)
+                    self.required = true;
                 else {
-                    if (!self.modelName||!self.modelName.length)
-                        self.required = true;
-                    else {
-                        self.disableEdit = true;
-                        self.changeText = 'changeConfig';
-                        self.renameModel(); //在完成的時候給前端控制
-                    }
+                     self.renameModel(); //在完成的時候給前端控制
                 }
+
             }
-            function modelClicked(model){
+
+            function modelClicked(model) {
                 if (!self.selectedEventhandler) return;
                 var idx = self.selectedModelGroups.indexOf(model);
                 if (idx != -1) self.selectedModelGroups.splice(idx, 1);

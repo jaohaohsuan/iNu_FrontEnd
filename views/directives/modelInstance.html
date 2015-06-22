@@ -11,7 +11,7 @@
 
             <input type="text" class="form-control" ng-required="modelInstanceCtrl.required"
                    ng-model="modelInstanceCtrl.modelName"
-                   placeholder="{{'modelNamePlaceholder'|translate}}"/><span class="input-group-btn"><button ng-click="modelInstanceCtrl.renameModel()" class="btn btn-success">{{'change'|translate}}</button></span>
+                   placeholder="{{'modelNamePlaceholder'|translate}}"/><span class="input-group-btn"><button ng-click="modelInstanceCtrl.change()" class="btn btn-success">{{'change'|translate}}</button></span>
         </div>
 
         <div class="form-inline">
@@ -45,7 +45,7 @@
 <p></p>
 <div ng-if="modelInstanceCtrl.isInstance">
     <!-- confirmed-click:按下確認後綁定的事件 confirm-click:確認視窗內容的文字-->
-    <button ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-success  btn-block instance-button">
+    <button ng-click="modelInstanceCtrl.enableModel()" class="btn btn-success  btn-block instance-button">
         {{'enableModel'|translate}}
     </button>
     <button ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-danger  btn-block instance-button">
