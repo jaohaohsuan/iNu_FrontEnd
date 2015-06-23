@@ -14,7 +14,7 @@
             {title: 'associateWords'},
             {title: 'modules'}
         ]
-
+        self.tabClicked = tabClicked;
         $scope.$on('addTab', function (event, tab) {
             self.tabs.splice(self.tabIndex + 1, 0, tab);
             self.tabIndex++;
@@ -28,6 +28,9 @@
                     self.tabs[self.tabIndex].active = true;
                 }
             }, 0);
+        }
+        function tabClicked(){
+            $scope.$broadcast('tabClicked');
         }
     }
 
@@ -76,6 +79,7 @@
         setModelSection();
         initialSetting();
         $scope.$on("$destroy", destroyListener);
+        $scope.$on('tabClicked',tabClicked);
         function addModelGroup() {
             SweetAlert.swal({
                     title: $translate.instant('newModelsName'), //讀取多語系key
@@ -207,7 +211,7 @@
             self.selectedRole = self.roles[0];
             self.selectedReuseModel = [];
             self.canAdd = false;
-            self.inputFocus = true;
+            self.keywordInputFocus = true;
         }
 
         function isRounded() {
@@ -280,7 +284,12 @@
                 }
             );
         }
-
+        function tabClicked(){
+            self.keywordInputFocus = false;
+            $timeout(function(){
+                self.keywordInputFocus = true;
+            })
+        }
         function toggleSelection(selectedItems, item) {
             var idx = selectedItems.indexOf(item);
             if (idx != -1) selectedItems.splice(idx, 1);
