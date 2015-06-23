@@ -100,9 +100,10 @@
                         "name": inputValue
                     })
                     $location.hash('models'+inputValue);
+                    $anchorScroll('models'+inputValue);
                 });
 
-            $anchorScroll();
+
         }
 
         function addTab() {
