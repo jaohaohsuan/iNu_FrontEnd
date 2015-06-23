@@ -36,13 +36,12 @@
         var modelGroupSelectedTimeout;
         var self = this;
 
-
         self.addModelGroup = addModelGroup;
         self.addTab = addTab;
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
         self.clear = clear;
-        self.deleteComponent = deleteComponent;
+        self.deleteModel = deleteModel;
         self.isInstance = true;
         self.isRounded = isRounded;
         self.keywordCheck = keywordCheck;
@@ -59,7 +58,7 @@
         };
         self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
         self.nextToDo = nextToDo;
-        self.renameComponent = renameComponent;
+        self.renameModel = renameModel;
         self.roles = [
             {"name": "角色：全部", "content": "ALL"},
             {"name": "角色：A", "content": "A"},
@@ -171,7 +170,7 @@
             self.showUndo = true;
         }
 
-        function deleteComponent() {
+        function deleteModel() {
             SweetAlert.swal({
                     title: $translate.instant('sureDelete'), //讀取多語系key
                     type: "warning",
@@ -223,7 +222,7 @@
             self.saveAsNameInputFocus = true;
         }
 
-        function renameComponent() {
+        function renameModel() {
             SweetAlert.swal("renamed", "", "success");
         }
 
@@ -242,10 +241,8 @@
                         alert('saved!');
                     }
                 };
-
                 return next[condition]();
             }
-
         }
 
 

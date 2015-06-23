@@ -119,7 +119,7 @@
                 addModelGroup: '=',
                 datasource: '=',
                 selectedEventhandler: '=',
-                enableModel: '=',
+                onlineModel: '=',
                 renameModel: '=',
                 deleteModel: '=',
                 isInstance: '='
