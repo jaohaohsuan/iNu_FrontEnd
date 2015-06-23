@@ -21,7 +21,7 @@
         });
 
         function removeTab(tab) {
-            $timeout(function () {
+            $timeout(function () { //刪除tab 不知為何需要用timeout才不會讓網址跑掉
                 self.tabIndex--;
                 self.tabs.splice(self.tabs.indexOf(tab), 1);
                 if (self.tabIndex == 0) {

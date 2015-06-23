@@ -29,16 +29,17 @@
 </form>
 
 <div class="clearfix"></div>
-<div ng-if="modelInstance.isManagement">
-    <label>{{'enableModel'|translate}}?</label>
+<div ng-if="modelInstanceCtrl.isManagement">
+    <!--<label>{{'enableModel'|translate}}?</label>-->
 
-    <div class="btn-group">
-        <label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"
-               btn-radio="'Middle'">ON</label>
-        <label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"
-               btn-radio="'Right'">OFF</label>
-    </div>
-    <button class="btn btn-success  pull-right">{{'saveAsModel'|translate}}</button>
+    <!--<div class="btn-group">-->
+        <!--<label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"-->
+               <!--btn-radio="'Middle'">ON</label>-->
+        <!--<label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"-->
+               <!--btn-radio="'Right'">OFF</label>-->
+    <!--</div>-->
+    <button class="btn btn-success btn-block instance-button">{{'saveAsModel'|translate}}</button>
+    <button class="btn btn-success btn-block instance-button">{{'saveModelAndOnline'|translate}}</button>
 </div>
 <p></p>
 <div ng-if="modelInstanceCtrl.isInstance">

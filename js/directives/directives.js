@@ -111,18 +111,21 @@
             }
         };
     }
-
     function modelInstance() {
         var directive = {
             restrict: 'E',
             scope: {
                 addModelGroup: '=',
                 datasource: '=',
-                selectedEventhandler: '=',
+                deleteModel: '=',
+                isInstance: '=', //是否是實例模式
+                isManagement: '=', //是否是模型管理下
                 onlineModel: '=',
                 renameModel: '=',
-                deleteModel: '=',
-                isInstance: '='
+                saveModel: '=',
+                saveModelAndOnline: '=',
+                selectedEventhandler: '=',
+                title:'='
             },
             templateUrl: 'views/directives/modelInstance.html',
             controller: modelInstanceController,
@@ -143,7 +146,7 @@
                 if (!self.modelName || !self.modelName.length)
                     self.required = true;
                 else {
-                     self.renameModel(); //在完成的時候給前端控制
+                    self.renameModel(); //在完成的時候給前端控制
                 }
 
             }
