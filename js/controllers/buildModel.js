@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout','$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate','URL', createModelController])
 
     function buildModelController($scope, $timeout,$translate) {
         var self = this;
@@ -31,9 +31,13 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate,URL) {
+
         var modelGroupSelectedTimeout;
         var self = this;
+
+
+
         self.addModelGroup = addModelGroup;
         self.addTab = addTab;
         self.addToBuildSection = addToBuildSection;
@@ -127,6 +131,7 @@
                         showConfirmButton: false
                     });
                     $scope.$emit('addTab', { title: 'createModel',active: true, addable: true,tabName: inputValue});
+                    URL.path=inputValue; //設定URL Service的path變數
                 });
 
         }
@@ -189,7 +194,11 @@
             $timeout.cancel( modelGroupSelectedTimeout );
         }
         function initialSetting() {
-            self.keywords = "";
+            self.keywords = [];
+            if(URL.path){
+                self.keywords.push({text:URL.path});
+                console.log(self.keywords)
+            }
             self.distance = 5;
             self.selectedRole = self.roles[0];
             self.selectedReuseModel = [];
