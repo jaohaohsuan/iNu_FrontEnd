@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL', createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL','$anchorScroll','$location', createModelController])
 
     function buildModelController($scope, $timeout, $translate) {
         var self = this;
@@ -31,7 +31,7 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL,$anchorScroll,$location) {
 
         var modelGroupSelectedTimeout;
         var self = this;
@@ -99,7 +99,10 @@
                     self.modelDatasource.models.push({
                         "name": inputValue
                     })
+                    $location.hash('models'+inputValue);
                 });
+
+            $anchorScroll();
         }
 
         function addTab() {

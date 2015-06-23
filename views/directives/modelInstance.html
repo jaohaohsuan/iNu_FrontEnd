@@ -17,7 +17,7 @@
         <div class="form-inline">
             <h3> {{'models'|translate}}: <button class="btn btn-success btn-xs fa fa-plus" ng-click="modelInstanceCtrl.addModelGroup()"></button></h3>
             <div class="btn-group btn-group-vertical btn-block models-select ">
-                <label class="btn btn-success btn-outline animated fadeInLeft" ng-model="model.selected"
+                <label id="models{{model.name}}" class="btn btn-success btn-outline animated fadeInLeft" ng-model="model.selected"
                         ng-repeat="model in modelInstanceCtrl.datasource"
                         ng-click="modelInstanceCtrl.modelClicked(model)"
                         btn-checkbox>{{model.name}}
