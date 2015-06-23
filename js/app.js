@@ -9,8 +9,7 @@
         'oc.lazyLoad',                  // ocLazyLoad
         'ui.bootstrap',                 // Ui Bootstrap
         'pascalprecht.translate',       // Angular Translate
-        'ngIdle',                       // Idle timer
-        'jsonMethodModule'              //json Method
+        'ngIdle'                       // Idle timer
     ])
 })();
 

@@ -1,5 +1,5 @@
 (function(){
-    angular.module('jsonMethodModule',[])
+    angular.module('iNu')
         .service('jsonMethodService',function($q,$http){
             var getJson = function(url){
                 var deferred = $q.defer();

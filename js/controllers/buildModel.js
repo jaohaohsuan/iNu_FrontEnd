@@ -197,7 +197,7 @@
             self.keywords = [];
             if(URL.path){
                 self.keywords.push({text:URL.path});
-                console.log(self.keywords)
+                console.log(JSON.stringify(self.keywords))
             }
             self.distance = 5;
             self.selectedRole = self.roles[0];
