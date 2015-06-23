@@ -34,7 +34,7 @@
     function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate) {
         var modelGroupSelectedTimeout;
         var self = this;
-        self.addModel = addModel;
+        self.addModelGroup = addModelGroup;
         self.addTab = addTab;
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
@@ -74,7 +74,7 @@
         setModelSection();
         initialSetting();
         $scope.$on("$destroy",destroyListener);
-        function addModel() {
+        function addModelGroup() {
             SweetAlert.swal({
                     title: $translate.instant('newModelsName'), //讀取多語系key
                     type: "input",
@@ -196,7 +196,9 @@
             self.canAdd = false;
             self.inputFocus = true;
         }
-
+        function isRounded() {
+            return window.innerWidth < 768
+        }
         function modelGroupsSelectedHandler(selectedModelGroups){
             if (modelGroupSelectedTimeout) $timeout.cancel(modelGroupSelectedTimeout);
             modelGroupSelectedTimeout = $timeout(function() {
@@ -269,8 +271,6 @@
             self.canAdd = true;
         }
 
-        function isRounded() {
-            return window.innerWidth < 768
-        }
+
     }
 })();

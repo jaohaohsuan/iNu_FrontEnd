@@ -116,7 +116,7 @@
         var directive = {
             restrict: 'E',
             scope: {
-                addModel: '=',
+                addModelGroup: '=',
                 datasource: '=',
                 selectedEventhandler: '=',
                 enableModel: '=',
@@ -132,13 +132,13 @@
 
         function modelInstanceController($scope) {
             var self = this;
-            self.change = change;
+            self.changeModelName = changeModelName;
             self.changeText = 'changeConfig';
             self.modelName = "Test";
             self.modelClicked = modelClicked;
             self.selectedModelGroups = [];
             self.required = false;
-            function change() {
+            function changeModelName() {
 
                 if (!self.modelName || !self.modelName.length)
                     self.required = true;

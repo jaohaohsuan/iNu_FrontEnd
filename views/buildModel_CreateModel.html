@@ -30,17 +30,17 @@
 
 
                 <p></p>
-                <!--組件使用的RadioButton-->
-                <div ng-show="createModelCtrl.isComponent">
-                    <div class="radio"><label> <input icheck type="radio" name="componentRadio" value="or"
-                                                      ng-model="createModelCtrl.keywordSelect">
-                        {{"eitherAccord"|translate}}
-                    </label></div>
-                    <div class="radio"><label> <input icheck type="radio" name="componentRadio" value="and"
-                                                      ng-model="createModelCtrl.keywordSelect">
-                        {{"allAccord"|translate}}
-                    </label></div>
-                </div>
+                <!--&lt;!&ndash;組件使用的RadioButton&ndash;&gt;-->
+                <!--<div ng-show="createModelCtrl.isComponent">-->
+                    <!--<div class="radio"><label> <input icheck type="radio" name="componentRadio" value="or"-->
+                                                      <!--ng-model="createModelCtrl.keywordSelect">-->
+                        <!--{{"eitherAccord"|translate}}-->
+                    <!--</label></div>-->
+                    <!--<div class="radio"><label> <input icheck type="radio" name="componentRadio" value="and"-->
+                                                      <!--ng-model="createModelCtrl.keywordSelect">-->
+                        <!--{{"allAccord"|translate}}-->
+                    <!--</label></div>-->
+                <!--</div>-->
                 <!--模型使用的RadioButton-->
                 <div ng-hide="createModelCtrl.isComponent">
                     <div class="radio"><label> <input icheck type="radio" name="modelRadio" value="or"
@@ -170,7 +170,7 @@
             <div class="ibox-content">
                 <model-instance datasource="createModelCtrl.modelDatasource.models"
                                 selected-eventhandler="createModelCtrl.modelGroupsSelectedHandler"
-                                add-model="createModelCtrl.addModel"
+                                add-model-group="createModelCtrl.addModelGroup"
                                 delete-model="createModelCtrl.deleteComponent"
                                 rename-model="createModelCtrl.renameComponent"
                                 is-instance="true"
