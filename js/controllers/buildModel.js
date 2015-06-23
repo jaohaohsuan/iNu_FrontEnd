@@ -1,9 +1,9 @@
 (function () {
     angular.module('iNu')
-        .controller('buildModelController', ['$scope', '$timeout','$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate','URL', createModelController])
+        .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL', createModelController])
 
-    function buildModelController($scope, $timeout,$translate) {
+    function buildModelController($scope, $timeout, $translate) {
         var self = this;
         //self.modelBroadcast = modelBroadcast;
         self.removeTab = removeTab;
@@ -15,27 +15,26 @@
             {title: 'modules'}
         ]
 
-        $scope.$on('addTab',function(event,tab){
-            self.tabs.splice(self.tabIndex+1,0,tab);
+        $scope.$on('addTab', function (event, tab) {
+            self.tabs.splice(self.tabIndex + 1, 0, tab);
             self.tabIndex++;
         });
 
         function removeTab(tab) {
-            $timeout (function() {
+            $timeout(function () {
                 self.tabIndex--;
                 self.tabs.splice(self.tabs.indexOf(tab), 1);
                 if (self.tabIndex == 0) {
                     self.tabs[self.tabIndex].active = true;
                 }
-            },0);
+            }, 0);
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate,URL) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL) {
 
         var modelGroupSelectedTimeout;
         var self = this;
-
 
 
         self.addModelGroup = addModelGroup;
@@ -77,7 +76,7 @@
         setModels();
         setModelSection();
         initialSetting();
-        $scope.$on("$destroy",destroyListener);
+        $scope.$on("$destroy", destroyListener);
         function addModelGroup() {
             SweetAlert.swal({
                     title: $translate.instant('newModelsName'), //讀取多語系key
@@ -130,8 +129,8 @@
                         type: "success",
                         showConfirmButton: false
                     });
-                    $scope.$emit('addTab', { title: 'createModel',active: true, addable: true,tabName: inputValue});
-                    URL.path=inputValue; //設定URL Service的path變數
+                    $scope.$emit('addTab', {title: 'createModel', active: true, addable: true, tabName: inputValue});
+                    URL.path = inputValue; //設定URL Service的path變數
                 });
 
         }
@@ -190,13 +189,15 @@
 
                 });
         }
-        function destroyListener(event ) {
-            $timeout.cancel( modelGroupSelectedTimeout );
+
+        function destroyListener(event) {
+            $timeout.cancel(modelGroupSelectedTimeout);
         }
+
         function initialSetting() {
             self.keywords = [];
-            if(URL.path){
-                self.keywords.push({text:URL.path});
+            if (URL.path) {
+                self.keywords.push({text: URL.path});
                 console.log(JSON.stringify(self.keywords))
             }
             self.distance = 5;
@@ -205,24 +206,45 @@
             self.canAdd = false;
             self.inputFocus = true;
         }
+
         function isRounded() {
             return window.innerWidth < 768
         }
-        function modelGroupsSelectedHandler(selectedModelGroups){
+
+        function modelGroupsSelectedHandler(selectedModelGroups) {
             if (modelGroupSelectedTimeout) $timeout.cancel(modelGroupSelectedTimeout);
-            modelGroupSelectedTimeout = $timeout(function() {
+            modelGroupSelectedTimeout = $timeout(function () {
                 console.log(selectedModelGroups)
             }, 1000); // delay 1000 ms
         }
-        function nextToDo(){
+
+        function nextToDo() {
             self.nextView = true;
             self.saveAsNameInputFocus = true;
         }
+
         function renameComponent() {
             SweetAlert.swal("renamed", "", "success");
         }
 
-        function saveAs() {
+        function saveAs(condition) {
+            if (!self.saveAsName || !self.saveAsName.length) return false;
+            else {
+                var next = {
+                   'edit': function () {
+                       $scope.$emit('addTab', {title: 'createModel', active: true, addable: true, tabName: self.saveAsName});
+                       URL.path = '編輯樣板的url';
+                    },
+                    'online': function () {
+                        alert('online!')
+                    },
+                    'save': function () {
+                        alert('saved!');
+                    }
+                };
+
+                return next[condition]();
+            }
 
         }
 

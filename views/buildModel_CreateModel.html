@@ -197,11 +197,11 @@
                                placeholder="{{'modelNamePlaceholder'|translate}}"
                                focus="createModelCtrl.saveAsNameInputFocus" required/>
                          <button  class="btn btn-success btn-block"
-                                 ng-click="createModelCtrl.saveAs()">
+                                 ng-click="createModelCtrl.saveAs('save')">
                                 {{'saveModel'|translate}}
                          </button>
-                        <button class="btn btn-success btn-block">{{'saveModelAndOnline'|translate}}</button>
-                        <button class="btn btn-success btn-block">{{'saveModelAndEdit'|translate}}</button>
+                        <button class="btn btn-success btn-block"  ng-click="createModelCtrl.saveAs('online')">{{'saveModelAndOnline'|translate}}</button>
+                        <button class="btn btn-success btn-block"  ng-click="createModelCtrl.saveAs('edit')">{{'saveModelAndEdit'|translate}}</button>
                 </form>
 
             </div>
