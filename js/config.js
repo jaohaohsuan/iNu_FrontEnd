@@ -75,7 +75,10 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     templateUrl:'views/buildModel_matchedReview.html'
                 },
                 'modelManagement@main.buildModel':{
-                    templateUrl:'views/buildModel_modelManagement.html'
+                    templateUrl:'views/buildModel_modelManagement.html',
+                    controller:'modelManagementController',
+                    controllerAs:'modelManagementCtrl'
+
                 },
                 "models@main.buildModel":{
                     templateUrl:'views/buildModel_models.html'
@@ -95,6 +98,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                             name:'oitozero.ngSweetAlert',
                             files:['js/plugins/angular-sweetalert/AngularSweetAlert.min.js','js/plugins/angular-sweetalert/sweetalert.min.js','css/plugins/angular-sweetalert/sweetalert.css']
                         }
+
                     ])
                 }
             }
