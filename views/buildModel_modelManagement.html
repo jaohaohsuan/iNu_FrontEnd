@@ -1,12 +1,7 @@
-<div>{{'modelManagement'|translate}}</div>
+<dropdown-multi-select
+        datasource="modelManagementCtrl.datasource"
+        display-property="modelManagementCtrl.displayProperty"
+        selected-items="modelManagementCtrl.selectedItems"
+        placeholder="modelManagementCtrl.placeholder">
 
-<span  class="dropdown" dropdown auto-close="outsideClick" on-toggle="modelManagementCtrltoggled(open)">
-      <a href class="dropdown-toggle" dropdown-toggle>
-          Click me for a dropdown, yo!
-      </a>
-      <ul class="dropdown-menu">
-          <div nested-scroll class="btn-group btn-group-vertical btn-block" ng-repeat="group in modelManagementCtrl.groups"   >
-                  <label  btn-checkbox class="btn btn-success btn-outline animated fadeInLeft" ng-model="group.selected">{{group.name}}</label>
-          </div>
-      </ul>
-</span>`
+</dropdown-multi-select>

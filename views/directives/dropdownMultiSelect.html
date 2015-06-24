@@ -1,0 +1,13 @@
+<span  class="btn-group" dropdown auto-close="outsideClick" >
+
+     <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+         {{multiSelectCtrl.selectedText}}<span class="caret"></span>
+     </button>
+
+      <ul class="dropdown-menu">
+          <div nested-scroll class="btn-group btn-group-vertical btn-block" ng-repeat="item in multiSelectCtrl.datasource"   >
+              <label  btn-checkbox class="btn btn-success btn-outline animated fadeInLeft" ng-model="item.selected"
+                      ng-click="multiSelectCtrl.itemClicked(item)">{{item[multiSelectCtrl.displayProperty]}}</label>
+          </div>
+      </ul>
+</span>

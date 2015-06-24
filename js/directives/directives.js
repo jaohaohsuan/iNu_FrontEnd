@@ -91,7 +91,43 @@
 
         return directive;
     }
+    function dropdownMultiSelect(){
+        var directive = {
+            restrict: 'E',
+            scope: {
+                datasource: '=',
+                selectedItems: '=',
+                displayProperty: '=',
+                placeholder: "="
+            },
+            templateUrl: 'views/directives/dropdownMultiSelect.html',
+            controller: multiSelectController,
+            controllerAs: 'multiSelectCtrl',
+            bindToController: true
+        }
+        function multiSelectController(){
+             var self = this;
+             self.selectedText = self.placeholder;
+            self.itemClicked = itemClicked;
+            function changeSelectedText(selectedItems){
+                if (selectedItems.length <= 0) self.selectedText = self.placeholder;
+                else{
+                    self.selectedText = "";
+                    self.selectedText = selectedItems.map(function(elem){
+                        return elem.name;
+                    }).join(",");
+                }
+            }
+            function itemClicked(item){
+                var idx = self.selectedItems.indexOf(item);
+                if (idx != -1)  self.selectedItems.splice(idx,1);
+                else self.selectedItems.push(item);
+                changeSelectedText(self.selectedItems);
+            }
 
+        }
+        return directive;
+    }
     function focus($parse, $timeout) {
         return {
             link: function (scope, element, attrs) {
@@ -580,7 +616,8 @@
         .directive('focus', focus)
         .directive('buildSection', buildSection)
         .directive('componentInstance', componentInstance) //組件實例視窗
-        .directive('modelInstance', modelInstance) //模型實例視窗
+        .directive('dropdownMultiSelect',dropdownMultiSelect)//下拉多選
         .directive('confirmClick', confirmClick) //刪除確認視窗
+        .directive('modelInstance', modelInstance) //模型實例視窗
         .directive('nestedScroll', nestedScroll)
 })();

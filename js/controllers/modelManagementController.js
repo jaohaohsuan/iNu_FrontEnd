@@ -7,6 +7,9 @@
 
     function modelManagementController($scope){
         var self = this;
-        self.groups =[{"name":'AAA'},{"name":'BBB'}]
+        self.datasource =[{"name":'AAA'},{"name":'BBB'},{"name":'BBB'},{"name":'BBB'},{"name":'BBB'},{"name":'BBB'},{"name":'BBB'},{"name":'BBB'}]
+        self.selectedItems = [];
+        self.displayProperty = "name";
+        self.placeholder = "Select Models...";
     }
 })();
