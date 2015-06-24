@@ -166,15 +166,15 @@
 
     function nestedScroll() {
         var directive =
-          function(scope,element){
-              element.on('mousewheel DOWMouseScroll',function(e){
-                  var e0 = e.originalEvent || e,
-                      delta = e0.wheelDelta || -e0.delta;
-                  this.scrollTop += (delta<0?1:-1)*30;
-                  e.preventDefault();
-              });
-          };
-            return directive;
+            function (scope, element) {
+                element.on('mousewheel DOMMouseScroll', function (e) {
+                    var e0 = e.originalEvent || e,
+                        delta = e0.wheelDelta || -e0.deltaY || -1;
+                    this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+                    e.preventDefault();
+                });
+            }
+        return directive;
     }
 
     function numberPicker() {
@@ -582,5 +582,5 @@
         .directive('componentInstance', componentInstance) //組件實例視窗
         .directive('modelInstance', modelInstance) //模型實例視窗
         .directive('confirmClick', confirmClick) //刪除確認視窗
-        .directive('nestedScroll',nestedScroll)
+        .directive('nestedScroll', nestedScroll)
 })();
