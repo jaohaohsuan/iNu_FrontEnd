@@ -111,6 +111,7 @@
             }
         };
     }
+
     function modelInstance() {
         var directive = {
             restrict: 'E',
@@ -125,7 +126,7 @@
                 saveModel: '=',
                 saveModelAndOnline: '=',
                 selectedEventhandler: '=',
-                title:'='
+                title: '='
             },
             templateUrl: 'views/directives/modelInstance.html',
             controller: modelInstanceController,
@@ -161,6 +162,19 @@
         }
 
         return directive;
+    }
+
+    function nestedScroll() {
+        var directive =
+          function(scope,element){
+              element.on('mousewheel DOWMouseScroll',function(e){
+                  var e0 = e.originalEvent || e,
+                      delta = e0.wheelDelta || -e0.delta;
+                  this.scrollTop += (delta<0?1:-1)*30;
+                  e.preventDefault();
+              });
+          };
+            return directive;
     }
 
     function numberPicker() {
@@ -568,4 +582,5 @@
         .directive('componentInstance', componentInstance) //組件實例視窗
         .directive('modelInstance', modelInstance) //模型實例視窗
         .directive('confirmClick', confirmClick) //刪除確認視窗
+        .directive('nestedScroll',nestedScroll)
 })();
