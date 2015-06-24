@@ -3,7 +3,7 @@
        <h4> {{section.prompt}}
         <span class="btn clear-button  btn-sm pull-right" ng-click="self.clear(section)">{{'clearAll'|translate}}</span></h4>
     </div>
-    <div nested-scroll  class="panel-body" ng-class="{true:'model-preview'}[section.datas.length>4]">
+    <div class="panel-body" ng-class="{true:'model-preview'}[section.datas.length>4]">
 
         <div ng-if="section.datas.length <= 0" class="panel-heading text-center">
         </div>
