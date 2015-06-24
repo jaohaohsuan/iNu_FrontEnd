@@ -12,14 +12,14 @@
                 <a href=""><i class="fa fa-eye"></i> <span class="nav-label">{{ 'explore' | translate }}</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('charts')}">
                     <li ui-sref-active="active"><a ui-sref="main.crossAnalysis" >{{'crossAnalysis'|translate}}</a></li>
-                    <li ui-sref-active="active"><a ui-sref="main.recordList">{{'callList'|translate}}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="main.recordList">{{'recordList'|translate}}</a></li>
                 </ul>
             </li>
             <li >
                 <a><i class="fa fa-plus-square-o"></i> <span class="nav-label">{{ 'model' | translate }} </span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('mailbox')}">
                     <li  ui-sref-active="active"><a ui-sref="main.buildModel">{{'modelBuild'|translate}}</a></li>
-                    <li><a >{{'modelManage'|translate}}</a></li>
+                    <li><a >{{'modelManagement'|translate}}</a></li>
                 </ul>
             </li>
         </ul>

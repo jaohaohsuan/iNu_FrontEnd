@@ -71,11 +71,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     controller: 'createModelController',
                     controllerAs: 'createModelCtrl'
                 },
-                'callList@main.buildModel':{
-                    templateUrl:'views/buildModel_callList.html'
+                'matchedReview@main.buildModel':{
+                    templateUrl:'views/buildModel_matchedReview.html'
                 },
-                'associateWords@main.buildModel':{
-                    templateUrl:'views/buildModel_associateWords.html'
+                'modelManagement@main.buildModel':{
+                    templateUrl:'views/buildModel_modelManagement.html'
                 },
                 "models@main.buildModel":{
                     templateUrl:'views/buildModel_models.html'

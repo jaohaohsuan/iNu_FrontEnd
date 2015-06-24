@@ -10,8 +10,8 @@
         self.tabIndex = 0;
         self.tabs = [
             {title: 'createModel', active: true},
-            {title: 'callList'},
-            {title: 'associateWords'},
+            {title: 'matchedReview'},
+            {title: 'modelManagement'},
             {title: 'modules'}
         ]
         self.tabClicked = tabClicked;
