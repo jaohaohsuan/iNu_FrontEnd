@@ -2,6 +2,8 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL','$anchorScroll','$location', createModelController])
+        .controller('modelManagementController',['$scope','jsonMethodService',modelManagementController])
+
 
     function buildModelController($scope, $timeout, $translate) {
         var self = this;
@@ -313,5 +315,17 @@
         }
 
 
+    }
+    function modelManagementController($scope,jsonMethodService){
+        var self = this;
+        self.datasource = [];
+        self.selectedItems = [];
+        setModels();
+        function setModels() {
+            jsonMethodService.getJson('json/models.json').then(
+                function (data) {
+                    self.datasource = data;
+                })
+        }
     }
 })();

@@ -97,8 +97,8 @@
             scope: {
                 datasource: '=',
                 selectedItems: '=',
-                displayProperty: '=',
-                placeholder: "="
+                displayProperty: '@',
+                placeholder: "@"
             },
             templateUrl: 'views/directives/dropdownMultiSelect.html',
             controller: multiSelectController,

@@ -28,6 +28,7 @@
 	"model": "业务建模",
 	"models": "模型组",
 	"modelBuild": "新建模型",
+    "modelGroupSelectPlactholder": "选择模型组/下拉复选",
 	"modelManagement": "模型管理",
 	"modelName": "模型名称",
 	"modelNamePlaceholder": "请输入模型名称",
