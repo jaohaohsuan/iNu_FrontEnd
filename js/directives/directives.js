@@ -102,15 +102,19 @@
                 placeholder: "@"
             },
             templateUrl: 'views/directives/dropdownMultiSelect.html',
-            controller: multiSelectController,
+            controller: ['$element','$window','$scope',multiSelectController],
             controllerAs: 'multiSelectCtrl',
             bindToController: true
-        }
 
-        function multiSelectController() {
+        };
+
+        function multiSelectController($element,$window,$scope) {
             var self = this;
+
             self.selectedText = self.placeholder;
             self.itemClicked = itemClicked;
+
+
             function changeSelectedText(selectedItems) {
                 if (selectedItems.length <= 0) self.selectedText = self.placeholder;
                 else {
@@ -118,13 +122,22 @@
                         return elem.name;
                     }).join(",");
                 }
+
             }
 
             function itemClicked(item) {
                 var idx = self.selectedItems.indexOf(item);
                 if (idx != -1)  self.selectedItems.splice(idx, 1);
                 else self.selectedItems.push(item);
-                changeSelectedText(self.selectedItems);
+                if($element.width()>$window.innerWidth *0.4||self.overWidth){
+                    self.selectedText='selectedModels';
+                    self.overWidth =true;
+                  }
+                else{
+                    changeSelectedText(self.selectedItems);
+                    self.overWidth =false;
+                }
+
             }
 
         }

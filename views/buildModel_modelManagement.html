@@ -1,6 +1,15 @@
-<dropdown-multi-select
-        datasource="modelManagementCtrl.datasource"
-        selected-items="modelManagementCtrl.selectedItems"
-        display-property="{{::'name'}}"
-        placeholder="{{::'modelGroupSelectPlactholder'|translate}}">
-</dropdown-multi-select>
+<div class="ibox">
+    <div class="ibox-content">
+        <div class="row">
+            <form class="form-inline">
+                <dropdown-multi-select
+                        datasource="modelManagementCtrl.datasource"
+                        selected-items="modelManagementCtrl.selectedItems"
+                        display-property="{{::'name'}}"
+                        placeholder="{{::'modelGroupSelectPlactholder'|translate}}">
+                </dropdown-multi-select>
+                <label>{{'modelKeyword'|translate}}:</label><input type="text" class="form-control"/>
+            </form>
+        </div>
+    </div>
+</div>

@@ -28,7 +28,10 @@ span > a:link {
 .field_set{
 padding-top: 5px;
 }
-
+.ibox .open > .dropdown-menu {
+    left:0;
+    right: 0;
+}
 .inline-div {
     display: inline;
 }
@@ -36,6 +39,7 @@ padding-top: 5px;
 .instance-button {
     margin-top: 2px;
 }
+
 .margins-div{
     margin: 0 0 0 2px;
 }
@@ -53,7 +57,11 @@ padding-top: 5px;
     position: relative;
     width: 30px;
 }
+.models-drop{
+    height: 200px;
+    overflow: auto;
 
+  }
 .models-label {
     position: relative;
     left: -50px;
