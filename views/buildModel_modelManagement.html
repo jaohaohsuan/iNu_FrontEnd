@@ -2,13 +2,14 @@
     <div class="ibox-content">
         <div class="row">
             <form class="form-inline">
-                <dropdown-multi-select
+                <p class="lead">
+                    <dropdown-multi-select
                         datasource="modelManagementCtrl.datasource"
                         selected-items="modelManagementCtrl.selectedItems"
                         display-property="{{::'name'}}"
                         placeholder="{{::'modelGroupSelectPlactholder'|translate}}">
                 </dropdown-multi-select>
-                <label>{{'modelKeyword'|translate}}:</label><input type="text" class="form-control"/>
+                {{'modelKeyword'|translate}}:<input type="text" class="form-control model-management-filter" required/><button class="btn btn-success model-management-filter">{{'filter'|translate}}</button></p>
             </form>
         </div>
     </div>

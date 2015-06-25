@@ -3,7 +3,10 @@
 body {
     font-family: Georgia, Microsoft JhengHei, sans-serif;
 }
+dropdown-multi-select{
 
+    padding: 10px;
+}
 span > a:link {
     color: #328F7B;
 }
@@ -42,6 +45,9 @@ padding-top: 5px;
 
 .margins-div{
     margin: 0 0 0 2px;
+}
+.model-management-filter{
+    margin-left:  10px;
 }
 .models-select {
     height: 120px;

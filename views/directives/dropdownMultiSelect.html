@@ -1,10 +1,8 @@
 <span  class="btn-group" dropdown auto-close="outsideClick" >
-
-     <div class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+     <button class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled">
          <label translate="{{multiSelectCtrl.selectedText}}" translate-values="{selectedLength:'{{multiSelectCtrl.selectedItems.length}}'}"></label>
          <span class="fa fa-caret-down fa-lg"></span>
-     </div>
-
+     </button>
       <ul nested-scroll class="dropdown-menu models-drop">
           <li  class="btn-group btn-group-vertical btn-block" ng-repeat="item in multiSelectCtrl.datasource track by $index"   >
               <label  btn-checkbox class="btn btn-success btn-outline animated fadeInLeft" ng-model="item.selected"
