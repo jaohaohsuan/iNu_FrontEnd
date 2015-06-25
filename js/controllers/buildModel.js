@@ -1,8 +1,8 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL','$anchorScroll','$location', createModelController])
-        .controller('modelManagementController',['$scope','jsonMethodService',modelManagementController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL', '$anchorScroll', '$location',  createModelController])
+        .controller('modelManagementController', ['$scope', 'jsonMethodService', modelManagementController])
 
 
     function buildModelController($scope, $timeout, $translate) {
@@ -11,11 +11,12 @@
         self.removeTab = removeTab;
         self.tabIndex = 0;
         self.tabs = [
-            {title: 'createModel', active: true},
+            {title: 'createModel'},
             {title: 'matchedReview'},
-            {title: 'modelManagement'},
+            {title: 'modelManagement', active: true},
             {title: 'modules'}
         ]
+
         self.tabClicked = tabClicked;
         $scope.$on('addTab', function (event, tab) {
             self.tabs.splice(self.tabIndex + 1, 0, tab);
@@ -31,16 +32,16 @@
                 }
             }, 0);
         }
-        function tabClicked(){
+
+        function tabClicked() {
             $scope.$broadcast('tabClicked');
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL,$anchorScroll,$location) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL, $anchorScroll, $location) {
 
         var modelGroupSelectedTimeout;
         var self = this;
-
         self.addModelGroup = addModelGroup;
         self.addTab = addTab;
         self.addToBuildSection = addToBuildSection;
@@ -81,7 +82,7 @@
         setModelSection();
         initialSetting();
         $scope.$on("$destroy", destroyListener);
-        $scope.$on('tabClicked',tabClicked);
+        $scope.$on('tabClicked', tabClicked);
         function addModelGroup() {
             SweetAlert.swal({
                     title: $translate.instant('newModelsName'), //讀取多語系key
@@ -105,8 +106,8 @@
                     self.modelDatasource.models.push({
                         "name": inputValue
                     })
-                    $location.hash('models'+inputValue);
-                    $anchorScroll('models'+inputValue);
+                    $location.hash('models' + inputValue);
+                    $anchorScroll('models' + inputValue);
                 });
 
 
@@ -209,6 +210,7 @@
                 self.keywords.push({text: URL.path});
                 console.log(JSON.stringify(self.keywords))
             }
+
             self.distance = 5;
             self.selectedRole = self.roles[0];
             self.selectedReuseModel = [];
@@ -240,9 +242,14 @@
             if (!self.saveAsName || !self.saveAsName.length) return false;
             else {
                 var next = {
-                   'edit': function () {
-                       $scope.$emit('addTab', {title: 'createModel', active: true, addable: true, tabName: self.saveAsName});
-                       URL.path = '編輯樣板的url';
+                    'edit': function () {
+                        $scope.$emit('addTab', {
+                            title: 'createModel',
+                            active: true,
+                            addable: true,
+                            tabName: self.saveAsName
+                        });
+                        URL.path = '編輯樣板的url';
                     },
                     'online': function () {
                         alert('online!')
@@ -286,12 +293,14 @@
                 }
             );
         }
-        function tabClicked(){
+
+        function tabClicked() {
             self.keywordInputFocus = false;
-            $timeout(function(){
+            $timeout(function () {
                 self.keywordInputFocus = true;
             })
         }
+
         function toggleSelection(selectedItems, item) {
             var idx = selectedItems.indexOf(item);
             if (idx != -1) selectedItems.splice(idx, 1);
@@ -316,9 +325,49 @@
 
 
     }
-    function modelManagementController($scope,jsonMethodService){
+
+    function modelManagementController($scope, jsonMethodService) {
         var self = this;
         self.datasource = [];
+        self.gridOptions = {
+            columnDefs: [
+                {
+                    field: 'modelName',
+                    displayName: '{{"modelName"|translate}}',
+                    headerCellFilter: 'translate'
+                },
+                {
+                    field:'role',
+                    displayName:'{{"role"|translate}}',
+                    headerCellFilter: 'translate'
+                },
+                {
+                    field:'creator',
+                    displayName:'{{"creator"|translate}}',
+                    headerCellFilter: 'translate'
+                },
+                {
+                    field:'lastModifiedTime',
+                    displayName:'{{"lastModifiedTime"|translate}}',
+                    headerCellFilter: 'translate'
+                },
+                {
+                    field:'lastModifiedBy',
+                    displayName:'{{"lastModifiedBy"|translate}}',
+                    headerCellFilter: 'translate'
+                },
+                {
+                    field:'status',
+                    displayName:'{{"status"|translate}}',
+                    headerCellFilter: 'translate'
+                },
+                {
+                    field:'management',
+                    displayName:'{{"management"|translate}}',
+                    headerCellFilter: 'translate'
+                }
+            ]
+        };
         self.selectedItems = [];
         setModels();
         function setModels() {

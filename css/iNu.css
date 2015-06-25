@@ -3,10 +3,12 @@
 body {
     font-family: Georgia, Microsoft JhengHei, sans-serif;
 }
-dropdown-multi-select{
+
+dropdown-multi-select {
 
     padding: 10px;
 }
+
 span > a:link {
     color: #328F7B;
 }
@@ -28,13 +30,16 @@ span > a:link {
     background-color: rgba(0, 0, 0, 0.1);
     color: #fff;
 }
-.field_set{
-padding-top: 5px;
+
+.field_set {
+    padding-top: 5px;
 }
+
 .ibox .open > .dropdown-menu {
-    left:0;
+    left: 0;
     right: 0;
 }
+
 .inline-div {
     display: inline;
 }
@@ -43,31 +48,39 @@ padding-top: 5px;
     margin-top: 2px;
 }
 
-.margins-div{
+.margins-div {
     margin: 0 0 0 2px;
 }
-.model-management-filter{
-    margin-left:  10px;
+
+.model-management-filter {
+    margin-left: 10px;
 }
+
+.model-management-grid {
+    width: 100%;
+ }
+
 .models-select {
     height: 120px;
     margin-top: 5px;
     overflow: auto;
     position: relative;
-    top:-10px;
+    top: -10px;
     width: 100%;
-  }
+}
 
 .models-add {
-    left:70%;
+    left: 70%;
     position: relative;
     width: 30px;
 }
-.models-drop{
+
+.models-drop {
     height: 200px;
     overflow: auto;
 
-  }
+}
+
 .models-label {
     position: relative;
     left: -50px;
@@ -116,6 +129,7 @@ padding-top: 5px;
 .tag-list li a {
     display: inline;
 }
-.cursor-pointer{
+
+.cursor-pointer {
     cursor: pointer;
 }
