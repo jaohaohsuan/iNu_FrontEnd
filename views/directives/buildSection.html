@@ -1,19 +1,9 @@
-<div ng-class="self.setClass($index)" ng-repeat="section in self.datasource">
+<div ng-class="buildSectionCtrl.setClass($index)" ng-repeat="section in buildSectionCtrl.datasource">
     <div class="panel-heading">
-       <h4> {{section.prompt}}
-        <span ng-if="self.clear" class="btn clear-button  btn-sm pull-right" ng-click="self.clear(section)">{{'clearAll'|translate}}</span></h4>
+        <h4> &nbsp;
+            <span ng-if="buildSectionCtrl.clear" class="btn clear-button  btn-sm pull-right" ng-click="buildSectionCtrl.clear(section)">{{'clearAll'|translate}}</span></h4>
     </div>
-    <div nested-scroll class="panel-body" ng-class="{true:'model-preview'}[section.datas.length>4]">
-
-        <div ng-if="section.datas.length <= 0" class="panel-heading text-center">
-        </div>
-        <div class="btn btn-primary btn-outline btn-block animated fadeInRight"
-             ng-repeat="data in section.datas">
-            <!--瀏覽區塊-->
-
-            <div> {{data.name}}&nbsp;{{data.value}}
-                <span ng-if="self.clear" class="btn btn-danger btn-xs  pull-right" ng-click="self.clear(data)"><i class="fa fa-close"></i></span>
-            </div>
-        </div>
+    <div nested-scroll class="panel-body" >
+        <div ng-transclude inject></div>
     </div>
 </div>

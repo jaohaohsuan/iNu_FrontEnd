@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL', '$anchorScroll', '$location',  createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL','textFormat', '$anchorScroll', '$location',  createModelController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', modelManagementController])
 
 
@@ -38,7 +38,7 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL, $anchorScroll, $location) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL,textFormat, $anchorScroll, $location) {
 
         var modelGroupSelectedTimeout;
         var self = this;
@@ -72,6 +72,7 @@
         ];
         self.saveAs = saveAs;
         self.saveAsName = '';
+        self.sections = [];
         self.showUndo = false;
         self.tabIndex = 0;
         self.toggleSelection = toggleSelection;
@@ -272,12 +273,21 @@
         }
 
         function setModelSection() {
-            jsonMethodService.getJson('json/buildSection.json').then(function (collectionjson) {
-                self.datasource = jsonParseService.getRelTemplate(collectionjson.collection.links, "section");
-                angular.forEach(self.datasource, function (section) {
-                    jsonMethodService.getJson('json/' + section.href).then(function (collectionjson) {
-                        var datas = jsonParseService.getDatasFromCollectionJson(collectionjson);
-                        section.datas = datas;
+            jsonMethodService.getJson('http://10.85.1.156:49154/_query/template').then(function (collectionjson) {
+                var editLink = jsonParseService.getEditorLinkFromLinkClass(collectionjson.collection.links);
+                jsonMethodService.getJson(editLink.href).then(function(collectionjson){
+                    angular.forEach(collectionjson.collection.items,function(item){
+                        angular.forEach(item.links,function(link){
+                            if (link.rel === "section"){
+                                jsonMethodService.getJson(link.href).then(function(collectionjson){
+                                    link.items = collectionjson.collection.items;
+                                    angular.forEach(link.items,function(item){
+                                        item.prompt = textFormat.buildSectionFormat(item.data);
+                                    })
+                                })
+                                self.sections.push(link);
+                            }
+                        })
                     })
                 })
             })

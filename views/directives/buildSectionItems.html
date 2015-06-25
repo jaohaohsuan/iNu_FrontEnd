@@ -1,0 +1,13 @@
+<div ng-class="{true:'model-preview'}[datasource.length>4]">
+    <div ng-if="!datasource ||datasource.length <= 0" class="panel-heading text-center">
+    </div>
+    <div class="btn btn-primary btn-outline btn-block animated fadeInRight"
+         ng-repeat="item in datasource">
+        <!--瀏覽區塊-->
+        <div>
+            <span ng-transclude inject></span>
+            <span ng-if="itemRemove" class="btn btn-danger btn-xs  pull-right" ng-click="itemRemove(item)"><i
+                    class="fa fa-close"></i></span>
+        </div>
+    </div>
+</div>

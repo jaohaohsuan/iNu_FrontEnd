@@ -158,7 +158,11 @@
             </h2></div>
             <div class="ibox-content">
                 <!--auto render-->
-                <build-section datasource="createModelCtrl.datasource" clear="createModelCtrl.clear"></build-section>
+                <build-section datasource="createModelCtrl.sections" clear="createModelCtrl.clear">
+                    <build-section-items datasource="section.items" item-remove="buildSectionCtrl.clear">
+                        {{item.prompt}}
+                    </build-section-items>
+                </build-section>
             </div>
         </div>
     </div>

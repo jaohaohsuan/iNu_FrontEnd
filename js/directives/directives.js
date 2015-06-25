@@ -6,12 +6,12 @@
                 datasource: '=',
                 clear: '='
             },
+            transclude: true,
             templateUrl: 'views/directives/buildSection.html',
             controller: buildSectionController,
-            controllerAs: 'self',
+            controllerAs: 'buildSectionCtrl',
             bindToController: true
         }
-
         function buildSectionController() {
             var self = this;
             self.setClass = setClass;
@@ -20,7 +20,18 @@
                 return className[index % className.length];
             }
         }
-
+        return directive;
+    }
+    function buildSectionItems(){
+        var directive = {
+            restrict: 'E',
+            scope: {
+                datasource: '=',
+                itemRemove: '='
+            },
+            transclude: true,
+            templateUrl: 'views/directives/buildSectionItems.html'
+        }
         return directive;
     }
 
@@ -144,7 +155,18 @@
 
         return directive;
     }
-
+    function inject() {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs, ctrl, transcludeFn) {//目的使transclude的內容使用到isolate-scope,e.g{{item}}
+                if (!transcludeFn) return;
+                transcludeFn(scope, function (clone) {
+                    element.empty();
+                    element.append(clone);
+                });
+            }
+        };
+    }
     function focus($parse, $timeout) {
         return {
             link: function (scope, element, attrs) {
@@ -631,10 +653,12 @@
         .directive('closeOffCanvas', closeOffCanvas)
         .directive('numberPicker', numberPicker)
         .directive('focus', focus)
-        .directive('buildSection', buildSection)
+        .directive('buildSection', buildSection)//查詢條件父區塊
+        .directive('buildSectionItems',buildSectionItems)//查詢條件子區塊
         .directive('componentInstance', componentInstance) //組件實例視窗
-        .directive('dropdownMultiSelect', dropdownMultiSelect)//下拉多選
         .directive('confirmClick', confirmClick) //刪除確認視窗
+        .directive('dropdownMultiSelect', dropdownMultiSelect)//下拉多選
+        .directive('inject',inject)
         .directive('modelInstance', modelInstance) //模型實例視窗
         .directive('nestedScroll', nestedScroll)
 })();
