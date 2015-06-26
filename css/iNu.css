@@ -2,12 +2,12 @@
 
 body {
     font-family: Georgia, Microsoft JhengHei, sans-serif;
+
 }
 
 dropdown-multi-select {
-
-    padding: 10px;
-}
+  margin-right: 5px;
+ }
 
 span > a:link {
     color: #328F7B;
@@ -34,14 +34,18 @@ span > a:link {
 .field_set {
     padding-top: 5px;
 }
-
+.dropdown-multi-select{
+    height: 30px;
+    top: -1px;
+}
 .ibox .open > .dropdown-menu {
     left: 0;
     right: 0;
 }
 
-.inline-div {
-    display: inline;
+
+.inline-block{
+    display: inline-block;
 }
 
 .instance-button {
@@ -53,11 +57,16 @@ span > a:link {
 }
 
 .model-management-filter {
+    height: 30px;
     margin-left: 10px;
+    padding:5px;
+  }
+.model-management-input{
+    height: 30px;
 }
-
 .model-management-grid {
     width: 100%;
+    margin-top: 10px;
  }
 
 .models-select {
