@@ -176,6 +176,22 @@
             }
         };
     }
+    function itemTemplate($compile) {
+        return {
+            restrict: "E",
+            transclude: true,
+            scope: {},
+            template: '<div ng-transclude ></div>',
+            link: function (scope, iElement, iAttr, ctrl, transcludeFn) {
+                var transcludetHtml = iElement.children().html();
+                var injectHtml = transcludetHtml.replace(/<([a-z].*?)>/g, '<$1  unselectable="on">');
+                var linkFn = $compile(injectHtml);
+                var compileContent = linkFn(scope.$parent);
+                iElement.empty();
+                iElement.append(compileContent);
+            }
+        };
+    }
     function focus($parse, $timeout) {
         return {
             link: function (scope, element, attrs) {
@@ -667,6 +683,7 @@
         .directive('confirmClick', confirmClick) //刪除確認視窗
         .directive('dropdownMultiSelect', dropdownMultiSelect)//下拉多選
         .directive('inject',inject)
+        .directive('itemTemplate',itemTemplate)
         .directive('modelInstance', modelInstance) //模型實例視窗
         .directive('nestedScroll', nestedScroll)
 })();
