@@ -272,7 +272,7 @@
 
         function setModelSection() {
             jsonMethodService.getJson('http://10.85.1.156:49154/_query/template').then(function (collectionjson) {
-                var editLink = jsonParseService.getEditorLinkFromLinkClass(collectionjson.collection.links);
+                var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links);
                 jsonMethodService.getJson(editLink.href).then(function(collectionjson){
                     angular.forEach(collectionjson.collection.items,function(item){
                         angular.forEach(item.links,function(link){

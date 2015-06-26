@@ -23,7 +23,7 @@
             })
             return datas;
         }
-        function getEditorLinkFromLinkClass(linkClass, callback) {
+        function getEditorLinkFromLinks(linkClass, callback) {
             return getRELTemplateValidate(linkClass, "edit", callback);
         }
         function getObjectMappingNameToValueFromDatas(datas,dataKey) {
@@ -47,14 +47,6 @@
             return result
         }
 
-        function getRelTemplate(links,rel,callback){
-            var result = [];
-            angular.forEach(links,function(link){
-                if (link.rel == rel) result.push(link);
-            })
-            if (callback) callback(result);
-            return result;
-        }
         function matchRELNameDoSomething(linkList, validateRelName, returnFunction) {
             var result
             var upperCaseCompareString = validateRelName.toUpperCase()
@@ -70,8 +62,7 @@
         }
         return{
             getDatasFromCollectionJson: getDatasFromCollectionJson,
-            getEditorLinkFromLinkClass: getEditorLinkFromLinkClass,
-            getRelTemplate: getRelTemplate,
+            getEditorLinkFromLinks: getEditorLinkFromLinks,
             getObjectMappingNameToValueFromDatas:getObjectMappingNameToValueFromDatas
         };
     }
