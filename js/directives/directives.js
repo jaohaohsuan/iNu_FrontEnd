@@ -2,9 +2,15 @@
     function buildSection() {
         var directive = {
             restrict: 'E',
+            required: '^buildSection',
             scope: {
                 datasource: '=',
-                clear: '='
+                titleProperty: '@',
+                clearAllText: '@',
+                clear: '=',
+                itemsProperty: '@',
+                itemEditableProperty: '@',
+                itemDblclick: '='
             },
             transclude: true,
             templateUrl: 'views/directives/buildSection.html',
@@ -14,23 +20,26 @@
         }
         function buildSectionController() {
             var self = this;
+            self.deepFind = deepFind;
+            self.itemDoubleClick = itemDoubleClick;
             self.setClass = setClass;
+            function deepFind(obj, path) {
+                var paths = path.split('.'), current = obj, i;
+                for (i = 0; i < paths.length; ++i) {
+                    if (current[paths[i]] == undefined) return undefined;
+                    else current = current[paths[i]];
+                }
+                return current;
+            }
+            function itemDoubleClick(item){
+                var editable = deepFind(item,self.itemEditableProperty);
+                if (editable === false) return;
+                self.itemDblclick(item);
+            }
             function setClass(index) {
                 var className = ['panel panel-primary', 'panel panel-danger', 'panel panel-warning', 'panel panel-info'];
                 return className[index % className.length];
             }
-        }
-        return directive;
-    }
-    function buildSectionItems(){
-        var directive = {
-            restrict: 'E',
-            scope: {
-                datasource: '=',
-                itemRemove: '='
-            },
-            transclude: true,
-            templateUrl: 'views/directives/buildSectionItems.html'
         }
         return directive;
     }
@@ -653,8 +662,7 @@
         .directive('closeOffCanvas', closeOffCanvas)
         .directive('numberPicker', numberPicker)
         .directive('focus', focus)
-        .directive('buildSection', buildSection)//查詢條件父區塊
-        .directive('buildSectionItems',buildSectionItems)//查詢條件子區塊
+        .directive('buildSection', buildSection)//查詢條件區塊
         .directive('componentInstance', componentInstance) //組件實例視窗
         .directive('confirmClick', confirmClick) //刪除確認視窗
         .directive('dropdownMultiSelect', dropdownMultiSelect)//下拉多選

@@ -158,10 +158,13 @@
             </h2></div>
             <div class="ibox-content">
                 <!--auto render-->
-                <build-section datasource="createModelCtrl.sections" clear="createModelCtrl.clear">
-                    <build-section-items datasource="section.items" item-remove="buildSectionCtrl.clear">
-                        {{item.prompt}}
-                    </build-section-items>
+                <build-section datasource="createModelCtrl.sections"
+                               clear-all-text="{{::'clearAll'|translate}}"
+                               clear="createModelCtrl.sectionsClear"
+                               items-property="{{::'items'}}"
+                               item-editable-property="{{::'itemInfo.editable'}}"
+                               item-dblclick="createModelCtrl.sectionsDblclick">
+                    {{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}
                 </build-section>
             </div>
         </div>

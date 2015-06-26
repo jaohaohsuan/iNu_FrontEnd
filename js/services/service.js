@@ -1,29 +1,42 @@
 (function(){
     angular.module('iNu')
-        .service('textFormat',['$translate',textFormat])
+        .service('structFormat',['$translate',structFormat])
         .service('URL', URL)
-    function textFormat($translate){
-        function buildSectionFormat(datas){
-            var textList = [];
+    function structFormat($translate){
+        function sectionItemFormat(datas,queryProperty,logicProperty,distanceProperty,editableProperty){
+            var itemInfoStruct = {};
+            itemInfoStruct[editableProperty] = true;
             datas.forEach(function(data){
                 var value = data.value;
                 var name = data.name;
-                if (["query","storedQueryTitle"].indexOf(name) != -1){
-                    textList.push(value);
-                }else if (name === "inOrder"){
-                    if (value) textList.push($translate.instant(name))
-                    textList.push($translate.instant("AND"));
-                }else if (name === "operator"){
-                    textList.push($translate.instant(value));
-                }else if (name === "slop"){
-                    textList.push($translate.instant('distance'));
-                    textList.push(value);
+                var mappingDefine = {
+                    "query": function(){
+                        itemInfoStruct[queryProperty] = value
+                    },
+                    "storedQueryTitle": function(){
+                        itemInfoStruct[queryProperty] = value;
+                        itemInfoStruct[editableProperty] = false;
+                    },
+                    "inOrder": function(){
+                        var text = "";
+                        if (value) text =  $translate.instant(name);
+                        text += $translate.instant("AND");
+                        itemInfoStruct[logicProperty] = text;
+                    },
+                    "operator": function(){
+                        itemInfoStruct[logicProperty] = $translate.instant(value);
+                    },
+                    "slop": function(){
+                        itemInfoStruct[distanceProperty] = $translate.instant('distance') + "(" + value + ")";
+                    }
                 }
+                if (!mappingDefine.hasOwnProperty(name)) {return;}
+                mappingDefine[name]();
             })
-            return textList.join(' ');
+            return itemInfoStruct;
         }
         return {
-            buildSectionFormat: buildSectionFormat
+            sectionItemFormat: sectionItemFormat
         }
     }
     function URL() {

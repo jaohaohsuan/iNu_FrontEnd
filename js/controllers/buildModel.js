@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL','textFormat', '$anchorScroll', '$location',  createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL','structFormat', '$anchorScroll', '$location',  createModelController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', modelManagementController])
 
 
@@ -38,7 +38,7 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL,textFormat, $anchorScroll, $location) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL,structFormat, $anchorScroll, $location) {
 
         var modelGroupSelectedTimeout;
         var self = this;
@@ -46,7 +46,7 @@
         self.addTab = addTab;
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
-        self.clear = clear;
+
         self.deleteModel = deleteModel;
         self.isInstance = true;
         self.isRounded = isRounded;
@@ -73,6 +73,8 @@
         self.saveAs = saveAs;
         self.saveAsName = '';
         self.sections = [];
+        self.sectionsClear = sectionsClear;
+        self.sectionsDblclick = sectionsDblclick;
         self.showUndo = false;
         self.tabIndex = 0;
         self.toggleSelection = toggleSelection;
@@ -178,10 +180,6 @@
             return t[query];
         }
 
-        function clear(section) {
-            self.showUndo = true;
-        }
-
         function deleteModel() {
             SweetAlert.swal({
                     title: $translate.instant('sureDelete'), //讀取多語系key
@@ -282,7 +280,7 @@
                                 jsonMethodService.getJson(link.href).then(function(collectionjson){
                                     link.items = collectionjson.collection.items;
                                     angular.forEach(link.items,function(item){
-                                        item.prompt = textFormat.buildSectionFormat(item.data);
+                                        item.itemInfo = structFormat.sectionItemFormat(item.data,"query","logic","distance","editable");
                                     })
                                 })
                                 self.sections.push(link);
@@ -303,7 +301,12 @@
                 }
             );
         }
-
+        function sectionsClear(section) {
+            self.showUndo = true;
+        }
+        function sectionsDblclick(item){
+            alert("editable")
+        }
         function tabClicked() {
             self.keywordInputFocus = false;
             $timeout(function () {
