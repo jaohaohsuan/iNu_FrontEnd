@@ -2,7 +2,7 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL','structFormat', '$anchorScroll', '$location',  createModelController])
-        .controller('modelManagementController', ['$scope', 'jsonMethodService', modelManagementController])
+        .controller('modelManagementController', ['$scope', 'jsonMethodService','$translate','$modal', modelManagementController])
 
 
     function buildModelController($scope, $timeout, $translate) {
@@ -339,55 +339,127 @@
 
     }
 
-    function modelManagementController($scope, jsonMethodService) {
+    function modelManagementController($scope, jsonMethodService, $translate,$modal) {
         var self = this;
+        $scope.changeModelStatus = changeModelStatus;
+        $scope.checkOnline = checkOnline;
         self.datasource = [];
+        $scope.editModel = editModel;
         self.gridOptions = {
             columnDefs: [
                 {
                     field: 'modelName',
                     displayName: '{{"modelName"|translate}}',
+                    headerCellFilter: 'translate',
+                    cellTemplate: '<button ng-click="grid.appScope.showModelDetail(row.entity)" class="btn btn-success btn-block">{{row.entity.modelName}}</button>'
+                },
+                {
+                    field: 'role',
+                    displayName: '{{"role"|translate}}',
                     headerCellFilter: 'translate'
                 },
                 {
-                    field:'role',
-                    displayName:'{{"role"|translate}}',
+                    field: 'creator',
+                    displayName: '{{"creator"|translate}}',
                     headerCellFilter: 'translate'
                 },
                 {
-                    field:'creator',
-                    displayName:'{{"creator"|translate}}',
+                    field: 'lastModifiedTime',
+                    displayName: '{{"lastModifiedTime"|translate}}',
                     headerCellFilter: 'translate'
                 },
                 {
-                    field:'lastModifiedTime',
-                    displayName:'{{"lastModifiedTime"|translate}}',
+                    field: 'lastModifiedBy',
+                    displayName: '{{"lastModifiedBy"|translate}}',
                     headerCellFilter: 'translate'
                 },
                 {
-                    field:'lastModifiedBy',
-                    displayName:'{{"lastModifiedBy"|translate}}',
+                    field: 'status',
+                    displayName: '{{"status"|translate}}',
                     headerCellFilter: 'translate'
                 },
                 {
-                    field:'status',
-                    displayName:'{{"status"|translate}}',
-                    headerCellFilter: 'translate'
-                },
-                {
-                    field:'management',
-                    displayName:'{{"management"|translate}}',
-                    headerCellFilter: 'translate'
+                    name: '{{"management"|translate}}',
+                    displayName: '{{"management"|translate}}',
+                    headerCellFilter: 'translate',
+                    cellTemplate: '<div class="model-management-grid">' +
+                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
+                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                    '</div>'
                 }
+            ],
+            data: [
+                {'modelName': 'Abc', 'role': 'A', 'status': 'online'},
+                {'modelName': 'Def', 'role': 'B', 'status': 'offline'}
+
             ]
         };
+        $scope.isModelOnline = false; //之後讀取API時需判斷此模型的上下線狀態
+        $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
+        $scope.showModelDetail=showModelDetail;
         setModels();
+
+        function checkOnline(status) {
+
+            var returnText = {
+                'online': function () {
+                    return $translate.instant('offline')
+                },
+                'offline': function () {
+                    return $translate.instant('online')
+                }
+            };
+            if (typeof returnText[status] !== 'function') {
+                return 'no status';
+            }
+            return returnText[status]();
+        }
+
+        function changeModelStatus(entity) {
+            var status = {
+                'online': function () {
+                    entity.status = 'offline';
+                },
+                'offline': function () {
+                    entity.status = 'online';
+                }
+            };
+            return status[entity.status]();
+
+
+        }
+
+        function editModel(entity) {
+            $scope.$emit('addTab', {
+                title: 'createModel',
+                active: true,
+                addable: true,
+                tabName: entity.modelName
+            });
+        }
+        function saveAsModel(entity){
+            var modelInstance = $modal.open({
+                backdropClass:'model-management-model-backdrop',
+                template:'<h1>'+entity.modelName+'</h1>',
+                windowClass:'model-management-model-save'
+            })
+        }
         function setModels() {
             jsonMethodService.getJson('json/models.json').then(
                 function (data) {
                     self.datasource = data;
                 })
+        }
+
+        function showModelDetail(entity){
+            var modelInstance = $modal.open({
+                backdropClass:'model-management-model-backdrop',
+                template:'<h1>'+entity.modelName+'</h1>',
+                windowClass:'model-management-model-logic'
+
+            })
         }
     }
 })();

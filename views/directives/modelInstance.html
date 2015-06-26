@@ -44,8 +44,11 @@
 <p></p>
 <div ng-if="modelInstanceCtrl.isInstance">
     <!-- confirmed-click:按下確認後綁定的事件 confirm-click:確認視窗內容的文字-->
-    <button ng-click="modelInstanceCtrl.enableModel()" class="btn btn-success  btn-block instance-button">
-        {{'enableModel'|translate}}
+    <button ng-hide="modelInstanceCtrl.isOnline" ng-click="modelInstanceCtrl.enableModel()" class="btn btn-success  btn-block instance-button">
+        {{'onlineModel'|translate}}
+    </button>
+    <button ng-show="modelInstanceCtrl.isOnline" ng-click="modelInstanceCtrl.enableModel()" class="btn btn-success  btn-block instance-button">
+        {{'offlineModel'|translate}}
     </button>
     <button ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-danger  btn-block instance-button">
         {{'deleteModel'|translate}}
