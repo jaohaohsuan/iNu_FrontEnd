@@ -4,10 +4,9 @@
             <span ng-if="buildSectionCtrl.clear" class="btn clear-button  btn-sm pull-right" ng-click="buildSectionCtrl.clear(section)">{{buildSectionCtrl.clearAllText}}</span></h4>
     </div>
     <div nested-scroll class="panel-body" >
-        <div ng-class="{true:'model-preview'}[section.length>4]">
+        <div nested-scroll ng-class="{true:'model-preview'}[section[buildSectionCtrl.itemsProperty].length>4]">
 
-            <div ng-if="section.length <= 0" class="panel-heading text-center">
-            </div>
+
             <div
                     ng-repeat="item in section[buildSectionCtrl.itemsProperty]"
                     ng-class="buildSectionCtrl.deepFind(item,buildSectionCtrl.itemEditableProperty) == false?'btn btn-block animated fadeInRight btn-success btn-outline':'btn btn-primary btn-outline btn-block animated fadeInRight'"
