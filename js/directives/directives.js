@@ -164,6 +164,25 @@
 
         return directive;
     }
+    function focus($parse, $timeout) {
+        return {
+            link: function (scope, element, attrs) {
+                var model = $parse(attrs.focus);
+
+                scope.$watch(model, function (value) {
+                    if (value === true) {
+                        $timeout(function () {
+                            element[0].focus();
+                            element.find('input').focus();
+                        });
+                    }
+                });
+                element.bind('blur', function () {
+                    scope.$apply(model.assign(scope, false));
+                });
+            }
+        };
+    }
     function inject() {
         return {
             restrict: 'A',
@@ -192,25 +211,7 @@
             }
         };
     }
-    function focus($parse, $timeout) {
-        return {
-            link: function (scope, element, attrs) {
-                var model = $parse(attrs.focus);
 
-                scope.$watch(model, function (value) {
-                    if (value === true) {
-                        $timeout(function () {
-                            element[0].focus();
-                            element.find('input').focus();
-                        });
-                    }
-                });
-                element.bind('blur', function () {
-                    scope.$apply(model.assign(scope, false));
-                });
-            }
-        };
-    }
 
     function modelInstance() {
         var directive = {
@@ -221,12 +222,12 @@
                 deleteModel: '=',
                 isInstance: '=', //是否是實例模式
                 isManagement: '=', //是否是模型管理下
-                onlineModel: '=',
+                enableModel: '=',
                 renameModel: '=',
                 saveModel: '=',
                 saveModelAndOnline: '=',
                 selectedEventhandler: '=',
-                title: '='
+                title: '@'
             },
             templateUrl: 'views/directives/modelInstance.html',
             controller: modelInstanceController,

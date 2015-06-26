@@ -442,9 +442,26 @@
         function saveAsModel(entity){
             var modelInstance = $modal.open({
                 backdropClass:'model-management-model-backdrop',
-                template:'<h1>'+entity.modelName+'</h1>',
+                controller:['$modalInstance',saveAsController],
+                controllerAs:'saveAsCtrl',
+                template:'<div ><span ng-click="saveAsCtrl.closeModal()" class="btn fa fa-remove fa-lg pull-right"></span>' +
+                               '<model-instance datasource="saveAsCtrl.datasource" is-management="true" title="{{::saveAsCtrl.title}}"' +
+                               '></model-instance>'+
+                        '</div>',
                 windowClass:'model-management-model-save'
             })
+            function saveAsController($modalInstance){
+                var self = this;
+                self.title =$translate.instant('saveAsNewModel');
+                jsonMethodService.getJson('json/models.json').then(
+                    function (data) {
+                        self.datasource = data;
+                    });
+                self.closeModal=closeModal;
+                function closeModal(){
+                    $modalInstance.close();
+                }
+            }
         }
         function setModels() {
             jsonMethodService.getJson('json/models.json').then(
@@ -456,10 +473,19 @@
         function showModelDetail(entity){
             var modelInstance = $modal.open({
                 backdropClass:'model-management-model-backdrop',
-                template:'<h1>'+entity.modelName+'</h1>',
+                controller:['$modalInstance',showModelDetailController],
+                controllerAs:'detailCtrl',
+                template:'<div><span ng-click="detailCtrl.closeModal()" class="btn fa fa-remove fa-lg pull-right"></span><h1>'+entity.modelName+'</h1></div>',
                 windowClass:'model-management-model-logic'
 
             })
+            function showModelDetailController($modalInstance){
+                var self = this;
+                self.closeModal=closeModal;
+                function closeModal(){
+                    $modalInstance.close();
+                }
+            }
         }
     }
 })();

@@ -60,6 +60,7 @@
 	"saveComponent": "组件",
 	"saveAs":"另存",
 	"saveAsModel": "另存为模型",
+	"saveAsNewModel": "另存为新模型",
 	"saveModel": "另存模型",
     "saveModelAndEdit": "另存后开启页签编辑",
     "saveModelAndOnline": "另存模型并上线",
