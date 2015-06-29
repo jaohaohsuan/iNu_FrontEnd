@@ -26,6 +26,15 @@
         function getEditorLinkFromLinks(linkClass, callback) {
             return getRELTemplateValidate(linkClass, "edit", callback);
         }
+        function getLinksObjFromLinks(links){
+            var result = {};
+            angular.forEach(links,function(link){
+                var rel = link.rel;
+                if (result[rel]) result[rel].push(link);
+                else result[rel] = [link];
+            })
+            return result;
+        }
         function getObjectMappingNameToValueFromDatas(datas,dataKey) {
             var result = {}
             if (!dataKey) dataKey = 'name'
@@ -63,6 +72,7 @@
         return{
             getDatasFromCollectionJson: getDatasFromCollectionJson,
             getEditorLinkFromLinks: getEditorLinkFromLinks,
+            getLinksObjFromLinks: getLinksObjFromLinks,
             getObjectMappingNameToValueFromDatas:getObjectMappingNameToValueFromDatas
         };
     }
