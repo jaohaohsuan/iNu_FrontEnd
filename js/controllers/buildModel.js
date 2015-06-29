@@ -1,8 +1,8 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL','structFormat', '$anchorScroll', '$location',  createModelController])
-        .controller('modelManagementController', ['$scope', 'jsonMethodService','$translate','$modal', modelManagementController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL', 'structFormat', '$anchorScroll', '$location', createModelController])
+        .controller('modelManagementController', ['$scope', 'jsonMethodService', '$translate', '$modal', modelManagementController])
 
 
     function buildModelController($scope, $timeout, $translate) {
@@ -10,7 +10,7 @@
         //self.modelBroadcast = modelBroadcast;
         self.removeTab = removeTab;
         self.tabIndex = 0;
-        self.tabs = [
+        self.tabs = [ //頁籤標題
             {title: 'createModel'},
             {title: 'matchedReview'},
             {title: 'modelManagement', active: true},
@@ -18,7 +18,7 @@
         ]
 
         self.tabClicked = tabClicked;
-        $scope.$on('addTab', function (event, tab) {
+        $scope.$on('addTab', function (event, tab) { //接收增加頁籤的廣播
             self.tabs.splice(self.tabIndex + 1, 0, tab);
             self.tabIndex++;
         });
@@ -38,12 +38,12 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL,structFormat, $anchorScroll, $location) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL, structFormat, $anchorScroll, $location) {
 
         var modelGroupSelectedTimeout;
         var self = this;
-        self.addModelGroup = addModelGroup;
-        self.addTab = addTab;
+        self.addModelGroup = addModelGroup; //增加模型組
+        self.addTab = addTab; //增加tab
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
 
@@ -80,10 +80,13 @@
         self.toggleSelection = toggleSelection;
         self.undo = undo;
 
-        setReuseModel();
+
+        initialSetting();
         setModels();
         setModelSection();
-        initialSetting();
+        setReuseModel();
+
+
         $scope.$on("$destroy", destroyListener);
         $scope.$on('tabClicked', tabClicked);
         function addModelGroup() {
@@ -203,19 +206,6 @@
             $timeout.cancel(modelGroupSelectedTimeout);
         }
 
-        function initialSetting() {
-            self.keywords = [];
-            if (URL.path) {
-                self.keywords.push({text: URL.path});
-                console.log(JSON.stringify(self.keywords))
-            }
-
-            self.distance = 5;
-            self.selectedRole = self.roles[0];
-            self.selectedReuseModel = [];
-            self.canAdd = false;
-            self.keywordInputFocus = true;
-        }
 
         function isRounded() {
             return window.innerWidth < 768
@@ -262,51 +252,17 @@
         }
 
 
-        function setModels() {
-            jsonMethodService.getJson('json/models.json').then(
-                function (data) {
-                    self.modelDatasource.models = data;
-
-                })
-        }
-
-        function setModelSection() {
-            jsonMethodService.getJson('http://10.85.1.156:49154/_query/template').then(function (collectionjson) {
-                var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links);
-                jsonMethodService.getJson(editLink.href).then(function(collectionjson){
-                    angular.forEach(collectionjson.collection.items,function(item){
-                        angular.forEach(item.links,function(link){
-                            if (link.rel === "section"){
-                                jsonMethodService.getJson(link.href).then(function(collectionjson){
-                                    link.items = collectionjson.collection.items;
-                                    angular.forEach(link.items,function(item){
-                                        item.itemInfo = structFormat.sectionItemFormat(item.data,"query","logic","distance","editable");
-                                    })
-                                })
-                                self.sections.push(link);
-                            }
-                        })
-                    })
-                })
-            })
-        }
-
-        function setReuseModel() {
-            jsonMethodService.getJson('json/reuseModel.json').then(
-                function (data) {//success
-                    self.reuseModel = data;
-                }, function (data) {//error
 
 
-                }
-            );
-        }
+
         function sectionsClear(section) {
             self.showUndo = true;
         }
-        function sectionsDblclick(item){
+
+        function sectionsDblclick(item) {
             alert("editable")
         }
+
         function tabClicked() {
             self.keywordInputFocus = false;
             $timeout(function () {
@@ -324,6 +280,22 @@
             self.showUndo = false;
         }
 
+//////////////////不綁定區//////////////////
+
+        function initialSetting() {
+            self.keywords = [];
+            if (URL.path) {
+                self.keywords.push({text: URL.path});
+                console.log(JSON.stringify(self.keywords))
+            }
+
+            self.distance = 5;
+            self.selectedRole = self.roles[0];
+            self.selectedReuseModel = [];
+            self.canAdd = false;
+            self.keywordInputFocus = true;
+        }
+
         /**
          *檢查輸入規則
          * @param textcontent
@@ -335,13 +307,49 @@
             }
             self.canAdd = true;
         }
+        function setModels() {
+            jsonMethodService.getJson('json/models.json').then(
+                function (data) {
+                    self.modelDatasource.models = data;
+
+                })
+        }
+
+        function setModelSection() {
+            jsonMethodService.getJson('http://10.85.1.156:49154/_query/template').then(function (collectionjson) {
+                var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links);
+                jsonMethodService.getJson(editLink.href).then(function (collectionjson) {
+                    angular.forEach(collectionjson.collection.items, function (item) {
+                        angular.forEach(item.links, function (link) {
+                            if (link.rel === "section") {
+                                jsonMethodService.getJson(link.href).then(function (collectionjson) {
+                                    link.items = collectionjson.collection.items;
+                                    angular.forEach(link.items, function (item) {
+                                        item.itemInfo = structFormat.sectionItemFormat(item.data, "query", "logic", "distance", "editable");
+                                    })
+                                })
+                                self.sections.push(link);
+                            }
+                        })
+                    })
+                })
+            })
+        }
+        function setReuseModel() {
+            jsonMethodService.getJson('json/reuseModel.json').then(
+                function (data) {//success
+                    self.reuseModel = data;
+                }, function (data) {//error
 
 
+                }
+            );
+        }
     }
 
-    function modelManagementController($scope, jsonMethodService, $translate,$modal) {
+    function modelManagementController($scope, jsonMethodService, $translate, $modal) {
         var self = this;
-        $scope.changeModelStatus = changeModelStatus;
+        $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
         $scope.checkOnline = checkOnline;
         self.datasource = [];
         $scope.editModel = editModel;
@@ -398,27 +406,27 @@
         $scope.isModelOnline = false; //之後讀取API時需判斷此模型的上下線狀態
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
-        $scope.showModelDetail=showModelDetail;
+        $scope.showModelDetail = showModelDetail;
         setModels();
 
 
-        function checkOnline(status) {
+        function checkOnline(status) { //顯示管理欄位裡面是上線或下線
 
             var returnText = {
-                'online': function () {
+                'online': function () { //如果是上線，管理欄位裡面要顯示下線
                     return $translate.instant('offline')
                 },
-                'offline': function () {
+                'offline': function () { //如果是下線，管理欄位裡面要顯示上線
                     return $translate.instant('online')
                 }
             };
-            if (typeof returnText[status] !== 'function') {
+            if (typeof returnText[status] !== 'function') { //如果不再上列的狀態
                 return 'no status';
             }
             return returnText[status]();
         }
 
-        function changeModelStatus(entity) {
+        function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
             var status = {
                 'online': function () {
                     entity.status = 'offline';
@@ -432,7 +440,7 @@
 
         }
 
-        function editModel(entity) {
+        function editModel(entity) { //另開頁籤編輯模型
             $scope.$emit('addTab', {
                 title: 'createModel',
                 active: true,
@@ -440,30 +448,54 @@
                 tabName: entity.modelName
             });
         }
-        function saveAsModel(entity){
+
+        function saveAsModel(entity) { //打開modal另存模型
             var modelInstance = $modal.open({
-                backdropClass:'model-management-model-backdrop',
-                controller:['$modalInstance',saveAsController],
-                controllerAs:'saveAsCtrl',
-                template:'<div ><span ng-click="saveAsCtrl.closeModal()" class="btn fa fa-remove fa-lg pull-right"></span>' +
-                               '<model-instance datasource="saveAsCtrl.datasource" is-management="true" title="{{::saveAsCtrl.title}}"' +
-                               '></model-instance>'+
-                        '</div>',
-                windowClass:'model-management-model-save'
+                backdropClass: 'model-management-model-backdrop', //打開modal後背景的CSS
+                controller: ['$modalInstance', saveAsController],
+                controllerAs: 'saveAsCtrl',
+                template: '<div ><span ng-click="saveAsCtrl.closeModal()" class="btn fa fa-remove fa-lg pull-right"></span>' +
+                '<model-instance datasource="saveAsCtrl.datasource" is-management="true" title="{{::saveAsCtrl.title}}"' +
+                '></model-instance>' +
+                '</div>',
+                windowClass: 'model-management-model-save' //modal頁的CSS
             })
-            function saveAsController($modalInstance){
+
+            function saveAsController($modalInstance) {
                 var self = this;
-                self.title =$translate.instant('saveAsNewModel');
+                self.title = $translate.instant('saveAsNewModel');
                 jsonMethodService.getJson('json/models.json').then(
                     function (data) {
                         self.datasource = data;
                     });
-                self.closeModal=closeModal;
-                function closeModal(){
+                self.closeModal = closeModal;
+                function closeModal() {
                     $modalInstance.close();
                 }
             }
         }
+
+
+        function showModelDetail(entity) { //打開modal顯示模型邏輯詞曲
+            var modelInstance = $modal.open({
+                backdropClass: 'model-management-model-backdrop',
+                controller: ['$modalInstance', showModelDetailController],
+                controllerAs: 'detailCtrl',
+                template: '<div><span ng-click="detailCtrl.closeModal()" class="btn fa fa-remove fa-lg pull-right"></span><h1>' + entity.modelName + '</h1></div>',
+                windowClass: 'model-management-model-logic'
+
+            })
+
+            function showModelDetailController($modalInstance) {
+                var self = this;
+                self.closeModal = closeModal;
+                function closeModal() {
+                    $modalInstance.close();
+                }
+            }
+        }
+
+/////////////////////////////////////////不綁定區//////////////////////////////////
         function setModels() {
             jsonMethodService.getJson('json/models.json').then(
                 function (data) {
@@ -472,22 +504,5 @@
         }
 
 
-        function showModelDetail(entity){
-            var modelInstance = $modal.open({
-                backdropClass:'model-management-model-backdrop',
-                controller:['$modalInstance',showModelDetailController],
-                controllerAs:'detailCtrl',
-                template:'<div><span ng-click="detailCtrl.closeModal()" class="btn fa fa-remove fa-lg pull-right"></span><h1>'+entity.modelName+'</h1></div>',
-                windowClass:'model-management-model-logic'
-
-            })
-            function showModelDetailController($modalInstance){
-                var self = this;
-                self.closeModal=closeModal;
-                function closeModal(){
-                    $modalInstance.close();
-                }
-            }
-        }
     }
 })();
