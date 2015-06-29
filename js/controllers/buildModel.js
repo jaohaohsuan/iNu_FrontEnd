@@ -312,7 +312,7 @@
         }
 
 
-        function setModelSection() {
+        function setModelSections() {
             angular.forEach(self.sections, function (section) {
                 refreshModelSection(section)
             })
@@ -337,7 +337,7 @@
                         var linksObj = jsonParseService.getLinksObjFromLinks(item.links);
                         self.sections = linksObj["section"];
                         self.keywordEdit = linksObj["edit"];
-                        setModelSection();
+                        setModelSections();
                     })
                 })
             })
