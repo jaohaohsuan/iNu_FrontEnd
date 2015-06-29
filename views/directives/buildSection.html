@@ -1,7 +1,7 @@
 <div ng-class="buildSectionCtrl.setClass($index)" ng-repeat="section in buildSectionCtrl.datasource">
     <div class="panel-heading">
         <h4> &nbsp;
-            <span ng-if="buildSectionCtrl.clear" class="btn clear-button  btn-sm pull-right" ng-click="buildSectionCtrl.clear(section)">{{buildSectionCtrl.clearAllText}}</span></h4>
+            <span ng-if="buildSectionCtrl.clear" class="btn clear-button  btn-sm pull-right" ng-click="buildSectionCtrl.clear(section,section)">{{buildSectionCtrl.clearAllText}}</span></h4>
     </div>
     <div nested-scroll class="panel-body" >
         <div nested-scroll ng-class="{true:'model-preview'}[section[buildSectionCtrl.itemsProperty].length>4]">
@@ -13,7 +13,7 @@
                     ng-dblclick="buildSectionCtrl.itemDoubleClick(item)"   >
                 <!--瀏覽區塊-->
                 <span ng-transclude inject></span>
-            <span  ng-if="buildSectionCtrl.clear" class="btn btn-danger btn-xs  pull-right" ng-click="buildSectionCtrl.clear(item)" ng-dblclick="$event.stopPropagation()"><i
+            <span  ng-if="buildSectionCtrl.clear" class="btn btn-danger btn-xs  pull-right" ng-click="buildSectionCtrl.clear(section,item)" ng-dblclick="$event.stopPropagation()"><i
                     class="fa fa-close"></i></span>
             </div>
         </div>

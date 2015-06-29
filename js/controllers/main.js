@@ -21,7 +21,7 @@
 
         function doService() {
 
-            jsonMethodService.getJson('json/pagetitle.json').then(
+            jsonMethodService.get('json/pagetitle.json').then(
                 function (data) {//success
                     self.userInfo = data;
                 }, function (data) {//error

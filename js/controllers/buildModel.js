@@ -50,7 +50,7 @@
         self.deleteModel = deleteModel;
         self.isInstance = true;
         self.isRounded = isRounded;
-        self.keywordCheck = keywordCheck;
+        self.keywordEdit = [];
         self.logicWord = 'and';
         //$scope.$on('currentTab', function (event, tab) {
         //    self.tabIndex = $scope.buildModelCtrl.tabs.indexOf(tab);
@@ -83,7 +83,7 @@
 
         initialSetting();
         setModels();
-        setModelSection();
+        $timeout(setTemplate('http://10.85.1.156:49154/_query/template'));
         setReuseModel();
 
 
@@ -153,7 +153,7 @@
 
         function addToBuildSection(modelSection) {
             var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource, "name");
-            jsonMethodService.getJson('json/mustNotNew.json').then(function (collectionjson) {
+            jsonMethodService.get('json/mustNotNew.json').then(function (collectionjson) {
                 var datas = jsonParseService.getDatasFromCollectionJson(collectionjson);
                 kvDatasource[modelSection].datas = datas;
             })
@@ -202,10 +202,6 @@
                 });
         }
 
-        function destroyListener(event) {
-            $timeout.cancel(modelGroupSelectedTimeout);
-        }
-
 
         function isRounded() {
             return window.innerWidth < 768
@@ -226,6 +222,7 @@
         function renameModel() {
             SweetAlert.swal("renamed", "", "success");
         }
+
 
         function saveAs(condition) {
             if (!self.saveAsName || !self.saveAsName.length) return false;
@@ -251,24 +248,23 @@
             }
         }
 
-
-
-
-
-        function sectionsClear(section) {
-            self.showUndo = true;
+        function sectionsClear(section, item) {
+            var sectionHref = section.href;
+            var itemHref = item.href;
+            jsonMethodService.DELETE(itemHref).then(function (data) {
+                $timeout(function () {
+                    var kvSections = jsonParseService.getObjectMappingNameToValueFromDatas(self.sections, "href");
+                    refreshModelSection(kvSections[sectionHref]);
+                    self.showUndo = true;
+                }, 1000);
+            }).then(function (data) {
+            })
         }
 
         function sectionsDblclick(item) {
             alert("editable")
         }
 
-        function tabClicked() {
-            self.keywordInputFocus = false;
-            $timeout(function () {
-                self.keywordInputFocus = true;
-            })
-        }
 
         function toggleSelection(selectedItems, item) {
             var idx = selectedItems.indexOf(item);
@@ -281,6 +277,9 @@
         }
 
 //////////////////不綁定區//////////////////
+        function destroyListener(event) {
+            $timeout.cancel(modelGroupSelectedTimeout);
+        }
 
         function initialSetting() {
             self.keywords = [];
@@ -296,47 +295,31 @@
             self.keywordInputFocus = true;
         }
 
-        /**
-         *檢查輸入規則
-         * @param textcontent
-         */
-        function keywordCheck(textcontent) {
-            if (!textcontent || textcontent.length <= 0) {
-                self.canAdd = false;
-                return;
-            }
-            self.canAdd = true;
-        }
-        function setModels() {
-            jsonMethodService.getJson('json/models.json').then(
-                function (data) {
-                    self.modelDatasource.models = data;
-
-                })
-        }
-
-        function setModelSection() {
-            jsonMethodService.getJson('http://10.85.1.156:49154/_query/template').then(function (collectionjson) {
-                var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links);
-                jsonMethodService.getJson(editLink.href).then(function (collectionjson) {
-                    angular.forEach(collectionjson.collection.items, function (item) {
-                        angular.forEach(item.links, function (link) {
-                            if (link.rel === "section") {
-                                jsonMethodService.getJson(link.href).then(function (collectionjson) {
-                                    link.items = collectionjson.collection.items;
-                                    angular.forEach(link.items, function (item) {
-                                        item.itemInfo = structFormat.sectionItemFormat(item.data, "query", "logic", "distance", "editable");
-                                    })
-                                })
-                                self.sections.push(link);
-                            }
-                        })
-                    })
+        function refreshModelSection(section) {
+            jsonMethodService.get(section.href).then(function (collectionjson) {
+                section.items = collectionjson.collection.items;
+                angular.forEach(section.items, function (item) {
+                    item.itemInfo = structFormat.sectionItemFormat(item.data, "query", "logic", "distance", "editable");
                 })
             })
         }
+
+        function setModels() {
+            jsonMethodService.get('json/models.json').then(
+                function (data) {
+                    self.modelDatasource.models = data;
+                })
+        }
+
+
+        function setModelSection() {
+            angular.forEach(self.sections, function (section) {
+                refreshModelSection(section)
+            })
+        }
+
         function setReuseModel() {
-            jsonMethodService.getJson('json/reuseModel.json').then(
+            jsonMethodService.get('json/reuseModel.json').then(
                 function (data) {//success
                     self.reuseModel = data;
                 }, function (data) {//error
@@ -344,6 +327,27 @@
 
                 }
             );
+        }
+
+        function setTemplate(href) {
+            jsonMethodService.get(href).then(function (collectionjson) {
+                var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links);
+                jsonMethodService.get(editLink.href).then(function (collectionjson) {
+                    angular.forEach(collectionjson.collection.items, function (item) {
+                        var linksObj = jsonParseService.getLinksObjFromLinks(item.links);
+                        self.sections = linksObj["section"];
+                        self.keywordEdit = linksObj["edit"];
+                        setModelSection();
+                    })
+                })
+            })
+        }
+
+        function tabClicked() {
+            self.keywordInputFocus = false;
+            $timeout(function () {
+                self.keywordInputFocus = true;
+            })
         }
     }
 
@@ -391,10 +395,10 @@
                     displayName: '{{"management"|translate}}',
                     headerCellFilter: 'translate',
                     cellTemplate: '<div class="model-management-grid">' +
-                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
-                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                    '</div>'
+                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
+                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                        '</div>'
                 }
             ],
             data: [
@@ -455,16 +459,16 @@
                 controller: ['$modalInstance', saveAsController],
                 controllerAs: 'saveAsCtrl',
                 template: '<div ><span ng-click="saveAsCtrl.closeModal()" class="btn fa fa-remove fa-lg pull-right"></span>' +
-                '<model-instance datasource="saveAsCtrl.datasource" is-management="true" title="{{::saveAsCtrl.title}}"' +
-                '></model-instance>' +
-                '</div>',
+                    '<model-instance datasource="saveAsCtrl.datasource" is-management="true" title="{{::saveAsCtrl.title}}"' +
+                    '></model-instance>' +
+                    '</div>',
                 windowClass: 'model-management-model-save' //modal頁的CSS
             })
 
             function saveAsController($modalInstance) {
                 var self = this;
                 self.title = $translate.instant('saveAsNewModel');
-                jsonMethodService.getJson('json/models.json').then(
+                jsonMethodService.get('json/models.json').then(
                     function (data) {
                         self.datasource = data;
                     });
@@ -497,7 +501,7 @@
 
 /////////////////////////////////////////不綁定區//////////////////////////////////
         function setModels() {
-            jsonMethodService.getJson('json/models.json').then(
+            jsonMethodService.get('json/models.json').then(
                 function (data) {
                     self.datasource = data;
                 })

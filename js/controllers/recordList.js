@@ -44,7 +44,7 @@
 
         doService();
         function doService() {
-            jsonMethodService.getJson('json/callList.json').then(
+            jsonMethodService.get('json/callList.json').then(
                 function (data) {//success
                     $scope.callListData = data
                 }, function (data) {//error
