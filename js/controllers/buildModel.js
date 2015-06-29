@@ -399,6 +399,7 @@
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
         $scope.showModelDetail=showModelDetail;
+        setModels();
 
 
         function checkOnline(status) {
@@ -462,6 +463,12 @@
                     $modalInstance.close();
                 }
             }
+        }
+        function setModels() {
+            jsonMethodService.getJson('json/models.json').then(
+                function (data) {
+                    self.datasource = data;
+                })
         }
 
 
