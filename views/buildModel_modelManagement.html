@@ -9,9 +9,13 @@
                         placeholder="{{::'modelGroupSelectPlactholder'|translate}}">
                 </dropdown-multi-select>
                 <div class="inline-block">
-                <label> {{'modelKeyword'|translate}}:</label>
-                <input type="text" class="model-management-input" required/>
-                <button class="btn btn-success model-management-filter">{{'filter'|translate}}</button>
+                    <label> {{'modelKeyword'|translate}}:</label>
+                    <input type="text" class="model-management-input" ng-model="modelManagementCtrl.modelKeyword"
+                           required/>
+                    <button class="btn btn-success model-management-filter" ng-click="modelManagementCtrl.filterModel()"
+                            ng-disabled="!modelManagementCtrl.selectedItems.length||!modelManagementCtrl.modelKeyword">
+                        {{'filter'|translate}}
+                    </button>
                 </div>
             </form>
             <div ui-grid="modelManagementCtrl.gridOptions" class="model-management-grid"></div>
