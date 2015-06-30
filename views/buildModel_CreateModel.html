@@ -146,7 +146,8 @@
                                item-editable-property="{{::'itemInfo.editable'}}"
                                item-dblclick="createModelCtrl.sectionsDblclick">
                     <item-template>
-                        {{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}
+                      <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}">
+                          {{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</div>
                     </item-template>
                 </build-section>
             </div>
