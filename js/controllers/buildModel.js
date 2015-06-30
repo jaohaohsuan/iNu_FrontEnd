@@ -39,43 +39,25 @@
     }
 
     function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL, structFormat, $anchorScroll, $location) {
-
         var modelGroupSelectedTimeout;
+        var refreshTimeout;
         var self = this;
         self.addModelGroup = addModelGroup; //增加模型組
         self.addTab = addTab; //增加tab
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
-        self.basicQuery = {
-            distance:0,
-            isNear:false,
-            inOrder:false,
-            occurrence: '',
-            operator: '',
-            role:{}
-        };
         self.deleteModel = deleteModel;
+        self.editLinks = [];
         self.isInstance = true;
         self.isRounded = isRounded;
-        self.keywordEdit = [];
-        self.logicWord = 'and';
-        //$scope.$on('currentTab', function (event, tab) {
-        //    self.tabIndex = $scope.buildModelCtrl.tabs.indexOf(tab);
-        //});
-
+        self.syntaxBinding = {};
+        self.syntaxEditCollection = {};
         self.modelDatasource = {
             models: []
         };
-        self.modelSection = {
-            "basicModel": "mustHave",
-            "reuseModel": "mustHave"
-        };
         self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
-
         self.nextToDo = nextToDo;
-
         self.renameModel = renameModel;
-
         self.roles = [
             {"name": "角色：全部", "content": "ALL"},
             {"name": "角色：A", "content": "A"},
@@ -94,7 +76,7 @@
 
         initialSetting();
         setModels();
-        $timeout(setTemplate('http://10.85.1.156:49154/_query/template'));
+        setTemplate('http://10.85.1.156:49154/_query/template');
         setReuseModel();
 
 
@@ -162,14 +144,23 @@
 
         }
 
-        function addToBuildSection(basicQuery,keywords) {
-            var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource, "name");
-            console.log(basicQuery)
-            jsonMethodService.get('json/mustNotNew.json').then(function (collectionjson) {
-                var datas = jsonParseService.getDatasFromCollectionJson(collectionjson);
-                kvDatasource[modelSection].datas = datas;
+        function addToBuildSection() {
+            var syntaxIdentity = (self.syntaxBinding.isNear) ? "near" : "match";
+            angular.forEach(self.syntaxEditCollection[syntaxIdentity].template.data, function (data) {
+                var name = data.name;
+                if (name === "query") data.value = self.syntaxBinding[data.name].map(function (element) {
+                    return element.text
+                }).join(" ");
+                else data.value = self.syntaxBinding[data.name]
             })
-            initialSetting();
+            var template = {template: self.syntaxEditCollection[syntaxIdentity].template};
+
+            jsonMethodService.post(self.syntaxEditCollection[syntaxIdentity].href, template).then(function (data) {
+                var section = jsonParseService.findItemValueFromArray(self.sections, "href", self.syntaxBinding.occurrence);
+                refreshModelSection(section, 1000);
+                initialSetting();
+            })
+
         }
 
         function autoTips(query) {
@@ -294,24 +285,50 @@
         }
 
         function initialSetting() {
-            self.keywords = [];
+            self.syntaxBinding.query = [];
             if (URL.path) {
-                self.keywords.push({text: URL.path});
+                self.syntaxBinding.query.push({text: URL.path});
                 console.log(JSON.stringify(self.keywords))
             }
-
-            self.distance = 5;
+            self.syntaxBinding.slop = 0;
+            self.syntaxBinding.operator = null;
+            self.syntaxBinding.isNear = false;
+            self.syntaxBinding.inOrder = false;
+            self.syntaxBinding.occurrence = "must";
             self.selectedRole = self.roles[0];
             self.selectedReuseModel = [];
             self.canAdd = false;
             self.keywordInputFocus = true;
         }
 
-        function refreshModelSection(section) {
-            jsonMethodService.get(section.href).then(function (collectionjson) {
-                section.items = collectionjson.collection.items;
-                angular.forEach(section.items, function (item) {
-                    item.itemInfo = structFormat.sectionItemFormat(item.data, "query", "logic", "distance", "editable");
+        function refreshModelSection(section, millisecond) {
+            refreshTimeout = $timeout(function () {
+                jsonMethodService.get(section.href).then(function (collectionjson) {
+                    section.items = collectionjson.collection.items;
+                    angular.forEach(section.items, function (item) {
+                        item.itemInfo = structFormat.sectionItemFormat(item.data, "query", "logic", "distance", "editable");
+                    })
+                })
+            }, millisecond)
+        }
+
+        function setEditBinding(datas) {
+            angular.forEach(datas, function (data) {
+                if (data.name == "query") {
+                    self.syntaxBinding.query = data.value.split("\\s");
+                } else {
+                    self.syntaxBinding[data.name] = data.value;
+                }
+            })
+        }
+
+        function setEditTemplates() {
+            angular.forEach(self.editLinks, function (editlink) {
+                jsonMethodService.get(editlink.href).then(function (collectionjson) {
+                    setEditBinding(collectionjson.collection.template.data);
+                    var syntaxIdentity = editlink.href.match(/(match|near|named)/g);
+                    if (!syntaxIdentity) return;
+                    self.syntaxEditCollection[syntaxIdentity] = collectionjson.collection;
                 })
             })
         }
@@ -326,7 +343,7 @@
 
         function setModelSections() {
             angular.forEach(self.sections, function (section) {
-                refreshModelSection(section)
+                refreshModelSection(section, 0)
             })
         }
 
@@ -348,9 +365,9 @@
                     angular.forEach(collectionjson.collection.items, function (item) {
                         var linksObj = jsonParseService.getLinksObjFromLinks(item.links);
                         self.sections = linksObj["section"];
-                        self.keywordEdit = linksObj["edit"];
+                        self.editLinks = linksObj["edit"];
                         setModelSections();
-
+                        setEditTemplates();
                     })
                 })
             })

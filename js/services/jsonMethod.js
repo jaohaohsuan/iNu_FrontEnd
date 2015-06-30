@@ -24,9 +24,28 @@
                 });
                 return deferred.promise;
             }
+            function post(href, data) {
+                var deferred = $q.defer();
+                var urlToGo = href;
+                $http(
+                    {
+                        method: "POST",
+                        data: data,
+                        url: urlToGo,
+                        headers: {'Content-Type': 'application/vnd.collection+json'}
+                    }
+                )
+                    .success(function (response) {
+                        deferred.resolve(response);
+                    }).error(function (response) {
+                        deferred.reject(response);
+                    });
+                return deferred.promise;
+            }
             return{
                 DELETE: DELETE,
-                get: get
+                get: get,
+                post: post
             };
         })
 })();
