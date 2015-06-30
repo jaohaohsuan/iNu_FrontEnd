@@ -161,6 +161,7 @@
                 initialSetting();
             })
 
+
         }
 
         function autoTips(query) {
@@ -255,11 +256,8 @@
             var sectionHref = section.href;
             var itemHref = item.href;
             jsonMethodService.DELETE(itemHref).then(function (data) {
-                $timeout(function () {
-                    var kvSections = jsonParseService.getObjectMappingNameToValueFromDatas(self.sections, "href");
-                    refreshModelSection(kvSections[sectionHref]);
-                    self.showUndo = true;
-                }, 1000);
+               var kvSections = jsonParseService.getObjectMappingNameToValueFromDatas(self.sections, "href");
+               refreshModelSection(kvSections[sectionHref],1000,function(){self.showUndo = true;});
             }).then(function (data) {
             })
         }
@@ -297,22 +295,22 @@
             self.syntaxBinding.occurrence = "must";
             self.selectedRole = self.roles[0];
             self.selectedReuseModel = [];
-            self.canAdd = false;
             self.keywordInputFocus = true;
         }
 
-        function refreshModelSection(section, millisecond) {
+        function refreshModelSection(section, millisecond,callback) {
             refreshTimeout = $timeout(function () {
                 jsonMethodService.get(section.href).then(function (collectionjson) {
                     section.items = collectionjson.collection.items;
                     angular.forEach(section.items, function (item) {
                         item.itemInfo = structFormat.sectionItemFormat(item.data, "query", "logic", "distance", "editable");
                     })
+                    if (typeof callback === 'function') callback();
                 })
             }, millisecond)
         }
 
-        function setEditBinding(datas) {
+        function setSyntaxEditBinding(datas) {
             angular.forEach(datas, function (data) {
                 if (data.name == "query") {
                     self.syntaxBinding.query = data.value.split("\\s");
@@ -325,7 +323,7 @@
         function setEditTemplates() {
             angular.forEach(self.editLinks, function (editlink) {
                 jsonMethodService.get(editlink.href).then(function (collectionjson) {
-                    setEditBinding(collectionjson.collection.template.data);
+                    setSyntaxEditBinding(collectionjson.collection.template.data);
                     var syntaxIdentity = editlink.href.match(/(match|near|named)/g);
                     if (!syntaxIdentity) return;
                     self.syntaxEditCollection[syntaxIdentity] = collectionjson.collection;
@@ -388,7 +386,6 @@
         $scope.checkOnline = checkOnline;
         self.datasource = [];
         $scope.editModel = editModel;
-        self.filterModel = filterModel;
         self.gridOptions = {
             columnDefs: [
                 {
@@ -427,11 +424,16 @@
                     displayName: '{{"management"|translate}}',
                     headerCellFilter: 'translate',
                     cellTemplate: '<div class="model-management-grid">' +
-                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
-                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                    '</div>'
+                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
+                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                        '</div>'
                 }
+            ],
+            data: [
+                {'modelName': 'Abc', 'role': 'A', 'status': 'online'},
+                {'modelName': 'Def', 'role': 'B', 'status': 'offline'}
+
             ]
         };
         $scope.isModelOnline = false; //之後讀取API時需判斷此模型的上下線狀態
@@ -480,31 +482,23 @@
                 tabName: entity.modelName
             });
         }
-        function filterModel(){
-            self.gridOptions.data= [
-                {'modelName': 'Abc', 'role': 'A', 'status': 'online'},
-                {'modelName': 'Def', 'role': 'B', 'status': 'offline'}
-            ]
-        }
+
         function saveAsModel(entity) { //打開modal另存模型
             var modelInstance = $modal.open({
                 backdropClass: 'model-management-model-backdrop', //打開modal後背景的CSS
-                controller: ['$modalInstance','$timeout', saveAsController],
+                controller: ['$modalInstance', '$timeout', saveAsController],
                 controllerAs: 'saveAsCtrl',
-                size:'sm',
-                template: '<div class="ibox"><div class="ibox-content"><span ng-click="saveAsCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
-                'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
-                '></model-instance>' +
-                '</div></div>',
+                template: '<div ><span ng-click="saveAsCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
+                    '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" title="{{::saveAsCtrl.title}}"' +
+                    '></model-instance>' +
+                    '</div>',
                 windowClass: 'model-management-model-save' //modal頁的CSS
             })
 
-            function saveAsController($modalInstance,$timeout) {
+            function saveAsController($modalInstance, $timeout) {
                 var modelGroupSelectedTimeout;
                 var self = this;
                 self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
-                self.saveModel = saveModel;
                 self.title = $translate.instant('saveAsNewModel');
                 jsonMethodService.get('json/models.json').then(
                     function (data) {
@@ -520,10 +514,6 @@
                     modelGroupSelectedTimeout = $timeout(function () {
                         console.log(selectedModelGroups)
                     }, 1000); // delay 1000 ms
-                }
-
-                function saveModel(type){
-                    alert(type)
                 }
             }
         }
@@ -542,15 +532,9 @@
             function showModelDetailController($modalInstance) {
                 var self = this;
                 self.closeModal = closeModal;
-                self.sections=[];
-
-
                 function closeModal() {
                     $modalInstance.close();
                 }
-
-
-
             }
         }
 
