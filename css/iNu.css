@@ -158,7 +158,7 @@ span > a:link {
 
 .section-content {
     display: inline-block;
-    overflow: auto;
+    overflow: hidden;
     width: 90%;
 }
 

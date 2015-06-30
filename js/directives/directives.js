@@ -207,7 +207,7 @@
                 var injectHtml = transcludetHtml.replace(/<([a-z].*?)>/g, '<$1  unselectable="on">');
                 var linkFn = $compile(injectHtml);
                 var compileContent = linkFn(scope.$parent);
-                //compileContent.addClass('section-content');
+                compileContent.addClass('section-content');
                 iElement.empty();
                 iElement.append(compileContent);
             }
