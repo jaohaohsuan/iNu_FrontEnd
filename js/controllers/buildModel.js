@@ -11,9 +11,9 @@
         self.removeTab = removeTab;
         self.tabIndex = 0;
         self.tabs = [ //頁籤標題
-            {title: 'createModel'},
+            {title: 'createModel', active: true},
             {title: 'matchedReview'},
-            {title: 'modelManagement', active: true},
+            {title: 'modelManagement'},
             {title: 'modules'}
         ]
 
@@ -46,7 +46,14 @@
         self.addTab = addTab; //增加tab
         self.addToBuildSection = addToBuildSection;
         self.autoTips = autoTips;
-
+        self.basicQuery = {
+            distance:0,
+            isNear:false,
+            inOrder:false,
+            occurrence: '',
+            operator: '',
+            role:{}
+        };
         self.deleteModel = deleteModel;
         self.isInstance = true;
         self.isRounded = isRounded;
@@ -55,6 +62,7 @@
         //$scope.$on('currentTab', function (event, tab) {
         //    self.tabIndex = $scope.buildModelCtrl.tabs.indexOf(tab);
         //});
+
         self.modelDatasource = {
             models: []
         };
@@ -63,8 +71,11 @@
             "reuseModel": "mustHave"
         };
         self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
+
         self.nextToDo = nextToDo;
+
         self.renameModel = renameModel;
+
         self.roles = [
             {"name": "角色：全部", "content": "ALL"},
             {"name": "角色：A", "content": "A"},
@@ -151,8 +162,9 @@
 
         }
 
-        function addToBuildSection(modelSection) {
+        function addToBuildSection(basicQuery,keywords) {
             var kvDatasource = jsonParseService.getObjectMappingNameToValueFromDatas(self.datasource, "name");
+            console.log(basicQuery)
             jsonMethodService.get('json/mustNotNew.json').then(function (collectionjson) {
                 var datas = jsonParseService.getDatasFromCollectionJson(collectionjson);
                 kvDatasource[modelSection].datas = datas;
@@ -338,6 +350,7 @@
                         self.sections = linksObj["section"];
                         self.keywordEdit = linksObj["edit"];
                         setModelSections();
+
                     })
                 })
             })
@@ -352,6 +365,7 @@
     }
 
     function modelManagementController($scope, jsonMethodService, $translate, $modal) {
+
         var self = this;
         $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
         $scope.checkOnline = checkOnline;
@@ -395,10 +409,10 @@
                     displayName: '{{"management"|translate}}',
                     headerCellFilter: 'translate',
                     cellTemplate: '<div class="model-management-grid">' +
-                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
-                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                        '</div>'
+                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
+                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                    '</div>'
                 }
             ],
             data: [
@@ -408,6 +422,7 @@
             ]
         };
         $scope.isModelOnline = false; //之後讀取API時需判斷此模型的上下線狀態
+
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
         $scope.showModelDetail = showModelDetail;
@@ -456,17 +471,19 @@
         function saveAsModel(entity) { //打開modal另存模型
             var modelInstance = $modal.open({
                 backdropClass: 'model-management-model-backdrop', //打開modal後背景的CSS
-                controller: ['$modalInstance', saveAsController],
+                controller: ['$modalInstance','$timeout', saveAsController],
                 controllerAs: 'saveAsCtrl',
-                template: '<div ><span ng-click="saveAsCtrl.closeModal()" class="btn fa fa-remove fa-lg pull-right"></span>' +
-                    '<model-instance datasource="saveAsCtrl.datasource" is-management="true" title="{{::saveAsCtrl.title}}"' +
-                    '></model-instance>' +
-                    '</div>',
+                template: '<div ><span ng-click="saveAsCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
+                '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" title="{{::saveAsCtrl.title}}"' +
+                '></model-instance>' +
+                '</div>',
                 windowClass: 'model-management-model-save' //modal頁的CSS
             })
 
-            function saveAsController($modalInstance) {
+            function saveAsController($modalInstance,$timeout) {
+                var modelGroupSelectedTimeout;
                 var self = this;
+                self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
                 self.title = $translate.instant('saveAsNewModel');
                 jsonMethodService.get('json/models.json').then(
                     function (data) {
@@ -475,6 +492,13 @@
                 self.closeModal = closeModal;
                 function closeModal() {
                     $modalInstance.close();
+                }
+
+                function modelGroupsSelectedHandler(selectedModelGroups) {
+                    if (modelGroupSelectedTimeout) $timeout.cancel(modelGroupSelectedTimeout);
+                    modelGroupSelectedTimeout = $timeout(function () {
+                        console.log(selectedModelGroups)
+                    }, 1000); // delay 1000 ms
                 }
             }
         }
@@ -485,7 +509,7 @@
                 backdropClass: 'model-management-model-backdrop',
                 controller: ['$modalInstance', showModelDetailController],
                 controllerAs: 'detailCtrl',
-                template: '<div><span ng-click="detailCtrl.closeModal()" class="btn fa fa-remove fa-lg pull-right"></span><h1>' + entity.modelName + '</h1></div>',
+                template: '<div><span ng-click="detailCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span><h1>' + entity.modelName + '</h1></div>',
                 windowClass: 'model-management-model-logic'
 
             })

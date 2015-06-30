@@ -53,7 +53,7 @@
                 </div>
 
                 <h4>{{"keywordRole"|translate}}：</h4>
-                <select class="form-control m-b" ng-model="createModelCtrl.role" ng-options="role.name for role in  createModelCtrl.roles">
+                <select class="form-control m-b" ng-model="createModelCtrl.basicQuery.role" ng-options="role.name for role in  createModelCtrl.roles">
                     <option value="">----</option>
                 </select>
 
@@ -74,7 +74,7 @@
                     </div>
                     <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2 pull-right btn btn-success btn-rounded  "
                             ng-click="createModelCtrl.addToBuildSection(createModelCtrl.basicQuery,createModelCtrl.keywords)"
-                            ng-disabled="createModelCtrl.keywords.length<=0 || !createModelCtrl.basicQuery.operator || !createModelCtrl.role.name"><i
+                            ng-disabled="createModelCtrl.keywords.length<=0 || !createModelCtrl.basicQuery.operator || !createModelCtrl.basicQuery.role.name"><i
                             class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
                     </button>
                 </div>
