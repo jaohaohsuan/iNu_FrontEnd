@@ -171,19 +171,23 @@
 
         function addToSectionFromComponent() {
             var kvDatas = jsonParseService.getObjectMappingNameToValueFromDatas(self.editCollection.named.template.data, "name");
-            angular.forEach(self.selectedReuseModel, function (reuseModel) {
+
+            angular.forEach(self.reuseModel, function (reuseModel) {
+                if (!reuseModel.checked) return;
                 $timeout(function () {
                     kvDatas.storedQueryTitle.value = reuseModel.name;
                     kvDatas.occurrence.value = self.editBinding.component.occurrence;
                     var template = {template: self.editCollection.named.template};
                     console.log(JSON.stringify(template))
                     jsonMethodService.post(self.editCollection.named.href, template).then(function () {
+                        reuseModel.checked = false;
                     }).then(function () {})
                 })
 
             })
             var section = jsonParseService.findItemValueFromArray(self.sections, "href", self.editBinding.component.occurrence);
             refreshModelSection(section, 1000);
+            self.selectedReuseModel = [];
         }
 
         function autoTips(query) {

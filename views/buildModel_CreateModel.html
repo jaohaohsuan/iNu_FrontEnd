@@ -100,7 +100,7 @@
                      ng-class="{true:'model-preview'}[createModelCtrl.reuseModel.length>5]">
                     <label class="btn btn-success btn-outline  animated fadeInLeft"
                            ng-repeat="model in createModelCtrl.reuseModel"
-                           ng-model="checked"
+                           ng-model="model.checked"
                            ng-click="createModelCtrl.toggleSelection(createModelCtrl.selectedReuseModel,model)"
                            btn-checkbox>
                         {{model.name}}
