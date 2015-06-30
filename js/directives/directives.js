@@ -34,6 +34,7 @@
             function itemDoubleClick(item){
                 var editable = deepFind(item,self.itemEditableProperty);
                 if (editable === false) return;
+                if(!self.itemDblclick) return;
                 self.itemDblclick(item);
             }
             function setClass(index) {
@@ -206,6 +207,7 @@
                 var injectHtml = transcludetHtml.replace(/<([a-z].*?)>/g, '<$1  unselectable="on">');
                 var linkFn = $compile(injectHtml);
                 var compileContent = linkFn(scope.$parent);
+                //compileContent.addClass('section-content');
                 iElement.empty();
                 iElement.append(compileContent);
             }
@@ -225,7 +227,6 @@
                 enableModel: '=',
                 renameModel: '=',
                 saveModel: '=',
-                saveModelAndOnline: '=',
                 selectedEventhandler: '=',
                 title: '@'
             },

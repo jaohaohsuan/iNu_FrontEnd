@@ -2,7 +2,7 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL', 'structFormat', '$anchorScroll', '$location', createModelController])
-        .controller('modelManagementController', ['$scope', 'jsonMethodService', '$translate', '$modal', modelManagementController])
+        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'structFormat', '$translate', '$modal', '$timeout', modelManagementController])
 
 
     function buildModelController($scope, $timeout, $translate) {
@@ -381,7 +381,7 @@
         }
     }
 
-    function modelManagementController($scope, jsonMethodService, $translate, $modal) {
+    function modelManagementController($scope, jsonMethodService, jsonParseService, structFormat, $translate, $modal, $timeout) {
 
         var self = this;
         $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
@@ -427,10 +427,10 @@
                     displayName: '{{"management"|translate}}',
                     headerCellFilter: 'translate',
                     cellTemplate: '<div class="model-management-grid">' +
-                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
-                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                        '</div>'
+                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
+                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                    '</div>'
                 }
             ]
         };
@@ -495,10 +495,10 @@
                 controllerAs: 'saveAsCtrl',
                 size: 'sm',
                 template: '<div class="ibox"><div class="ibox-content"><span ng-click="saveAsCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                    '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
-                    'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
-                    '></model-instance>' +
-                    '</div></div>',
+                '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
+                'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
+                '></model-instance>' +
+                '</div></div>',
                 windowClass: 'model-management-model-save' //modal頁的CSS
             })
 
@@ -536,7 +536,12 @@
                 backdropClass: 'model-management-model-backdrop',
                 controller: ['$modalInstance', showModelDetailController],
                 controllerAs: 'detailCtrl',
-                template: '<div><span ng-click="detailCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span><h1>' + entity.modelName + '</h1></div>',
+                template: '<div><span ng-click="detailCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
+                '<build-section datasource="detailCtrl.sections" items-property="{{::detailCtrl.itemProperty}}"' +
+                'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
+                '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
+                '</build-section> ' +
+                '</div>',
                 windowClass: 'model-management-model-logic'
 
             })
@@ -544,14 +549,45 @@
             function showModelDetailController($modalInstance) {
                 var self = this;
                 self.closeModal = closeModal;
+                self.itemProperty = 'items';
+                self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
-
+                setTemplate('http://10.85.1.156:49154/_query/template');
 
                 function closeModal() {
                     $modalInstance.close();
                 }
 
+                function setTemplate(href) {
+                    jsonMethodService.get(href).then(function (collectionjson) {
+                        var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links);
+                        jsonMethodService.get(editLink.href).then(function (collection) {
+                            angular.forEach(collection.collection.items, function (item) {
+                                var linksObj = jsonParseService.getLinksObjFromLinks(item.links);
+                                self.sections = linksObj["section"];
+                                setModelSections();
+                            })
+                        })
+                    })
+                }
 
+                function refreshModelSection(section, millisecond, callback) {
+                    refreshTimeout = $timeout(function () {
+                        jsonMethodService.get(section.href).then(function (collectionjson) {
+                            section.items = collectionjson.collection.items;
+                            angular.forEach(section.items, function (item) {
+                                item.itemInfo = structFormat.sectionItemFormat(item.data, "query", "logic", "distance", "editable");
+                            })
+                            if (typeof callback === 'function') callback();
+                        })
+                    }, millisecond)
+                }
+
+                function setModelSections() {
+                    angular.forEach(self.sections, function (section) {
+                        refreshModelSection(section)
+                    })
+                }
             }
         }
 
