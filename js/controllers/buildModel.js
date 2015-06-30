@@ -44,14 +44,22 @@
         var self = this;
         self.addModelGroup = addModelGroup; //增加模型組
         self.addTab = addTab; //增加tab
-        self.addToBuildSection = addToBuildSection;
+        self.addToBuildSection = addToSectionFromSyntax;
+        self.addToSectionFromComponent = addToSectionFromComponent;
         self.autoTips = autoTips;
         self.deleteModel = deleteModel;
+        self.editBinding = {
+            syntax: {
+                syntaxIdentity: 'match'
+            },
+            component: {}
+        };
+        self.editCollection = {};
         self.editLinks = [];
         self.isInstance = true;
         self.isRounded = isRounded;
-        self.syntaxBinding = {};
-        self.syntaxEditCollection = {};
+
+
         self.modelDatasource = {
             models: []
         };
@@ -68,13 +76,13 @@
         self.sections = [];
         self.sectionsClear = sectionsClear;
         self.sectionsDblclick = sectionsDblclick;
+        self.selectedReuseModel = [];
         self.showUndo = false;
         self.tabIndex = 0;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
 
-
-        initialSetting();
+        syntaxInitSetting();
         setModels();
         setTemplate('http://10.85.1.156:49154/_query/template');
         setReuseModel();
@@ -144,23 +152,38 @@
 
         }
 
-        function addToBuildSection() {
-            var syntaxIdentity = (self.syntaxBinding.isNear) ? "near" : "match";
-            angular.forEach(self.syntaxEditCollection[syntaxIdentity].template.data, function (data) {
+        function addToSectionFromSyntax(syntaxIdentity) {
+            angular.forEach(self.editCollection[syntaxIdentity].template.data, function (data) {
                 var name = data.name;
-                if (name === "query") data.value = self.syntaxBinding[data.name].map(function (element) {
+                if (name === "query") data.value = self.editBinding.syntax[data.name].map(function (element) {
                     return element.text
                 }).join(" ");
-                else data.value = self.syntaxBinding[data.name]
+                else data.value = self.editBinding.syntax[data.name]
             })
-            var template = {template: self.syntaxEditCollection[syntaxIdentity].template};
+            var template = {template: self.editCollection[syntaxIdentity].template};
 
-            jsonMethodService.post(self.syntaxEditCollection[syntaxIdentity].href, template).then(function (data) {
-                var section = jsonParseService.findItemValueFromArray(self.sections, "href", self.syntaxBinding.occurrence);
+            jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (data) {
+                var section = jsonParseService.findItemValueFromArray(self.sections, "href", self.editBinding.syntax.occurrence);
                 refreshModelSection(section, 1000);
-                initialSetting();
+                syntaxInitSetting();
             })
+        }
 
+        function addToSectionFromComponent() {
+            var kvDatas = jsonParseService.getObjectMappingNameToValueFromDatas(self.editCollection.named.template.data, "name");
+            angular.forEach(self.selectedReuseModel, function (reuseModel) {
+                $timeout(function () {
+                    kvDatas.storedQueryTitle.value = reuseModel.name;
+                    kvDatas.occurrence.value = self.editBinding.component.occurrence;
+                    var template = {template: self.editCollection.named.template};
+                    console.log(JSON.stringify(template))
+                    jsonMethodService.post(self.editCollection.named.href, template).then(function () {
+                    }).then(function () {})
+                })
+
+            })
+            var section = jsonParseService.findItemValueFromArray(self.sections, "href", self.editBinding.component.occurrence);
+            refreshModelSection(section, 1000);
         }
 
         function autoTips(query) {
@@ -279,24 +302,19 @@
         }
 
 //////////////////不綁定區//////////////////
+
+
         function destroyListener(event) {
             $timeout.cancel(modelGroupSelectedTimeout);
         }
 
-        function initialSetting() {
-            self.syntaxBinding.query = [];
+        function syntaxInitSetting() {
             if (URL.path) {
-                self.syntaxBinding.query.push({text: URL.path});
+                self.editBinding.query.push({text: URL.path});
                 console.log(JSON.stringify(self.keywords))
             }
-            self.syntaxBinding.slop = 0;
-            self.syntaxBinding.operator = null;
-            self.syntaxBinding.isNear = false;
-            self.syntaxBinding.inOrder = false;
-            self.syntaxBinding.occurrence = "must";
-            self.selectedRole = self.roles[0];
-            self.selectedReuseModel = [];
-            self.canAdd = false;
+            self.editBinding.syntax.syntaxIdentity = 'match';
+            self.editBinding.syntax.query = [];
             self.keywordInputFocus = true;
         }
 
@@ -312,12 +330,12 @@
             }, millisecond)
         }
 
-        function setSyntaxEditBinding(datas) {
+        function setEditBinding(bindGroup, datas) {
             angular.forEach(datas, function (data) {
                 if (data.name == "query") {
-                    self.syntaxBinding.query = data.value.split("\\s");
+                    self.editBinding[bindGroup].query = data.value.split("\\s");
                 } else {
-                    self.syntaxBinding[data.name] = data.value;
+                    self.editBinding[bindGroup][data.name] = data.value;
                 }
             })
         }
@@ -325,10 +343,13 @@
         function setEditTemplates() {
             angular.forEach(self.editLinks, function (editlink) {
                 jsonMethodService.get(editlink.href).then(function (collectionjson) {
-                    setSyntaxEditBinding(collectionjson.collection.template.data);
-                    var syntaxIdentity = editlink.href.match(/(match|near|named)/g);
+                    var syntaxIdentity = editlink.href.match(/(match|near|named)/g)[0];
+                    var bindGroup;
                     if (!syntaxIdentity) return;
-                    self.syntaxEditCollection[syntaxIdentity] = collectionjson.collection;
+                    if (["match", "near"].indexOf(syntaxIdentity) != -1) bindGroup = "syntax";
+                    else if (syntaxIdentity == "named") bindGroup = "component";
+                    setEditBinding(bindGroup, collectionjson.collection.template.data);
+                    self.editCollection[syntaxIdentity] = collectionjson.collection;
                 })
             })
         }
@@ -427,10 +448,10 @@
                     displayName: '{{"management"|translate}}',
                     headerCellFilter: 'translate',
                     cellTemplate: '<div class="model-management-grid">' +
-                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
-                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                    '</div>'
+                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
+                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                        '</div>'
                 }
             ]
         };
@@ -495,10 +516,10 @@
                 controllerAs: 'saveAsCtrl',
                 size: 'sm',
                 template: '<div class="ibox"><div class="ibox-content"><span ng-click="saveAsCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
-                'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
-                '></model-instance>' +
-                '</div></div>',
+                    '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
+                    'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
+                    '></model-instance>' +
+                    '</div></div>',
                 windowClass: 'model-management-model-save' //modal頁的CSS
             })
 
@@ -537,11 +558,11 @@
                 controller: ['$modalInstance', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 template: '<div><span ng-click="detailCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                '<build-section datasource="detailCtrl.sections" items-property="{{::detailCtrl.itemProperty}}"' +
-                'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
-                '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
-                '</build-section> ' +
-                '</div>',
+                    '<build-section datasource="detailCtrl.sections" items-property="{{::detailCtrl.itemProperty}}"' +
+                    'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
+                    '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
+                    '</build-section> ' +
+                    '</div>',
                 windowClass: 'model-management-model-logic'
 
             })
