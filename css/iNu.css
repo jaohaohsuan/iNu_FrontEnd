@@ -6,8 +6,8 @@ body {
 }
 
 dropdown-multi-select {
-  margin-right: 5px;
- }
+    margin-right: 5px;
+}
 
 span > a:link {
     color: #328F7B;
@@ -34,17 +34,18 @@ span > a:link {
 .field_set {
     padding-top: 5px;
 }
-.dropdown-multi-select{
+
+.dropdown-multi-select {
     height: 30px;
     top: -1px;
 }
+
 .ibox .open > .dropdown-menu {
     left: 0;
     right: 0;
 }
 
-
-.inline-block{
+.inline-block {
     display: inline-block;
 }
 
@@ -56,32 +57,39 @@ span > a:link {
     margin: 0 0 0 2px;
 }
 
-.model-management-grid >a{
-    margin-right: 5px;
-    color: red;
-}
 .model-management-filter {
     height: 30px;
     margin-left: 10px;
-    padding:5px;
-  }
-.model-management-input{
+    padding: 5px;
+}
+
+.model-management-grid {
+    margin-top: 10px;
+}
+
+.model-management-grid > a {
+    margin-left: 10px;
+    color: red;
+}
+
+.model-management-input {
     height: 30px;
 }
-.model-management-grid {
-     margin-top: 10px;
- }
-.model-management-model-logic{
+
+.model-management-model-logic {
     top: 180px;
 }
-.model-management-model-save{
-    top: 180px;
-    left: 39%;
- }
-.model-management-model-backdrop{
-    background: rgba(0,0,0,0);
+
+.model-management-model-save {
+    top: 170px;
+    left: 50%;
+}
+
+.model-management-model-backdrop {
+    background: rgba(0, 0, 0, 0);
 
 }
+
 .models-select {
     height: 120px;
     margin-top: 5px;
@@ -146,6 +154,12 @@ span > a:link {
     padding-top: 4px;
     padding-bottom: 7px;
     margin-bottom: 0;
+}
+
+.section-content {
+    display: inline-block;
+    overflow: auto;
+    width: 90%;
 }
 
 .tag-list li a {

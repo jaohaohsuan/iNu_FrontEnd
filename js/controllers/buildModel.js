@@ -381,7 +381,7 @@
         }
     }
 
-    function modelManagementController($scope, jsonMethodService,jsonParseService, $translate, $modal) {
+    function modelManagementController($scope, jsonMethodService, $translate, $modal) {
 
         var self = this;
         $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
