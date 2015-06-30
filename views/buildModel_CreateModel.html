@@ -4,10 +4,9 @@
         <div class="ibox">
             <div class="ibox-title"><h2>{{"logicWord"|translate}}</h2></div>
             <div class="ibox-content">
-                <h4>{{"keywordTitle"|translate}}：</h4>
 
-                <p></p>
-                <tags-input ng-model="createModelCtrl.keywords"
+                <h4>{{"keywordTitle"|translate}}：</h4>
+                  <tags-input ng-model="createModelCtrl.keywords"
                             min-length="0"
                             add-on-space="true"
                             add-on-paste="true"
@@ -23,58 +22,39 @@
                                    min-length="0"
                                    select-first-match="false"></auto-complete>
                 </tags-input>
-                <!--<input type="text" class="form-control" placeholder="{{'keywordPlaceholder'|translate}}"-->
-                <!--ng-model="createModelCtrl.keywords"-->
-                <!--focus="createModelCtrl.keywordInputFocus"-->
-                <!--ng-change="createModelCtrl.keywordCheck(createModelCtrl.keywords)"/>-->
 
-
-                <p></p>
-                <!--&lt;!&ndash;組件使用的RadioButton&ndash;&gt;-->
-                <!--<div ng-show="createModelCtrl.isComponent">-->
-                    <!--<div class="radio"><label> <input icheck type="radio" name="componentRadio" value="or"-->
-                                                      <!--ng-model="createModelCtrl.keywordSelect">-->
-                        <!--{{"eitherAccord"|translate}}-->
-                    <!--</label></div>-->
-                    <!--<div class="radio"><label> <input icheck type="radio" name="componentRadio" value="and"-->
-                                                      <!--ng-model="createModelCtrl.keywordSelect">-->
-                        <!--{{"allAccord"|translate}}-->
-                    <!--</label></div>-->
-                <!--</div>-->
-                <!--模型使用的RadioButton-->
-                <div ng-hide="createModelCtrl.isComponent">
-                    <div class="radio"><label> <input icheck type="radio" name="modelRadio" value="or"
-                                                      ng-model="createModelCtrl.keywordSelect">
+                <div>
+                    <div class="radio "><label> <input  icheck type="radio" name="modelRadio" value="OR"
+                                                      ng-model="createModelCtrl.basicQuery.operator" >
                         {{"eitherAccord"|translate}}
                     </label></div>
-                    <div class="radio"><label> <input icheck type="radio" name="modelRadio" value="and"
-                                                      ng-model="createModelCtrl.keywordSelect">
+                    <div class="radio"><label> <input icheck type="radio" name="modelRadio" value="AND"
+                                                      ng-model="createModelCtrl.basicQuery.operator"  >
                         {{"allAccord"|translate}}
                     </label></div>
                 </div>
 
-                <div class="form-inline col-xs-offset-1" ng-show="createModelCtrl.keywordSelect=='and'">
+                <div class="form-inline col-xs-offset-1" ng-show="createModelCtrl.basicQuery.operator=='AND'">
                     <div class="checkbox">
                         <label><input icheck type="checkbox" name="radioTest"
-                                      ng-model="createModelCtrl.limitDistanceChecked">
+                                      ng-model="createModelCtrl.basicQuery.isNear"
+                                      ng-true-value="true"
+                                      ng-false-value="false">
                             {{"wordDistance"|translate}}：
                         </label>
-                        <number-picker number="createModelCtrl.distance" size="3"></number-picker>
+                        <number-picker number="createModelCtrl.basicQuery.distance" size="3"></number-picker>
                         &nbsp;&nbsp;
-                        <label ng-if="createModelCtrl.limitDistanceChecked">
-                            <input icheck type="checkbox" name="radioTest" ng-model="createModelCtrl.afterwordChecked">
+                        <label ng-if="createModelCtrl.basicQuery.isNear">
+                            <input icheck type="checkbox" name="radioTest" ng-model="createModelCtrl.basicQuery.inOrder">
                             <span>  {{"afterWord"|translate}}</span>
                         </label>
 
                     </div>
                 </div>
-                <p></p>
-
-                <p></p>
 
                 <h4>{{"keywordRole"|translate}}：</h4>
-                <select class="form-control m-b">
-                    <option ng-repeat="role in createModelCtrl.roles">{{role.name}}</option>
+                <select class="form-control m-b" ng-model="createModelCtrl.role" ng-options="role.name for role in  createModelCtrl.roles">
+                    <option value="">----</option>
                 </select>
 
                 <hr/>
@@ -82,22 +62,23 @@
                     <div ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
                         <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.modelSection.basicModel"
-                               btn-radio="'mustHave'">{{"mustHave"|translate}}</label>
+                               ng-model="createModelCtrl.basicQuery.occurrence"
+                               btn-radio="'must'">{{"mustHave"|translate}}</label>
                         <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
-                               ng-model="createModelCtrl.modelSection.basicModel"
-                               btn-radio="'mustNot'">{{"mustNot"|translate}}</label>
+                               ng-model="createModelCtrl.basicQuery.occurrence"
+                               btn-radio="'must_not'">{{"mustNot"|translate}}</label>
                         <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.modelSection.basicModel"
+                               ng-model="createModelCtrl.basicQuery.occurrence"
                                btn-radio="'should'">{{"should"|translate}}</label>
                     </div>
                     <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2 pull-right btn btn-success btn-rounded  "
-                            ng-click="createModelCtrl.addToBuildSection(createModelCtrl.modelSection.basicModel,createModelCtrl.keywords)"
-                            ng-disabled="createModelCtrl.keywords.length<=0"><i
+                            ng-click="createModelCtrl.addToBuildSection(createModelCtrl.basicQuery,createModelCtrl.keywords)"
+                            ng-disabled="createModelCtrl.keywords.length<=0 || !createModelCtrl.basicQuery.operator || !createModelCtrl.role.name"><i
                             class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
                     </button>
                 </div>
+
             </div>
         </div>
         <!--可復用的模型組件-->
