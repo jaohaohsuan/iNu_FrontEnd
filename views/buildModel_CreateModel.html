@@ -96,10 +96,10 @@
                 </h2>
             </div>
             <div class="ibox-content">
-                <div class="input-group public-component-filter">
-                    <input type="text" class="form-control" size="10"/><span class="input-group-btn">
+                <form class="input-group public-component-filter">
+                    <input type="text" class="form-control" required/><span class="input-group-btn">
                         <button class="btn btn-success">{{'filter'|translate}}</button></span>
-                </div>
+                </form>
                 <div nested-scroll class="btn-group btn-group-vertical btn-block "
                      ng-class="{true:'model-preview'}[createModelCtrl.reuseModel.length>5]">
                     <label class="btn btn-success btn-outline  animated fadeInLeft"
