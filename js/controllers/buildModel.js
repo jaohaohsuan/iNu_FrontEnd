@@ -172,8 +172,7 @@
         function addToSectionFromComponent() {
             var kvDatas = jsonParseService.getObjectMappingNameToValueFromDatas(self.editCollection.named.template.data, "name");
 
-            angular.forEach(self.reuseModel, function (reuseModel) {
-                if (!reuseModel.checked) return;
+            angular.forEach(self.selectedReuseModel, function (reuseModel) {
                 $timeout(function () {
                     kvDatas.storedQueryTitle.value = reuseModel.name;
                     kvDatas.occurrence.value = self.editBinding.component.occurrence;
@@ -183,7 +182,6 @@
                         reuseModel.checked = false;
                     }).then(function () {})
                 })
-
             })
             var section = jsonParseService.findItemValueFromArray(self.sections, "href", self.editBinding.component.occurrence);
             refreshModelSection(section, 1000);
