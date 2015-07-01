@@ -105,7 +105,7 @@
                     <label class="btn btn-success btn-outline  animated fadeInLeft"
                            ng-repeat="item in createModelCtrl.editBinding.component.items"
                            ng-model="item.checked"
-                           ng-click="createModelCtrl.toggleSelection(createModelCtrl.selectedReuseModel,item)"
+                           ng-click="createModelCtrl.toggleSelection(createModelCtrl.selectedComponent,item)"
                            btn-checkbox>
                         {{item.name}}
                     </label>
@@ -126,7 +126,7 @@
                                btn-radio="'should'">{{"should"|translate}}</label>
                     </div>
                     <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2  pull-right btn btn-success  btn-rounded "
-                            ng-disabled="createModelCtrl.selectedReuseModel.length <= 0"
+                            ng-disabled="createModelCtrl.selectedComponent.length <= 0"
                             ng-click="createModelCtrl.addToSectionFromComponent()"><i
                             class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
                     </button>

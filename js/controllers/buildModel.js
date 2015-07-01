@@ -76,18 +76,14 @@
         self.sections = [];
         self.sectionsClear = sectionsClear;
         self.sectionsDblclick = sectionsDblclick;
-        self.selectedReuseModel = [];
+        self.selectedComponent = [];
         self.showUndo = false;
         self.tabIndex = 0;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
-
         syntaxInitSetting();
         setModels();
         setTemplate('http://10.85.1.156:32772/_query/template');
-        setReuseModel();
-
-
         $scope.$on("$destroy", destroyListener);
         $scope.$on('tabClicked', tabClicked);
         function addModelGroup() {
@@ -172,7 +168,7 @@
         function addToSectionFromComponent() {
             var kvDatas = jsonParseService.getObjectMappingNameToValueFromDatas(self.editCollection.named.template.data, "name");
 
-            angular.forEach(self.selectedReuseModel, function (reuseModel) {
+            angular.forEach(self.selectedComponent, function (reuseModel) {
                 $timeout(function () {
                     kvDatas.storedQueryTitle.value = reuseModel.name;
                     kvDatas.occurrence.value = self.editBinding.component.occurrence;
@@ -185,7 +181,7 @@
             })
             var section = jsonParseService.findItemValueFromArray(self.sections, "href", self.editBinding.component.occurrence);
             refreshModelSection(section, 1000);
-            self.selectedReuseModel = [];
+            self.selectedComponent = [];
         }
 
         function autoTips(query) {
@@ -378,17 +374,6 @@
             angular.forEach(self.sections, function (section) {
                 refreshModelSection(section)
             })
-        }
-
-        function setReuseModel() {
-            jsonMethodService.get('json/reuseModel.json').then(
-                function (data) {//success
-                    self.reuseModel = data;
-                }, function (data) {//error
-
-
-                }
-            );
         }
 
         function setTemplate(href) {
