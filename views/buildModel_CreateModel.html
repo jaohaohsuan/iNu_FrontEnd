@@ -100,14 +100,14 @@
                     <input type="text" class="form-control" required/><span class="input-group-btn">
                         <button class="btn btn-success">{{'filter'|translate}}</button></span>
                 </form>
-                <div nested-scroll class="btn-group btn-group-vertical btn-block "
-                     ng-class="{true:'model-preview'}[createModelCtrl.reuseModel.length>5]">
+                <div nested-scroll  class="btn-group btn-group-vertical btn-block "
+                     ng-class="{true:'model-preview'}[createModelCtrl.editBinding.component.items.length>5]">
                     <label class="btn btn-success btn-outline  animated fadeInLeft"
-                           ng-repeat="model in createModelCtrl.reuseModel"
-                           ng-model="model.checked"
-                           ng-click="createModelCtrl.toggleSelection(createModelCtrl.selectedReuseModel,model)"
+                           ng-repeat="item in createModelCtrl.editBinding.component.items"
+                           ng-model="item.checked"
+                           ng-click="createModelCtrl.toggleSelection(createModelCtrl.selectedReuseModel,item)"
                            btn-checkbox>
-                        {{model.name}}
+                        {{item.name}}
                     </label>
                 </div>
                 <hr/>

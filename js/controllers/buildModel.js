@@ -356,6 +356,16 @@
             })
         }
 
+        function setItemsBinding(items){
+            angular.forEach(items,function(item){
+                angular.forEach(item.data,function(data){
+                    item[data.name] = data.value;
+                })
+                delete item['data'];
+            })
+            self.editBinding.component.items = items;
+        }
+
         function setModels() {
             jsonMethodService.get('json/models.json').then(
                 function (data) {
@@ -393,6 +403,7 @@
                         setEditTemplates();
                     })
                 })
+                setItemsBinding(collectionjson.collection.items);//公用組件列表
             })
         }
 
