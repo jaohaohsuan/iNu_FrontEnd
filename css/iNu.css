@@ -163,6 +163,13 @@ span > a:link {
     padding-bottom: 7px;
     margin-bottom: 0;
 }
+.public-component-filter{
+    margin-bottom: 10px;
+}
+.right {
+    position: absolute;
+    right: 2%;
+}
 
 .section-content {
     display: inline-block;
@@ -170,10 +177,6 @@ span > a:link {
     width: 90%;
 }
 
-.right {
-    position: absolute;
-    right: 2%;
-}
 
 .tag-list li a {
     display: inline;

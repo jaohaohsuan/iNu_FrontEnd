@@ -24,12 +24,12 @@
                 </tags-input>
 
                 <div>
-                    <div class="radio "><label> <input  icheck type="radio" name="modelRadio" value="OR"
-                                                        ng-model="createModelCtrl.editBinding.syntax.operator" >
+                    <div class="radio "><label> <input icheck type="radio" name="modelRadio" value="OR"
+                                                       ng-model="createModelCtrl.editBinding.syntax.operator">
                         {{"eitherAccord"|translate}}
                     </label></div>
                     <div class="radio"><label> <input icheck type="radio" name="modelRadio" value="AND"
-                                                      ng-model="createModelCtrl.editBinding.syntax.operator"  >
+                                                      ng-model="createModelCtrl.editBinding.syntax.operator">
                         {{"allAccord"|translate}}
                     </label></div>
                 </div>
@@ -74,8 +74,8 @@
                     </div>
                     <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2 pull-right btn btn-success btn-rounded  "
                             ng-click="createModelCtrl.addToBuildSection(createModelCtrl.editBinding.syntax.syntaxIdentity)"
-                            ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator"><i
-                            class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
+                            ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">
+                            <i class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
                     </button>
                 </div>
 
@@ -85,18 +85,22 @@
         <div class="ibox">
             <div class="ibox-title ">
                 <h2>{{"reuseModel"|translate}}
-                    <div class="pull-right">
-                        <button class="btn btn-primary btn-rounded" ng-click="createModelCtrl.addTab()">
-                            {{"create"|translate}}
-                        </button>
-                        <button class="btn btn-primary btn-rounded">
-                            {{"update"|translate}}
-                        </button>
-                    </div>
+                        <div class="pull-right">
+                            <button class="btn btn-primary btn-rounded" ng-click="createModelCtrl.addTab()">
+                                {{"create"|translate}}
+                            </button>
+                            <button class="btn btn-primary btn-rounded">
+                                {{"update"|translate}}
+                            </button>
+                        </div>
                 </h2>
             </div>
             <div class="ibox-content">
-                <div nested-scroll  class="btn-group btn-group-vertical btn-block "
+                <div class="input-group public-component-filter">
+                    <input type="text" class="form-control" size="10"/><span class="input-group-btn">
+                        <button class="btn btn-success">{{'filter'|translate}}</button></span>
+                </div>
+                <div nested-scroll class="btn-group btn-group-vertical btn-block "
                      ng-class="{true:'model-preview'}[createModelCtrl.reuseModel.length>5]">
                     <label class="btn btn-success btn-outline  animated fadeInLeft"
                            ng-repeat="model in createModelCtrl.reuseModel"
@@ -147,8 +151,9 @@
                                item-editable-property="{{::'itemInfo.editable'}}"
                                item-dblclick="createModelCtrl.sectionsDblclick">
                     <item-template>
-                      <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}">
-                          {{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</div>
+                        <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}">
+                            {{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}
+                        </div>
                     </item-template>
                 </build-section>
             </div>
@@ -185,15 +190,19 @@
                 </button>
                 <!--創建模型顯示控件-->
                 <form class="form-group animated fadeIn" ng-show="createModelCtrl.nextView">
-                        <input type="text" class="form-control btn-block" ng-model="createModelCtrl.saveAsName"
-                               placeholder="{{'modelNamePlaceholder'|translate}}"
-                               focus="createModelCtrl.saveAsNameInputFocus" required/>
-                         <button  class="btn btn-success btn-block"
-                                 ng-click="createModelCtrl.saveAs('save')">
-                                {{'saveModel'|translate}}
-                         </button>
-                        <button class="btn btn-success btn-block"  ng-click="createModelCtrl.saveAs('online')">{{'saveModelAndOnline'|translate}}</button>
-                        <button class="btn btn-success btn-block"  ng-click="createModelCtrl.saveAs('edit')">{{'saveModelAndEdit'|translate}}</button>
+                    <input type="text" class="form-control btn-block" ng-model="createModelCtrl.saveAsName"
+                           placeholder="{{'modelNamePlaceholder'|translate}}"
+                           focus="createModelCtrl.saveAsNameInputFocus" required/>
+                    <button class="btn btn-success btn-block"
+                            ng-click="createModelCtrl.saveAs('save')">
+                        {{'saveModel'|translate}}
+                    </button>
+                    <button class="btn btn-success btn-block" ng-click="createModelCtrl.saveAs('online')">
+                        {{'saveModelAndOnline'|translate}}
+                    </button>
+                    <button class="btn btn-success btn-block" ng-click="createModelCtrl.saveAs('edit')">
+                        {{'saveModelAndEdit'|translate}}
+                    </button>
                 </form>
 
             </div>
