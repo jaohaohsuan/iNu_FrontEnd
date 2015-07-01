@@ -84,7 +84,7 @@
 
         syntaxInitSetting();
         setModels();
-        setTemplate('http://10.85.1.156:49154/_query/template');
+        setTemplate('http://10.85.1.156:32772/_query/template');
         setReuseModel();
 
 
@@ -277,13 +277,13 @@
         }
 
         function sectionsClear(section, item) {
-            var sectionHref = section.href;
             var itemHref = item.href;
             jsonMethodService.DELETE(itemHref).then(function (data) {
-                var kvSections = jsonParseService.getObjectMappingNameToValueFromDatas(self.sections, "href");
-                refreshModelSection(kvSections[sectionHref], 1000, function () {
-                    self.showUndo = true;
-                });
+                if (section == item) section.items.length = 0;
+                else {
+                    var idx = section.items.indexOf(item);
+                    section.items.splice(idx,1);
+                }
             }).then(function (data) {
             })
         }
@@ -575,7 +575,7 @@
                 self.itemProperty = 'items';
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
-                setTemplate('http://10.85.1.156:49154/_query/template');
+                setTemplate('http://10.85.1.156:32772/_query/template');
 
                 function closeModal() {
                     $modalInstance.close();
