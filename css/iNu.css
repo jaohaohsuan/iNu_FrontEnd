@@ -90,6 +90,15 @@ span > a:link {
 
 }
 
+.model-preview {
+    height: 185px;
+    overflow: auto;
+}
+.model-preview::-webkit-scrollbar {
+   display: none;
+}
+
+
 .models-select {
     height: 120px;
     margin-top: 5px;
@@ -108,18 +117,17 @@ span > a:link {
 .models-drop {
     height: 200px;
     overflow: auto;
-
 }
+
+.models-drop::-webkit-scrollbar {
+    display: none;
+}
+
 
 .models-label {
     position: relative;
     left: -50px;
     top: 30px
-}
-
-.model-preview {
-    height: 180px;
-    overflow: auto;
 }
 
 .next-todo > .btn {
@@ -160,6 +168,11 @@ span > a:link {
     display: inline-block;
     overflow: hidden;
     width: 90%;
+}
+
+.right {
+    position: absolute;
+    right: 2%;
 }
 
 .tag-list li a {
