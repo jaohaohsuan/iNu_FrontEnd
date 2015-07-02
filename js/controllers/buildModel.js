@@ -83,7 +83,7 @@
         self.undo = undo;
         syntaxInitSetting();
         setModels();
-        initial(templateLocation.path,templateUrl);
+        initial(templateLocation.path, templateUrl);
         $scope.$on('$destroy', destroyListener);
         $scope.$on('tabClicked', tabClicked);
         function addModelGroup() {
@@ -158,7 +158,7 @@
             })
             var template = {template: self.editCollection[syntaxIdentity].template};
 
-            jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (data,status) {
+            jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (data, status) {
                 var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.syntax.occurrence);
                 refreshModelSection(section, 1000);
                 syntaxInitSetting();
@@ -322,9 +322,9 @@
         function initial(locationUrl, templateUrl) {
             if (!locationUrl)//location不存在代表為首頁template
             {
-                buildModelService.setTemplate(templateUrl,self.sections,self.editCollection,self.editBinding);
+                buildModelService.setTemplate(templateUrl, self.sections, self.editCollection, self.editBinding);
             } else {//設定Temporary
-                buildModelService.setTemporary(locationUrl,self.sections,self.editCollection,self.editBinding);
+                buildModelService.setTemporary(locationUrl, self.sections, self.editCollection, self.editBinding);
             }
             searchFromComponent();
         }
@@ -410,10 +410,10 @@
                     displayName: '{{"management"|translate}}',
                     headerCellFilter: 'translate',
                     cellTemplate: '<div class="model-management-grid">' +
-                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity.status)}}</a>' + //之後改成綁定後端給的狀態
-                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                        '</div>'
+                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
+                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                    '</div>'
                 }
             ]
         };
@@ -425,16 +425,16 @@
         setModels();
 
 
-        function checkOnline(status) { //顯示管理欄位裡面是上線或下線
-
+        function checkOnline(entity) { //顯示管理欄位裡面是上線或下線
             var returnText = {
                 'online': function () { //如果是上線，管理欄位裡面要顯示下線
-                    return $translate.instant('offline')
+                    return $translate.instant('offline');
                 },
                 'offline': function () { //如果是下線，管理欄位裡面要顯示上線
-                    return $translate.instant('online')
+                    return $translate.instant('online');
                 }
             };
+            var status = entity.enabled == true ? "online" : "offline";
             if (typeof returnText[status] !== 'function') { //如果不再上列的狀態
                 return 'no status';
             }
@@ -442,18 +442,20 @@
         }
 
         function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
-            var status = {
+            var returnText = {
                 'online': function () {
-                    entity.status = 'offline';
+                    entity.status = $translate.instant('offline');
+                    entity.enabled = false;
                 },
                 'offline': function () {
-                    entity.status = 'online';
+                    entity.status = $translate.instant('online');
+                    entity.enabled = true;
                 }
             };
-            return status[entity.status]();
-
-
+            var status = entity.enabled == true ? "online" : "offline";
+            return returnText[status]();
         }
+
 
         function editModel(entity) { //另開頁籤編輯模型
             $scope.$emit('addTab', {
@@ -464,11 +466,17 @@
             });
         }
 
-        function filterModel() {
-            self.gridOptions.data = [
-                {'modelName': 'Abc', 'role': 'A', 'status': 'online'},
-                {'modelName': 'Def', 'role': 'B', 'status': 'offline'}
-            ]
+        function filterModel(selectedItems, modelKeyword) {
+            if (self.gridOptions.data)  self.gridOptions.data.length = 0;
+            var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + modelKeyword;
+            jsonMethodService.get(searchUrl).then(function (collectionjson) {
+                if (collectionjson.collection.items) {
+                    angular.forEach(collectionjson.collection.items, function (item) {
+                        var data = setGridData(item);
+                        self.gridOptions.data.push(data);
+                    })
+                }
+            })
         }
 
         function saveAsModel(entity) { //打開modal另存模型
@@ -478,10 +486,10 @@
                 controllerAs: 'saveAsCtrl',
                 size: 'sm',
                 template: '<div class="ibox"><div class="ibox-content"><span ng-click="saveAsCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                    '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
-                    'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
-                    '></model-instance>' +
-                    '</div></div>',
+                '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
+                'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
+                '></model-instance>' +
+                '</div></div>',
                 windowClass: 'model-management-model-save' //modal頁的CSS
             })
 
@@ -520,12 +528,12 @@
                 controller: ['$modalInstance', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 template: '<div><span ng-click="detailCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                    '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
-                    'items-property="{{::detailCtrl.itemProperty}}"' +
-                    'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
-                    '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
-                    '</build-section> ' +
-                    '</div>',
+                '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
+                'items-property="{{::detailCtrl.itemProperty}}"' +
+                'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
+                '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
+                '</build-section> ' +
+                '</div>',
                 windowClass: 'model-management-model-logic'
 
             })
@@ -537,7 +545,7 @@
                 self.itemProperty = 'items';
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
-                buildModelService.setTemplate('http://10.85.1.156:32772/_query/template',self.sections);
+                buildModelService.setTemplate('http://10.85.1.156:32772/_query/template', self.sections);
                 function closeModal() {
                     $modalInstance.close();
                 }
@@ -545,6 +553,17 @@
         }
 
 /////////////////////////////////////////不綁定區//////////////////////////////////
+        function setGridData(items) {
+
+            var datas = jsonParseService.getObjectMappingNameToValueFromDatas(items.data, 'name')
+            var href = items.href;
+            var status = $translate.instant(datas['status'].value);
+            var title = datas['title'].value;
+            var enabled = (datas['status'].value === 'enabled' ? true : false)
+            var gridDatas = {'href': href, 'modelName': title, 'role': 'A', 'status': status, 'enabled': enabled}
+            return gridDatas;
+        }
+
         function setModels() {
             jsonMethodService.get('json/models.json').then(
                 function (data) {
