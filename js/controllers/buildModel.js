@@ -1,8 +1,8 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'structFormat', '$anchorScroll', '$location', createModelController])
-        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'structFormat', '$translate', '$modal', '$timeout', modelManagementController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location', createModelController])
+        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', '$translate', '$modal', '$timeout', modelManagementController])
 
 
     function buildModelController($scope, $timeout, $translate) {
@@ -38,7 +38,7 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, structFormat, $anchorScroll, $location) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, $anchorScroll, $location) {
         var modelGroupSelectedTimeout;
         var refreshTimeout;
         var templateUrl = 'http://10.85.1.156:32772/_query/template';
@@ -83,7 +83,7 @@
         self.undo = undo;
         syntaxInitSetting();
         setModels();
-        setTemplate('http://10.85.1.156:32772/_query/template');
+        initial(templateLocation.path,templateUrl);
         $scope.$on('$destroy', destroyListener);
         $scope.$on('tabClicked', tabClicked);
         function addModelGroup() {
@@ -272,11 +272,18 @@
             }
         }
 
-        function searchFromComponent(text){
+        function searchFromComponent(text) {
             if (!text) text = '';
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + text
-            jsonMethodService.get(searchUrl).then(function(collectionjson){
-                setItemsBinding(collectionjson.collection.items);
+            jsonMethodService.get(searchUrl).then(function (collectionjson) {
+                angular.forEach(items, function (item) {
+                    angular.forEach(item.data, function (data) {
+                        item[data.name] = data.value;
+                    })
+                    delete item['data'];
+                })
+                self.editBinding.component.items = items;
+                self.editBinding.component.selected = [];
             })
         }
 
@@ -308,16 +315,21 @@
         }
 
 //////////////////不綁定區//////////////////
-
-
         function destroyListener(event) {
             $timeout.cancel(modelGroupSelectedTimeout);
         }
 
-        function syntaxInitSetting() {
-            if (templateLocation.path) {
-                console.log(templateLocation.path)
+        function initial(locationUrl, templateUrl) {
+            if (!locationUrl)//location不存在代表為首頁template
+            {
+                buildModelService.setTemplate(templateUrl,self.sections,self.editCollection,self.editBinding);
+            } else {//設定Temporary
+                buildModelService.setTemporary(locationUrl,self.sections,self.editCollection,self.editBinding);
             }
+            searchFromComponent();
+        }
+
+        function syntaxInitSetting() {
             self.editBinding.syntax.syntaxIdentity = 'match';
             self.editBinding.syntax.query = [];
             self.syntaxInputFocus = true;
@@ -327,7 +339,6 @@
             refreshTimeout = $timeout(function () {
                 jsonMethodService.get(section.href).then(function (collectionjson) {
                     section.items = collectionjson.collection.items;
-                    console.log(section.name)
                     section.name = $translate.instant(section.name);
                     angular.forEach(section.items, function (item) {
                         item.itemInfo = structFormat.sectionItemFormat(item.data, 'query', 'logic', 'distance', 'editable');
@@ -338,69 +349,11 @@
             }, millisecond)
         }
 
-        function setEditBinding(bindGroup, datas) {
-            angular.forEach(datas, function (data) {
-                if (data.name == 'query') {
-                    self.editBinding[bindGroup].query = data.value.split('\\s');
-                } else {
-                    self.editBinding[bindGroup][data.name] = data.value;
-                }
-            })
-        }
-
-        function setEditTemporary(editLinks) {
-            angular.forEach(editLinks, function (editlink) {
-                jsonMethodService.get(editlink.href).then(function (collectionjson) {
-                    var syntaxIdentity = editlink.href.match(/(match|near|named)/g)[0];
-                    var bindGroup;
-                    if (!syntaxIdentity) return;
-                    if (['match', 'near'].indexOf(syntaxIdentity) != -1) bindGroup = 'syntax';
-                    else if (syntaxIdentity == 'named') bindGroup = 'component';
-                    setEditBinding(bindGroup, collectionjson.collection.template.data);
-                    self.editCollection[syntaxIdentity] = collectionjson.collection;
-                })
-            })
-        }
-
-        function setItemsBinding(items) {
-            angular.forEach(items, function (item) {
-                angular.forEach(item.data, function (data) {
-                    item[data.name] = data.value;
-                })
-                delete item['data'];
-            })
-            self.editBinding.component.items = items;
-            self.editBinding.component.selected = [];
-        }
-
         function setModels() {
             jsonMethodService.get('json/models.json').then(
                 function (data) {
                     self.modelDatasource.models = data;
                 })
-        }
-
-
-        function setModelSections() {
-            angular.forEach(self.sections, function (section) {
-                refreshModelSection(section)
-            })
-        }
-
-        function setTemplate(href) { //由_query/template取得樣板或剛模型 section 與 edit的template
-            jsonMethodService.get(href).then(function (collectionjson) {
-                var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links); //取得edit的href
-                jsonMethodService.get(editLink.href).then(function (collectionjson) {
-                    angular.forEach(collectionjson.collection.items, function (item) {
-                        var linksObj = jsonParseService.getLinksObjFromLinks(item.links,'rel'); //將items裡面的links用rel分類
-                        var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
-                        self.sections = linksObj['section'];//用來增加查詢條件的(match near named)
-                        setModelSections();//設定如何顯示三個條件裡面的資料
-                        setEditTemporary(editLinks);//設定binding的資料是詞區還是公用組件
-                    })
-                })
-                setItemsBinding(collectionjson.collection.items);//公用組件列表
-            })
         }
 
         function tabClicked() {
@@ -411,7 +364,7 @@
         }
     }
 
-    function modelManagementController($scope, jsonMethodService, jsonParseService, structFormat, $translate, $modal, $timeout) {
+    function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, $translate, $modal, $timeout) {
 
         var self = this;
         $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
@@ -567,7 +520,8 @@
                 controller: ['$modalInstance', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 template: '<div><span ng-click="detailCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                    '<build-section datasource="detailCtrl.sections" items-property="{{::detailCtrl.itemProperty}}"' +
+                    '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
+                    'items-property="{{::detailCtrl.itemProperty}}"' +
                     'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
                     '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
                     '</build-section> ' +
@@ -579,44 +533,13 @@
             function showModelDetailController($modalInstance) {
                 var self = this;
                 self.closeModal = closeModal;
+                self.titlePrpperty = 'name';
                 self.itemProperty = 'items';
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
-                setTemplate('http://10.85.1.156:32772/_query/template');
-
+                buildModelService.setTemplate('http://10.85.1.156:32772/_query/template',self.sections);
                 function closeModal() {
                     $modalInstance.close();
-                }
-
-                function setTemplate(href) {
-                    jsonMethodService.get(href).then(function (collectionjson) {
-                        var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links);
-                        jsonMethodService.get(editLink.href).then(function (collection) {
-                            angular.forEach(collection.collection.items, function (item) {
-                                var linksObj = jsonParseService.getLinksObjFromLinks(item.links);
-                                self.sections = linksObj['section'];
-                                setModelSections();
-                            })
-                        })
-                    })
-                }
-
-                function refreshModelSection(section, millisecond, callback) {
-                    refreshTimeout = $timeout(function () {
-                        jsonMethodService.get(section.href).then(function (collectionjson) {
-                            section.items = collectionjson.collection.items;
-                            angular.forEach(section.items, function (item) {
-                                item.itemInfo = structFormat.sectionItemFormat(item.data, 'query', 'logic', 'distance', 'editable');
-                            })
-                            if (typeof callback === 'function') callback();
-                        })
-                    }, millisecond)
-                }
-
-                function setModelSections() {
-                    angular.forEach(self.sections, function (section) {
-                        refreshModelSection(section)
-                    })
                 }
             }
         }

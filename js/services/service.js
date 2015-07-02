@@ -1,8 +1,63 @@
 (function(){
     angular.module('iNu')
-        .service('structFormat',['$translate',structFormat])
+        .service('buildModelService',['jsonMethodService','jsonParseService','$translate',buildModelService])
         .service('templateLocation', templateLocation)
-    function structFormat($translate){
+    function buildModelService(jsonMethodService,jsonParseService,$translate){
+        function setEditBinding(editBinding,bindGroup, datas) {
+            angular.forEach(datas, function (data) {
+                if (data.name == 'query') {
+                    editBinding[bindGroup].query = data.value.split('\\s');
+                } else {
+                    editBinding[bindGroup][data.name] = data.value;
+                }
+            })
+        }
+        function setEditTemporary(editLinks,editCollection) {
+            angular.forEach(editLinks, function (editlink) {
+                jsonMethodService.get(editlink.href).then(function (collectionjson) {
+                    var syntaxIdentity = editlink.href.match(/(match|near|named)/g)[0];
+                    var bindGroup;
+                    if (!syntaxIdentity) return;
+                    if (['match', 'near'].indexOf(syntaxIdentity) != -1) bindGroup = 'syntax';
+                    else if (syntaxIdentity == 'named') bindGroup = 'component';
+                    setEditBinding(bindGroup, collectionjson.collection.template.data);
+                    editCollection[syntaxIdentity] = collectionjson.collection;
+                })
+            })
+        }
+        function setModelSections(sections) {
+            angular.forEach(sections, function (section) {
+                jsonMethodService.get(section.href).then(function (collectionjson) {
+                    section.items = collectionjson.collection.items;
+                    section.name = $translate.instant(section.name);
+                    angular.forEach(section.items, function (item) {
+                        item.itemInfo = sectionItemFormat(item.data, 'query', 'logic', 'distance', 'editable');//格式化成前端顯示文字
+                    })
+                })
+            })
+        }
+        function setTemplate(href,sections,editCollection,editBinding) {
+            jsonMethodService.get(href).then(function(collectionjson){
+                var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links,"href","temporary").href;//由links內取得temporary的href
+                setTemporary(temporaryUrl,sections,editCollection,editBinding);//設定temporary結構
+            })
+        }
+
+        function setTemporary(href,sections,editCollection,editBinding) {
+            jsonMethodService.get(href).then(function (collectionjson) {
+                angular.forEach(collectionjson.collection.items, function (item) {
+                    var linksObj = jsonParseService.getLinksObjFromLinks(item.links, 'rel'); //將items裡面的links用rel分類
+                    var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
+                    var tmpSections = linksObj['section'];//用來增加查詢條件的(match near named)
+                    angular.forEach(tmpSections,function(section){
+                        sections.push(section);
+                    })
+                    setModelSections(sections);//設定如何顯示三個條件裡面的資料
+                    if (editCollection && editBinding)setEditTemporary(editLinks,editCollection,editBinding);//設定binding的資料是詞區還是公用組件
+                })
+            })
+        }
+
         function sectionItemFormat(datas,queryProperty,logicProperty,distanceProperty,editableProperty){
             var itemInfoStruct = {};
             itemInfoStruct[editableProperty] = true;
@@ -35,8 +90,9 @@
             })
             return itemInfoStruct;
         }
-        return {
-            sectionItemFormat: sectionItemFormat
+        return{
+            setTemplate:  setTemplate,
+            setTemporary: setTemporary
         }
     }
     function templateLocation() {
