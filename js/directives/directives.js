@@ -18,6 +18,7 @@
             controllerAs: 'buildSectionCtrl',
             bindToController: true
         }
+
         function buildSectionController() {
             var self = this;
             self.deepFind = deepFind;
@@ -31,17 +32,20 @@
                 }
                 return current;
             }
-            function itemDoubleClick(item){
-                var editable = deepFind(item,self.itemEditableProperty);
+
+            function itemDoubleClick(item) {
+                var editable = deepFind(item, self.itemEditableProperty);
                 if (editable === false) return;
-                if(!self.itemDblclick) return;
+                if (!self.itemDblclick) return;
                 self.itemDblclick(item);
             }
+
             function setClass(index) {
                 var className = ['panel panel-primary', 'panel panel-danger', 'panel panel-warning', 'panel panel-info'];
                 return className[index % className.length];
             }
         }
+
         return directive;
     }
 
@@ -123,13 +127,13 @@
                 placeholder: "@"
             },
             templateUrl: 'views/directives/dropdownMultiSelect.html',
-            controller: ['$element','$window','$scope',multiSelectController],
+            controller: ['$element', '$window', '$scope', multiSelectController],
             controllerAs: 'multiSelectCtrl',
             bindToController: true
 
         };
 
-        function multiSelectController($element,$window,$scope) {
+        function multiSelectController($element, $window, $scope) {
             var self = this;
 
             self.selectedText = self.placeholder;
@@ -150,13 +154,13 @@
                 var idx = self.selectedItems.indexOf(item);
                 if (idx != -1)  self.selectedItems.splice(idx, 1);
                 else self.selectedItems.push(item);
-                if($element.width()>$window.innerWidth *0.4||self.overWidth){
-                    self.selectedText='selectedModels';
-                    self.overWidth =true;
-                  }
-                else{
+                if ($element.width() > $window.innerWidth * 0.4 || self.overWidth) {
+                    self.selectedText = 'selectedModels';
+                    self.overWidth = true;
+                }
+                else {
                     changeSelectedText(self.selectedItems);
-                    self.overWidth =false;
+                    self.overWidth = false;
                 }
 
             }
@@ -165,6 +169,7 @@
 
         return directive;
     }
+
     function focus($parse, $timeout) {
         return {
             link: function (scope, element, attrs) {
@@ -184,6 +189,7 @@
             }
         };
     }
+
     function inject() {
         return {
             restrict: 'A',
@@ -196,6 +202,7 @@
             }
         };
     }
+
     function itemTemplate($compile) {
         return {
             restrict: "E",
@@ -222,9 +229,10 @@
                 addModelGroup: '=',
                 datasource: '=',
                 deleteModel: '=',
+                enableModel: '=',
                 isInstance: '=', //是否是實例模式
                 isManagement: '=', //是否是模型管理下
-                enableModel: '=',
+                modelName: '=',//另存模型名稱
                 renameModel: '=',
                 saveModel: '=',
                 selectedEventhandler: '=',
@@ -240,7 +248,6 @@
             var self = this;
             self.changeModelName = changeModelName;
             self.changeText = 'changeConfig';
-            self.modelName = "Test";
             self.modelClicked = modelClicked;
             self.selectedModelGroups = [];
             self.required = false;
@@ -684,8 +691,8 @@
         .directive('componentInstance', componentInstance) //組件實例視窗
         .directive('confirmClick', confirmClick) //刪除確認視窗
         .directive('dropdownMultiSelect', dropdownMultiSelect)//下拉多選
-        .directive('inject',inject)
-        .directive('itemTemplate',itemTemplate)
+        .directive('inject', inject)
+        .directive('itemTemplate', itemTemplate)
         .directive('modelInstance', modelInstance) //模型實例視窗
         .directive('nestedScroll', nestedScroll)
 })();

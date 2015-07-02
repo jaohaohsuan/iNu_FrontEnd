@@ -148,7 +148,7 @@
         }
 
         function addToSectionFromSyntax(syntaxIdentity) {
-            angular.forEach(self.editCollection[syntaxIdentity].template.data, function (data) {
+            angular.forEach(self.editCollection[syntaxIdentity].template.data, function (data) { //從template取出資料後，一一做綁定
                 var name = data.name;
                 if (name === 'query') data.value = self.editBinding.syntax[data.name].map(function (element) {
                     return element.text
@@ -384,16 +384,16 @@
             })
         }
 
-        function setTemplate(href) {
+        function setTemplate(href) { //由_query/template取得樣板或剛模型 section 與 edit的template
             jsonMethodService.get(href).then(function (collectionjson) {
-                var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links);
+                var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links); //取得edit的href
                 jsonMethodService.get(editLink.href).then(function (collectionjson) {
                     angular.forEach(collectionjson.collection.items, function (item) {
-                        var linksObj = jsonParseService.getLinksObjFromLinks(item.links,'rel');
-                        var editLinks = linksObj['edit'];
-                        self.sections = linksObj['section'];
-                        setModelSections();
-                        setEditTemporary(editLinks);
+                        var linksObj = jsonParseService.getLinksObjFromLinks(item.links,'rel'); //將items裡面的links用rel分類
+                        var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
+                        self.sections = linksObj['section'];//用來增加查詢條件的(match near named)
+                        setModelSections();//設定如何顯示三個條件裡面的資料
+                        setEditTemporary(editLinks);//設定binding的資料是詞區還是公用組件
                     })
                 })
                 setItemsBinding(collectionjson.collection.items);//公用組件列表
