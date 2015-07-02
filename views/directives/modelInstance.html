@@ -7,23 +7,14 @@
     <!--</button>-->
 
     <div class="field_set">
-        <div class="form-inline input-group" ng-if="modelInstanceCtrl.isInstance">
+        <div class="form-inline">
 
-            <input type="text" class="form-control" required="modelInstanceCtrl.required"
-                   ng-model="modelInstanceCtrl.modelName"
-                   placeholder="{{'modelNamePlaceholder'|translate}}"/>
-            <span class="input-group-btn">
-                <button ng-click="modelInstanceCtrl.changeModelName()"
-                        class="btn btn-success">{{'change'|translate}}
-                </button>
-            </span>
-        </div>
-        <div class="input-group" ng-if="modelInstanceCtrl.isManagement">
             <label>{{'modelName'|translate}}:</label>
             <input type="text" class="form-control-static" required="modelInstanceCtrl.required"
                    ng-model="modelInstanceCtrl.modelName"
                    placeholder="{{'modelNamePlaceholder'|translate}}"/>
         </div>
+
         <div class="form-inline">
             <h3> {{'models'|translate}}:
                 <button class="btn btn-success btn-xs fa fa-plus" ng-click="modelInstanceCtrl.addModelGroup()"></button>
@@ -64,6 +55,9 @@
 
     <div ng-show="modelInstanceCtrl.isInstance">
         <!-- confirmed-click:按下確認後綁定的事件 confirm-click:確認視窗內容的文字-->
+        <button ng-click="modelInstanceCtrl.changeModelName()"
+                class="btn btn-primary btn-block">{{'change'|translate}}
+        </button>
         <button ng-hide="modelInstanceCtrl.isOnline" ng-click="modelInstanceCtrl.enableModel()"
                 class="btn btn-success  btn-block instance-button">
             {{'onlineModel'|translate}}
