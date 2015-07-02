@@ -1,211 +1,211 @@
 <div class="row">
-    <!--模型創建-->
-    <div class="col-md-5 col-xs-12 col-sm-12">
-        <div class="ibox">
-            <div class="ibox-title"><h2>{{"logicWord"|translate}}</h2></div>
-            <div class="ibox-content">
+<!--模型創建-->
+<div class="col-md-5 col-xs-12 col-sm-12">
+    <div class="ibox">
+        <div class="ibox-title"><h2>{{"logicWord"|translate}}</h2></div>
+        <div class="ibox-content">
 
-                <h4>{{"keywordTitle"|translate}}：</h4>
-                <tags-input ng-model="createModelCtrl.editBinding.syntax.query"
-                            min-length="0"
-                            add-on-space="true"
-                            add-on-paste="true"
-                            enable-editing-last-tag="true"
-                            paste-split-pattern="\s|,"
-                            allow-leftover-text="true"
-                            add-on-enter="true"
-                            tags-repeat="true"
-                            placeholder="{{'keywordPlaceholder'|translate}}"
-                            focus="createModelCtrl.keywordInputFocus"
-                        >
-                    <auto-complete source="createModelCtrl.autoTips($query)"
-                                   min-length="0"
-                                   select-first-match="false"></auto-complete>
-                </tags-input>
+            <h4>{{"keywordTitle"|translate}}：</h4>
+            <tags-input ng-model="createModelCtrl.editBinding.syntax.query"
+                        min-length="0"
+                        add-on-space="true"
+                        add-on-paste="true"
+                        enable-editing-last-tag="true"
+                        paste-split-pattern="\s|,"
+                        allow-leftover-text="true"
+                        add-on-enter="true"
+                        tags-repeat="true"
+                        placeholder="{{'keywordPlaceholder'|translate}}"
+                        focus="createModelCtrl.syntaxInputFocus"
+                    >
+                <auto-complete source="createModelCtrl.autoTips($query)"
+                               min-length="0"
+                               select-first-match="false"></auto-complete>
+            </tags-input>
 
-                <div>
-                    <div class="radio "><label> <input icheck type="radio" name="modelRadio" value="OR"
-                                                       ng-model="createModelCtrl.editBinding.syntax.operator">
-                        {{"eitherAccord"|translate}}
-                    </label></div>
-                    <div class="radio"><label> <input icheck type="radio" name="modelRadio" value="AND"
-                                                      ng-model="createModelCtrl.editBinding.syntax.operator">
-                        {{"allAccord"|translate}}
-                    </label></div>
-                </div>
-
-                <div class="form-inline col-xs-offset-1" ng-show="createModelCtrl.editBinding.syntax.operator=='AND'">
-                    <div class="checkbox">
-                        <label><input icheck type="checkbox" name="radioTest"
-                                      ng-model="createModelCtrl.editBinding.syntax.syntaxIdentity"
-                                      ng-true-value="'near'"
-                                      ng-false-value="'match'">
-                            {{"wordDistance"|translate}}：
-                        </label>
-                        <number-picker number="createModelCtrl.editBinding.syntax.slop" size="3"></number-picker>
-                        &nbsp;&nbsp;
-                        <label ng-if="createModelCtrl.editBinding.syntax.syntaxIdentity === 'near'">
-                            <input icheck type="checkbox" name="radioTest" ng-model="createModelCtrl.editBinding.syntax.inOrder">
-                            <span>  {{"afterWord"|translate}}</span>
-                        </label>
-
-                    </div>
-                </div>
-
-                <h4>{{"keywordRole"|translate}}：</h4>
-                <select class="form-control m-b" ng-model="createModelCtrl.editBinding.syntax.role" ng-options="role.name for role in  createModelCtrl.roles">
-                    <option value="">----</option>
-                </select>
-
-                <hr/>
-                <div class="row">
-                    <div ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
-                        <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
-                               ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.editBinding.syntax.occurrence"
-                               btn-radio="'must'">{{"mustHave"|translate}}</label>
-                        <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
-                               ng-model="createModelCtrl.editBinding.syntax.occurrence"
-                               btn-radio="'must_not'">{{"mustNot"|translate}}</label>
-                        <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
-                               ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.editBinding.syntax.occurrence"
-                               btn-radio="'should'">{{"should"|translate}}</label>
-                    </div>
-                    <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2 pull-right btn btn-success btn-rounded  "
-                            ng-click="createModelCtrl.addToBuildSection(createModelCtrl.editBinding.syntax.syntaxIdentity)"
-                            ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">
-                            <i class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
-                    </button>
-                </div>
-
+            <div>
+                <div class="radio "><label> <input icheck type="radio" name="modelRadio" value="OR"
+                                                   ng-model="createModelCtrl.editBinding.syntax.operator">
+                    {{"eitherAccord"|translate}}
+                </label></div>
+                <div class="radio"><label> <input icheck type="radio" name="modelRadio" value="AND"
+                                                  ng-model="createModelCtrl.editBinding.syntax.operator">
+                    {{"allAccord"|translate}}
+                </label></div>
             </div>
-        </div>
-        <!--可復用的模型組件-->
-        <div class="ibox">
-            <div class="ibox-title ">
-                <h2>{{"reuseModel"|translate}}
-                        <div class="pull-right">
-                            <button class="btn btn-primary btn-rounded" ng-click="createModelCtrl.addTab()">
-                                {{"create"|translate}}
-                            </button>
-                            <button class="btn btn-primary btn-rounded">
-                                {{"update"|translate}}
-                            </button>
-                        </div>
-                </h2>
-            </div>
-            <div class="ibox-content">
-                <form class="input-group public-component-filter">
-                    <input type="text" class="form-control" required/><span class="input-group-btn">
-                        <button class="btn btn-success">{{'filter'|translate}}</button></span>
-                </form>
-                <div nested-scroll  class="btn-group btn-group-vertical btn-block "
-                     ng-class="{true:'model-preview'}[createModelCtrl.editBinding.component.items.length>5]">
-                    <label class="btn btn-success btn-outline  animated fadeInLeft"
-                           ng-repeat="item in createModelCtrl.editBinding.component.items"
-                           ng-model="item.checked"
-                           ng-click="createModelCtrl.toggleSelection(createModelCtrl.selectedComponent,item)"
-                           btn-checkbox>
-                        {{item.name}}
+
+            <div class="form-inline col-xs-offset-1" ng-show="createModelCtrl.editBinding.syntax.operator=='AND'">
+                <div class="checkbox">
+                    <label><input icheck type="checkbox" name="radioTest"
+                                  ng-model="createModelCtrl.editBinding.syntax.syntaxIdentity"
+                                  ng-true-value="'near'"
+                                  ng-false-value="'match'">
+                        {{"wordDistance"|translate}}：
                     </label>
-                </div>
-                <hr/>
-                <div class="row">
-                    <div ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
-                        <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success"
-                               ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.editBinding.component.occurrence"
-                               btn-radio="'must'">{{"mustHave"|translate}}</label>
-                        <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success"
-                               ng-model="createModelCtrl.editBinding.component.occurrence"
-                               btn-radio="'must_not'">{{"mustNot"|translate}}</label>
-                        <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success "
-                               ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.editBinding.component.occurrence"
-                               btn-radio="'should'">{{"should"|translate}}</label>
-                    </div>
-                    <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2  pull-right btn btn-success  btn-rounded "
-                            ng-disabled="createModelCtrl.selectedComponent.length <= 0"
-                            ng-click="createModelCtrl.addToSectionFromComponent()"><i
-                            class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
-                    </button>
+                    <number-picker number="createModelCtrl.editBinding.syntax.slop" size="3"></number-picker>
+                    &nbsp;&nbsp;
+                    <label ng-if="createModelCtrl.editBinding.syntax.syntaxIdentity === 'near'">
+                        <input icheck type="checkbox" name="radioTest" ng-model="createModelCtrl.editBinding.syntax.inOrder">
+                        <span>  {{"afterWord"|translate}}</span>
+                    </label>
+
                 </div>
             </div>
-        </div>
-    </div>
-    <!--查詢條件-->
-    <div class="col-md-4 col-xs-12  col-sm-12">
-        <div class="ibox">
-            <div class="ibox-title"><h2>{{"queryConditions"|translate}}<span title="{{'undo'|translate}}"
-                                                                             class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right"
-                                                                             ng-click="createModelCtrl.undo()"
-                                                                             ng-show="createModelCtrl.showUndo"></span>
-            </h2></div>
-            <div class="ibox-content">
-                <!--auto render-->
-                <build-section datasource="createModelCtrl.sections"
-                               clear-all-text="{{::'clearAll'|translate}}"
-                               clear="createModelCtrl.sectionsClear"
-                               items-property="{{::'items'}}"
-                               item-editable-property="{{::'itemInfo.editable'}}"
-                               item-dblclick="createModelCtrl.sectionsDblclick">
-                    <item-template>
-                        <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}">
-                            {{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}
-                        </div>
-                    </item-template>
-                </build-section>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-md-3 col-xs-12 col-sm-12">
-        <!--配置-->
-        <div class="ibox" ng-show="createModelCtrl.isInstance">
-            <div class="ibox-title"><h2>{{"config"|translate}}</h2></div>
-            <div class="ibox-content">
-                <model-instance datasource="createModelCtrl.modelDatasource.models"
-                                selected-eventhandler="createModelCtrl.modelGroupsSelectedHandler"
-                                add-model-group="createModelCtrl.addModelGroup"
-                                delete-model="createModelCtrl.deleteModel"
-                                rename-model="createModelCtrl.renameModel"
-                                is-instance="true"
-                                ng-hide="createModelCtrl.isComponent">
+            <h4>{{"keywordRole"|translate}}：</h4>
+            <select class="form-control m-b" ng-model="createModelCtrl.editBinding.syntax.role" ng-options="role.name for role in  createModelCtrl.roles">
+                <option value="">----</option>
+            </select>
 
-                </model-instance>
-
-            </div>
-        </div>
-        <!--進階功能-->
-        <div class="ibox">
-            <div class="ibox-title">
-                <h2 translate="whatEditing">{{'componentOrModelName'|translate}}</h2>
-            </div>
-            <div class="ibox-content">
-                <button class="btn btn-success btn-block"
-                        ng-click="createModelCtrl.nextToDo()"
-                        ng-hide="createModelCtrl.nextView">
-                    <i class="fa fa-info-circle"></i>&nbsp;{{'next'|translate}}
+            <hr/>
+            <div class="row">
+                <div ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
+                    <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
+                           ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
+                           ng-model="createModelCtrl.editBinding.syntax.occurrence"
+                           btn-radio="'must'">{{"mustHave"|translate}}</label>
+                    <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
+                           ng-model="createModelCtrl.editBinding.syntax.occurrence"
+                           btn-radio="'must_not'">{{"mustNot"|translate}}</label>
+                    <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
+                           ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
+                           ng-model="createModelCtrl.editBinding.syntax.occurrence"
+                           btn-radio="'should'">{{"should"|translate}}</label>
+                </div>
+                <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2 pull-right btn btn-success btn-rounded  "
+                        ng-click="createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
+                        ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">
+                    <i class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
                 </button>
-                <!--創建模型顯示控件-->
-                <form class="form-group animated fadeIn" ng-show="createModelCtrl.nextView">
-                    <input type="text" class="form-control btn-block" ng-model="createModelCtrl.saveAsName"
-                           placeholder="{{'modelNamePlaceholder'|translate}}"
-                           focus="createModelCtrl.saveAsNameInputFocus" required/>
-                    <button class="btn btn-success btn-block"
-                            ng-click="createModelCtrl.saveAs('save')">
-                        {{'saveModel'|translate}}
-                    </button>
-                    <button class="btn btn-success btn-block" ng-click="createModelCtrl.saveAs('online')">
-                        {{'saveModelAndOnline'|translate}}
-                    </button>
-                    <button class="btn btn-success btn-block" ng-click="createModelCtrl.saveAs('edit')">
-                        {{'saveModelAndEdit'|translate}}
-                    </button>
-                </form>
+            </div>
 
+        </div>
+    </div>
+    <!--可復用的模型組件-->
+    <div class="ibox">
+        <div class="ibox-title ">
+            <h2>{{"reuseModel"|translate}}
+                <div class="pull-right">
+                    <button class="btn btn-primary btn-rounded" ng-click="createModelCtrl.addTab()">
+                        {{"create"|translate}}
+                    </button>
+                    <button class="btn btn-primary btn-rounded">
+                        {{"update"|translate}}
+                    </button>
+                </div>
+            </h2>
+        </div>
+        <div class="ibox-content">
+            <form class="input-group public-component-filter">
+                <input type="text" class="form-control" ng-model="createModelCtrl.searchText"/><span class="input-group-btn">
+                        <button class="btn btn-success" ng-click="createModelCtrl.searchFromComponent(createModelCtrl.searchText)">{{'filter'|translate}}</button></span>
+            </form>
+            <div nested-scroll  class="btn-group btn-group-vertical btn-block "
+                 ng-class="{true:'model-preview'}[createModelCtrl.editBinding.component.items.length>5]">
+                <label class="btn btn-success btn-outline  animated fadeInLeft"
+                       ng-repeat="item in createModelCtrl.editBinding.component.items"
+                       ng-model="item.checked"
+                       ng-click="createModelCtrl.toggleSelection(createModelCtrl.editBinding.component.selected,item)"
+                       btn-checkbox>
+                    {{item.name}}
+                </label>
+            </div>
+            <hr/>
+            <div class="row">
+                <div ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
+                    <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success"
+                           ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
+                           ng-model="createModelCtrl.editBinding.component.occurrence"
+                           btn-radio="'must'">{{"mustHave"|translate}}</label>
+                    <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success"
+                           ng-model="createModelCtrl.editBinding.component.occurrence"
+                           btn-radio="'must_not'">{{"mustNot"|translate}}</label>
+                    <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success "
+                           ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
+                           ng-model="createModelCtrl.editBinding.component.occurrence"
+                           btn-radio="'should'">{{"should"|translate}}</label>
+                </div>
+                <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2  pull-right btn btn-success  btn-rounded "
+                        ng-disabled="createModelCtrl.editBinding.component.selected.length <= 0"
+                        ng-click="createModelCtrl.addToSectionFromComponent()"><i
+                        class="fa fa-plus"></i>&nbsp;{{"join"|translate}}
+                </button>
             </div>
         </div>
     </div>
+</div>
+<!--查詢條件-->
+<div class="col-md-4 col-xs-12  col-sm-12">
+    <div class="ibox">
+        <div class="ibox-title"><h2>{{"queryConditions"|translate}}<span title="{{'undo'|translate}}"
+                                                                         class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right"
+                                                                         ng-click="createModelCtrl.undo()"
+                                                                         ng-show="createModelCtrl.showUndo"></span>
+        </h2></div>
+        <div class="ibox-content">
+            <!--auto render-->
+            <build-section datasource="createModelCtrl.sections"
+                           clear-all-text="{{::'clearAll'|translate}}"
+                           clear="createModelCtrl.sectionsClear"
+                           items-property="{{::'items'}}"
+                           item-editable-property="{{::'itemInfo.editable'}}"
+                           item-dblclick="createModelCtrl.sectionsDblclick">
+                <item-template>
+                    <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}">
+                        {{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}
+                    </div>
+                </item-template>
+            </build-section>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-xs-12 col-sm-12">
+    <!--配置-->
+    <div class="ibox" ng-show="createModelCtrl.isInstance">
+        <div class="ibox-title"><h2>{{"config"|translate}}</h2></div>
+        <div class="ibox-content">
+            <model-instance datasource="createModelCtrl.modelDatasource.models"
+                            selected-eventhandler="createModelCtrl.modelGroupsSelectedHandler"
+                            add-model-group="createModelCtrl.addModelGroup"
+                            delete-model="createModelCtrl.deleteModel"
+                            rename-model="createModelCtrl.renameModel"
+                            is-instance="true"
+                            ng-hide="createModelCtrl.isComponent">
+
+            </model-instance>
+
+        </div>
+    </div>
+    <!--進階功能-->
+    <div class="ibox">
+        <div class="ibox-title">
+            <h2 translate="whatEditing">{{'componentOrModelName'|translate}}</h2>
+        </div>
+        <div class="ibox-content">
+            <button class="btn btn-success btn-block"
+                    ng-click="createModelCtrl.nextToDo()"
+                    ng-hide="createModelCtrl.nextView">
+                <i class="fa fa-info-circle"></i>&nbsp;{{'next'|translate}}
+            </button>
+            <!--創建模型顯示控件-->
+            <form class="form-group animated fadeIn" ng-show="createModelCtrl.nextView">
+                <input type="text" class="form-control btn-block" ng-model="createModelCtrl.saveAsName"
+                       placeholder="{{'modelNamePlaceholder'|translate}}"
+                       focus="createModelCtrl.saveAsNameInputFocus" required/>
+                <button class="btn btn-success btn-block"
+                        ng-click="createModelCtrl.saveAs('save')">
+                    {{'saveModel'|translate}}
+                </button>
+                <button class="btn btn-success btn-block" ng-click="createModelCtrl.saveAs('online')">
+                    {{'saveModelAndOnline'|translate}}
+                </button>
+                <button class="btn btn-success btn-block" ng-click="createModelCtrl.saveAs('edit')">
+                    {{'saveModelAndEdit'|translate}}
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
 </div>

@@ -44,7 +44,7 @@
         var self = this;
         self.addModelGroup = addModelGroup; //增加模型組
         self.addTab = addTab; //增加tab
-        self.addToBuildSection = addToSectionFromSyntax;
+        self.addToSectionFromSyntax = addToSectionFromSyntax;
         self.addToSectionFromComponent = addToSectionFromComponent;
         self.autoTips = autoTips;
         self.deleteModel = deleteModel;
@@ -52,14 +52,13 @@
             syntax: {
                 syntaxIdentity: 'match'
             },
-            component: {}
+            component: {
+                selected: []
+            }
         };
         self.editCollection = {};
-        self.editLinks = [];
         self.isInstance = true;
         self.isRounded = isRounded;
-
-
         self.modelDatasource = {
             models: []
         };
@@ -67,16 +66,16 @@
         self.nextToDo = nextToDo;
         self.renameModel = renameModel;
         self.roles = [
-            {"name": "角色：全部", "content": "ALL"},
-            {"name": "角色：A", "content": "A"},
-            {"name": "角色：B", "content": "B"}
+            {'name': '角色：全部', 'content': 'ALL'},
+            {'name': '角色：A', 'content': 'A'},
+            {'name': '角色：B', 'content': 'B'}
         ];
         self.saveAs = saveAs;
         self.saveAsName = '';
+        self.searchFromComponent = searchFromComponent;
         self.sections = [];
         self.sectionsClear = sectionsClear;
         self.sectionsDblclick = sectionsDblclick;
-        self.selectedComponent = [];
         self.showUndo = false;
         self.tabIndex = 0;
         self.toggleSelection = toggleSelection;
@@ -84,15 +83,15 @@
         syntaxInitSetting();
         setModels();
         setTemplate('http://10.85.1.156:32772/_query/template');
-        $scope.$on("$destroy", destroyListener);
+        $scope.$on('$destroy', destroyListener);
         $scope.$on('tabClicked', tabClicked);
         function addModelGroup() {
             SweetAlert.swal({
                     title: $translate.instant('newModelsName'), //讀取多語系key
-                    type: "input",
+                    type: 'input',
                     showCancelButton: true,
                     inputPlaceholder: $translate.instant('newModelsName'),
-                    confirmButtonColor: "#1C84C6",
+                    confirmButtonColor: '#1C84C6',
                     confirmButtonText: $translate.instant('sure'),
                     cancelButtonText: $translate.instant('cancel'),
                     closeOnConfirm: false,
@@ -101,13 +100,13 @@
                 },
                 function (inputValue) {
                     if (inputValue === false) return false;
-                    if (inputValue === "" || !inputValue.trim().length) {
-                        swal.showInputError("You need to write something!");
+                    if (inputValue === '' || !inputValue.trim().length) {
+                        swal.showInputError('You need to write something!');
                         return false
                     }
-                    swal("Nice!", "You wrote: " + inputValue, "success");
+                    swal('Nice!', 'You wrote: ' + inputValue, 'success');
                     self.modelDatasource.models.push({
-                        "name": inputValue
+                        'name': inputValue
                     })
                     $location.hash('models' + inputValue);
                     $anchorScroll('models' + inputValue);
@@ -119,10 +118,10 @@
         function addTab() {
             SweetAlert.swal({
                     title: $translate.instant('newComponentName'), //讀取多語系key
-                    type: "input",
+                    type: 'input',
                     showCancelButton: true,
                     inputPlaceholder: $translate.instant('newComponentName'),
-                    confirmButtonColor: "#1C84C6",
+                    confirmButtonColor: '#1C84C6',
                     confirmButtonText: $translate.instant('sure'),
                     cancelButtonText: $translate.instant('cancel'),
                     closeOnConfirm: false,
@@ -131,15 +130,15 @@
                 },
                 function (inputValue) {
                     if (inputValue === false) return false;
-                    if (inputValue === "" || !inputValue.trim().length) {
-                        swal.showInputError("You need to write something!");
+                    if (inputValue === '' || !inputValue.trim().length) {
+                        swal.showInputError('You need to write something!');
                         return false
                     }
                     swal({
                         title: 'Nice!',
-                        text: "You wrote: " + inputValue,
+                        text: 'You wrote: ' + inputValue,
                         timer: 1000,
-                        type: "success",
+                        type: 'success',
                         showConfirmButton: false
                     });
                     $scope.$emit('addTab', {title: 'createModel', active: true, addable: true, tabName: inputValue});
@@ -151,15 +150,15 @@
         function addToSectionFromSyntax(syntaxIdentity) {
             angular.forEach(self.editCollection[syntaxIdentity].template.data, function (data) {
                 var name = data.name;
-                if (name === "query") data.value = self.editBinding.syntax[data.name].map(function (element) {
+                if (name === 'query') data.value = self.editBinding.syntax[data.name].map(function (element) {
                     return element.text
-                }).join(" ");
+                }).join(' ');
                 else data.value = self.editBinding.syntax[data.name]
             })
             var template = {template: self.editCollection[syntaxIdentity].template};
 
             jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (data) {
-                var section = jsonParseService.findItemValueFromArray(self.sections, "href", self.editBinding.syntax.occurrence);
+                var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.syntax.occurrence);
                 refreshModelSection(section, 1000);
                 syntaxInitSetting();
             })
@@ -168,40 +167,40 @@
         function addToSectionFromComponent() {
             var kvDatas = jsonParseService.getObjectMappingNameToValueFromDatas(self.editCollection.named.template.data, "name");
 
-            angular.forEach(self.selectedComponent, function (reuseModel) {
+            angular.forEach(self.editBinding.component.selected, function (component) {
                 $timeout(function () {
-                    kvDatas.storedQueryTitle.value = reuseModel.name;
+                    kvDatas.storedQueryTitle.value = component.name;
                     kvDatas.occurrence.value = self.editBinding.component.occurrence;
                     var template = {template: self.editCollection.named.template};
-                    console.log(JSON.stringify(template))
                     jsonMethodService.post(self.editCollection.named.href, template).then(function () {
-                        reuseModel.checked = false;
-                    }).then(function () {})
+                        component.checked = false;
+                    }).then(function () {
+                    })
                 })
             })
-            var section = jsonParseService.findItemValueFromArray(self.sections, "href", self.editBinding.component.occurrence);
+            var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.component.occurrence);
             refreshModelSection(section, 1000);
-            self.selectedComponent = [];
+            self.editBinding.component.selected = [];
         }
 
         function autoTips(query) {
             var t = {
-                "i": ["ibon", "ipad", "iphone1", "iphone2"],
-                "ib": ["ibon"],
-                "ibo": ["ibon"],
-                "ibon": ["ibon"],
-                "ip": ["ipad", "iphone1", "iphone2"],
-                "ipa": ["ipad"],
-                "iph": ["iphone1", "iphone2"],
-                "ipad": ["ipad"],
-                "ipho": ["iphone1", "iphone2"],
-                "iphon": ["iphone1", "iphone2"],
-                "iphone": ["iphone1", "iphone2"],
-                "iphone1": ["iphone1"],
-                "iphone2": ["iphone2"],
-                "不": ["不賠", "不會"],
-                "不賠": ["不賠"],
-                "不會": ["不會"]
+                'i': ['ibon', 'ipad', 'iphone1', 'iphone2'],
+                'ib': ['ibon'],
+                'ibo': ['ibon'],
+                'ibon': ['ibon'],
+                'ip': ['ipad', 'iphone1', 'iphone2'],
+                'ipa': ['ipad'],
+                'iph': ['iphone1', 'iphone2'],
+                'ipad': ['ipad'],
+                'ipho': ['iphone1', 'iphone2'],
+                'iphon': ['iphone1', 'iphone2'],
+                'iphone': ['iphone1', 'iphone2'],
+                'iphone1': ['iphone1'],
+                'iphone2': ['iphone2'],
+                '不': ['不賠', '不會'],
+                '不賠': ['不賠'],
+                '不會': ['不會']
 
             }
             return t[query];
@@ -210,9 +209,9 @@
         function deleteModel() {
             SweetAlert.swal({
                     title: $translate.instant('sureDelete'), //讀取多語系key
-                    type: "warning",
+                    type: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
+                    confirmButtonColor: '#DD6B55',
                     confirmButtonText: $translate.instant('sure'),
                     cancelButtonText: $translate.instant('cancel'),
                     closeOnConfirm: false,
@@ -220,7 +219,7 @@
                 },
                 function (isConfirm) {
                     if (isConfirm) {
-                        SweetAlert.swal("deleted", "", "success");
+                        SweetAlert.swal('deleted', '', 'success');
                     }
 
                 });
@@ -272,13 +271,21 @@
             }
         }
 
+        function searchFromComponent(text){
+            if (!text) text = '';
+            var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + text
+            jsonMethodService.get(searchUrl).then(function(collectionjson){
+                setItemsBinding(collectionjson.collection.items);
+            })
+        }
+
         function sectionsClear(section, item) {
             var itemHref = item.href;
             jsonMethodService.DELETE(itemHref).then(function (data) {
                 if (section == item) section.items.length = 0;
                 else {
                     var idx = section.items.indexOf(item);
-                    section.items.splice(idx,1);
+                    section.items.splice(idx, 1);
                 }
             }).then(function (data) {
             })
@@ -313,7 +320,7 @@
             }
             self.editBinding.syntax.syntaxIdentity = 'match';
             self.editBinding.syntax.query = [];
-            self.keywordInputFocus = true;
+            self.syntaxInputFocus = true;
         }
 
         function refreshModelSection(section, millisecond, callback) {
@@ -321,7 +328,7 @@
                 jsonMethodService.get(section.href).then(function (collectionjson) {
                     section.items = collectionjson.collection.items;
                     angular.forEach(section.items, function (item) {
-                        item.itemInfo = structFormat.sectionItemFormat(item.data, "query", "logic", "distance", "editable");
+                        item.itemInfo = structFormat.sectionItemFormat(item.data, 'query', 'logic', 'distance', 'editable');
                     })
                     if (typeof callback === 'function') callback();
                 })
@@ -330,36 +337,37 @@
 
         function setEditBinding(bindGroup, datas) {
             angular.forEach(datas, function (data) {
-                if (data.name == "query") {
-                    self.editBinding[bindGroup].query = data.value.split("\\s");
+                if (data.name == 'query') {
+                    self.editBinding[bindGroup].query = data.value.split('\\s');
                 } else {
                     self.editBinding[bindGroup][data.name] = data.value;
                 }
             })
         }
 
-        function setEditTemplates() {
-            angular.forEach(self.editLinks, function (editlink) {
+        function setEditTemporary(editLinks) {
+            angular.forEach(editLinks, function (editlink) {
                 jsonMethodService.get(editlink.href).then(function (collectionjson) {
                     var syntaxIdentity = editlink.href.match(/(match|near|named)/g)[0];
                     var bindGroup;
                     if (!syntaxIdentity) return;
-                    if (["match", "near"].indexOf(syntaxIdentity) != -1) bindGroup = "syntax";
-                    else if (syntaxIdentity == "named") bindGroup = "component";
+                    if (['match', 'near'].indexOf(syntaxIdentity) != -1) bindGroup = 'syntax';
+                    else if (syntaxIdentity == 'named') bindGroup = 'component';
                     setEditBinding(bindGroup, collectionjson.collection.template.data);
                     self.editCollection[syntaxIdentity] = collectionjson.collection;
                 })
             })
         }
 
-        function setItemsBinding(items){
-            angular.forEach(items,function(item){
-                angular.forEach(item.data,function(data){
+        function setItemsBinding(items) {
+            angular.forEach(items, function (item) {
+                angular.forEach(item.data, function (data) {
                     item[data.name] = data.value;
                 })
                 delete item['data'];
             })
             self.editBinding.component.items = items;
+            self.editBinding.component.selected = [];
         }
 
         function setModels() {
@@ -381,11 +389,11 @@
                 var editLink = jsonParseService.getEditorLinkFromLinks(collectionjson.collection.links);
                 jsonMethodService.get(editLink.href).then(function (collectionjson) {
                     angular.forEach(collectionjson.collection.items, function (item) {
-                        var linksObj = jsonParseService.getLinksObjFromLinks(item.links);
-                        self.sections = linksObj["section"];
-                        self.editLinks = linksObj["edit"];
+                        var linksObj = jsonParseService.getLinksObjFromLinks(item.links,'rel');
+                        var editLinks = linksObj['edit'];
+                        self.sections = linksObj['section'];
                         setModelSections();
-                        setEditTemplates();
+                        setEditTemporary(editLinks);
                     })
                 })
                 setItemsBinding(collectionjson.collection.items);//公用組件列表
@@ -393,9 +401,9 @@
         }
 
         function tabClicked() {
-            self.keywordInputFocus = false;
+            self.syntaxInputFocus = false;
             $timeout(function () {
-                self.keywordInputFocus = true;
+                self.syntaxInputFocus = true;
             })
         }
     }
@@ -583,7 +591,7 @@
                         jsonMethodService.get(editLink.href).then(function (collection) {
                             angular.forEach(collection.collection.items, function (item) {
                                 var linksObj = jsonParseService.getLinksObjFromLinks(item.links);
-                                self.sections = linksObj["section"];
+                                self.sections = linksObj['section'];
                                 setModelSections();
                             })
                         })
@@ -595,7 +603,7 @@
                         jsonMethodService.get(section.href).then(function (collectionjson) {
                             section.items = collectionjson.collection.items;
                             angular.forEach(section.items, function (item) {
-                                item.itemInfo = structFormat.sectionItemFormat(item.data, "query", "logic", "distance", "editable");
+                                item.itemInfo = structFormat.sectionItemFormat(item.data, 'query', 'logic', 'distance', 'editable');
                             })
                             if (typeof callback === 'function') callback();
                         })
