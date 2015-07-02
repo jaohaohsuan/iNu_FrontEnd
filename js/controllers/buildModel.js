@@ -41,6 +41,7 @@
     function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, structFormat, $anchorScroll, $location) {
         var modelGroupSelectedTimeout;
         var refreshTimeout;
+        var templateUrl = 'http://10.85.1.156:32772/_query/template';
         var self = this;
         self.addModelGroup = addModelGroup; //增加模型組
         self.addTab = addTab; //增加tab
@@ -326,8 +327,11 @@
             refreshTimeout = $timeout(function () {
                 jsonMethodService.get(section.href).then(function (collectionjson) {
                     section.items = collectionjson.collection.items;
+                    console.log(section.name)
+                    section.name = $translate.instant(section.name);
                     angular.forEach(section.items, function (item) {
                         item.itemInfo = structFormat.sectionItemFormat(item.data, 'query', 'logic', 'distance', 'editable');
+
                     })
                     if (typeof callback === 'function') callback();
                 })

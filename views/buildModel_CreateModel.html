@@ -63,10 +63,10 @@
                     <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
                            ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
                            ng-model="createModelCtrl.editBinding.syntax.occurrence"
-                           btn-radio="'must'">{{"mustHave"|translate}}</label>
+                           btn-radio="'must'">{{"must"|translate}}</label>
                     <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
                            ng-model="createModelCtrl.editBinding.syntax.occurrence"
-                           btn-radio="'must_not'">{{"mustNot"|translate}}</label>
+                           btn-radio="'must_not'">{{"must_not"|translate}}</label>
                     <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
                            ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
                            ng-model="createModelCtrl.editBinding.syntax.occurrence"
@@ -107,7 +107,7 @@
                        ng-model="item.checked"
                        ng-click="createModelCtrl.toggleSelection(createModelCtrl.editBinding.component.selected,item)"
                        btn-checkbox>
-                    {{item.name}}
+                    {{item.title}}
                 </label>
             </div>
             <hr/>
@@ -116,10 +116,10 @@
                     <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success"
                            ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
                            ng-model="createModelCtrl.editBinding.component.occurrence"
-                           btn-radio="'must'">{{"mustHave"|translate}}</label>
+                           btn-radio="'must'">{{"must"|translate}}</label>
                     <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success"
                            ng-model="createModelCtrl.editBinding.component.occurrence"
-                           btn-radio="'must_not'">{{"mustNot"|translate}}</label>
+                           btn-radio="'must_not'">{{"must_not"|translate}}</label>
                     <label class="col-xs-6 col-md-4 col-sm-4  btn btn-success "
                            ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
                            ng-model="createModelCtrl.editBinding.component.occurrence"
@@ -147,6 +147,7 @@
             <build-section datasource="createModelCtrl.sections"
                            clear-all-text="{{::'clearAll'|translate}}"
                            clear="createModelCtrl.sectionsClear"
+                           title-property="{{::'name'}}"
                            items-property="{{::'items'}}"
                            item-editable-property="{{::'itemInfo.editable'}}"
                            item-dblclick="createModelCtrl.sectionsDblclick">

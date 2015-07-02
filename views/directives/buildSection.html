@@ -1,6 +1,6 @@
 <div ng-class="buildSectionCtrl.setClass($index)" ng-repeat="section in buildSectionCtrl.datasource">
     <div class="panel-heading">
-        <h4> &nbsp;
+        <h4> {{section[buildSectionCtrl.titleProperty]}}
             <span ng-if="buildSectionCtrl.clear" class="btn clear-button  btn-sm pull-right" ng-click="buildSectionCtrl.clear(section,section)">{{buildSectionCtrl.clearAllText}}</span></h4>
     </div>
     <div  class="panel-body" >
