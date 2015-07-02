@@ -158,9 +158,14 @@
             })
             var template = {template: self.editCollection[syntaxIdentity].template};
 
-            jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (data, status) {
+            jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (response) {
                 var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.syntax.occurrence);
-                refreshModelSection(section, 1000);
+                var location = response.headers('Location');
+                var item = {
+                    href: location,
+                    itemInfo: buildModelService.sectionItemFormat(template.template.data,'query', 'logic', 'distance', 'editable')
+                }
+                section.items.push(item);
                 syntaxInitSetting();
             })
         }
