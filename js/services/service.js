@@ -1,7 +1,7 @@
 (function(){
     angular.module('iNu')
         .service('structFormat',['$translate',structFormat])
-        .service('URL', URL)
+        .service('templateLocation', templateLocation)
     function structFormat($translate){
         function sectionItemFormat(datas,queryProperty,logicProperty,distanceProperty,editableProperty){
             var itemInfoStruct = {};
@@ -39,11 +39,11 @@
             sectionItemFormat: sectionItemFormat
         }
     }
-    function URL() {
+    function templateLocation() {
         var self = this;
     }
 
-    Object.defineProperty(URL.prototype, 'path', {
+    Object.defineProperty(templateLocation.prototype, 'path', {
         configurable:false,
         get :function (){
             return this._path;

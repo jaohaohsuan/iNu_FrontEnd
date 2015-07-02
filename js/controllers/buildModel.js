@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'URL', 'structFormat', '$anchorScroll', '$location', createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'structFormat', '$anchorScroll', '$location', createModelController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'structFormat', '$translate', '$modal', '$timeout', modelManagementController])
 
 
@@ -38,7 +38,7 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, URL, structFormat, $anchorScroll, $location) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, structFormat, $anchorScroll, $location) {
         var modelGroupSelectedTimeout;
         var refreshTimeout;
         var self = this;
@@ -142,7 +142,7 @@
                         showConfirmButton: false
                     });
                     $scope.$emit('addTab', {title: 'createModel', active: true, addable: true, tabName: inputValue});
-                    URL.path = inputValue; //設定URL Service的path變數
+                    templateLocation.path = inputValue; //設定URL Service的path變數
                 });
 
         }
@@ -258,7 +258,7 @@
                             addable: true,
                             tabName: self.saveAsName
                         });
-                        URL.path = '編輯樣板的url';
+                        templateLocation.path = '編輯樣板的Location';
                     },
                     'online': function () {
                         alert('online!')
@@ -314,9 +314,8 @@
         }
 
         function syntaxInitSetting() {
-            if (URL.path) {
-                self.editBinding.query.push({text: URL.path});
-                console.log(JSON.stringify(self.keywords))
+            if (templateLocation.path) {
+                console.log(templateLocation.path)
             }
             self.editBinding.syntax.syntaxIdentity = 'match';
             self.editBinding.syntax.query = [];
