@@ -158,7 +158,7 @@
             })
             var template = {template: self.editCollection[syntaxIdentity].template};
 
-            jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (data) {
+            jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (data,status) {
                 var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.syntax.occurrence);
                 refreshModelSection(section, 1000);
                 syntaxInitSetting();
@@ -276,13 +276,13 @@
             if (!text) text = '';
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + text
             jsonMethodService.get(searchUrl).then(function (collectionjson) {
-                angular.forEach(items, function (item) {
+                angular.forEach(collectionjson.collection.items, function (item) {
                     angular.forEach(item.data, function (data) {
                         item[data.name] = data.value;
                     })
                     delete item['data'];
                 })
-                self.editBinding.component.items = items;
+                self.editBinding.component.items = collectionjson.collection.items;
                 self.editBinding.component.selected = [];
             })
         }

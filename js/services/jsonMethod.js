@@ -36,7 +36,7 @@
                     }
                 )
                     .success(function (response,status,header) {
-                        deferred.resolve(response);
+                        deferred.resolve(response,status);
                     }).error(function (response) {
                         deferred.reject(response);
                     });

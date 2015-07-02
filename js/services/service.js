@@ -12,7 +12,7 @@
                 }
             })
         }
-        function setEditTemporary(editLinks,editCollection) {
+        function setEditTemporary(editLinks,editCollection,editBinding) {
             angular.forEach(editLinks, function (editlink) {
                 jsonMethodService.get(editlink.href).then(function (collectionjson) {
                     var syntaxIdentity = editlink.href.match(/(match|near|named)/g)[0];
@@ -20,7 +20,7 @@
                     if (!syntaxIdentity) return;
                     if (['match', 'near'].indexOf(syntaxIdentity) != -1) bindGroup = 'syntax';
                     else if (syntaxIdentity == 'named') bindGroup = 'component';
-                    setEditBinding(bindGroup, collectionjson.collection.template.data);
+                    if (editBinding)setEditBinding(editBinding,bindGroup, collectionjson.collection.template.data);
                     editCollection[syntaxIdentity] = collectionjson.collection;
                 })
             })
@@ -53,7 +53,7 @@
                         sections.push(section);
                     })
                     setModelSections(sections);//設定如何顯示三個條件裡面的資料
-                    if (editCollection && editBinding)setEditTemporary(editLinks,editCollection,editBinding);//設定binding的資料是詞區還是公用組件
+                    if (editCollection) setEditTemporary(editLinks,editCollection,editBinding);//設定binding的資料是詞區還是公用組件
                 })
             })
         }
