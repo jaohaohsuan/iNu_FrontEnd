@@ -545,7 +545,7 @@
                 self.itemProperty = 'items';
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
-                buildModelService.setTemplate('http://10.85.1.156:32772/_query/template', self.sections);
+                buildModelService.setTemporary(entity.href, self.sections);
                 function closeModal() {
                     $modalInstance.close();
                 }
