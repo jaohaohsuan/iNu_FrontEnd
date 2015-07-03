@@ -3,6 +3,20 @@
         .service('buildModelService',['jsonMethodService','jsonParseService','$translate',buildModelService])
         .service('templateLocation', templateLocation)
     function buildModelService(jsonMethodService,jsonParseService,$translate){
+        function addToCurrentSection(href,template,sections,occurrence,successCallback,errorCallback){
+            jsonMethodService.post(href, template).then(function (response) {
+                var section = jsonParseService.findItemValueFromArray(sections, 'href', occurrence);
+                var location = response.headers('Location');
+                var item = {
+                    href: location,
+                    itemInfo: sectionItemFormat(template.template.data, 'query', 'logic', 'distance', 'editable')
+                };
+                section.items.push(item);
+                if (successCallback) successCallback();
+            }).then(function (response) {
+                if (errorCallback) errorCallback(response);
+            })
+        }
         function setEditBinding(editBinding,bindGroup, datas) {
             angular.forEach(datas, function (data) {
                 if (data.name == 'query') {
@@ -91,6 +105,7 @@
             return itemInfoStruct;
         }
         return{
+            addToCurrentSection: addToCurrentSection,
             sectionItemFormat: sectionItemFormat,
             setTemplate:  setTemplate,
             setTemporary: setTemporary
