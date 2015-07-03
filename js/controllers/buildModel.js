@@ -40,7 +40,6 @@
 
     function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, $anchorScroll, $location) {
         var modelGroupSelectedTimeout;
-        var refreshTimeout;
         var templateUrl = 'http://10.85.1.156:32772/_query/template';
         var self = this;
         self.addModelGroup = addModelGroup; //增加模型組
@@ -156,18 +155,13 @@
                 }).join(' ');
                 else data.value = self.editBinding.syntax[data.name]
             })
+            var href = self.editCollection[syntaxIdentity].href;
             var template = {template: angular.copy(self.editCollection[syntaxIdentity].template)};
-
-            jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (response) {
-                var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.syntax.occurrence);
-                var location = response.headers('Location');
-                var item = {
-                    href: location,
-                    itemInfo: buildModelService.sectionItemFormat(template.template.data, 'query', 'logic', 'distance', 'editable')
-                }
-                section.items.push(item);
+            var occurrence = self.editBinding.syntax.occurrence;
+            var successCallback = function(){
                 syntaxBindingClear();
-            })
+            }
+            buildModelService.addToCurrentSection(href,template,self.sections,occurrence,successCallback);
         }
 
         function addToSectionFromComponent() {
@@ -177,17 +171,12 @@
                     kvDatas.storedQueryTitle.value = component.title;
                     kvDatas.occurrence.value = self.editBinding.component.occurrence;
                     var template = {template: angular.copy(self.editCollection.named.template)};
-                    jsonMethodService.post(self.editCollection.named.href, template).then(function (response) {
-                        var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.component.occurrence);
-                        var location = response.headers('Location');
-                        var item = {
-                            href: location,
-                            itemInfo: buildModelService.sectionItemFormat(template.template.data, 'query', 'logic', 'distance', 'editable')
-                        };
-                        section.items.push(item);
+                    var href = self.editCollection.named.href;
+                    var occurrence = self.editBinding.component.occurrence;
+                    var successCallback = function(){
                         component.checked = false;
-                    }).then(function () {
-                    })
+                    }
+                    buildModelService.addToCurrentSection(href,template,self.sections,occurrence,successCallback);
                 })
             })
 
@@ -531,7 +520,7 @@
                     '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
                     'items-property="{{::detailCtrl.itemProperty}}"' +
                     'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
-                    '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
+                    '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}</item-template>' +
                     '</build-section> ' +
                     '</div>',
                 windowClass: 'model-management-model-logic'

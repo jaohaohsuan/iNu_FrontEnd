@@ -3,6 +3,20 @@
         .service('buildModelService',['jsonMethodService','jsonParseService','$translate',buildModelService])
         .service('templateLocation', templateLocation)
     function buildModelService(jsonMethodService,jsonParseService,$translate){
+        function addToCurrentSection(href,template,sections,occurrence,successCallback,errorCallback){
+            jsonMethodService.post(href, template).then(function (response) {
+                var section = jsonParseService.findItemValueFromArray(sections, 'href', occurrence);
+                var location = response.headers('Location');
+                var item = {
+                    href: location,
+                    itemInfo: sectionItemFormat(template.template.data, 'query', 'syntax', 'slop', 'editable')
+                };
+                section.items.push(item);
+                if (successCallback) successCallback();
+            }).then(function (response) {
+                if (errorCallback) errorCallback(response);
+            })
+        }
         function setEditBinding(editBinding,bindGroup, datas) {
             angular.forEach(datas, function (data) {
                 if (data.name == 'query') {
@@ -31,7 +45,7 @@
                     section.items = collectionjson.collection.items;
                     section.name = $translate.instant(section.name);
                     angular.forEach(section.items, function (item) {
-                        item.itemInfo = sectionItemFormat(item.data, 'query', 'logic', 'distance', 'editable');//格式化成前端顯示文字
+                        item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable');//格式化成前端顯示文字
                     })
                 })
             })
@@ -91,7 +105,7 @@
             return itemInfoStruct;
         }
         return{
-            sectionItemFormat: sectionItemFormat,
+            addToCurrentSection: addToCurrentSection,
             setTemplate:  setTemplate,
             setTemporary: setTemporary
         }
