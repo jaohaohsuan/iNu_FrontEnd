@@ -1,7 +1,7 @@
 <div class="ibox">
     <div class="ibox-content">
         <div class="row">
-            <form class="form-inline">
+            <form class="form-inline" ng-enter="modelManagementCtrl.filterModel(modelManagementCtrl.selectedItems,modelManagementCtrl.modelKeyword)" >
                 <dropdown-multi-select
                         datasource="modelManagementCtrl.datasource"
                         selected-items="modelManagementCtrl.selectedItems"

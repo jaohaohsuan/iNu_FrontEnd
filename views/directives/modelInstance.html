@@ -66,8 +66,8 @@
                 class="btn btn-success  btn-block instance-button">
             {{'offlineModel'|translate}}
         </button>
-        <button ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-danger  btn-block instance-button">
-            {{'deleteModel'|translate}}
-        </button>
-    </div>
+      </div>
 </form>
+<button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.deleteModel()" class="btn btn-danger  btn-block instance-button">
+    {{'deleteModel'|translate}}
+</button>

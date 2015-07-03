@@ -272,7 +272,19 @@
 
         return directive;
     }
+    function ngEnter(){
+        var directive =function(scope,element,attrs){
+            element.bind('keydown keypress',function(event){
+                if(event.which===13){
 
+                        scope.$eval(attrs.ngEnter);
+
+                    event.preventDefault();
+                }
+            });
+        };
+        return directive;
+    }
     function nestedScroll() {
         var directive =
             function (scope, element) {
@@ -694,5 +706,6 @@
         .directive('inject', inject)
         .directive('itemTemplate', itemTemplate)
         .directive('modelInstance', modelInstance) //模型實例視窗
+        .directive('ngEnter',ngEnter)
         .directive('nestedScroll', nestedScroll)
 })();
