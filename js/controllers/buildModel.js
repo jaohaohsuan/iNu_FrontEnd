@@ -366,7 +366,7 @@
         $scope.editModel = editModel;
         self.filterModel = filterModel;
         self.gridOptions = {
-            exporterMenuPdf:false,
+            exporterMenuPdf: false,
             enableGridMenu: true,
             gridMenuTitleFilter: translateCol,
             columnDefs: [
@@ -374,9 +374,9 @@
                     field: 'modelName',
                     displayName: '{{"modelName"|translate}}',
                     headerCellFilter: 'translate',
-                    cellTemplate: '<button ng-click="grid.appScope.showModelDetail(row.entity)" class="btn btn-success btn-block">{{row.entity.modelName}}</button>',
+                    cellTemplate: '<a ng-click="grid.appScope.showModelDetail(row.entity)" class="btn btn-success btn-block">{{row.entity.modelName}}</a>',
                     enableColumnMenu: false,
-                    enableHiding:false
+                    enableHiding: false
                 },
                 {
                     field: 'role',
@@ -413,7 +413,7 @@
                 {
                     name: '{{"management"|translate}}',
                     displayName: '{{"management"|translate}}',
-                    enableHiding:false,
+                    enableHiding: false,
                     enableColumnMenu: false,
                     enableSorting: false,
                     headerCellFilter: 'translate',
@@ -495,11 +495,7 @@
                 controller: ['$modalInstance', '$timeout', saveAsController],
                 controllerAs: 'saveAsCtrl',
                 size: 'sm',
-                template: '<div class="ibox"><div class="ibox-content"><span ng-click="saveAsCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
-                'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
-                '></model-instance>' +
-                '</div></div>',
+                templateUrl: 'views/buildModel_modelManagement_saveAsModel_modal.html',
                 windowClass: 'model-management-model-save' //modal頁的CSS
             })
 
@@ -537,13 +533,7 @@
                 backdropClass: 'model-management-model-backdrop',
                 controller: ['$modalInstance', showModelDetailController],
                 controllerAs: 'detailCtrl',
-                template: '<div><span ng-click="detailCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
-                'items-property="{{::detailCtrl.itemProperty}}"' +
-                'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
-                '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}</item-template>' +
-                '</build-section> ' +
-                '</div>',
+                templateUrl: 'views/buildModel_modelManagement_modelDetailModal.html',
                 windowClass: 'model-management-model-logic'
 
             })
@@ -580,7 +570,8 @@
                     self.datasource = data;
                 })
         }
-         function translateCol(title){
+
+        function translateCol(title) {
             return $translate.instant(title)
         };
 

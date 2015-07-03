@@ -1,0 +1,15 @@
+<div class="ibox">
+    <div class="ibox-title"><h3 class="text-center">{{"logicWord"|translate}}</h3></div>
+    <div class="ibox-content"><span ng-click="detailCtrl.closeModal()"
+                                    class="btn text-danger fa fa-remove fa-lg pull-right"></span>
+        <build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"
+                       items-property="{{::detailCtrl.itemProperty}}"
+                       item-editable-property="{{::detailCtrl.itemInfoEditable}}">
+            <item-template>
+                <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}">
+                    {{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}
+                </div>
+            </item-template>
+        </build-section>
+    </div>
+</div>
