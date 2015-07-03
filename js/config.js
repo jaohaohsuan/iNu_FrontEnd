@@ -99,7 +99,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                             files:['js/plugins/angular-sweetalert/AngularSweetAlert.min.js','js/plugins/angular-sweetalert/sweetalert.min.js','css/plugins/angular-sweetalert/sweetalert.css']
                         },
                         {
-                            name: ['ui.grid', 'ui.grid.edit','ui.grid.selection','ui.grid.pagination','ui.grid.expandable','ui.grid.pinning', 'ui.grid.resizeColumns'],
+                            name: ['ui.grid', 'ui.grid.edit','ui.grid.selection','ui.grid.pagination','ui.grid.expandable','ui.grid.pinning', 'ui.grid.resizeColumns','ui.grid.exporter'],
                             files: ['css/plugins/uiGrid/ui-grid.min.css','js/plugins/uiGrid/ui-grid.min.js']
                         }
                     ])
