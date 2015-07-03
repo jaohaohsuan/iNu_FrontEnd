@@ -1818,7 +1818,7 @@ table.dataTable thead .sorting:after {
 /* SWITCHES */
 .onoffswitch {
     position: relative;
-    width: 54px;
+    width: 70px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -1859,14 +1859,14 @@ table.dataTable thead .sorting:after {
     box-sizing: border-box;
 }
 .onoffswitch-inner:before {
-    content: "ON";
-    padding-left: 7px;
+    content: "ONLINE";
+    padding-left: 2px;
     background-color: #1AB394;
     color: #FFFFFF;
 }
 .onoffswitch-inner:after {
-    content: "OFF";
-    padding-right: 7px;
+    content: "OFFLINE";
+    padding-right: 1px;
     background-color: #FFFFFF;
     color: #919191;
     text-align: right;
@@ -1881,7 +1881,7 @@ table.dataTable thead .sorting:after {
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 36px;
+    right: 74%;
     -moz-transition: all 0.3s ease-in 0s;
     -webkit-transition: all 0.3s ease-in 0s;
     -o-transition: all 0.3s ease-in 0s;

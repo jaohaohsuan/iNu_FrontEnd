@@ -298,6 +298,7 @@
         }
 
         function sectionsClear(section, item) {
+
             var itemHref = item.href;
             jsonMethodService.DELETE(itemHref).then(function (data) {
                 if (section == item) section.items.length = 0;
@@ -400,7 +401,8 @@
                 {
                     field: 'status',
                     displayName: '{{"status"|translate}}',
-                    headerCellFilter: 'translate'
+                    headerCellFilter: 'translate',
+                    cellTemplate:'   <div class="switch"><div class="onoffswitch"><input disabled type="checkbox" ng-checked="row.entity.enabled" class="onoffswitch-checkbox" ><label style="cursor: default" class="onoffswitch-label"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>'
                 },
                 {
                     name: '{{"management"|translate}}',
@@ -415,7 +417,8 @@
             ]
         };
         $scope.isModelOnline = false; //之後讀取API時需判斷此模型的上下線狀態
-
+        $scope.onlineClass='online';
+        $scope.offlineClass='offline';
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
         $scope.showModelDetail = showModelDetail;

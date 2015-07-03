@@ -18,7 +18,10 @@ span > a:link {
 .border-radius {
     border-radius: 6px
 }
-
+.checkOnline{
+    position: relative;
+    bottom: 10px;
+}
 .clear-button {
     position: relative;
     margin-top: -5px;
@@ -162,6 +165,10 @@ span > a:link {
     padding-top: 4px;
     padding-bottom: 7px;
     margin-bottom: 0;
+}
+.switch{
+   position: relative;
+    margin: 8px;
 }
 .public-component-filter{
     margin-bottom: 10px;
