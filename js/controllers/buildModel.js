@@ -163,7 +163,7 @@
                 var location = response.headers('Location');
                 var item = {
                     href: location,
-                    itemInfo: buildModelService.sectionItemFormat(template.template.data,'query', 'logic', 'distance', 'editable')
+                    itemInfo: buildModelService.sectionItemFormat(template.template.data, 'query', 'logic', 'distance', 'editable')
                 }
                 section.items.push(item);
                 syntaxInitSetting();
@@ -172,20 +172,25 @@
 
         function addToSectionFromComponent() {
             var kvDatas = jsonParseService.getObjectMappingNameToValueFromDatas(self.editCollection.named.template.data, "name");
-
             angular.forEach(self.editBinding.component.selected, function (component) {
                 $timeout(function () {
-                    kvDatas.storedQueryTitle.value = component.name;
+                    kvDatas.storedQueryTitle.value = component.title;
                     kvDatas.occurrence.value = self.editBinding.component.occurrence;
-                    var template = {template: self.editCollection.named.template};
-                    jsonMethodService.post(self.editCollection.named.href, template).then(function () {
+                    var template = {template: angular.copy(self.editCollection.named.template)};
+                    jsonMethodService.post(self.editCollection.named.href, template).then(function (response) {
+                        var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.component.occurrence);
+                        var location = response.headers('Location');
+                        var item = {
+                            href: location,
+                            itemInfo: buildModelService.sectionItemFormat(template.template.data, 'query', 'logic', 'distance', 'editable')
+                        };
+                        section.items.push(item);
                         component.checked = false;
                     }).then(function () {
                     })
-                })
+                }, 100)
             })
-            var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.component.occurrence);
-            refreshModelSection(section, 1000);
+
             self.editBinding.component.selected = [];
         }
 
@@ -340,20 +345,6 @@
             self.syntaxInputFocus = true;
         }
 
-        function refreshModelSection(section, millisecond, callback) {
-            refreshTimeout = $timeout(function () {
-                jsonMethodService.get(section.href).then(function (collectionjson) {
-                    section.items = collectionjson.collection.items;
-                    section.name = $translate.instant(section.name);
-                    angular.forEach(section.items, function (item) {
-                        item.itemInfo = structFormat.sectionItemFormat(item.data, 'query', 'logic', 'distance', 'editable');
-
-                    })
-                    if (typeof callback === 'function') callback();
-                })
-            }, millisecond)
-        }
-
         function setModels() {
             jsonMethodService.get('json/models.json').then(
                 function (data) {
@@ -415,10 +406,10 @@
                     displayName: '{{"management"|translate}}',
                     headerCellFilter: 'translate',
                     cellTemplate: '<div class="model-management-grid">' +
-                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
-                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                    '</div>'
+                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
+                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                        '</div>'
                 }
             ]
         };
@@ -491,10 +482,10 @@
                 controllerAs: 'saveAsCtrl',
                 size: 'sm',
                 template: '<div class="ibox"><div class="ibox-content"><span ng-click="saveAsCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
-                'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
-                '></model-instance>' +
-                '</div></div>',
+                    '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
+                    'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
+                    '></model-instance>' +
+                    '</div></div>',
                 windowClass: 'model-management-model-save' //modal頁的CSS
             })
 
@@ -533,12 +524,12 @@
                 controller: ['$modalInstance', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 template: '<div><span ng-click="detailCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
-                'items-property="{{::detailCtrl.itemProperty}}"' +
-                'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
-                '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
-                '</build-section> ' +
-                '</div>',
+                    '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
+                    'items-property="{{::detailCtrl.itemProperty}}"' +
+                    'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
+                    '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
+                    '</build-section> ' +
+                    '</div>',
                 windowClass: 'model-management-model-logic'
 
             })
