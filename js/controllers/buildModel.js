@@ -2,7 +2,7 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location', createModelController])
-        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', '$translate', '$modal', '$timeout', modelManagementController])
+        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', modelManagementController])
 
 
     function buildModelController($scope, $timeout, $translate) {
@@ -58,7 +58,8 @@
             }
         };
         self.editCollection = {};
-        self.isInstance = true;
+        self.enabledModel = enabledModel;
+        self.isInstance = false;
         self.isRounded = isRounded;
         self.modelDatasource = {
             models: []
@@ -81,7 +82,6 @@
         self.tabIndex = 0;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
-
         initial(templateLocation.path, templateUrl);
         $scope.$on('$destroy', destroyListener);
         $scope.$on('tabClicked', tabClicked);
@@ -158,10 +158,10 @@
             var href = self.editCollection[syntaxIdentity].href;
             var template = {template: angular.copy(self.editCollection[syntaxIdentity].template)};
             var occurrence = self.editBinding.syntax.occurrence;
-            var successCallback = function(){
+            var successCallback = function () {
                 syntaxBindingClear();
             }
-            buildModelService.addToCurrentSection(href,template,self.sections,occurrence,successCallback);
+            buildModelService.addToCurrentSection(href, template, self.sections, occurrence, successCallback);
         }
 
         function addToSectionFromComponent() {
@@ -173,10 +173,10 @@
                     var template = {template: angular.copy(self.editCollection.named.template)};
                     var href = self.editCollection.named.href;
                     var occurrence = self.editBinding.component.occurrence;
-                    var successCallback = function(){
+                    var successCallback = function () {
                         component.checked = false;
                     }
-                    buildModelService.addToCurrentSection(href,template,self.sections,occurrence,successCallback);
+                    buildModelService.addToCurrentSection(href, template, self.sections, occurrence, successCallback);
                 })
             })
 
@@ -225,6 +225,9 @@
                 });
         }
 
+        function enabledModel() {
+
+        }
 
         function isRounded() {
             return window.innerWidth < 768
@@ -287,7 +290,6 @@
         }
 
         function sectionsClear(section, item) {
-
             var itemHref = item.href;
             jsonMethodService.DELETE(itemHref).then(function (data) {
                 if (section == item) section.items.length = 0;
@@ -323,8 +325,11 @@
             if (!locationUrl)//location不存在代表為首頁template
             {
                 buildModelService.setTemplate(templateUrl, self.sections, self.editCollection, self.editBinding);
+
             } else {//設定Temporary
                 buildModelService.setTemporary(locationUrl, self.sections, self.editCollection, self.editBinding);
+                self.isInstance = true;
+
             }
             searchFromComponent();
             setModels();
@@ -351,7 +356,7 @@
         }
     }
 
-    function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, $translate, $modal, $timeout) {
+    function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout) {
 
         var self = this;
         $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
@@ -391,23 +396,23 @@
                     field: 'status',
                     displayName: '{{"status"|translate}}',
                     headerCellFilter: 'translate',
-                    cellTemplate:'   <div class="switch"><div class="onoffswitch"><input disabled type="checkbox" ng-checked="row.entity.enabled" class="onoffswitch-checkbox" ><label style="cursor: default" class="onoffswitch-label"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>'
+                    cellTemplate: '   <div class="switch"><div class="onoffswitch"><input disabled type="checkbox" ng-checked="row.entity.enabled" class="onoffswitch-checkbox" ><label style="cursor: default" class="onoffswitch-label"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>'
                 },
                 {
                     name: '{{"management"|translate}}',
                     displayName: '{{"management"|translate}}',
                     headerCellFilter: 'translate',
                     cellTemplate: '<div class="model-management-grid">' +
-                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
-                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                        '</div>'
+                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
+                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                    '</div>'
                 }
             ]
         };
         $scope.isModelOnline = false; //之後讀取API時需判斷此模型的上下線狀態
-        $scope.onlineClass='online';
-        $scope.offlineClass='offline';
+        $scope.onlineClass = 'online';
+        $scope.offlineClass = 'offline';
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
         $scope.showModelDetail = showModelDetail;
@@ -433,12 +438,12 @@
         function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
             var returnText = {
                 'online': function () {
-                    entity.status = $translate.instant('offline');
                     entity.enabled = false;
+                    //do API
                 },
                 'offline': function () {
-                    entity.status = $translate.instant('online');
                     entity.enabled = true;
+                    //do API
                 }
             };
             var status = entity.enabled == true ? "online" : "offline";
@@ -453,6 +458,7 @@
                 addable: true,
                 tabName: entity.modelName
             });
+            templateLocation.path = entity.href;
         }
 
         function filterModel(selectedItems, modelKeyword) {
@@ -475,10 +481,10 @@
                 controllerAs: 'saveAsCtrl',
                 size: 'sm',
                 template: '<div class="ibox"><div class="ibox-content"><span ng-click="saveAsCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                    '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
-                    'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
-                    '></model-instance>' +
-                    '</div></div>',
+                '<model-instance datasource="saveAsCtrl.datasource"  is-management="true"  selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler" ' +
+                'title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel"' +
+                '></model-instance>' +
+                '</div></div>',
                 windowClass: 'model-management-model-save' //modal頁的CSS
             })
 
@@ -517,12 +523,12 @@
                 controller: ['$modalInstance', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 template: '<div><span ng-click="detailCtrl.closeModal()" class="btn text-danger fa fa-remove fa-lg pull-right"></span>' +
-                    '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
-                    'items-property="{{::detailCtrl.itemProperty}}"' +
-                    'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
-                    '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}</item-template>' +
-                    '</build-section> ' +
-                    '</div>',
+                '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
+                'items-property="{{::detailCtrl.itemProperty}}"' +
+                'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
+                '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}</item-template>' +
+                '</build-section> ' +
+                '</div>',
                 windowClass: 'model-management-model-logic'
 
             })

@@ -163,17 +163,16 @@
 
 <div class="col-md-3 col-xs-12 col-sm-12">
     <!--配置-->
-    <div class="ibox" ng-show="createModelCtrl.isInstance">
+    <div class="ibox">
         <div class="ibox-title"><h2>{{"config"|translate}}</h2></div>
         <div class="ibox-content">
             <model-instance datasource="createModelCtrl.modelDatasource.models"
                             selected-eventhandler="createModelCtrl.modelGroupsSelectedHandler"
                             add-model-group="createModelCtrl.addModelGroup"
                             delete-model="createModelCtrl.deleteModel"
+                            enable-model="createModelCtrl.enabledModel"
                             rename-model="createModelCtrl.renameModel"
-                            is-instance="true"
-                            ng-hide="createModelCtrl.isComponent">
-
+                            is-instance="createModelCtrl.isInstance"
             </model-instance>
 
         </div>

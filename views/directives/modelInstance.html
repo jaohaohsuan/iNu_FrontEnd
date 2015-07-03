@@ -56,29 +56,25 @@
     <div ng-show="modelInstanceCtrl.isInstance">
         <!-- confirmed-click:按下確認後綁定的事件 confirm-click:確認視窗內容的文字-->
         <label class="checkOnline">{{'onlineModel'|translate}}？</label>
+
         <div class="switch inline-block">
             <div class="onoffswitch">
-                <input type="checkbox" ng-checked="modelInstanceCtrl.isOnline" class="onoffswitch-checkbox" id="checkOnline">
-                <label class="onoffswitch-label" for="checkOnline">
+                <input type="checkbox" ng-checked="modelInstanceCtrl.isOnline" class="onoffswitch-checkbox"
+                       id="checkOnline{{modelInstanceCtrl.modelName}}">
+                <label class="onoffswitch-label" for="checkOnline{{modelInstanceCtrl.modelName}}" ng-click="modelInstanceCtrl.enableModel()">
                     <span class="onoffswitch-inner"></span>
                     <span class="onoffswitch-switch"></span>
                 </label>
             </div>
         </div>
         <button ng-click="modelInstanceCtrl.changeModelName()"
+                ng-disabled="!modelInstanceCtrl.modelName||modelInstanceCtrl.selectedModelGroups.length<=0"
                 class="btn btn-success btn-block">{{'change'|translate}}
         </button>
-        <!--<button ng-hide="modelInstanceCtrl.isOnline" ng-click="modelInstanceCtrl.enableModel()"-->
-                <!--class="btn btn-success  btn-block instance-button">-->
-            <!--{{'onlineModel'|translate}}-->
-        <!--</button>-->
-        <!--<button ng-show="modelInstanceCtrl.isOnline" ng-click="modelInstanceCtrl.enableModel()"-->
-                <!--class="btn btn-success  btn-block instance-button">-->
-            <!--{{'offlineModel'|translate}}-->
-        <!--</button>-->
-    </div>
+        <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.deleteModel()"
+                ng-disabled="!modelInstanceCtrl.modelName"
+                class="btn btn-danger  btn-block instance-button">
+            {{'deleteModel'|translate}}
+        </button>
+     </div>
 </form>
-<button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.deleteModel()"
-        class="btn btn-danger  btn-block instance-button">
-    {{'deleteModel'|translate}}
-</button>
