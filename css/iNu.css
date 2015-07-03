@@ -132,7 +132,10 @@ span > a:link {
     left: -50px;
     top: 30px
 }
-
+.new-model-input{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 .next-todo > .btn {
     margin: 10px;
 }
