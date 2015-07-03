@@ -51,7 +51,8 @@
         self.deleteModel = deleteModel;
         self.editBinding = {
             syntax: {
-                syntaxIdentity: 'match'
+                syntaxIdentity: 'match',
+                focus: true
             },
             component: {
                 selected: []
@@ -81,8 +82,7 @@
         self.tabIndex = 0;
         self.toggleSelection = toggleSelection;
         self.undo = undo;
-        syntaxInitSetting();
-        setModels();
+
         initial(templateLocation.path, templateUrl);
         $scope.$on('$destroy', destroyListener);
         $scope.$on('tabClicked', tabClicked);
@@ -156,7 +156,7 @@
                 }).join(' ');
                 else data.value = self.editBinding.syntax[data.name]
             })
-            var template = {template: self.editCollection[syntaxIdentity].template};
+            var template = {template: angular.copy(self.editCollection[syntaxIdentity].template)};
 
             jsonMethodService.post(self.editCollection[syntaxIdentity].href, template).then(function (response) {
                 var section = jsonParseService.findItemValueFromArray(self.sections, 'href', self.editBinding.syntax.occurrence);
@@ -166,7 +166,7 @@
                     itemInfo: buildModelService.sectionItemFormat(template.template.data, 'query', 'logic', 'distance', 'editable')
                 }
                 section.items.push(item);
-                syntaxInitSetting();
+                syntaxBindingClear();
             })
         }
 
@@ -188,7 +188,7 @@
                         component.checked = false;
                     }).then(function () {
                     })
-                }, 100)
+                })
             })
 
             self.editBinding.component.selected = [];
@@ -337,12 +337,13 @@
                 buildModelService.setTemporary(locationUrl, self.sections, self.editCollection, self.editBinding);
             }
             searchFromComponent();
+            setModels();
         }
 
-        function syntaxInitSetting() {
+        function syntaxBindingClear() {
             self.editBinding.syntax.syntaxIdentity = 'match';
             self.editBinding.syntax.query = [];
-            self.syntaxInputFocus = true;
+            self.editBinding.syntax.focus = true;
         }
 
         function setModels() {
@@ -353,9 +354,9 @@
         }
 
         function tabClicked() {
-            self.syntaxInputFocus = false;
+            self.editBinding.syntax.focus = false;
             $timeout(function () {
-                self.syntaxInputFocus = true;
+                self.editBinding.syntax.focus = true;
             })
         }
     }
