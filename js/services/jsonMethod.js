@@ -35,9 +35,13 @@
                         headers: {'Content-Type': 'application/vnd.collection+json'}
                     }
                 )
-                    .success(function (response,status,header) {
-                        deferred.resolve(response,status);
-                    }).error(function (response) {
+                    .success(function (data,status,headers) {
+                        var response = {};
+                        response.data = data;
+                        response.status = status;
+                        response.headers = headers;
+                        deferred.resolve(response);
+                    }).success(function (response) {
                         deferred.reject(response);
                     });
                 return deferred.promise;

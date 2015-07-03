@@ -91,6 +91,7 @@
             return itemInfoStruct;
         }
         return{
+            sectionItemFormat: sectionItemFormat,
             setTemplate:  setTemplate,
             setTemporary: setTemporary
         }
