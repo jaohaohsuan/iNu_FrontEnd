@@ -167,8 +167,9 @@ span > a:link {
     margin-bottom: 0;
 }
 .switch{
+    margin-top: 5px;
    position: relative;
-    margin: 8px;
+    top:1px
 }
 .public-component-filter{
     margin-bottom: 10px;

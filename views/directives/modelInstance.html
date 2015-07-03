@@ -8,14 +8,6 @@
 
     <div class="field_set">
         <div class="form-inline">
-
-            <label>{{'modelName'|translate}}:</label>
-            <input type="text" class="form-control-static" required="modelInstanceCtrl.required"
-                   ng-model="modelInstanceCtrl.modelName"
-                   placeholder="{{'modelNamePlaceholder'|translate}}"/>
-        </div>
-
-        <div class="form-inline">
             <h3> {{'models'|translate}}:
                 <button class="btn btn-success btn-xs fa fa-plus" ng-click="modelInstanceCtrl.addModelGroup()"></button>
             </h3>
@@ -34,14 +26,6 @@
 
     <div class="clearfix"></div>
     <div ng-if="modelInstanceCtrl.isManagement">
-        <!--<label>{{'enableModel'|translate}}?</label>-->
-
-        <!--<div class="btn-group">-->
-        <!--<label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"-->
-        <!--btn-radio="'Middle'">ON</label>-->
-        <!--<label class="btn btn-success btn-xs btn-rounded btn-outline" ng-model="main.t"-->
-        <!--btn-radio="'Right'">OFF</label>-->
-        <!--</div>-->
         <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.saveModel('save')"
                 ng-disabled="!modelInstanceCtrl.modelName||modelInstanceCtrl.selectedModelGroups.length<=0">
             {{'saveAsModel'|translate}}
@@ -55,13 +39,19 @@
 
     <div ng-show="modelInstanceCtrl.isInstance">
         <!-- confirmed-click:按下確認後綁定的事件 confirm-click:確認視窗內容的文字-->
+        <div class="form-inline">
+            <label>{{'modelName'|translate}}:</label>
+            <input type="text" class="form-control-static" required="modelInstanceCtrl.required"
+                   ng-model="modelInstanceCtrl.modelName"
+                   placeholder="{{'modelNamePlaceholder'|translate}}"/>
+        </div>
         <label class="checkOnline">{{'onlineModel'|translate}}？</label>
-
         <div class="switch inline-block">
             <div class="onoffswitch">
                 <input type="checkbox" ng-checked="modelInstanceCtrl.isOnline" class="onoffswitch-checkbox"
                        id="checkOnline{{modelInstanceCtrl.modelName}}">
-                <label class="onoffswitch-label" for="checkOnline{{modelInstanceCtrl.modelName}}" ng-click="modelInstanceCtrl.enableModel()">
+                <label class="onoffswitch-label" for="checkOnline{{modelInstanceCtrl.modelName}}"
+                       ng-click="modelInstanceCtrl.enableModel()">
                     <span class="onoffswitch-inner"></span>
                     <span class="onoffswitch-switch"></span>
                 </label>
@@ -76,5 +66,5 @@
                 class="btn btn-danger  btn-block instance-button">
             {{'deleteModel'|translate}}
         </button>
-     </div>
+    </div>
 </form>
