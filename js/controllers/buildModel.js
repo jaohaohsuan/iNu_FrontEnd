@@ -40,7 +40,6 @@
 
     function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, $anchorScroll, $location) {
         var modelGroupSelectedTimeout;
-        var refreshTimeout;
         var templateUrl = 'http://10.85.1.156:32772/_query/template';
         var self = this;
         self.addModelGroup = addModelGroup; //增加模型組
@@ -518,7 +517,7 @@
                     '<build-section datasource="detailCtrl.sections" title-property="{{::detailCtrl.titlePrpperty}}"' +
                     'items-property="{{::detailCtrl.itemProperty}}"' +
                     'item-editable-property="{{::detailCtrl.itemInfoEditable}}">' +
-                    '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.logic}}&nbsp;{{item.itemInfo.distance}}</item-template>' +
+                    '<item-template>{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}</item-template>' +
                     '</build-section> ' +
                     '</div>',
                 windowClass: 'model-management-model-logic'

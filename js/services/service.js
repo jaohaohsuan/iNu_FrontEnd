@@ -9,7 +9,7 @@
                 var location = response.headers('Location');
                 var item = {
                     href: location,
-                    itemInfo: sectionItemFormat(template.template.data, 'query', 'logic', 'distance', 'editable')
+                    itemInfo: sectionItemFormat(template.template.data, 'query', 'syntax', 'slop', 'editable')
                 };
                 section.items.push(item);
                 if (successCallback) successCallback();
@@ -45,7 +45,7 @@
                     section.items = collectionjson.collection.items;
                     section.name = $translate.instant(section.name);
                     angular.forEach(section.items, function (item) {
-                        item.itemInfo = sectionItemFormat(item.data, 'query', 'logic', 'distance', 'editable');//格式化成前端顯示文字
+                        item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable');//格式化成前端顯示文字
                     })
                 })
             })
@@ -106,7 +106,6 @@
         }
         return{
             addToCurrentSection: addToCurrentSection,
-            sectionItemFormat: sectionItemFormat,
             setTemplate:  setTemplate,
             setTemporary: setTemporary
         }
