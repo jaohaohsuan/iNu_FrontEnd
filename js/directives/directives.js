@@ -154,7 +154,7 @@
                 var idx = self.selectedItems.indexOf(item);
                 if (idx != -1)  self.selectedItems.splice(idx, 1);
                 else self.selectedItems.push(item);
-                if ($element.width() > $window.innerWidth * 0.4 || self.overWidth) {
+                if ($element.width() > $element.parent().width() * 0.4 || self.overWidth) {
                     self.selectedText = 'selectedModels';
                     self.overWidth = true;
                 }

@@ -91,7 +91,7 @@ span > a:link {
     background-color: #2664b0 !important;
     color: #fff;
     text-align: center;
-    height: 30px;
+    height: 31px;
 }
 
 .model-management-input {
@@ -191,7 +191,7 @@ span > a:link {
 }
 .switch {
     margin-top: 5px;
-    margin-left: 20%;
+    left: 35%;
     position: relative;
     top: 1px
 }

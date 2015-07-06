@@ -1863,6 +1863,7 @@ table.dataTable thead .sorting:after {
     padding-left: 2px;
     background-color: #1AB394;
     color: #FFFFFF;
+    text-align: center;
 }
 .onoffswitch-inner:after {
     content: "OFF";
