@@ -55,15 +55,23 @@
             },
             component: {
                 selected: []
+            },
+            configuration: {
+
+            },
+            expansion: {
+                title: ''
             }
         };
-        self.editCollection = {};
+        self.editCollection = {
+            match: {},
+            near: {},
+            named: {},
+            temporary: {}
+        };
         self.enabledModel = enabledModel;
         self.isInstance = false;
         self.isRounded = isRounded;
-        self.modelDatasource = {
-            models: []
-        };
         self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
         self.nextToDo = nextToDo;
         self.renameModel = renameModel;
@@ -251,17 +259,21 @@
 
 
         function saveAs(condition) {
-            if (!self.saveAsName || !self.saveAsName.length) return false;
+            if (self.editBinding.expansion.title.length <= 0) return;
             else {
                 var next = {
                     'edit': function () {
-                        $scope.$emit('addTab', {
-                            title: 'createModel',
-                            active: true,
-                            addable: true,
-                            tabName: self.saveAsName
-                        });
-                        templateLocation.path = '編輯樣板的Location';
+                        buildModelService.saveAs(self.editCollection["temporary"].collection,self.editBinding.expansion.title,self.editBinding.configuration.tags,function(location){
+                            $timeout(function(){
+                                $scope.$emit('addTab', {
+                                    title: 'createModel',
+                                    active: true,
+                                    addable: true,
+                                    tabName: self.editBinding.expansion.title
+                                });
+                                templateLocation.path = location;
+                            },1000)
+                        })
                     },
                     'online': function () {
                         alert('online!')
@@ -332,20 +344,12 @@
 
             }
             searchFromComponent();
-            setModels();
         }
 
         function syntaxBindingClear() {
             self.editBinding.syntax.syntaxIdentity = 'match';
             self.editBinding.syntax.query = [];
             self.editBinding.syntax.focus = true;
-        }
-
-        function setModels() {
-            jsonMethodService.get('json/models.json').then(
-                function (data) {
-                    self.modelDatasource.models = data;
-                })
         }
 
         function tabClicked() {

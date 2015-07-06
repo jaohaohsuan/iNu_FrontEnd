@@ -166,13 +166,13 @@
     <div class="ibox">
         <div class="ibox-title"><h2>{{"config"|translate}}</h2></div>
         <div class="ibox-content">
-            <model-instance datasource="createModelCtrl.modelDatasource.models"
+            <model-instance datasource="createModelCtrl.editBinding.configuration"
                             selected-eventhandler="createModelCtrl.modelGroupsSelectedHandler"
-                            add-model-group="createModelCtrl.addModelGroup"
+                            add-tags="createModelCtrl.addTags"
                             delete-model="createModelCtrl.deleteModel"
                             enable-model="createModelCtrl.enabledModel"
                             rename-model="createModelCtrl.renameModel"
-                            is-instance="createModelCtrl.isInstance"
+                            is-instance="createModelCtrl.isInstance">
             </model-instance>
 
         </div>
@@ -190,7 +190,7 @@
             </button>
             <!--創建模型顯示控件-->
             <form class="form-group animated fadeIn" ng-show="createModelCtrl.nextView">
-                <input type="text" class="form-control btn-block" ng-model="createModelCtrl.saveAsName"
+                <input type="text" class="form-control btn-block" ng-model="createModelCtrl.editBinding.expansion.title"
                        placeholder="{{'modelNamePlaceholder'|translate}}"
                        focus="createModelCtrl.saveAsNameInputFocus" required/>
                 <button class="btn btn-success btn-block"

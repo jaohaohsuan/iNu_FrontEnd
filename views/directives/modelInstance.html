@@ -9,14 +9,15 @@
     <div class="field_set">
         <div class="form-inline">
             <h3> {{'models'|translate}}:
-                <button class="btn btn-success btn-xs fa fa-plus" ng-click="modelInstanceCtrl.addModelGroup()"></button>
+                <button class="btn btn-success btn-xs fa fa-plus" ng-click="modelInstanceCtrl.addTags()"></button>
             </h3>
             <div nested-scroll class="btn-group btn-group-vertical btn-block models-select ">
-                <label id="models{{model.name}}" class="btn btn-success btn-outline animated fadeInLeft"
-                       ng-model="model.selected"
-                       ng-repeat="model in modelInstanceCtrl.datasource track by $index"
-                       ng-click="modelInstanceCtrl.modelClicked(model)"
-                       btn-checkbox>{{model.name}}
+                <label id="models{{tag.name}}" class="btn btn-success btn-outline animated fadeInLeft"
+                       ng-model="tag.selected"
+                       ng-disabled="tag.enabled"
+                       ng-repeat="tag in modelInstanceCtrl.datasource.tags track by $index"
+                       ng-click="modelInstanceCtrl.modelClicked(tag)"
+                       btn-checkbox>{{tag.value}}
                 </label>
             </div>
         </div>
@@ -26,7 +27,7 @@
     <div class="form-inline new-model-input"  ng-show="modelInstanceCtrl.isInstance||modelInstanceCtrl.isManagement">
         <label>{{'modelName'|translate}}:</label>
         <input type="text" class="form-control-static" required="modelInstanceCtrl.required"
-               ng-model="modelInstanceCtrl.modelName"
+               ng-model="modelInstanceCtrl.datasource.title"
                placeholder="{{'modelNamePlaceholder'|translate}}"/>
     </div>
     <div ng-if="modelInstanceCtrl.isManagement">
@@ -44,9 +45,9 @@
      <label class="checkOnline">{{'onlineModel'|translate}}？</label>
         <div class="switch-instance inline-block">
             <div class="onoffswitch">
-                <input type="checkbox" ng-checked="modelInstanceCtrl.isOnline" class="onoffswitch-checkbox"
-                       id="checkOnline{{modelInstanceCtrl.modelName}}">
-                <label class="onoffswitch-label" for="checkOnline{{modelInstanceCtrl.modelName}}"
+                <input type="checkbox" ng-checked="modelInstanceCtrl.datasource.isOnline" class="onoffswitch-checkbox"
+                       id="checkOnline{{modelInstanceCtrl.datasource.title}}">
+                <label class="onoffswitch-label" for="checkOnline{{modelInstanceCtrl.datasource.title}}"
                        ng-click="modelInstanceCtrl.enableModel()">
                     <span class="onoffswitch-inner"></span>
                     <span class="onoffswitch-switch"></span>
@@ -58,7 +59,7 @@
             class="btn btn-success btn-block">{{'change'|translate}}
     </button>
     <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.deleteModel()"
-            ng-disabled="!modelInstanceCtrl.modelName"
+            ng-disabled="!modelInstanceCtrl.datasource.title"
             class="btn btn-danger  btn-block instance-button">
         {{'deleteModel'|translate}}
     </button>

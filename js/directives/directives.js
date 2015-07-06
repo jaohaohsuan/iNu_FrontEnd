@@ -226,7 +226,7 @@
         var directive = {
             restrict: 'E',
             scope: {
-                addModelGroup: '=',
+                addTags: '=',
                 datasource: '=',
                 deleteModel: '=',
                 enableModel: '=',
