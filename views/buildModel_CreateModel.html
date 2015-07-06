@@ -25,7 +25,8 @@
 
             <div>
                 <div class="radio "><label> <input icheck type="radio" name="modelRadio" value="OR"
-                                                   ng-model="createModelCtrl.editBinding.syntax.operator">
+                                                   ng-model="createModelCtrl.editBinding.syntax.operator"
+                                                   ng-change="createModelCtrl.editBinding.syntax.syntaxIdentity = 'match'">
                     {{"eitherAccord"|translate}}
                 </label></div>
                 <div class="radio"><label> <input icheck type="radio" name="modelRadio" value="AND"

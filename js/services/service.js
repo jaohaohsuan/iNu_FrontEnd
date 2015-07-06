@@ -27,6 +27,7 @@
                 if (!tag.enabled) return tag.name;
             }).join(' ');
             var  template = {template: angular.copy(temporaryCollection.template)};
+            console.log(JSON.stringify(template))
             jsonMethodService.post(href, template).then(
                 function (response) {
                     if (successCallback) successCallback(response.headers('Location'));
