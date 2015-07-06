@@ -1859,17 +1859,17 @@ table.dataTable thead .sorting:after {
     box-sizing: border-box;
 }
 .onoffswitch-inner:before {
-    content: "ONLINE";
+    content: "ON";
     padding-left: 2px;
     background-color: #1AB394;
     color: #FFFFFF;
 }
 .onoffswitch-inner:after {
-    content: "OFFLINE";
+    content: "OFF";
     padding-right: 1px;
     background-color: #FFFFFF;
     color: #919191;
-    text-align: right;
+    text-align: center;
 }
 .onoffswitch-switch {
     display: block;

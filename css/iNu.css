@@ -18,10 +18,12 @@ span > a:link {
 .border-radius {
     border-radius: 6px
 }
-.checkOnline{
+
+.checkOnline {
     position: relative;
     bottom: 10px;
 }
+
 .clear-button {
     position: relative;
     margin-top: -5px;
@@ -68,11 +70,28 @@ span > a:link {
 
 .model-management-grid {
     margin-top: 10px;
+    background: rgba(222, 222, 225, 0.2)
 }
 
 .model-management-grid > a {
-    margin-left: 10px;
+    margin-left: 5px;
     color: red;
+}
+
+.model-management-grid-cell-even {
+    text-align: center;
+}
+
+.model-management-grid-cell-odd {
+    background-color: rgba(0, 0, 255, 0.1) !important;
+    text-align: center;
+}
+
+.model-management-grid-header {
+    background-color: #2664b0 !important;
+    color: #fff;
+    text-align: center;
+    height: 30px;
 }
 
 .model-management-input {
@@ -97,10 +116,10 @@ span > a:link {
     height: 185px;
     overflow: auto;
 }
-.model-preview::-webkit-scrollbar {
-   display: none;
-}
 
+.model-preview::-webkit-scrollbar {
+    display: none;
+}
 
 .models-select {
     height: 120px;
@@ -126,16 +145,17 @@ span > a:link {
     display: none;
 }
 
-
 .models-label {
     position: relative;
     left: -50px;
     top: 30px
 }
-.new-model-input{
+
+.new-model-input {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
 .next-todo > .btn {
     margin: 10px;
 }
@@ -169,15 +189,23 @@ span > a:link {
     padding-bottom: 7px;
     margin-bottom: 0;
 }
-.switch{
+.switch {
     margin-top: 5px;
-    margin-left: 5px;
-   position: relative;
-    top:1px
+    margin-left: 20%;
+    position: relative;
+    top: 1px
 }
-.public-component-filter{
+.switch-instance {
+    margin-top: 5px;
+    margin-left: 20px;
+    position: relative;
+    top: 1px
+}
+
+.public-component-filter {
     margin-bottom: 10px;
 }
+
 .right {
     position: absolute;
     right: 2%;
@@ -188,7 +216,6 @@ span > a:link {
     overflow: hidden;
     width: 90%;
 }
-
 
 .tag-list li a {
     display: inline;

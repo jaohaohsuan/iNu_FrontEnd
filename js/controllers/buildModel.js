@@ -361,69 +361,85 @@
         var self = this;
         $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
         $scope.checkOnline = checkOnline;
-
         self.datasource = [];
         $scope.editModel = editModel;
         self.filterModel = filterModel;
         self.gridOptions = {
-            exporterMenuPdf: false,
-            enableGridMenu: true,
-            gridMenuTitleFilter: translateCol,
             columnDefs: [
                 {
+                    cellClass:setCellClass,
                     field: 'modelName',
                     displayName: '{{"modelName"|translate}}',
+                    headerCellClass:'model-management-grid-header',
                     headerCellFilter: 'translate',
-                    cellTemplate: '<a ng-click="grid.appScope.showModelDetail(row.entity)" class="btn btn-success btn-block">{{row.entity.modelName}}</a>',
+                    cellTemplate: '<a ng-click="grid.appScope.showModelDetail(row.entity)" class="btn  btn-block">{{row.entity.modelName}}</a>',
                     enableColumnMenu: false,
                     enableHiding: false
                 },
                 {
+                    cellClass:setCellClass,
                     field: 'role',
                     displayName: '{{"role"|translate}}',
                     headerCellFilter: 'translate',
+                    headerCellClass:'model-management-grid-header',
                     enableColumnMenu: false
                 },
                 {
+                    cellClass:setCellClass,
                     field: 'creator',
                     displayName: '{{"creator"|translate}}',
                     headerCellFilter: 'translate',
+                    headerCellClass:'model-management-grid-header',
                     enableColumnMenu: false
                 },
                 {
+                    cellClass:setCellClass,
                     field: 'lastModifiedTime',
                     displayName: '{{"lastModifiedTime"|translate}}',
                     headerCellFilter: 'translate',
+                    headerCellClass:'model-management-grid-header',
                     enableColumnMenu: false
                 },
                 {
+                    cellClass:setCellClass,
                     field: 'lastModifiedBy',
                     displayName: '{{"lastModifiedBy"|translate}}',
                     headerCellFilter: 'translate',
+                    headerCellClass:'model-management-grid-header',
                     enableColumnMenu: false
                 },
                 {
+                    cellClass:setCellClass,
                     field: 'status',
                     displayName: '{{"status"|translate}}',
                     headerCellFilter: 'translate',
-                    cellTemplate: '   <div class="switch"><div class="onoffswitch"><input disabled type="checkbox" ng-checked="row.entity.enabled" class="onoffswitch-checkbox" ><label style="cursor: default" class="onoffswitch-label"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>',
+                    headerCellClass:'model-management-grid-header',
+                    cellTemplate: '   <div class="switch"><div class="onoffswitch"><input disabled type="checkbox" ng-checked="row.entity.enabled" class="onoffswitch-checkbox" ><label style="cursor: default" class="onoffswitch-label"><span class="onoffswitch-inner"></span></label></div></div>',
                     enableColumnMenu: false,
                     enableSorting: false
                 },
                 {
+                    cellClass:setCellClass,
                     name: '{{"management"|translate}}',
                     displayName: '{{"management"|translate}}',
                     enableHiding: false,
                     enableColumnMenu: false,
                     enableSorting: false,
                     headerCellFilter: 'translate',
+                    headerCellClass:'model-management-grid-header',
                     cellTemplate: '<div class="model-management-grid">' +
                     '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
                     '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
                     '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                    '</div>'
+                    '</div>',
+                    minWidth:120
                 }
-            ]
+            ],
+            exporterMenuPdf: false,
+            enableGridMenu: true,
+            gridMenuTitleFilter: translateCol,
+            paginationPageSize: 8,
+            paginationPageSizes: [8, 20, 30]
         };
         $scope.isModelOnline = false; //之後讀取API時需判斷此模型的上下線狀態
         $scope.onlineClass = 'online';
@@ -553,6 +569,15 @@
         }
 
 /////////////////////////////////////////不綁定區//////////////////////////////////
+        function setCellClass(grid, row, col, rowIndex, colIndex){
+            var index =rowIndex % 2;
+            if(index==0){
+                return 'model-management-grid-cell-odd'
+            }
+            else{
+                return 'model-management-grid-cell-even'
+            }
+        }
         function setGridData(items) {
 
             var datas = jsonParseService.getObjectMappingNameToValueFromDatas(items.data, 'name')
