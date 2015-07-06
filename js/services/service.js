@@ -19,14 +19,14 @@
                 })
         }
 
-        function saveAs(temporaryCollection,title,tags,successCallback, errorCallback) {
-            var href = jsonParseService.findItemValueFromArray(temporaryCollection.items,"href","temporary").href;
+        function saveAs(temporaryCollection, title, tags, successCallback, errorCallback) {
+            var href = jsonParseService.findItemValueFromArray(temporaryCollection.items, "href", "temporary").href;
             var kvTemplate = jsonParseService.getObjectMappingNameToValueFromDatas(temporaryCollection.template.data);
             kvTemplate.title.value = title;
-            kvTemplate.tags.value = tags.map(function(tag){
+            kvTemplate.tags.value = tags.map(function (tag) {
                 if (!tag.enabled) return tag.name;
             }).join(' ');
-            var  template = {template: angular.copy(temporaryCollection.template)};
+            var template = {template: angular.copy(temporaryCollection.template)};
             console.log(JSON.stringify(template))
             jsonMethodService.post(href, template).then(
                 function (response) {
@@ -119,12 +119,14 @@
                     var linksObj = jsonParseService.getLinksObjFromLinks(item.links, 'rel'); //將items裡面的links用rel分類
                     var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
                     var tmpSections = linksObj['section'];//用來增加查詢條件的(match near named)
-                    angular.forEach(tmpSections, function (section) {
-                        sections.push(section);
-                    })
-                    setModelSections(sections);//設定查詢條件的綁定
-                    if (editCollection && editBinding) {
-                        setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
+                    if (sections) {
+                        angular.forEach(tmpSections, function (section) {
+                            sections.push(section);
+                        })
+                        setModelSections(sections);//設定查詢條件的綁定
+                    }
+                    if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
+                    if (editBinding) {
                         setDefaultTags(editBinding, function () {
                             setConfigurationTemporary(item.data, editBinding);//設定配置區塊的資料綁定
                         })

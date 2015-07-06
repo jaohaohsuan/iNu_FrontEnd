@@ -524,11 +524,16 @@
                 var self = this;
                 self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
                 self.saveModel = saveModel;
-                self.title = $translate.instant('saveAsNewModel');
-                jsonMethodService.get('json/models.json').then(
-                    function (data) {
-                        self.datasource = data;
-                    });
+                self.title = $translate.instant('saveAsNewModel')
+                self.editBinding = {
+                    configuration: {
+                    }
+                };
+                buildModelService.setTemporary(entity.href,null,null,self.editBinding);
+//                jsonMethodService.get('json/models.json').then(
+//                    function (data) {
+//                        self.datasource = data;
+//                    });
                 self.closeModal = closeModal;
                 function closeModal() {
                     $modalInstance.close();
