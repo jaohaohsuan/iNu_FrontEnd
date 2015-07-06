@@ -54,7 +54,7 @@
             </div>
         </div>
    </div>
-    <button ng-click="modelInstanceCtrl.changeModelName()"
+    <button  ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.changeModelName()"
             class="btn btn-success btn-block">{{'change'|translate}}
     </button>
     <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.deleteModel()"
