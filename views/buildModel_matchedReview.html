@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <form class="form-group">
+                    <form class="form-group" ng-enter="matchedReviewCtrl.filterModelGroup(matchedReviewCtrl.modelKeyword)">
                         <dropdown-multi-select
                                 full-size="matchedReviewCtrl.dropdownAutoSize"
                                 datasource="matchedReviewCtrl.datasource"
@@ -21,9 +21,9 @@
                            </span>
                         </div>
                     </form>
-                    <div class="list-group matched-reviewed-model-list-group model-preview">
-                        <h4 class="list-group-item list-group-item-info text-center">模型名稱列表</h4>
-                        <a class="list-group-item text-center " ng-repeat="modelGroup in matchedReviewCtrl.modelGroups">{{modelGroup.title}}</a>
+                    <h4 class="list-group-item active  list-group-item-info text-center">模型名稱列表</h4>
+                    <div class="list-group matched-reviewed-model-list-group matched-review-model-preview">
+                        <a class="list-group-item text-center"  ng-repeat="model in matchedReviewCtrl.models" ng-click="matchedReviewCtrl.showModelDetail(model.href)">{{model.title}}</a>
                     </div>
                 </div>
                 <div class="col-md-9">

@@ -2,7 +2,7 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location', createModelController])
-        .controller('matchedReviewedController', ['$scope', 'jsonMethodService','jsonParseService', matchedReviewedController])
+        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal','buildModelService', matchedReviewedController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', modelManagementController])
 
 
@@ -57,9 +57,7 @@
             component: {
                 selected: []
             },
-            configuration: {
-
-            },
+            configuration: {},
             expansion: {
                 title: ''
             }
@@ -359,7 +357,8 @@
             })
         }
     }
-    function matchedReviewedController($scope, jsonMethodService,jsonParseService) {
+
+    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal,buildModelService) {
         var self = this;
         self.datasource = [];
         self.dropdownAutoSize = false;
@@ -371,10 +370,12 @@
                 }
             ]
         };
-        self.modelGroups = [];
-        self.modelKeyword='';
+
+        self.modelKeyword = '';
+        self.models = [];
         self.selectedItems = [];
-        $scope.$on('minimalizaSidebar', setInputSize)
+        self.showModelDetail = showModelDetail;
+        $scope.$on('minimalizaSidebar', setInputSize);
         setModels();
         function filterModelGroup(text) {
             if (!text) text = '';
@@ -386,8 +387,33 @@
                     })
                     delete item['data'];
                 })
-                self.modelGroups = collectionjson.collection.items;
+                self.models = collectionjson.collection.items;
             })
+        }
+
+        function showModelDetail(href) {
+            var modelInstance = $modal.open({
+                backdropClass: 'model-management-model-backdrop',
+                controller: ['$modalInstance', showModelDetailController],
+                controllerAs: 'detailCtrl',
+                size:'sm',
+                templateUrl: 'views/buildModel_modelManagement_modelDetailModal.html',
+                windowClass: 'matched-review-model-logic'
+
+            })
+
+            function showModelDetailController($modalInstance) {
+                var self = this;
+                self.closeModal = closeModal;
+                self.titlePrpperty = 'name';
+                self.itemProperty = 'items';
+                self.itemInfoEditable = 'itemInfo.editable';
+                self.sections = [];
+                buildModelService.setTemporary(href, self.sections);
+                function closeModal() {
+                    $modalInstance.close();
+                }
+            }
         }
 
         ////////////////////不綁定區//////////////
@@ -407,6 +433,7 @@
             //$('input.matched-review-keyword-text').innerWidth(parentWidth)
         }
     }
+
     function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout) {
 
         var self = this;
@@ -479,10 +506,10 @@
                     headerCellFilter: 'translate',
                     headerCellClass: 'model-management-grid-header',
                     cellTemplate: '<div class="model-management-grid">' +
-                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
-                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                        '</div>',
+                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
+                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                    '</div>',
                     minWidth: 120
                 }
             ],
@@ -573,8 +600,7 @@
                 self.saveModel = saveModel;
                 self.title = $translate.instant('saveAsNewModel')
                 self.editBinding = {
-                    configuration: {
-                    }
+                    configuration: {}
                 };
                 buildModelService.setTemporary(entity.href, null, null, self.editBinding);
 

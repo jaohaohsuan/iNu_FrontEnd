@@ -66,11 +66,19 @@ span > a:link {
     margin-top: 2px;
     width: 100%;
 }
-
 .matched-reviewed-model-list-group{
     width: 100%;
+ }
+.matched-review-model-logic{
+    left: -50%;
 }
-
+.matched-review-model-preview{
+    height: 250px;
+    overflow: scroll;
+}
+.matched-review-model-preview::-webkit-scrollbar {
+    display: none;
+}
 .margins-div {
     margin: 0 0 0 2px;
 }
