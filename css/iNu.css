@@ -39,11 +39,13 @@ span > a:link {
 .field_set {
     padding-top: 5px;
 }
-
+.dropdown-multi-select-full-size {
+    width: 100%;
+}
 .dropdown-multi-select {
     height: 30px;
     top: -1px;
-}
+ }
 
 .ibox .open > .dropdown-menu {
     left: 0;
@@ -56,6 +58,17 @@ span > a:link {
 
 .instance-button {
     margin-top: 2px;
+}
+.matched-review-grid{
+    background: rgba(222, 222, 225, 0.2);
+}
+.matched-review-keyword{
+    margin-top: 2px;
+    width: 100%;
+}
+
+.matched-reviewed-model-list-group{
+    width: 100%;
 }
 
 .margins-div {

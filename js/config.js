@@ -72,7 +72,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                     controllerAs: 'createModelCtrl'
                 },
                 'matchedReview@main.buildModel':{
-                    templateUrl:'views/buildModel_matchedReview.html'
+                    templateUrl:'views/buildModel_matchedReview.html',
+                    controller:'matchedReviewedController',
+                    controllerAs:'matchedReviewCtrl'
                 },
                 'modelManagement@main.buildModel':{
                     templateUrl:'views/buildModel_modelManagement.html',

@@ -2,6 +2,7 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location', createModelController])
+        .controller('matchedReviewedController', ['$scope', 'jsonMethodService','jsonParseService', matchedReviewedController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', modelManagementController])
 
 
@@ -358,7 +359,54 @@
             })
         }
     }
+    function matchedReviewedController($scope, jsonMethodService,jsonParseService) {
+        var self = this;
+        self.datasource = [];
+        self.dropdownAutoSize = false;
+        self.filterModelGroup = filterModelGroup;
+        self.gridOptions = {
+            columnDefs: [
+                {
+                    name: 'test'
+                }
+            ]
+        };
+        self.modelGroups = [];
+        self.modelKeyword='';
+        self.selectedItems = [];
+        $scope.$on('minimalizaSidebar', setInputSize)
+        setModels();
+        function filterModelGroup(text) {
+            if (!text) text = '';
+            var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + text
+            jsonMethodService.get(searchUrl).then(function (collectionjson) {
+                angular.forEach(collectionjson.collection.items, function (item) {
+                    angular.forEach(item.data, function (data) {
+                        item[data.name] = data.value;
+                    })
+                    delete item['data'];
+                })
+                self.modelGroups = collectionjson.collection.items;
+            })
+        }
 
+        ////////////////////不綁定區//////////////
+
+        function setModels() {
+            jsonMethodService.get('json/models.json').then(
+                function (data) {
+                    self.datasource = data;
+                })
+        }
+
+
+        function setInputSize() {
+            var parentWidth = $('input.matched-review-keyword-text').parent().innerWidth();
+            console.log(parentWidth)
+            console.log($('input.matched-review-keyword-text').innerWidth())
+            //$('input.matched-review-keyword-text').innerWidth(parentWidth)
+        }
+    }
     function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout) {
 
         var self = this;

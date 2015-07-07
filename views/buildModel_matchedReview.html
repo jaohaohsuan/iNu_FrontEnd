@@ -1,1 +1,35 @@
-{{'matchedReview'|translate}}
+<div class="ibox">
+    <div class="ibox-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <form class="form-group">
+                        <dropdown-multi-select
+                                full-size="matchedReviewCtrl.dropdownAutoSize"
+                                datasource="matchedReviewCtrl.datasource"
+                                selected-items="matchedReviewCtrl.selectedItems"
+                                display-property="{{::'name'}}"
+                                placeholder="{{::'modelGroupSelectPlactholder'|translate}}">>
+                        </dropdown-multi-select>
+                        <div class="matched-review-keyword input-group">
+                            <!--<label>{{'modelKeyword'|translate}}:</label>-->
+                            <input type="text" class="form-control" ng-model="matchedReviewCtrl.modelKeyword" placeholder="{{'modelKeyword'|translate}}"/>
+                           <span class="input-group-btn">
+                               <button class="btn btn-success" ng-click="matchedReviewCtrl.filterModelGroup(matchedReviewCtrl.modelKeyword)">
+                                   {{'filter'|translate}}
+                               </button>
+                           </span>
+                        </div>
+                    </form>
+                    <div class="list-group matched-reviewed-model-list-group model-preview">
+                        <h4 class="list-group-item list-group-item-info text-center">模型名稱列表</h4>
+                        <a class="list-group-item text-center " ng-repeat="modelGroup in matchedReviewCtrl.modelGroups">{{modelGroup.title}}</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div ui-grid="matchedReviewCtrl.gridOptions" class="matched-review-grid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

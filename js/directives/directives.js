@@ -124,7 +124,8 @@
                 datasource: '=',
                 selectedItems: '=',
                 displayProperty: '@',
-                placeholder: "@"
+                placeholder: "@",
+                fullSize:'='
             },
             templateUrl: 'views/directives/dropdownMultiSelect.html',
             controller: ['$element', '$window', '$scope', multiSelectController],
@@ -435,8 +436,9 @@
         return {
             restrict: 'A',
             template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="" ng-click="minimalize()"><i class="fa fa-bars"></i></a>',
-            controller: function ($scope, $element) {
+            controller: function ($rootScope,$scope, $element) {
                 $scope.minimalize = function () {
+                    $rootScope.$broadcast('minimalizaSidebar')
                     $("body").toggleClass("mini-navbar");
                     if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
                         // Hide menu in order to smoothly turn on when maximize menu
