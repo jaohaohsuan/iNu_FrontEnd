@@ -162,7 +162,7 @@
                         itemInfoStruct[syntaxProperty] = $translate.instant(value);
                     },
                     "slop": function () {
-                        itemInfoStruct[slopProperty] = $translate.instant('distance') + "(" + value + ")";
+                        itemInfoStruct[slopProperty] = $translate.instant(slopProperty) + "(" + value + ")";
                     }
                 }
                 if (!mappingDefine.hasOwnProperty(name)) {

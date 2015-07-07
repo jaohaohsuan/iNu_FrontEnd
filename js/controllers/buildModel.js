@@ -157,8 +157,7 @@
 
         function addToSectionFromSyntax(syntaxIdentity) {
             angular.forEach(self.editCollection[syntaxIdentity].template.data, function (data) { //從template取出資料後，一一做綁定
-                var name = data.name;
-                if (name === 'query') data.value = self.editBinding.syntax[data.name].map(function (element) {
+                if (data.name === 'query') data.value = self.editBinding.syntax[data.name].map(function (element) {
                     return element.text
                 }).join(' ');
                 else data.value = self.editBinding.syntax[data.name]
@@ -167,17 +166,17 @@
             var template = {template: angular.copy(self.editCollection[syntaxIdentity].template)};
             var occurrence = self.editBinding.syntax.occurrence;
             var successCallback = function () {
-                syntaxBindingClear();
+                syntaxInputClear();
             }
             buildModelService.addToCurrentSection(href, template, self.sections, occurrence, successCallback);
         }
 
         function addToSectionFromComponent() {
             var kvDatas = jsonParseService.getObjectMappingNameToValueFromDatas(self.editCollection.named.template.data, "name");
+            kvDatas.occurrence.value = self.editBinding.component.occurrence;
             angular.forEach(self.editBinding.component.selected, function (component) {
                 $timeout(function () {
                     kvDatas.storedQueryTitle.value = component.title;
-                    kvDatas.occurrence.value = self.editBinding.component.occurrence;
                     var template = {template: angular.copy(self.editCollection.named.template)};
                     var href = self.editCollection.named.href;
                     var occurrence = self.editBinding.component.occurrence;
@@ -263,16 +262,16 @@
             else {
                 var next = {
                     'edit': function () {
-                        buildModelService.saveAs(self.editCollection["temporary"].collection,self.editBinding.expansion.title,self.editBinding.configuration.tags,function(location){
-                            $timeout(function(){
+                        buildModelService.saveAs(self.editCollection["temporary"].collection, self.editBinding.expansion.title, self.editBinding.configuration.tags, function (location) {
+                            $timeout(function () {
                                 $scope.$emit('addTab', {
                                     title: 'createModel',
                                     active: true,
                                     addable: true,
                                     tabName: self.editBinding.expansion.title
                                 });
-                                templateLocation.path = location;
-                            },1000)
+                            }, 1000)
+                            templateLocation.path = location;
                         })
                     },
                     'online': function () {
@@ -309,7 +308,7 @@
                     var idx = section.items.indexOf(item);
                     section.items.splice(idx, 1);
                 }
-            }).then(function (data) {
+            }, function (data) {
             })
         }
 
@@ -346,7 +345,7 @@
             searchFromComponent();
         }
 
-        function syntaxBindingClear() {
+        function syntaxInputClear() {
             self.editBinding.syntax.syntaxIdentity = 'match';
             self.editBinding.syntax.query = [];
             self.editBinding.syntax.focus = true;
@@ -371,72 +370,72 @@
         self.gridOptions = {
             columnDefs: [
                 {
-                    cellClass:setCellClass,
+                    cellClass: setCellClass,
                     field: 'modelName',
                     displayName: '{{"modelName"|translate}}',
-                    headerCellClass:'model-management-grid-header',
+                    headerCellClass: 'model-management-grid-header',
                     headerCellFilter: 'translate',
                     cellTemplate: '<a ng-click="grid.appScope.showModelDetail(row.entity)" class="btn  btn-block">{{row.entity.modelName}}</a>',
                     enableColumnMenu: false,
                     enableHiding: false
                 },
                 {
-                    cellClass:setCellClass,
+                    cellClass: setCellClass,
                     field: 'role',
                     displayName: '{{"role"|translate}}',
                     headerCellFilter: 'translate',
-                    headerCellClass:'model-management-grid-header',
+                    headerCellClass: 'model-management-grid-header',
                     enableColumnMenu: false
                 },
                 {
-                    cellClass:setCellClass,
+                    cellClass: setCellClass,
                     field: 'creator',
                     displayName: '{{"creator"|translate}}',
                     headerCellFilter: 'translate',
-                    headerCellClass:'model-management-grid-header',
+                    headerCellClass: 'model-management-grid-header',
                     enableColumnMenu: false
                 },
                 {
-                    cellClass:setCellClass,
+                    cellClass: setCellClass,
                     field: 'lastModifiedTime',
                     displayName: '{{"lastModifiedTime"|translate}}',
                     headerCellFilter: 'translate',
-                    headerCellClass:'model-management-grid-header',
+                    headerCellClass: 'model-management-grid-header',
                     enableColumnMenu: false
                 },
                 {
-                    cellClass:setCellClass,
+                    cellClass: setCellClass,
                     field: 'lastModifiedBy',
                     displayName: '{{"lastModifiedBy"|translate}}',
                     headerCellFilter: 'translate',
-                    headerCellClass:'model-management-grid-header',
+                    headerCellClass: 'model-management-grid-header',
                     enableColumnMenu: false
                 },
                 {
-                    cellClass:setCellClass,
+                    cellClass: setCellClass,
                     field: 'status',
                     displayName: '{{"status"|translate}}',
                     headerCellFilter: 'translate',
-                    headerCellClass:'model-management-grid-header',
+                    headerCellClass: 'model-management-grid-header',
                     cellTemplate: '   <div class="switch"><div class="onoffswitch"><input disabled type="checkbox" ng-checked="row.entity.enabled" class="onoffswitch-checkbox" ><label style="cursor: default" class="onoffswitch-label"><span class="onoffswitch-inner"></span></label></div></div>',
                     enableColumnMenu: false,
                     enableSorting: false
                 },
                 {
-                    cellClass:setCellClass,
+                    cellClass: setCellClass,
                     name: '{{"management"|translate}}',
                     displayName: '{{"management"|translate}}',
                     enableHiding: false,
                     enableColumnMenu: false,
                     enableSorting: false,
                     headerCellFilter: 'translate',
-                    headerCellClass:'model-management-grid-header',
+                    headerCellClass: 'model-management-grid-header',
                     cellTemplate: '<div class="model-management-grid">' +
-                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
-                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                    '</div>',
-                    minWidth:120
+                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
+                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                        '</div>',
+                    minWidth: 120
                 }
             ],
             exporterMenuPdf: false,
@@ -529,11 +528,8 @@
                     configuration: {
                     }
                 };
-                buildModelService.setTemporary(entity.href,null,null,self.editBinding);
-//                jsonMethodService.get('json/models.json').then(
-//                    function (data) {
-//                        self.datasource = data;
-//                    });
+                buildModelService.setTemporary(entity.href, null, null, self.editBinding);
+
                 self.closeModal = closeModal;
                 function closeModal() {
                     $modalInstance.close();
@@ -578,15 +574,16 @@
         }
 
 /////////////////////////////////////////不綁定區//////////////////////////////////
-        function setCellClass(grid, row, col, rowIndex, colIndex){
-            var index =rowIndex % 2;
-            if(index==0){
+        function setCellClass(grid, row, col, rowIndex, colIndex) {
+            var index = rowIndex % 2;
+            if (index == 0) {
                 return 'model-management-grid-cell-odd'
             }
-            else{
+            else {
                 return 'model-management-grid-cell-even'
             }
         }
+
         function setGridData(items) {
 
             var datas = jsonParseService.getObjectMappingNameToValueFromDatas(items.data, 'name')
