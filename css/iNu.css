@@ -74,7 +74,7 @@ span > a:link {
 }
 .matched-review-model-preview{
     height: 250px;
-    overflow: scroll;
+    overflow: auto;
 }
 .matched-review-model-preview::-webkit-scrollbar {
     display: none;
