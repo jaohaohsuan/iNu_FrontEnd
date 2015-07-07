@@ -20,7 +20,7 @@
         }
 
         function saveAs(temporaryCollection, title, tags, successCallback, errorCallback) {
-            var href = jsonParseService.findItemValueFromArray(temporaryCollection.items, "href", "temporary").href;
+            var href = jsonParseService.findItemValueFromArray(temporaryCollection.items, "href", "template").href;
             var kvTemplate = jsonParseService.getObjectMappingNameToValueFromDatas(temporaryCollection.template.data);
             kvTemplate.title.value = title;
             kvTemplate.tags.value = tags.map(function (tag) {
