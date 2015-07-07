@@ -24,10 +24,9 @@
             var kvTemplate = jsonParseService.getObjectMappingNameToValueFromDatas(temporaryCollection.template.data);
             kvTemplate.title.value = title;
             kvTemplate.tags.value = tags.map(function (tag) {
-                if (!tag.enabled) return tag.name;
-            }).join(' ');
+                if (!tag.enabled && tag.selected) return tag.name;
+            }).join(' ').trim();
             var template = {template: angular.copy(temporaryCollection.template)};
-            console.log(JSON.stringify(template))
             jsonMethodService.post(href, template).then(
                 function (response) {
                     if (successCallback) successCallback(response.headers('Location'));
@@ -103,18 +102,19 @@
                     })
                 })
             })
+
         }
 
-        function setTemplate(href, sections, editCollection, editBinding) {
+        function setTemplate(href,temporaryCollection,sections, editCollection, editBinding) {
             jsonMethodService.get(href).then(function (collectionjson) {
                 var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
-                setTemporary(temporaryUrl, sections, editCollection, editBinding);//設定temporary結構
+                setTemporary(temporaryUrl,temporaryCollection, sections, editCollection, editBinding);//設定temporary結構
             })
         }
 
-        function setTemporary(href, sections, editCollection, editBinding) {
+        function setTemporary(href,temporaryCollection, sections, editCollection, editBinding) {
             jsonMethodService.get(href).then(function (collectionjson) {
-                if (editCollection) editCollection["temporary"] = collectionjson;
+                if (temporaryCollection) temporaryCollection.collection = angular.copy(collectionjson.collection);
                 angular.forEach(collectionjson.collection.items, function (item) {
                     var linksObj = jsonParseService.getLinksObjFromLinks(item.links, 'rel'); //將items裡面的links用rel分類
                     var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
@@ -132,7 +132,6 @@
                         })
                     }
                 })
-
             }, function () {
                 setDefaultTags(editBinding);//設定預設標籤
             })

@@ -57,7 +57,10 @@
             component: {
                 selected: []
             },
-            configuration: {},
+            configuration: {
+                title: '',
+                tags: []
+            },
             expansion: {
                 title: ''
             }
@@ -65,8 +68,7 @@
         self.editCollection = {
             match: {},
             near: {},
-            named: {},
-            temporary: {}
+            named: {}
         };
         self.enabledModel = enabledModel;
         self.isInstance = false;
@@ -87,6 +89,9 @@
         self.sectionsDblclick = sectionsDblclick;
         self.showUndo = false;
         self.tabIndex = 0;
+        self.temporaryCollection = {
+            collection: {}
+        };
         self.toggleSelection = toggleSelection;
         self.undo = undo;
         initial(templateLocation.path, templateUrl);
@@ -261,7 +266,7 @@
             else {
                 var next = {
                     'edit': function () {
-                        buildModelService.saveAs(self.editCollection["temporary"].collection, self.editBinding.expansion.title, self.editBinding.configuration.tags, function (location) {
+                        buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.expansion.title, self.editBinding.configuration.tags, function (location) {
                             $timeout(function () {
                                 $scope.$emit('addTab', {
                                     title: 'createModel',
@@ -277,7 +282,11 @@
                         alert('online!')
                     },
                     'save': function () {
-                        alert('saved!');
+                        buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.expansion.title, self.editBinding.configuration.tags, function (location) {
+                            swal(
+                                {   title: "Success",timer: 1000, type: 'success',showConfirmButton: false }
+                            );
+                        })
                     }
                 };
                 return next[condition]();
@@ -334,10 +343,10 @@
         function initial(locationUrl, templateUrl) {
             if (!locationUrl)//location不存在代表為首頁template
             {
-                buildModelService.setTemplate(templateUrl, self.sections, self.editCollection, self.editBinding);
+                buildModelService.setTemplate(templateUrl, self.temporaryCollection,self.sections, self.editCollection, self.editBinding);
 
             } else {//設定Temporary
-                buildModelService.setTemporary(locationUrl, self.sections, self.editCollection, self.editBinding);
+                buildModelService.setTemporary(locationUrl,self.temporaryCollection,self.sections, self.editCollection, self.editBinding);
                 self.isInstance = true;
 
             }
@@ -415,7 +424,7 @@
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
                 self.title =title;
-                buildModelService.setTemporary(entity.href, self.sections);
+                buildModelService.setTemporary(entity.href,null, self.sections);
                 function closeModal() {
                     $modalInstance.close();
                 }
@@ -607,9 +616,15 @@
                 self.saveModel = saveModel;
                 self.title = $translate.instant('saveAsNewModel')
                 self.editBinding = {
-                    configuration: {}
+                    configuration: {
+                        title: '',
+                        tags: []
+                    }
                 };
-                buildModelService.setTemporary(entity.href, null, null, self.editBinding);
+                self.temporaryCollection = {
+                    collection: {}
+                }
+                buildModelService.setTemporary(entity.href,self.temporaryCollection, null, null, self.editBinding);
 
                 self.closeModal = closeModal;
                 function closeModal() {
@@ -624,7 +639,12 @@
                 }
 
                 function saveModel(type) {
-                    alert(type)
+                    buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.configuration.title, self.editBinding.configuration.tags, function (location) {
+                        swal(
+                            {   title: "Success",timer: 1000, type: 'success',showConfirmButton: false }
+                        );
+                        $modalInstance.close();
+                    })
                 }
             }
         }
@@ -652,7 +672,7 @@
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
                 self.title =title;
-                buildModelService.setTemporary(entity.href, self.sections);
+                buildModelService.setTemporary(entity.href,null, self.sections);
                 function closeModal() {
                     $modalInstance.close();
                 }
