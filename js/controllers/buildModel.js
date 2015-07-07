@@ -16,7 +16,7 @@
             {title: 'matchedReview'},
             {title: 'modelManagement'},
             {title: 'modules'}
-        ]
+        ];
 
         self.tabClicked = tabClicked;
         $scope.$on('addTab', function (event, tab) { //接收增加頁籤的廣播
@@ -28,7 +28,7 @@
             $timeout(function () { //刪除tab 不知為何需要用timeout才不會讓網址跑掉
                 self.tabIndex--;
                 self.tabs.splice(self.tabs.indexOf(tab), 1);
-                if (self.tabIndex == 0) {
+                if (self.tabIndex === 0) {
                     self.tabs[self.tabIndex].active = true;
                 }
             }, 0);
@@ -257,7 +257,7 @@
         }
 
         function renameModel() {
-            SweetAlert.swal("renamed", "", "success");
+            SweetAlert.swal('renamed', '', 'success');
         }
 
 
@@ -284,7 +284,7 @@
                     'save': function () {
                         buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.expansion.title, self.editBinding.configuration.tags, function (location) {
                             swal(
-                                {   title: "Success",timer: 1000, type: 'success',showConfirmButton: false }
+                                {   title: 'Success',timer: 1000, type: 'success',showConfirmButton: false }
                             );
                         })
                     }
@@ -301,7 +301,7 @@
                     angular.forEach(item.data, function (data) {
                         item[data.name] = data.value;
                     })
-                    delete item['data'];
+                    delete item.data;
                 })
                 self.editBinding.component.items = collectionjson.collection.items;
                 self.editBinding.component.selected = [];
@@ -321,7 +321,7 @@
         }
 
         function sectionsDblclick(item) {
-            alert("editable")
+            alert('editable');
         }
 
 
@@ -396,7 +396,7 @@
                     angular.forEach(item.data, function (data) {
                         item[data.name] = data.value;
                     })
-                    delete item['data'];
+                    delete item.data;
                 })
                 self.models = collectionjson.collection.items;
             })
@@ -499,10 +499,10 @@
                     headerCellFilter: 'translate',
                     headerCellClass: 'model-management-grid-header',
                     cellTemplate: '<div class="model-management-grid">' +
-                    '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
-                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                    '</div>',
+                        '<a ng-click="grid.appScope.changeModelStatus(row.entity)">{{grid.appScope.checkOnline(row.entity)}}</a>' + //之後改成綁定後端給的狀態
+                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                        '</div>',
                     minWidth: 120
                 }
             ],
@@ -530,7 +530,7 @@
                     return $translate.instant('online');
                 }
             };
-            var status = entity.enabled == true ? "online" : "offline";
+            var status = entity.enabled === true ? "online" : "offline";
             if (typeof returnText[status] !== 'function') { //如果不再上列的狀態
                 return 'no status';
             }
@@ -548,7 +548,7 @@
                     //do API
                 }
             };
-            var status = entity.enabled == true ? "online" : "offline";
+            var status = entity.enabled === true ? "online" : "offline";
             return returnText[status]();
         }
 
@@ -564,7 +564,7 @@
         }
 
         function filterModel(selectedItems, modelKeyword) {
-       if (self.gridOptions.data)  self.gridOptions.data.length = 0;
+            if (self.gridOptions.data)  self.gridOptions.data.length = 0;
             if(!modelKeyword) modelKeyword='';
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + modelKeyword;
             jsonMethodService.get(searchUrl).then(function (collectionjson) {
@@ -660,7 +660,7 @@
 /////////////////////////////////////////不綁定區//////////////////////////////////
         function setCellClass(grid, row, col, rowIndex, colIndex) {
             var index = rowIndex % 2;
-            if (index == 0) {
+            if (index === 0) {
                 return 'model-management-grid-cell-odd'
             }
             else {
@@ -672,9 +672,9 @@
 
             var datas = jsonParseService.getObjectMappingNameToValueFromDatas(items.data, 'name')
             var href = items.href;
-            var status = $translate.instant(datas['status'].value);
-            var title = datas['title'].value;
-            var enabled = (datas['status'].value === 'enabled' ? true : false)
+            var status = $translate.instant(datas.status.value);
+            var title = datas.title.value;
+            var enabled = (datas.status.value === 'enabled' ? true : false)
             var gridDatas = {'href': href, 'modelName': title, 'role': 'A', 'status': status, 'enabled': enabled}
             return gridDatas;
         }
@@ -688,7 +688,7 @@
 
         function translateCol(title) {
             return $translate.instant(title)
-        };
+        }
 
     }
 })();
