@@ -43,7 +43,8 @@
                         <h4 class="list-group-item active  list-group-item-info text-center">模型名稱列表</h4>
 
                         <div nested-scroll
-                             class="list-group matched-reviewed-model-list-group matched-review-model-preview">
+                             ng-class="{true:'matched-review-model-preview'}[matchedReviewCtrl.models.length>5]"
+                             class="list-group matched-reviewed-model-list-group">
                             <a class="list-group-item text-center" ng-repeat="model in matchedReviewCtrl.models"
                                ng-click="matchedReviewCtrl.showModelDetail(model)">{{model.title}}</a>
                         </div>
