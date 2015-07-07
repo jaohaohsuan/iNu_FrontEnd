@@ -391,25 +391,31 @@
             })
         }
 
-        function showModelDetail(href) {
+        function showModelDetail(entity) {
             var modelInstance = $modal.open({
                 backdropClass: 'model-management-model-backdrop',
-                controller: ['$modalInstance', showModelDetailController],
+                controller: ['$modalInstance','title', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 size:'sm',
                 templateUrl: 'views/buildModel_modelManagement_modelDetailModal.html',
-                windowClass: 'matched-review-model-logic'
+                windowClass: 'matched-review-model-logic',
+                resolve:{
+                    title:function(){
+                        return entity.title;
+                    }
+                }
 
             })
 
-            function showModelDetailController($modalInstance) {
+            function showModelDetailController($modalInstance,title) {
                 var self = this;
                 self.closeModal = closeModal;
                 self.titlePrpperty = 'name';
                 self.itemProperty = 'items';
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
-                buildModelService.setTemporary(href, self.sections);
+                self.title =title;
+                buildModelService.setTemporary(entity.href, self.sections);
                 function closeModal() {
                     $modalInstance.close();
                 }
@@ -571,7 +577,8 @@
         }
 
         function filterModel(selectedItems, modelKeyword) {
-            if (self.gridOptions.data)  self.gridOptions.data.length = 0;
+       if (self.gridOptions.data)  self.gridOptions.data.length = 0;
+            if(!modelKeyword) modelKeyword='';
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + modelKeyword;
             jsonMethodService.get(searchUrl).then(function (collectionjson) {
                 if (collectionjson.collection.items) {
@@ -626,20 +633,25 @@
         function showModelDetail(entity) { //打開modal顯示模型邏輯詞曲
             var modelInstance = $modal.open({
                 backdropClass: 'model-management-model-backdrop',
-                controller: ['$modalInstance', showModelDetailController],
+                controller: ['$modalInstance','title', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 templateUrl: 'views/buildModel_modelManagement_modelDetailModal.html',
-                windowClass: 'model-management-model-logic'
+                windowClass: 'model-management-model-logic',
+                resolve:{
+                    title:function(){
+                        return entity.modelName;
+                    }
+                }
+            });
 
-            })
-
-            function showModelDetailController($modalInstance) {
+            function showModelDetailController($modalInstance,title) {
                 var self = this;
                 self.closeModal = closeModal;
                 self.titlePrpperty = 'name';
                 self.itemProperty = 'items';
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
+                self.title =title;
                 buildModelService.setTemporary(entity.href, self.sections);
                 function closeModal() {
                     $modalInstance.close();

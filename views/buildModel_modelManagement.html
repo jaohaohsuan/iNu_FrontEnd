@@ -1,7 +1,8 @@
 <div class="ibox">
     <div class="ibox-content">
         <div class="row">
-            <form class="form-inline" ng-enter="(modelManagementCtrl.selectedItems.length>0 && modelManagementCtrl.modelKeyword) && modelManagementCtrl.filterModel(modelManagementCtrl.selectedItems,modelManagementCtrl.modelKeyword)" >
+            <form class="form-inline" ng-enter="(modelManagementCtrl.selectedItems.length>0 ) && modelManagementCtrl.filterModel(modelManagementCtrl.selectedItems,modelManagementCtrl.modelKeyword)" >
+
                 <dropdown-multi-select
                         datasource="modelManagementCtrl.datasource"
                         selected-items="modelManagementCtrl.selectedItems"
@@ -10,11 +11,10 @@
                 </dropdown-multi-select>
                 <div class="inline-block">
                     <label> {{'modelKeyword'|translate}}:</label>
-                    <input type="text" class="model-management-input" ng-model="modelManagementCtrl.modelKeyword"
-                           required/>
+                    <input type="text" class="model-management-input" ng-model="modelManagementCtrl.modelKeyword"/>
                     <button class="btn btn-success model-management-filter"
                             ng-click="modelManagementCtrl.filterModel(modelManagementCtrl.selectedItems,modelManagementCtrl.modelKeyword)"
-                            ng-disabled="!modelManagementCtrl.selectedItems.length||!modelManagementCtrl.modelKeyword">
+                            ng-disabled="!modelManagementCtrl.selectedItems.length">
                         {{'filter'|translate}}
                     </button>
                 </div>
