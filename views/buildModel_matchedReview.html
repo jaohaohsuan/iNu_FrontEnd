@@ -3,27 +3,50 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <form class="form-group" ng-enter="matchedReviewCtrl.filterModelGroup(matchedReviewCtrl.modelKeyword)">
-                        <dropdown-multi-select
-                                full-size="matchedReviewCtrl.dropdownAutoSize"
-                                datasource="matchedReviewCtrl.datasource"
-                                selected-items="matchedReviewCtrl.selectedItems"
-                                display-property="{{::'name'}}"
-                                placeholder="{{::'modelGroupSelectPlactholder'|translate}}">>
-                        </dropdown-multi-select>
-                        <div class="matched-review-keyword input-group">
-                            <!--<label>{{'modelKeyword'|translate}}:</label>-->
-                            <input type="text" class="form-control" ng-model="matchedReviewCtrl.modelKeyword" placeholder="{{'modelKeyword'|translate}}"/>
+                    <div ng-show="matchedReviewCtrl.isShowModelDetail">
+                        <h3 class="text-center">{{matchedReviewCtrl.modelTitle}}-{{"logicWord"|translate}}
+                            <span class="btn btn-default btn-outline fa fa-undo"
+                                  ng-click="matchedReviewCtrl.isShowModelDetail=!matchedReviewCtrl.isShowModelDetail"></span>
+                        </h3>
+                        <build-section datasource="matchedReviewCtrl.buildSections" title-property="{{::'name'}}"
+                                       items-property="{{::'items'}}"
+                                       item-editable-property="{{::detailCtrl.itemInfoEditable}}">
+                            <item-template>
+                                <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}">
+                                    {{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}
+                                </div>
+                            </item-template>
+                        </build-section>
+                    </div>
+                    <div ng-hide="matchedReviewCtrl.isShowModelDetail">
+                        <form class="form-group"
+                              ng-enter="matchedReviewCtrl.filterModelGroup(matchedReviewCtrl.modelKeyword)">
+                            <dropdown-multi-select
+                                    full-size="matchedReviewCtrl.dropdownAutoSize"
+                                    datasource="matchedReviewCtrl.datasource"
+                                    selected-items="matchedReviewCtrl.selectedItems"
+                                    display-property="{{::'name'}}"
+                                    placeholder="{{::'modelGroupSelectPlactholder'|translate}}">>
+                            </dropdown-multi-select>
+                            <div class="matched-review-keyword input-group">
+                                <!--<label>{{'modelKeyword'|translate}}:</label>-->
+                                <input type="text" class="form-control" ng-model="matchedReviewCtrl.modelKeyword"
+                                       placeholder="{{'modelKeyword'|translate}}"/>
                            <span class="input-group-btn">
-                               <button class="btn btn-success" ng-click="matchedReviewCtrl.filterModelGroup(matchedReviewCtrl.modelKeyword)">
+                               <button class="btn btn-success"
+                                       ng-click="matchedReviewCtrl.filterModelGroup(matchedReviewCtrl.modelKeyword)">
                                    {{'filter'|translate}}
                                </button>
                            </span>
+                            </div>
+                        </form>
+                        <h4 class="list-group-item active  list-group-item-info text-center">模型名稱列表</h4>
+
+                        <div nested-scroll
+                             class="list-group matched-reviewed-model-list-group matched-review-model-preview">
+                            <a class="list-group-item text-center" ng-repeat="model in matchedReviewCtrl.models"
+                               ng-click="matchedReviewCtrl.showModelDetail(model)">{{model.title}}</a>
                         </div>
-                    </form>
-                    <h4 class="list-group-item active  list-group-item-info text-center">模型名稱列表</h4>
-                    <div nested-scroll class="list-group matched-reviewed-model-list-group matched-review-model-preview">
-                        <a class="list-group-item text-center"  ng-repeat="model in matchedReviewCtrl.models" ng-click="matchedReviewCtrl.showModelDetail(model)">{{model.title}}</a>
                     </div>
                 </div>
                 <div class="col-md-9">

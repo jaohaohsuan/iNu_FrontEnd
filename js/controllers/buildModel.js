@@ -369,6 +369,8 @@
 
     function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal,buildModelService) {
         var self = this;
+        self.buildSections=[];
+        self.modelTitle=''; //顯示模型邏輯詞區的title
         self.datasource = [];
         self.dropdownAutoSize = false;
         self.filterModelGroup = filterModelGroup;
@@ -379,7 +381,7 @@
                 }
             ]
         };
-
+        self.isShowModelDetail=false
         self.modelKeyword = '';
         self.models = [];
         self.selectedItems = [];
@@ -401,34 +403,10 @@
         }
 
         function showModelDetail(entity) {
-            var modelInstance = $modal.open({
-                backdropClass: 'model-management-model-backdrop',
-                controller: ['$modalInstance','title', showModelDetailController],
-                controllerAs: 'detailCtrl',
-                size:'sm',
-                templateUrl: 'views/buildModel_modelManagement_modelDetailModal.html',
-                windowClass: 'matched-review-model-logic',
-                resolve:{
-                    title:function(){
-                        return entity.title;
-                    }
-                }
-
-            })
-
-            function showModelDetailController($modalInstance,title) {
-                var self = this;
-                self.closeModal = closeModal;
-                self.titlePrpperty = 'name';
-                self.itemProperty = 'items';
-                self.itemInfoEditable = 'itemInfo.editable';
-                self.sections = [];
-                self.title =title;
-                buildModelService.setTemporary(entity.href,null, self.sections);
-                function closeModal() {
-                    $modalInstance.close();
-                }
-            }
+            if(self.buildSections.length>0) self.buildSections.length=0;
+            buildModelService.setTemporary(entity.href,null, self.buildSections);
+            self.isShowModelDetail=true;
+            self.modelTitle=entity.title;
         }
 
         ////////////////////不綁定區//////////////
