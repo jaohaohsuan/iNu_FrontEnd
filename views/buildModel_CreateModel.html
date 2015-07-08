@@ -171,7 +171,8 @@
     <!--進階功能-->
     <div class="ibox">
         <div class="ibox-title">
-            <h2 translate="whatEditing">{{'componentOrModelName'|translate}}</h2>
+            <h2>{{'editingTemplate'|translate}}</h2>
+            <h2 ng-show="createModelCtrl.isInstanc" translate="editingModel"   translate-values="{modelName:'{{createModelCtrl.editBinding.configuration.title}}'}"></h2>
         </div>
         <div class="ibox-content">
             <button class="btn btn-success btn-block"

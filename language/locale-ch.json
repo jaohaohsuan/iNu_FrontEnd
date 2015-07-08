@@ -17,6 +17,8 @@
     "crossAnalysis": "交叉分析",
     "deleteModel": "删除此模型",
     "edit":"编辑",
+	"editingModel":"您正在編輯的模型是'{{modelName}}'",
+	"editingTemplate": "您正在编辑的是样板",
     "eitherAccord": "提及任一关键词",
 	"enabled":"上线",
     "explore": "业务探索",
@@ -74,6 +76,5 @@
     "undo": "复原",
     "update": "更新",
     "welcome": "欢迎进入如意系统，您当前登陆的用户组为：",
-    "whatEditing": "您正在编辑的是[模型]的样板",
     "wordDistance": "限定跨词距离"
 }
