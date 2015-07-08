@@ -34,9 +34,6 @@ span > a:link {
     color: #fff;
 }
 
-.field_set {
-    padding-top: 5px;
-}
 
 .dropdown-multi-select {
     height: 30px;
@@ -53,7 +50,8 @@ span > a:link {
 }
 
 .instance-button {
-    margin-top: 2px;
+    margin-top: -15px;
+    margin-left: 10px;
 }
 .matched-review-grid{
     background: rgba(222, 222, 225, 0.2);
@@ -87,6 +85,13 @@ span > a:link {
 }
 .model-filter-dropdown-multi-select {
     margin-right: 5px;
+}
+.model-instance-changeable {
+    padding: 5px;
+    border-bottom: inset 2px #696969;
+}
+.model-instance-changeable >.new-model-input> .btn-block{
+margin-top: 5px;
 }
 .model-management-grid {
     margin-top: 10px;
@@ -214,9 +219,9 @@ span > a:link {
 }
 .switch-instance {
     margin-top: 5px;
-    margin-left: 20px;
+    margin-left: 10px;
     position: relative;
-    top: 1px
+    top: 1px;
 }
 
 .public-component-filter {
