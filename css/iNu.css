@@ -5,9 +5,7 @@ body {
 
 }
 
-dropdown-multi-select {
-    margin-right: 5px;
-}
+
 
 span > a:link {
     color: #328F7B;
@@ -39,9 +37,7 @@ span > a:link {
 .field_set {
     padding-top: 5px;
 }
-.dropdown-multi-select-full-size {
-    width: 100%;
-}
+
 .dropdown-multi-select {
     height: 30px;
     top: -1px;
@@ -83,10 +79,15 @@ span > a:link {
 .model-filter>.inline-block{
     margin-top: 3px;
 }
+.model-filter-auto-size {
+    width: 100%;
+}
 .model-filter-button{
     height: 33px;
 }
-
+.model-filter-dropdown-multi-select {
+    margin-right: 5px;
+}
 .model-management-grid {
     margin-top: 10px;
     background: rgba(222, 222, 225, 0.2)

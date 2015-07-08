@@ -1,8 +1,8 @@
 <div class="form-inline model-filter">
-<span ng-class="{false:'dropdown-multi-select-full-size'}[modelFilterCtrl.fullSize]" class="btn-group" dropdown
+<span ng-class="{false:'model-filter-auto-size'}[modelFilterCtrl.autoSize]" class="btn-group" dropdown
       auto-close="outsideClick">
-     <button ng-class="{false:'dropdown-multi-select-full-size'}[modelFilterCtrl.fullSize]"
-             class="btn btn-default dropdown-toggle dropdown-multi-select" dropdown-toggle ng-disabled="disabled">
+     <button ng-class="{false:'model-filter-auto-size'}[modelFilterCtrl.autoSize]"
+             class="btn btn-default dropdown-toggle model-filter-dropdown-multi-select" dropdown-toggle ng-disabled="disabled">
          <label translate="{{modelFilterCtrl.selectedText}}"
                 translate-values="{selectedLength:'{{modelFilterCtrl.selectedItems.length}}'}"></label>
          <span class="fa fa-caret-down fa-lg"></span>
@@ -17,7 +17,7 @@
 </span>
     <div class="inline-block">
         <label>{{'modelKeyword'|translate}}</label>
-        <input type="text" class="form-control inline-block" ng-model="modelFilterCtrl.modelKeyword" placeholder="{{modelFilterCtrl.placeholder}}"/>
+        <input type="text" class="form-control inline-block" ng-model="modelFilterCtrl.modelKeyword" />
 <button class="btn btn-success btn-xs model-filter-button"
             ng-click="modelFilterCtrl.doFilter(modelFilterCtrl.selectedItems,modelFilterCtrl.modelKeyword)"
             ng-disabled="!modelFilterCtrl.selectedItems.length">

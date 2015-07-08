@@ -178,7 +178,7 @@
                 selectedItems: '=',
                 displayProperty: '@',
                 placeholder: "@",
-                fullSize:'=',
+                autoSize:'=',
                 doFilter:'='
             },
             templateUrl: 'views/directives/modelFilter.html',
@@ -209,13 +209,13 @@
                 var idx = self.selectedItems.indexOf(item);
                 if (idx != -1)  self.selectedItems.splice(idx, 1);
                 else self.selectedItems.push(item);
-                if ($element.width() > $element.parent().width() * 0.4 || self.overWidth) {
+                if (self.selectedItems.length > ($element.parent().width() /80) ) {
                     self.selectedText = 'selectedModels';
-                    self.overWidth = true;
+                    //self.overWidth = true;
                 }
                 else {
                     changeSelectedText(self.selectedItems);
-                    self.overWidth = false;
+                    //self.overWidth = false;
                 }
 
             }
