@@ -12,6 +12,7 @@
                         href: location,
                         itemInfo: sectionItemFormat(template.template.data, 'query', 'syntax', 'slop', 'editable')//格式化前端需顯示的文字
                     };
+                    if (!currentSection.items) currentSection.items = [];
                     currentSection.items.push(item);
                     if (successCallback) successCallback();
                 }, function (response) {

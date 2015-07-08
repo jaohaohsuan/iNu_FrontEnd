@@ -180,6 +180,8 @@
             kvDatas.occurrence.value = self.editBinding.component.occurrence;
             angular.forEach(self.editBinding.component.selected, function (component) {
                 $timeout(function () {
+                    var id = component.href.substr(component.href.lastIndexOf('/') + 1);
+                    kvDatas.storedQueryId.value = id;
                     kvDatas.storedQueryTitle.value = component.title;
                     var template = {template: angular.copy(self.editCollection.named.template)};
                     var href = self.editCollection.named.href;
