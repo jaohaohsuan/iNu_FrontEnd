@@ -30,7 +30,7 @@
                                     do-filter="matchedReviewCtrl.filterModelGroup">
                             </model-filter>
                         </form>
-                        <div ng-show="matchedReviewCtrl.models">
+                        <div ng-show="matchedReviewCtrl.models.length>0">
                             <h4 class="list-group-item active  list-group-item-info text-center">模型名稱列表</h4>
                             <div nested-scroll
                                  ng-class="{true:'matched-review-model-preview'}[matchedReviewCtrl.models.length>5]"
