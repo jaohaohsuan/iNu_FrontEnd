@@ -39,34 +39,13 @@
         function setConfigurationTemporary(datas, editBinding) {//配置區塊資料綁定
             angular.forEach(datas, function (data) {
                 if (data.name === 'tags') {
-                    var splitTags = data.value.split('\\s').map(function (e) {
+                    var splitTags = data.value.split(/\s+/).map(function (e) {
                         return {"name": e}
                     });
-                    if (splitTags.length >= 0) editBinding.configuration.tags.concat(splitTags)
-                    data.value = editBinding.configuration.tags;
-                }
-                else if (data.name === 'status' && data.value === 'enabled') {//啟用狀態
-                    editBinding.configuration['isOnline'] = true;
-                    editBinding.configuration.tags.some(function (tag) {
-                        if (tag.name === 'online') {
-                            tag.enabled = true;
-                            tag.selected = true;
-                            return true;
-                        }
-                    })
+                    if (splitTags.length >= 0) data.value = splitTags;
                 }
                 editBinding.configuration[data.name] = data.value;
             })
-        }
-
-        function setDefaultTags(editBinding, successCallback, errorCallback) {
-            jsonMethodService.get('json/defaultTags.json').then(
-                function (defaultTags) {
-                    editBinding.configuration.tags = defaultTags;
-                    if (successCallback) successCallback();
-                }, function () {
-                    if (errorCallback) errorCallback();
-                });
         }
 
         function setEditBinding(editBinding, bindGroup, datas) {
@@ -128,14 +107,10 @@
                     }
                     if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
                     if (editBinding) {
-                        setDefaultTags(editBinding, function () {
-                            setConfigurationTemporary(item.data, editBinding);//設定配置區塊的資料綁定
-                        })
+                        setConfigurationTemporary(item.data, editBinding);//設定配置區塊的資料綁定
                     }
                 })
-            }, function () {
-                setDefaultTags(editBinding);//設定預設標籤
-            })
+            }, function () {})
         }
 
         function sectionItemFormat(datas, queryProperty, syntaxProperty, slopProperty, editableProperty) {

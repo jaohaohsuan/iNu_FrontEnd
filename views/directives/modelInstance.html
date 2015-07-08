@@ -14,10 +14,9 @@
             <div nested-scroll class="btn-group btn-group-vertical btn-block models-select ">
                 <label id="models{{tag.name}}" class="btn btn-success btn-outline animated fadeInLeft"
                        ng-model="tag.selected"
-                       ng-disabled="tag.enabled"
                        ng-repeat="tag in modelInstanceCtrl.datasource.tags track by $index"
                        ng-click="modelInstanceCtrl.modelClicked(tag)"
-                       btn-checkbox>{{tag.value}}
+                       btn-checkbox>{{tag.name}}
                 </label>
             </div>
         </div>
