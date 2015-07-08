@@ -566,7 +566,6 @@
         }
 
         function filterModel(selectedItems, modelKeyword) {
-            console.log(selectedItems)
             if (self.gridOptions.data)  self.gridOptions.data.length = 0;
             if(!modelKeyword) modelKeyword='';
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + modelKeyword;
