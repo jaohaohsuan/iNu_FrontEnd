@@ -42,7 +42,8 @@
                     var splitTags = data.value.split(/\s+/).map(function (e) {
                         return {"name": e}
                     });
-                    if (splitTags.length >= 0) data.value = splitTags;
+                    if (data.value.length > 0) data.value = splitTags;
+                    else data.value = [];
                 }
                 editBinding.configuration[data.name] = data.value;
             })
