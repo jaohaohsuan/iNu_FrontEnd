@@ -3,21 +3,22 @@
         <div class="row">
             <form class="form-inline" ng-enter="(modelManagementCtrl.selectedItems.length>0 ) && modelManagementCtrl.filterModel(modelManagementCtrl.selectedItems,modelManagementCtrl.modelKeyword)" >
 
-                <dropdown-multi-select
+                <model-filter
                         datasource="modelManagementCtrl.datasource"
                         selected-items="modelManagementCtrl.selectedItems"
                         display-property="{{::'name'}}"
-                        placeholder="{{::'modelGroupSelectPlactholder'|translate}}">
-                </dropdown-multi-select>
-                <div class="inline-block">
-                    <label> {{'modelKeyword'|translate}}:</label>
-                    <input type="text" class="model-management-input" ng-model="modelManagementCtrl.modelKeyword"/>
-                    <button class="btn btn-success model-management-filter"
-                            ng-click="modelManagementCtrl.filterModel(modelManagementCtrl.selectedItems,modelManagementCtrl.modelKeyword)"
-                            ng-disabled="!modelManagementCtrl.selectedItems.length">
-                        {{'filter'|translate}}
-                    </button>
-                </div>
+                        placeholder="{{::'modelGroupSelectPlactholder'|translate}}"
+                        do-filter="modelManagementCtrl.filterModel">
+                </model-filter>
+                <!--<div class="inline-block">-->
+                    <!--<label> {{'modelKeyword'|translate}}:</label>-->
+                    <!--<input type="text" class="model-management-input" ng-model="modelManagementCtrl.modelKeyword"/>-->
+                    <!--<button class="btn btn-success model-management-filter"-->
+                            <!--ng-click="modelManagementCtrl.filterModel(modelManagementCtrl.selectedItems,modelManagementCtrl.modelKeyword)"-->
+                            <!--ng-disabled="!modelManagementCtrl.selectedItems.length">-->
+                        <!--{{'filter'|translate}}-->
+                    <!--</button>-->
+                <!--</div>-->
             </form>
             <div ui-grid="modelManagementCtrl.gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-exporter ui-grid-pagination class="model-management-grid"></div>
         </div>

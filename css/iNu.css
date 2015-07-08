@@ -1,7 +1,7 @@
 /*���Ұ�*/
 
 body {
-    font-family: Georgia, Microsoft JhengHei, sans-serif;
+    font-family:Microsoft YaHei , SimHei, Microsoft JhengHei, sans-serif;
 
 }
 
@@ -53,7 +53,7 @@ span > a:link {
 }
 
 .inline-block {
-    display: inline-block;
+    display: inline-block !important;
 }
 
 .instance-button {
@@ -69,9 +69,7 @@ span > a:link {
 .matched-reviewed-model-list-group{
     width: 100%;
  }
-.matched-review-model-logic{
-    left: -50%;
-}
+
 .matched-review-model-preview{
     height: 250px;
     overflow: auto;
@@ -82,11 +80,11 @@ span > a:link {
 .margins-div {
     margin: 0 0 0 2px;
 }
-
-.model-management-filter {
-    height: 30px;
-    margin-left: 10px;
-    padding: 5px;
+.model-filter>.inline-block{
+    margin-top: 3px;
+}
+.model-filter-button{
+    height: 33px;
 }
 
 .model-management-grid {
@@ -104,26 +102,23 @@ span > a:link {
 }
 
 .model-management-grid-cell-odd {
-    background-color: rgba(0, 0, 255, 0.1) !important;
+
     text-align: center;
 }
 
 .model-management-grid-header {
-    background-color: #2664b0 !important;
-    color: #fff;
+
     text-align: center;
     height: 31px;
 }
 
-.model-management-input {
-    height: 30px;
-}
 
-.model-management-model-logic {
+
+.model-management-modal-logic {
     left: 1%;
 }
 
-.model-management-model-save {
+.model-management-modal-save {
     top: 170px;
     left: 50%;
 }

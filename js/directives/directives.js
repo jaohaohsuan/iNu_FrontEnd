@@ -117,59 +117,7 @@
         return directive;
     }
 
-    function dropdownMultiSelect() {
-        var directive = {
-            restrict: 'E',
-            scope: {
-                datasource: '=',
-                selectedItems: '=',
-                displayProperty: '@',
-                placeholder: "@",
-                fullSize:'='
-            },
-            templateUrl: 'views/directives/dropdownMultiSelect.html',
-            controller: ['$element', '$window', '$scope', multiSelectController],
-            controllerAs: 'multiSelectCtrl',
-            bindToController: true
 
-        };
-
-        function multiSelectController($element, $window, $scope) {
-            var self = this;
-
-            self.selectedText = self.placeholder;
-            self.itemClicked = itemClicked;
-
-
-            function changeSelectedText(selectedItems) {
-                if (selectedItems.length <= 0) self.selectedText = self.placeholder;
-                else {
-                    self.selectedText = selectedItems.map(function (elem) {
-                        return elem.name;
-                    }).join(",");
-                }
-
-            }
-
-            function itemClicked(item) {
-                var idx = self.selectedItems.indexOf(item);
-                if (idx != -1)  self.selectedItems.splice(idx, 1);
-                else self.selectedItems.push(item);
-                if ($element.width() > $element.parent().width() * 0.4 || self.overWidth) {
-                    self.selectedText = 'selectedModels';
-                    self.overWidth = true;
-                }
-                else {
-                    changeSelectedText(self.selectedItems);
-                    self.overWidth = false;
-                }
-
-            }
-
-        }
-
-        return directive;
-    }
 
     function focus($parse, $timeout) {
         return {
@@ -222,7 +170,60 @@
         };
     }
 
+    function modelFilter() {
+        var directive = {
+            restrict: 'E',
+            scope: {
+                datasource: '=',
+                selectedItems: '=',
+                displayProperty: '@',
+                placeholder: "@",
+                fullSize:'=',
+                doFilter:'='
+            },
+            templateUrl: 'views/directives/modelFilter.html',
+            controller: ['$element', '$window', '$scope', modelFilterController],
+            controllerAs: 'modelFilterCtrl',
+            bindToController: true
 
+        };
+
+        function modelFilterController($element, $window, $scope) {
+            var self = this;
+
+            self.selectedText = self.placeholder;
+            self.itemClicked = itemClicked;
+            self.modelKeyword='';
+
+            function changeSelectedText(selectedItems) {
+                if (selectedItems.length <= 0) self.selectedText = self.placeholder;
+                else {
+                    self.selectedText = selectedItems.map(function (elem) {
+                        return elem.name;
+                    }).join(",");
+                }
+
+            }
+
+            function itemClicked(item) {
+                var idx = self.selectedItems.indexOf(item);
+                if (idx != -1)  self.selectedItems.splice(idx, 1);
+                else self.selectedItems.push(item);
+                if ($element.width() > $element.parent().width() * 0.4 || self.overWidth) {
+                    self.selectedText = 'selectedModels';
+                    self.overWidth = true;
+                }
+                else {
+                    changeSelectedText(self.selectedItems);
+                    self.overWidth = false;
+                }
+
+            }
+
+        }
+
+        return directive;
+    }
     function modelInstance() {
         var directive = {
             restrict: 'E',
@@ -704,7 +705,7 @@
         .directive('buildSection', buildSection)//查詢條件區塊
         .directive('componentInstance', componentInstance) //組件實例視窗
         .directive('confirmClick', confirmClick) //刪除確認視窗
-        .directive('dropdownMultiSelect', dropdownMultiSelect)//下拉多選
+        .directive('modelFilter', modelFilter)//下拉多選
         .directive('inject', inject)
         .directive('itemTemplate', itemTemplate)
         .directive('modelInstance', modelInstance) //模型實例視窗

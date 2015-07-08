@@ -390,8 +390,8 @@
         self.showModelDetail = showModelDetail;
         $scope.$on('minimalizaSidebar', setInputSize);
         setModels();
-        function filterModelGroup(text) {
-            if (!text) text = '';
+        function filterModelGroup(selectedItems,text) {
+           if (!text) text = '';
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + text
             jsonMethodService.get(searchUrl).then(function (collectionjson) {
                 angular.forEach(collectionjson.collection.items, function (item) {
@@ -440,7 +440,7 @@
         self.gridOptions = {
             columnDefs: [
                 {
-                    cellClass: setCellClass,
+
                     field: 'modelName',
                     displayName: '{{"modelName"|translate}}',
                     headerCellClass: 'model-management-grid-header',
@@ -450,7 +450,7 @@
                     enableHiding: false
                 },
                 {
-                    cellClass: setCellClass,
+
                     field: 'role',
                     displayName: '{{"role"|translate}}',
                     headerCellFilter: 'translate',
@@ -458,7 +458,7 @@
                     enableColumnMenu: false
                 },
                 {
-                    cellClass: setCellClass,
+
                     field: 'creator',
                     displayName: '{{"creator"|translate}}',
                     headerCellFilter: 'translate',
@@ -466,7 +466,7 @@
                     enableColumnMenu: false
                 },
                 {
-                    cellClass: setCellClass,
+
                     field: 'lastModifiedTime',
                     displayName: '{{"lastModifiedTime"|translate}}',
                     headerCellFilter: 'translate',
@@ -474,7 +474,7 @@
                     enableColumnMenu: false
                 },
                 {
-                    cellClass: setCellClass,
+
                     field: 'lastModifiedBy',
                     displayName: '{{"lastModifiedBy"|translate}}',
                     headerCellFilter: 'translate',
@@ -482,7 +482,7 @@
                     enableColumnMenu: false
                 },
                 {
-                    cellClass: setCellClass,
+
                     field: 'status',
                     displayName: '{{"status"|translate}}',
                     headerCellFilter: 'translate',
@@ -492,7 +492,7 @@
                     enableSorting: false
                 },
                 {
-                    cellClass: setCellClass,
+
                     name: '{{"management"|translate}}',
                     displayName: '{{"management"|translate}}',
                     enableHiding: false,
@@ -566,6 +566,7 @@
         }
 
         function filterModel(selectedItems, modelKeyword) {
+            console.log(selectedItems)
             if (self.gridOptions.data)  self.gridOptions.data.length = 0;
             if(!modelKeyword) modelKeyword='';
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + modelKeyword;
@@ -586,7 +587,7 @@
                 controllerAs: 'saveAsCtrl',
                 size: 'sm',
                 templateUrl: 'views/buildModel_modelManagement_saveAsModel_modal.html',
-                windowClass: 'model-management-model-save' //modal頁的CSS
+                windowClass: 'model-management-modal-save' //modal頁的CSS
             })
 
             function saveAsController($modalInstance, $timeout) {
@@ -636,7 +637,7 @@
                 controller: ['$modalInstance','title', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 templateUrl: 'views/buildModel_modelManagement_modelDetailModal.html',
-                windowClass: 'model-management-model-logic',
+                windowClass: 'model-management-modal-logic',
                 resolve:{
                     title:function(){
                         return entity.modelName;
@@ -660,15 +661,6 @@
         }
 
 /////////////////////////////////////////不綁定區//////////////////////////////////
-        function setCellClass(grid, row, col, rowIndex, colIndex) {
-            var index = rowIndex % 2;
-            if (index === 0) {
-                return 'model-management-grid-cell-odd'
-            }
-            else {
-                return 'model-management-grid-cell-even'
-            }
-        }
 
         function setGridData(items) {
 
