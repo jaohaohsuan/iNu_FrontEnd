@@ -103,14 +103,10 @@ margin-top: 5px;
     color: red;
 }
 
-.model-management-grid-cell-even {
+.model-management-grid-cell{
     text-align: center;
 }
 
-.model-management-grid-cell-odd {
-
-    text-align: center;
-}
 
 .model-management-grid-header {
 

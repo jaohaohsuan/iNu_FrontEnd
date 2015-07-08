@@ -442,6 +442,7 @@
 
                     field: 'modelName',
                     displayName: '{{"modelName"|translate}}',
+                    cellClass:'model-management-grid-cell',
                     headerCellClass: 'model-management-grid-header',
                     headerCellFilter: 'translate',
                     cellTemplate: '<a ng-click="grid.appScope.showModelDetail(row.entity)" class="btn  btn-block">{{row.entity.modelName}}</a>',
@@ -453,31 +454,17 @@
                     field: 'role',
                     displayName: '{{"role"|translate}}',
                     headerCellFilter: 'translate',
+                    cellClass:'model-management-grid-cell',
                     headerCellClass: 'model-management-grid-header',
                     enableColumnMenu: false
                 },
                 {
 
-                    field: 'creator',
-                    displayName: '{{"creator"|translate}}',
+                    field: 'history',
+                    displayName: '{{"history"|translate}}',
                     headerCellFilter: 'translate',
                     headerCellClass: 'model-management-grid-header',
-                    enableColumnMenu: false
-                },
-                {
-
-                    field: 'lastModifiedTime',
-                    displayName: '{{"lastModifiedTime"|translate}}',
-                    headerCellFilter: 'translate',
-                    headerCellClass: 'model-management-grid-header',
-                    enableColumnMenu: false
-                },
-                {
-
-                    field: 'lastModifiedBy',
-                    displayName: '{{"lastModifiedBy"|translate}}',
-                    headerCellFilter: 'translate',
-                    headerCellClass: 'model-management-grid-header',
+                    cellClass:'model-management-grid-cell',
                     enableColumnMenu: false
                 },
                 {
@@ -486,6 +473,7 @@
                     displayName: '{{"status"|translate}}',
                     headerCellFilter: 'translate',
                     headerCellClass: 'model-management-grid-header',
+                    cellClass:'model-management-grid-cell',
                     cellTemplate: '<div class="switch-instance inline-block"><div class="onoffswitch"><input type="checkbox" ng-model="row.entity.enabled" ng-change="grid.appScope.changeModelStatus(row.entity)" class="onoffswitch-checkbox" id="modelManagent{{row.entity.modelName}}"><label class="onoffswitch-label" for="modelManagent{{row.entity.modelName}}"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>',
                     enableColumnMenu: false,
                     enableSorting: false
@@ -499,6 +487,7 @@
                     enableSorting: false,
                     headerCellFilter: 'translate',
                     headerCellClass: 'model-management-grid-header',
+                    cellClass:'model-management-grid-cell',
                     cellTemplate: '<div class="model-management-grid">' +
                         '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
                         '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
