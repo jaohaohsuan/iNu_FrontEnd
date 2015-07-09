@@ -53,7 +53,8 @@
         <div class="switch-instance inline-block">
             <div class="onoffswitch">
                 <input type="checkbox" ng-model="modelInstanceCtrl.datasource.isOnline"
-                       ng-change="modelInstanceCtrl.enableModel()"
+                       ng-checked="modelInstanceCtrl.datasource.isOnline"
+                       ng-click="modelInstanceCtrl.enableModel(modelInstanceCtrl.datasource)"
                        class="onoffswitch-checkbox" id="checkOnline{{modelInstanceCtrl.datasource.title}}">
                 <label class="onoffswitch-label" for="checkOnline{{modelInstanceCtrl.datasource.title}}"
                         >

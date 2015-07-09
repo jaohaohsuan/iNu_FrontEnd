@@ -234,7 +234,10 @@ margin-top: 5px;
     overflow: hidden;
     width: 90%;
 }
-
+.sweetAlert{
+    top: 40% !important;
+    left: 65%!important;
+}
 .tag-list li a {
     display: inline;
 }

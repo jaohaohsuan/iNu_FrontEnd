@@ -2,8 +2,8 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location', createModelController])
-        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal','buildModelService', matchedReviewedController])
-        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', modelManagementController])
+        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', matchedReviewedController])
+        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', modelManagementController])
 
 
     function buildModelController($scope, $timeout, $translate) {
@@ -238,8 +238,27 @@
                 });
         }
 
-        function enabledModel() {
-
+        function enabledModel(data) {
+            var title = data.isOnline ? $translate.instant('onlineModel') : $translate.instant('offlineModel');
+            SweetAlert.swal({
+                title: title,
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: $translate.instant('sure'),
+                cancelButtonText: $translate.instant('cancel'),
+                closeOnConfirm: true,
+                closeOnCancel: true,
+                customClass: 'sweetAlert'
+            }, function (sure) {
+                if (!sure) {
+                    data.isOnline = !data.isOnline;
+                    console.log(data)
+                }
+                else {
+                    console.log(data)
+                }
+            });
         }
 
         function isRounded() {
@@ -286,7 +305,7 @@
                     'save': function () {
                         buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.expansion.title, self.editBinding.configuration.tags, function (location) {
                             swal(
-                                {   title: 'Success',timer: 1000, type: 'success',showConfirmButton: false }
+                                {title: 'Success', timer: 1000, type: 'success', showConfirmButton: false}
                             );
                         })
                     }
@@ -345,10 +364,10 @@
         function initial(locationUrl, templateUrl) {
             if (!locationUrl)//location不存在代表為首頁template
             {
-                buildModelService.setTemplate(templateUrl, self.temporaryCollection,self.sections, self.editCollection, self.editBinding);
+                buildModelService.setTemplate(templateUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
 
             } else {//設定Temporary
-                buildModelService.setTemporary(locationUrl,self.temporaryCollection,self.sections, self.editCollection, self.editBinding);
+                buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
                 self.isInstance = true;
 
             }
@@ -369,10 +388,10 @@
         }
     }
 
-    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal,buildModelService) {
+    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService) {
         var self = this;
-        self.buildSections=[];
-        self.modelTitle=''; //顯示模型邏輯詞區的title
+        self.buildSections = [];
+        self.modelTitle = ''; //顯示模型邏輯詞區的title
         self.datasource = [];
         self.dropdownAutoSize = false;
         self.filterModelGroup = filterModelGroup;
@@ -383,15 +402,15 @@
                 }
             ]
         };
-        self.isShowModelDetail=false
+        self.isShowModelDetail = false
         self.modelKeyword = '';
         self.models = [];
         self.selectedItems = [];
         self.showModelDetail = showModelDetail;
         $scope.$on('minimalizaSidebar', setInputSize);
         setModels();
-        function filterModelGroup(selectedItems,text) {
-           if (!text) text = '';
+        function filterModelGroup(selectedItems, text) {
+            if (!text) text = '';
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + text
             jsonMethodService.get(searchUrl).then(function (collectionjson) {
                 angular.forEach(collectionjson.collection.items, function (item) {
@@ -405,10 +424,10 @@
         }
 
         function showModelDetail(entity) {
-            if(self.buildSections.length>0) self.buildSections.length=0;
-            buildModelService.setTemporary(entity.href,null, self.buildSections);
-            self.isShowModelDetail=true;
-            self.modelTitle=entity.title;
+            if (self.buildSections.length > 0) self.buildSections.length = 0;
+            buildModelService.setTemporary(entity.href, null, self.buildSections);
+            self.isShowModelDetail = true;
+            self.modelTitle = entity.title;
         }
 
         ////////////////////不綁定區//////////////
@@ -429,8 +448,9 @@
         }
     }
 
-    function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout) {
+    function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert) {
 
+        var enableModelTimeout;
         var self = this;
         $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
         self.datasource = [];
@@ -442,7 +462,7 @@
 
                     field: 'modelName',
                     displayName: '{{"modelName"|translate}}',
-                    cellClass:'model-management-grid-cell',
+                    cellClass: 'model-management-grid-cell',
                     headerCellClass: 'model-management-grid-header',
                     headerCellFilter: 'translate',
                     cellTemplate: '<a ng-click="grid.appScope.showModelDetail(row.entity)" class="btn  btn-block">{{row.entity.modelName}}</a>',
@@ -454,7 +474,7 @@
                     field: 'role',
                     displayName: '{{"role"|translate}}',
                     headerCellFilter: 'translate',
-                    cellClass:'model-management-grid-cell',
+                    cellClass: 'model-management-grid-cell',
                     headerCellClass: 'model-management-grid-header',
                     enableColumnMenu: false
                 },
@@ -464,7 +484,7 @@
                     displayName: '{{"history"|translate}}',
                     headerCellFilter: 'translate',
                     headerCellClass: 'model-management-grid-header',
-                    cellClass:'model-management-grid-cell',
+                    cellClass: 'model-management-grid-cell',
                     enableColumnMenu: false
                 },
                 {
@@ -473,8 +493,8 @@
                     displayName: '{{"status"|translate}}',
                     headerCellFilter: 'translate',
                     headerCellClass: 'model-management-grid-header',
-                    cellClass:'model-management-grid-cell',
-                    cellTemplate: '<div class="switch-instance inline-block"><div class="onoffswitch"><input type="checkbox" ng-model="row.entity.enabled" ng-change="grid.appScope.changeModelStatus(row.entity)" class="onoffswitch-checkbox" id="modelManagent{{row.entity.modelName}}"><label class="onoffswitch-label" for="modelManagent{{row.entity.modelName}}"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>',
+                    cellClass: 'model-management-grid-cell',
+                    cellTemplate: '<div class="switch-instance inline-block"><div class="onoffswitch"><input type="checkbox" ng-checked="row.entity.enabled" ng-model="row.entity.enabled"  ng-click="grid.appScope.changeModelStatus(row.entity)" class="onoffswitch-checkbox" id="modelManagent{{row.entity.modelName}}"><label class="onoffswitch-label" for="modelManagent{{row.entity.modelName}}"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>',
                     enableColumnMenu: false,
                     enableSorting: false
                 },
@@ -487,11 +507,11 @@
                     enableSorting: false,
                     headerCellFilter: 'translate',
                     headerCellClass: 'model-management-grid-header',
-                    cellClass:'model-management-grid-cell',
+                    cellClass: 'model-management-grid-cell',
                     cellTemplate: '<div class="model-management-grid">' +
-                        '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                        '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                        '</div>',
+                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
+                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
+                    '</div>',
                     minWidth: 120
                 }
             ],
@@ -509,10 +529,34 @@
         $scope.showModelDetail = showModelDetail;
         setModels();
 
-        function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
-            console.log(entity)
+        function changeModelStatus( entity) { //變更上下線，可直接變更該一列的資料
+            //entity.enabled=!entity.enabled;
+            // if(enableModelTimeout) $timeout.cancel(enableModelTimeout);
+            //enableModelTimeout=$timeout(function(){
             //do API
-            return  !entity.enabled;
+
+            //
+            //},1000);
+            var title = entity.enabled ? $translate.instant('onlineModel') : $translate.instant('offlineModel');
+            SweetAlert.swal({
+                title: title,
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: $translate.instant('sure'),
+                cancelButtonText: $translate.instant('cancel'),
+                closeOnConfirm: true,
+                closeOnCancel: true,
+                customClass: 'sweetAlert'
+            }, function (sure) {
+                if (!sure) {
+                    entity.enabled = !entity.enabled;
+                    console.log(entity)
+                }
+                else {
+                    console.log(entity)
+                }
+            });
         }
 
 
@@ -527,9 +571,9 @@
         }
 
         function filterModel(selectedItems, modelKeyword) {
-           if (self.gridOptions.data)  self.gridOptions.data.length = 0;
+            if (self.gridOptions.data)  self.gridOptions.data.length = 0;
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search';
-            if(modelKeyword) searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + modelKeyword;
+            if (modelKeyword) searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + modelKeyword;
 
             jsonMethodService.get(searchUrl).then(function (collectionjson) {
                 if (collectionjson.collection.items) {
@@ -566,7 +610,7 @@
                 self.temporaryCollection = {
                     collection: {}
                 }
-                buildModelService.setTemporary(entity.href,self.temporaryCollection, null, null, self.editBinding);
+                buildModelService.setTemporary(entity.href, self.temporaryCollection, null, null, self.editBinding);
 
                 self.closeModal = closeModal;
                 function closeModal() {
@@ -583,7 +627,7 @@
                 function saveModel(type) {
                     buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.configuration.title, self.editBinding.configuration.tags, function (location) {
                         swal(
-                            {   title: "Success",timer: 1000, type: 'success',showConfirmButton: false }
+                            {title: "Success", timer: 1000, type: 'success', showConfirmButton: false}
                         );
                         $modalInstance.close();
                     })
@@ -595,26 +639,26 @@
         function showModelDetail(entity) { //打開modal顯示模型邏輯詞曲
             var modelInstance = $modal.open({
                 backdropClass: 'model-management-model-backdrop',
-                controller: ['$modalInstance','title', showModelDetailController],
+                controller: ['$modalInstance', 'title', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 templateUrl: 'views/buildModel_modelManagement_modelDetailModal.html',
                 windowClass: 'model-management-modal-logic',
-                resolve:{
-                    title:function(){
+                resolve: {
+                    title: function () {
                         return entity.modelName;
                     }
                 }
             });
 
-            function showModelDetailController($modalInstance,title) {
+            function showModelDetailController($modalInstance, title) {
                 var self = this;
                 self.closeModal = closeModal;
                 self.titlePrpperty = 'name';
                 self.itemProperty = 'items';
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
-                self.title =title;
-                buildModelService.setTemporary(entity.href,null, self.sections);
+                self.title = title;
+                buildModelService.setTemporary(entity.href, null, self.sections);
                 function closeModal() {
                     $modalInstance.close();
                 }
