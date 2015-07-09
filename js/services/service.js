@@ -6,14 +6,14 @@
         function addToCurrentSection(href, template, sections, occurrence, successCallback, errorCallback) {
             jsonMethodService.post(href, template).then(
                 function (response) {
-                    var currentSection = jsonParseService.findItemValueFromArray(sections, 'href', occurrence);
+                    var currentSection = jsonParseService.findItemValueFromArray(sections, 'href', occurrence);//從sections內搜尋正確的section
                     var location = response.headers('Location');
                     var item = {
                         href: location,
                         itemInfo: sectionItemFormat(template.template.data, 'query', 'syntax', 'slop', 'editable')//格式化前端需顯示的文字
                     };
                     if (!currentSection.items) currentSection.items = [];
-                    currentSection.items.push(item);
+                    currentSection.items.push(item);//post成功後前端加入格式化後的item
                     if (successCallback) successCallback();
                 }, function (response) {
                     if (errorCallback) errorCallback(response);
@@ -24,9 +24,7 @@
             var href = jsonParseService.findItemValueFromArray(temporaryCollection.items, "href", "template").href;
             var kvTemplate = jsonParseService.getObjectMappingNameToValueFromDatas(temporaryCollection.template.data);
             kvTemplate.title.value = title;
-            kvTemplate.tags.value = tags.map(function (tag) {
-                if (!tag.enabled && tag.selected) return tag.name;
-            }).join(' ').trim();
+            kvTemplate.tags.value = tagsJoinBySelected(tags);
             var template = {template: angular.copy(temporaryCollection.template)};
             jsonMethodService.post(href, template).then(
                 function (response) {
@@ -36,14 +34,38 @@
                 })
         }
 
+        function searchByQueries(queriesCollection,queryBinding,rel,successCallback,errorCallback){
+            queryBinding = angular.copy(queryBinding);
+            if (queryBinding.tags){
+                queryBinding.tags = tagsJoinBySelected(queryBinding.tags);
+            }
+            var searchHref = '';
+            queriesCollection.queries.some(function(query){
+                if (query.rel === rel){//匹配到指定的rel進行搜尋的url參數設定
+                    searchHref = query.href + '?';
+                    angular.forEach(query.data,function(data){
+                        data.prompt = queryBinding[data.name];
+                        if (data.prompt.length > 0) searchHref += data.name + '=' + data.prompt + '&'
+                    })
+                    return true;
+                }
+            })
+
+            jsonMethodService.get(searchHref).then(function(collectionjson){
+                angular.forEach(collectionjson.collection.items, function (item) {
+                    angular.forEach(item.data, function (data) {//將每個item內的data[]轉換成key/value的形式以利綁定
+                        item[data.name] = data.value;
+                    })
+                })
+                if (successCallback) successCallback(angular.copy(collectionjson.collection.items));
+            },function(){
+                if (errorCallback) errorCallback();
+            })
+        }
         function setConfigurationTemporary(datas, editBinding) {//配置區塊資料綁定
             angular.forEach(datas, function (data) {
                 if (data.name === 'tags') {
-                    var splitTags = data.value.split(/\s+/).map(function (e) {
-                        return {"name": e}
-                    });
-                    if (data.value.length > 0) data.value = splitTags;
-                    else data.value = [];
+                    data.value = tagsToArrayObject(data.value);
                 }
                 editBinding.configuration[data.name] = data.value;
             })
@@ -86,14 +108,30 @@
 
         }
 
-        function setTemplate(href,temporaryCollection,sections, editCollection, editBinding) {
-            jsonMethodService.get(href).then(function (collectionjson) {
-                var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
-                setTemporary(temporaryUrl,temporaryCollection, sections, editCollection, editBinding);//設定temporary結構
+        function setQueriesBinding(href,queriesCollection, queriesBinding,successCallback) {
+            jsonMethodService.get(href).then(function(collectionjson){
+                queriesCollection.queries = angular.copy(collectionjson.collection.queries);
+                angular.forEach(collectionjson.collection.queries, function (query) {
+                    angular.forEach(query.data, function (data) {
+                        query[data.name] = data.prompt;
+                    })
+                    delete query.data;
+                    query.q = '';
+                    query.tags = tagsToArrayObject(query.tags,'name');
+                    queriesBinding[query.rel] = query;
+                })
+                if (successCallback) successCallback();
             })
         }
 
-        function setTemporary(href,temporaryCollection, sections, editCollection, editBinding) {
+        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding) {
+            jsonMethodService.get(href).then(function (collectionjson) {
+                var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
+                setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding);//設定temporary結構
+            })
+        }
+
+        function setTemporary(href, temporaryCollection, sections, editCollection, editBinding) {
             jsonMethodService.get(href).then(function (collectionjson) {
                 if (temporaryCollection) temporaryCollection.collection = angular.copy(collectionjson.collection);
                 angular.forEach(collectionjson.collection.items, function (item) {
@@ -111,7 +149,8 @@
                         setConfigurationTemporary(item.data, editBinding);//設定配置區塊的資料綁定
                     }
                 })
-            }, function () {})
+            }, function () {
+            })
         }
 
         function sectionItemFormat(datas, queryProperty, syntaxProperty, slopProperty, editableProperty) {
@@ -149,9 +188,25 @@
             return itemInfoStruct;
         }
 
+        function tagsJoinBySelected(tagsArrayObject) {
+            return tagsArrayObject.map(function (tag) {
+                if (tag.selected) return tag.name;
+            }).join(' ').trim();
+        }
+
+        function tagsToArrayObject(tags){
+            if (tags.length > 0){
+                return tags.split(/\s+/).map(function (e) {
+                    return {"name": e}
+                });
+            }else return [];
+        }
+
         return{
             addToCurrentSection: addToCurrentSection,
             saveAs: saveAs,
+            searchByQueries: searchByQueries,
+            setQueriesBinding: setQueriesBinding,
             setTemplate: setTemplate,
             setTemporary: setTemporary
         }

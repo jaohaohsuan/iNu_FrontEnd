@@ -1,4 +1,4 @@
-<div class="form-inline model-filter">
+<div class="form-inline model-filter" ng-enter="modelFilterCtrl.doFilter(modelFilterCtrl.datasource)"><!--需修改-->
 <span ng-class="{false:'model-filter-auto-size'}[modelFilterCtrl.autoSize]" class="btn-group" dropdown
       auto-close="outsideClick">
      <button ng-class="{false:'model-filter-auto-size'}[modelFilterCtrl.autoSize]"
@@ -9,19 +9,21 @@
      </button>
       <ul nested-scroll class="dropdown-menu models-drop">
           <li class="btn-group btn-group-vertical btn-block"
-              ng-repeat="item in modelFilterCtrl.datasource track by $index">
+              ng-repeat="item in modelFilterCtrl.datasource.tags track by $index">
               <label btn-checkbox class="btn btn-success btn-outline animated fadeInLeft" ng-model="item.selected"
-                     ng-click="modelFilterCtrl.itemClicked(item)">{{::item[modelFilterCtrl.displayProperty]}}</label>
+                     ng-click="modelFilterCtrl.itemClicked(item)">{{::item[modelFilterCtrl.tagDisplayProperty]}}</label>
           </li>
       </ul>
 </span>
     <div class="inline-block">
         <label>{{'modelKeyword'|translate}}</label>
-        <input type="text" class="form-control inline-block" ng-model="modelFilterCtrl.modelKeyword" />
-<button class="btn btn-success btn-xs model-filter-button"
-            ng-click="modelFilterCtrl.doFilter(modelFilterCtrl.selectedItems,modelFilterCtrl.modelKeyword)"
-            ng-disabled="!modelFilterCtrl.selectedItems.length">
-        {{'filter'|translate}}
-    </button>
+        <input type="text" class="form-control inline-block"
+               placeholder="{{modelFilterCtrl.queryPlaceholder}}"
+               ng-model="modelFilterCtrl.datasource.q" />
+        <button class="btn btn-success btn-xs model-filter-button"
+                ng-click="modelFilterCtrl.doFilter(modelFilterCtrl.datasource)"
+                >
+            {{'filter'|translate}}
+        </button>
     </div>
 </div>

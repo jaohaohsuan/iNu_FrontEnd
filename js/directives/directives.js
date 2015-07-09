@@ -170,14 +170,14 @@
         };
     }
 
-    function modelFilter() {
+    function modelFilter() {//需修改
         var directive = {
             restrict: 'E',
             scope: {
                 datasource: '=',
-                selectedItems: '=',
-                displayProperty: '@',
-                placeholder: "@",
+                tagDisplayProperty: '@',
+                tagsPlaceholder: "@",
+                queryPlaceholder: '@',
                 autoSize:'=',
                 doFilter:'='
             },
@@ -190,13 +190,13 @@
 
         function modelFilterController($element, $window, $scope) {
             var self = this;
-
-            self.selectedText = self.placeholder;
+            self.selectedItems = [];
+            self.selectedText = self.tagsPlaceholder;
             self.itemClicked = itemClicked;
             self.modelKeyword='';
 
             function changeSelectedText(selectedItems) {
-                if (selectedItems.length <= 0) self.selectedText = self.placeholder;
+                if (selectedItems.length <= 0) self.selectedText = self.tagsPlaceholder;
                 else {
                     self.selectedText = selectedItems.map(function (elem) {
                         return elem.name;
@@ -279,7 +279,7 @@
             element.bind('keydown keypress',function(event){
                 if(event.which===13){
 
-                        scope.$eval(attrs.ngEnter);
+                    scope.$eval(attrs.ngEnter);
 
                     event.preventDefault();
                 }

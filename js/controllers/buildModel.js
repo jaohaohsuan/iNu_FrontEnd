@@ -71,10 +71,17 @@
             named: {}
         };
         self.enabledModel = enabledModel;
+        self.filterModelGroup = filterModelGroup;//需修改
         self.isInstance = false;
         self.isRounded = isRounded;
         self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
         self.nextToDo = nextToDo;
+        self.queriesCollection = {//需修改
+            queries: []
+        };
+        self.queriesBinding = {//需修改
+            search: {}
+        };
         self.renameModel = renameModel;
         self.roles = [
             {'name': '角色：全部', 'content': 'ALL'},
@@ -83,7 +90,6 @@
         ];
         self.saveAs = saveAs;
         self.saveAsName = '';
-        self.searchFromComponent = searchFromComponent;
         self.sections = [];
         self.sectionsClear = sectionsClear;
         self.sectionsDblclick = sectionsDblclick;
@@ -262,6 +268,13 @@
             });
         }
 
+        function filterModelGroup(queriesBinding) {//需修改
+            buildModelService.searchByQueries(self.queriesCollection,queriesBinding,'search',function(items){
+                self.editBinding.component.items = items;
+                self.editBinding.component.selected = [];
+            })
+        }
+
         function isRounded() {
             return window.innerWidth < 768
         }
@@ -315,21 +328,6 @@
             }
         }
 
-        function searchFromComponent(text) {
-            if (!text) text = '';
-            var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + text
-            jsonMethodService.get(searchUrl).then(function (collectionjson) {
-                angular.forEach(collectionjson.collection.items, function (item) {
-                    angular.forEach(item.data, function (data) {
-                        item[data.name] = data.value;
-                    })
-                    delete item.data;
-                })
-                self.editBinding.component.items = collectionjson.collection.items;
-                self.editBinding.component.selected = [];
-            })
-        }
-
         function sectionsClear(section, item) {
             var itemHref = item.href;
             jsonMethodService.DELETE(itemHref).then(function (data) {
@@ -372,7 +370,12 @@
                 self.isInstance = true;
 
             }
-            searchFromComponent();
+            buildModelService.setQueriesBinding(templateUrl + '/search',self.queriesCollection,self.queriesBinding,function(){
+                buildModelService.searchByQueries(self.queriesCollection,self.queriesBinding.search,'search',function(items){
+                    self.editBinding.component.items = items;
+                    self.editBinding.component.selected = [];
+                })
+            });
         }
 
         function syntaxInputClear() {
@@ -406,21 +409,19 @@
         self.isShowModelDetail = false
         self.modelKeyword = '';
         self.models = [];
+        self.queriesBinding = {
+            search: {}
+        }
+        self.queriesCollection = {
+            queries: []
+        }
         self.selectedItems = [];
         self.showModelDetail = showModelDetail;
         $scope.$on('minimalizaSidebar', setInputSize);
-        setModels();
-        function filterModelGroup(selectedItems, text) {
-            if (!text) text = '';
-            var searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + text
-            jsonMethodService.get(searchUrl).then(function (collectionjson) {
-                angular.forEach(collectionjson.collection.items, function (item) {
-                    angular.forEach(item.data, function (data) {
-                        item[data.name] = data.value;
-                    })
-                    delete item.data;
-                })
-                self.models = collectionjson.collection.items;
+        buildModelService.setQueriesBinding('http://10.85.1.156:32772/_query/template/search',self.queriesCollection,self.queriesBinding);//需修改
+        function filterModelGroup(queriesBinding) {//需修改
+            buildModelService.searchByQueries(self.queriesCollection,queriesBinding,'search',function(items){
+                self.models = items;
             })
         }
 
@@ -432,15 +433,6 @@
         }
 
         ////////////////////不綁定區//////////////
-
-        function setModels() {
-            jsonMethodService.get('json/models.json').then(
-                function (data) {
-                    self.datasource = data;
-                })
-        }
-
-
         function setInputSize() {
             var parentWidth = $('input.matched-review-keyword-text').parent().innerWidth();
             console.log(parentWidth)
@@ -512,10 +504,16 @@
         $scope.isModelOnline = false; //之後讀取API時需判斷此模型的上下線狀態
         $scope.onlineClass = 'online';
         $scope.offlineClass = 'offline';
+        self.queriesBinding = {
+            search: {}
+        }
+        self.queriesCollection = {
+            queries: []
+        }
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
         $scope.showModelDetail = showModelDetail;
-        setModels();
+        buildModelService.setQueriesBinding('http://10.85.1.156:32772/_query/template/search',self.queriesCollection,self.queriesBinding);//需修改
 
         function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
             //entity.enabled=!entity.enabled;
@@ -558,17 +556,13 @@
             templateLocation.path = entity.href;
         }
 
-        function filterModel(selectedItems, modelKeyword) {
+        function filterModel(queriesBinding) {//需修改
             if (self.gridOptions.data)  self.gridOptions.data.length = 0;
-            var searchUrl = 'http://10.85.1.156:32772/_query/template/search';
-            if (modelKeyword) searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + modelKeyword;
-            jsonMethodService.get(searchUrl).then(function (collectionjson) {
-                if (collectionjson.collection.items) {
-                    angular.forEach(collectionjson.collection.items, function (item) {
-                        var data = setGridData(item);
-                        self.gridOptions.data.push(data);
-                    })
-                }
+            buildModelService.searchByQueries(self.queriesCollection,queriesBinding,'search',function(items){
+                angular.forEach(items, function (item) {
+                    var data = setGridData(item);
+                    self.gridOptions.data.push(data);
+                })
             })
         }
 

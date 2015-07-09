@@ -19,14 +19,13 @@
                         </build-section>
                     </div>
                     <div ng-hide="matchedReviewCtrl.isShowModelDetail">
-                        <form class="form-group"
-                              ng-enter="matchedReviewCtrl.filterModelGroup(matchedReviewCtrl.modelKeyword)">
+                        <form class="form-group">
                             <model-filter
                                     auto-size="matchedReviewCtrl.dropdownAutoSize"
-                                    datasource="matchedReviewCtrl.datasource"
-                                    selected-items="matchedReviewCtrl.selectedItems"
-                                    display-property="{{::'name'}}"
-                                    placeholder="{{::'modelGroupSelectPlactholder'|translate}}"
+                                    datasource="matchedReviewCtrl.queriesBinding.search"
+                                    tag-display-property="{{::'name'}}"
+                                    query-placeholder="{{::'queryPlaceholder'|translate}}"
+                                    tags-placeholder="{{::'tagsPlaceholder'|translate}}"
                                     do-filter="matchedReviewCtrl.filterModelGroup">
                             </model-filter>
                         </form>

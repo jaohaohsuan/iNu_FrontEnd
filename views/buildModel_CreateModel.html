@@ -116,13 +116,15 @@
                 <h2>{{"addNestingModel"|translate}}</h2>
             </div>
             <div class="ibox-content">
-                <form class="input-group public-component-filter">
-                    <input type="text" class="form-control" ng-model="createModelCtrl.searchText"/><span
-                        class="input-group-btn">
-                        <button class="btn btn-success"
-                                ng-click="createModelCtrl.searchFromComponent(createModelCtrl.searchText)">
-                            {{'filter'|translate}}
-                        </button></span>
+                <form class="form-group">
+                    <model-filter
+                            auto-size="true"
+                            datasource="createModelCtrl.queriesBinding.search"
+                            tag-display-property="{{::'name'}}"
+                            query-placeholder="{{::'queryPlaceholder'|translate}}"
+                            tags-placeholder="{{::'tagsPlaceholder'|translate}}"
+                            do-filter="createModelCtrl.filterModelGroup">
+                    </model-filter>
                 </form>
                 <div nested-scroll class="btn-group btn-group-vertical btn-block "
                      ng-class="{true:'model-preview'}[createModelCtrl.editBinding.component.items.length>5]">
