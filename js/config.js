@@ -1,113 +1,131 @@
-(function(){
-	
-function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider){
-    $urlRouterProvider.otherwise("/main");
-    // Configure Idle settings
+(function () {
+
+    function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider) {
+        $urlRouterProvider.otherwise("/main");
+        // Configure Idle settings
 //    IdleProvider.idle(5); // in seconds
 //    IdleProvider.timeout(120); // in seconds
-    $ocLazyLoadProvider.config({
-        // Set to true if you want to see what and when is dynamically loaded
-        debug: false
-    });
-    $stateProvider
-        .state('login', {
-            url: "/login",
-            controller: "loginController",
-            controllerAs: "loginCtrl",
-            templateUrl: "views/login.html"
+        $ocLazyLoadProvider.config({
+            // Set to true if you want to see what and when is dynamically loaded
+            debug: false
+        });
+        $stateProvider
+            .state('login', {
+                url: "/login",
+                controller: "loginController",
+                controllerAs: "loginCtrl",
+                templateUrl: "views/login.html",
+                data:{
+                    title:"login"
+                }
 
-        })
-        .state('main',{
-            url: '/main',
-            controller: 'mainController',
-            controllerAs: 'mainCtrl',
-            templateUrl: "views/common/content.html"
-        })
+            })
+            .state('main', {
+                url: '/main',
+                controller: 'mainController',
+                controllerAs: 'mainCtrl',
+                templateUrl: "views/common/content.html",
+                data:{
+                    title:"INU"
+                }
+            })
 //        .state('main.businessTrend',{
 //            url: '/businessTrend',
 //            templateUrl: "Main/businessTrend.html",
 //            controller: 'trendController',
 //            controllerAs: 'trendCtrl'
 //        })
-        .state('main.recordList',{
-            url: '/recordList',
-            templateUrl: "views/recordList.html",
-            controller: 'recordListController',
-            controllerAs: 'recordListCtrl',
-            resolve: {
-                loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
-                        {
-                            name: ['ui.grid', 'ui.grid.edit','ui.grid.selection','ui.grid.pagination','ui.grid.expandable','ui.grid.pinning'],
-                            files: ['css/plugins/uiGrid/ui-grid.min.css','js/plugins/uiGrid/ui-grid.min.js']
-                        },
-                        {
-                            name: 'ui.tree',
-                            files: ['css/plugins/uiTree/angular-ui-tree.min.css','js/plugins/uiTree/angular-ui-tree.min.js']
-                        }
-                    ]);
+            .state('main.recordList', {
+                url: '/recordList',
+                templateUrl: "views/recordList.html",
+                controller: 'recordListController',
+                controllerAs: 'recordListCtrl',
+                data: {
+                    title: 'recordList'
+                },
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                name: ['ui.grid', 'ui.grid.edit', 'ui.grid.selection', 'ui.grid.pagination', 'ui.grid.expandable', 'ui.grid.pinning'],
+                                files: ['css/plugins/uiGrid/ui-grid.min.css', 'js/plugins/uiGrid/ui-grid.min.js']
+                            },
+                            {
+                                name: 'ui.tree',
+                                files: ['css/plugins/uiTree/angular-ui-tree.min.css', 'js/plugins/uiTree/angular-ui-tree.min.js']
+                            }
+                        ]);
+                    }
                 }
-            }
-        })
-        .state('main.crossAnalysis',{
-            url: '/crossAnalysis',
-            templateUrl: "views/crossAnalysis.html"
-        })
-        .state('main.buildModel',{
-            url: '/buildModel',
-            views:{
-                '':{
-                    templateUrl: "views/buildModel.html",
-                    controller: 'buildModelController',
-                    controllerAs: 'buildModelCtrl'
+            })
+            .state('main.crossAnalysis', {
+                url: '/crossAnalysis',
+                templateUrl: "views/crossAnalysis.html",
+                data: {
+                    title: 'crossAnalysis'
+                }
+            })
+            .state('main.buildModel', {
+                url: '/buildModel',
+                data: {
+                    title: 'modelBuild'
                 },
-                //'createComponent@main.buildModel':{
-                //    templateUrl:'views/buildModel_createModel.html',
-                //    controller: 'createModelController',
-                //    controllerAs: 'createModelCtrl'
-                //},
-                "createModel@main.buildModel":{
-                    templateUrl:'views/buildModel_createModel.html',
-                    controller: 'createModelController',
-                    controllerAs: 'createModelCtrl'
-                },
-                'matchedReview@main.buildModel':{
-                    templateUrl:'views/buildModel_matchedReview.html',
-                    controller:'matchedReviewedController',
-                    controllerAs:'matchedReviewCtrl'
-                },
-                'modelManagement@main.buildModel':{
-                    templateUrl:'views/buildModel_modelManagement.html',
-                    controller:'modelManagementController',
-                    controllerAs:'modelManagementCtrl'
+                views: {
+                    '': {
+                        templateUrl: "views/buildModel.html",
+                        controller: 'buildModelController',
+                        controllerAs: 'buildModelCtrl'
+                    },
+                    //'createComponent@main.buildModel':{
+                    //    templateUrl:'views/buildModel_createModel.html',
+                    //    controller: 'createModelController',
+                    //    controllerAs: 'createModelCtrl'
+                    //},
+                    "createModel@main.buildModel": {
+                        templateUrl: 'views/buildModel_createModel.html',
+                        controller: 'createModelController',
+                        controllerAs: 'createModelCtrl'
+                    },
+                    'matchedReview@main.buildModel': {
+                        templateUrl: 'views/buildModel_matchedReview.html',
+                        controller: 'matchedReviewedController',
+                        controllerAs: 'matchedReviewCtrl',
+                        data: {
+                            title: 'matchedReview'
+                        }
+                    },
+                    'modelManagement@main.buildModel': {
+                        templateUrl: 'views/buildModel_modelManagement.html',
+                        controller: 'modelManagementController',
+                        controllerAs: 'modelManagementCtrl'
 
+                    },
+                    "models@main.buildModel": {
+                        templateUrl: 'views/buildModel_models.html'
+                    }
                 },
-                "models@main.buildModel":{
-                    templateUrl:'views/buildModel_models.html'
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                            },
+                            {
+                                name: ['ngTagsInput'],
+                                files: ['js/plugins/tagsInput/ng-tags-input.min.js', 'css/plugins/tagsInput/ng-tags-input.min.css', 'css/plugins/tagsInput/ng-tags-input.bootstrap.min.css']
+                            },
+                            {
+                                name: 'oitozero.ngSweetAlert',
+                                files: ['js/plugins/angular-sweetalert/AngularSweetAlert.min.js', 'js/plugins/angular-sweetalert/sweetalert.min.js', 'css/plugins/angular-sweetalert/sweetalert.css']
+                            },
+                            {
+                                name: ['ui.grid', 'ui.grid.edit', 'ui.grid.selection', 'ui.grid.pagination', 'ui.grid.expandable', 'ui.grid.pinning', 'ui.grid.resizeColumns', 'ui.grid.exporter'],
+                                files: ['css/plugins/uiGrid/ui-grid.min.css', 'js/plugins/uiGrid/ui-grid.min.js']
+                            }
+                        ])
+                    }
                 }
-            },
-            resolve:{
-                loadPlugin: function($ocLazyLoad){
-                    return $ocLazyLoad.load([
-                        {
-                            files: ['css/plugins/iCheck/custom.css','js/plugins/iCheck/icheck.min.js']
-                        },
-                        {
-                            name: ['ngTagsInput'],
-                            files: ['js/plugins/tagsInput/ng-tags-input.min.js','css/plugins/tagsInput/ng-tags-input.min.css','css/plugins/tagsInput/ng-tags-input.bootstrap.min.css']
-                        },
-                        {
-                            name:'oitozero.ngSweetAlert',
-                            files:['js/plugins/angular-sweetalert/AngularSweetAlert.min.js','js/plugins/angular-sweetalert/sweetalert.min.js','css/plugins/angular-sweetalert/sweetalert.css']
-                        },
-                        {
-                            name: ['ui.grid', 'ui.grid.edit','ui.grid.selection','ui.grid.pagination','ui.grid.expandable','ui.grid.pinning', 'ui.grid.resizeColumns','ui.grid.exporter'],
-                            files: ['css/plugins/uiGrid/ui-grid.min.css','js/plugins/uiGrid/ui-grid.min.js']
-                        }
-                    ])
-                }
-            }
-        })
+            })
         //.state('main.buildModel.createComponent',{
         //    url:'/createComponent',
         //    views:{
@@ -148,12 +166,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         //        }
         //    }
         //})
-}
+    }
 
     angular
         .module('iNu')
-        .config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider',config])
-        .run(function($rootScope, $state) {
+        .config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', 'IdleProvider', 'KeepaliveProvider', config])
+        .run(function ($rootScope, $state) {
             //$rootScope.$state = $state;
         });
 })();

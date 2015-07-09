@@ -118,7 +118,6 @@
     }
 
 
-
     function focus($parse, $timeout) {
         return {
             link: function (scope, element, attrs) {
@@ -178,24 +177,24 @@
                 tagDisplayProperty: '@',
                 tagsPlaceholder: "@",
                 queryPlaceholder: '@',
-                autoSize:'=',
-                doFilter:'='
+                autoSize: '=',
+                doFilter: '='
             },
             templateUrl: 'views/directives/modelFilter.html',
-            controller: ['$element', '$window', '$scope','$timeout', modelFilterController],
+            controller: ['$element', '$window', '$scope', '$timeout', modelFilterController],
             controllerAs: 'modelFilterCtrl',
             bindToController: true
 
         };
 
-        function modelFilterController($element, $window, $scope,$timeout) {
+        function modelFilterController($element, $window, $scope, $timeout) {
             var doFilterTimer;
             var self = this;
             self.filterClick = filterClick;
             self.selectedItems = [];
             self.selectedText = self.tagsPlaceholder;
             self.itemClicked = itemClicked;
-            self.modelKeyword='';
+            self.modelKeyword = '';
             $scope.$on('$destroy', destroyListener);
             function changeSelectedText(selectedItems) {
                 if (selectedItems.length <= 0) self.selectedText = self.tagsPlaceholder;
@@ -206,20 +205,23 @@
                 }
 
             }
+
             function destroyListener(event) {
                 $timeout.cancel(doFilterTimer);
             }
-            function filterClick(datasource){
+
+            function filterClick(datasource) {
                 if (doFilterTimer) $timeout.cancel(doFilterTimer);
-                doFilterTimer = $timeout(function(){
+                doFilterTimer = $timeout(function () {
                     if (self.doFilter) self.doFilter(datasource);
-                },500)
+                }, 500)
             }
+
             function itemClicked(item) {
                 var idx = self.selectedItems.indexOf(item);
                 if (idx != -1)  self.selectedItems.splice(idx, 1);
                 else self.selectedItems.push(item);
-                if (self.selectedItems.length > ($element.parent().width() /80) ) {
+                if (self.selectedItems.length > ($element.parent().width() / 80)) {
                     self.selectedText = 'selectedModels';
                     //self.overWidth = true;
                 }
@@ -234,6 +236,7 @@
 
         return directive;
     }
+
     function modelInstance() {
         var directive = {
             restrict: 'E',
@@ -284,10 +287,11 @@
 
         return directive;
     }
-    function ngEnter(){
-        var directive =function(scope,element,attrs){
-            element.bind('keydown keypress',function(event){
-                if(event.which===13){
+
+    function ngEnter() {
+        var directive = function (scope, element, attrs) {
+            element.bind('keydown keypress', function (event) {
+                if (event.which === 13) {
 
                     scope.$eval(attrs.ngEnter);
 
@@ -297,6 +301,7 @@
         };
         return directive;
     }
+
     function nestedScroll() {
         var directive =
             function (scope, element) {
@@ -348,7 +353,7 @@
         var directive = {
             link: function (scope, ele) {
                 var listener = function (event, toState, toParams, fromState, fromParams) {
-                    var title = 'iNu';
+                    var title = 'INU';
                     $translate(title).then(function (translate) {
                         title = translate;
                         ele.text(title);
@@ -447,7 +452,7 @@
         return {
             restrict: 'A',
             template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="" ng-click="minimalize()"><i class="fa fa-bars"></i></a>',
-            controller: function ($rootScope,$scope, $element) {
+            controller: function ($rootScope, $scope, $element) {
                 $scope.minimalize = function () {
                     $rootScope.$broadcast('minimalizaSidebar')
                     $("body").toggleClass("mini-navbar");
@@ -719,6 +724,6 @@
         .directive('inject', inject)
         .directive('itemTemplate', itemTemplate)
         .directive('modelInstance', modelInstance) //模型實例視窗
-        .directive('ngEnter',ngEnter)
+        .directive('ngEnter', ngEnter)
         .directive('nestedScroll', nestedScroll)
 })();
