@@ -87,6 +87,7 @@
         self.sections = [];
         self.sectionsClear = sectionsClear;
         self.sectionsDblclick = sectionsDblclick;
+        self.selectedNestingItems = [];
         self.showUndo = false;
         self.tabIndex = 0;
         self.temporaryCollection = {
@@ -458,6 +459,7 @@
         self.filterModel = filterModel;
         self.gridOptions = {
             columnDefs: [
+
                 {
 
                     field: 'modelName',
@@ -465,9 +467,11 @@
                     cellClass: 'model-management-grid-cell',
                     headerCellClass: 'model-management-grid-header',
                     headerCellFilter: 'translate',
-                    cellTemplate: '<a ng-click="grid.appScope.showModelDetail(row.entity)" class="btn  btn-block">{{row.entity.modelName}}</a>',
+                    cellTemplate: 'views/buildModel_modelManagement_modelName_grid.html',
                     enableColumnMenu: false,
-                    enableHiding: false
+                    enableHiding: false,
+                    minWidth: 120
+
                 },
                 {
 
@@ -497,22 +501,6 @@
                     cellTemplate: '<div class="switch-instance inline-block"><div class="onoffswitch"><input type="checkbox" ng-checked="row.entity.enabled" ng-model="row.entity.enabled"  ng-click="grid.appScope.changeModelStatus(row.entity)" class="onoffswitch-checkbox" id="modelManagent{{row.entity.modelName}}"><label class="onoffswitch-label" for="modelManagent{{row.entity.modelName}}"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>',
                     enableColumnMenu: false,
                     enableSorting: false
-                },
-                {
-
-                    name: '{{"management"|translate}}',
-                    displayName: '{{"management"|translate}}',
-                    enableHiding: false,
-                    enableColumnMenu: false,
-                    enableSorting: false,
-                    headerCellFilter: 'translate',
-                    headerCellClass: 'model-management-grid-header',
-                    cellClass: 'model-management-grid-cell',
-                    cellTemplate: '<div class="model-management-grid">' +
-                    '<a ng-click="grid.appScope.editModel(row.entity)">{{"edit"|translate}}</a>' +
-                    '<a ng-click="grid.appScope.saveAsModel(row.entity)">{{"saveAs"|translate}}</a>' +
-                    '</div>',
-                    minWidth: 120
                 }
             ],
             exporterMenuPdf: false,
@@ -529,7 +517,7 @@
         $scope.showModelDetail = showModelDetail;
         setModels();
 
-        function changeModelStatus( entity) { //變更上下線，可直接變更該一列的資料
+        function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
             //entity.enabled=!entity.enabled;
             // if(enableModelTimeout) $timeout.cancel(enableModelTimeout);
             //enableModelTimeout=$timeout(function(){
@@ -574,7 +562,6 @@
             if (self.gridOptions.data)  self.gridOptions.data.length = 0;
             var searchUrl = 'http://10.85.1.156:32772/_query/template/search';
             if (modelKeyword) searchUrl = 'http://10.85.1.156:32772/_query/template/search?q=' + modelKeyword;
-
             jsonMethodService.get(searchUrl).then(function (collectionjson) {
                 if (collectionjson.collection.items) {
                     angular.forEach(collectionjson.collection.items, function (item) {

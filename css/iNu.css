@@ -1,11 +1,9 @@
 /*���Ұ�*/
 
 body {
-    font-family:Microsoft YaHei , SimHei, Microsoft JhengHei, sans-serif;
+    font-family: Microsoft YaHei, SimHei, Microsoft JhengHei, sans-serif;
 
 }
-
-
 
 span > a:link {
     color: #328F7B;
@@ -34,11 +32,10 @@ span > a:link {
     color: #fff;
 }
 
-
 .dropdown-multi-select {
     height: 30px;
     top: -1px;
- }
+}
 
 .ibox .open > .dropdown-menu {
     left: 0;
@@ -50,49 +47,64 @@ span > a:link {
 }
 
 .instance-button {
+    margin-top: 15px;
+    margin-left: 2px;
+}
+.instance-delete-button {
     margin-top: -15px;
     margin-left: 10px;
 }
-.matched-review-grid{
+.matched-review-grid {
     background: rgba(222, 222, 225, 0.2);
 }
-.matched-review-keyword{
+
+.matched-review-keyword {
     margin-top: 2px;
     width: 100%;
 }
-.matched-reviewed-model-list-group{
-    width: 100%;
- }
 
-.matched-review-model-preview{
+.matched-reviewed-model-list-group {
+    width: 100%;
+}
+
+.matched-review-model-preview {
     height: 250px;
     overflow: auto;
 }
+
 .matched-review-model-preview::-webkit-scrollbar {
     display: none;
 }
+
 .margins-div {
     margin: 0 0 0 2px;
 }
-.model-filter>.inline-block{
+
+.model-filter > .inline-block {
     margin-top: 3px;
 }
+
 .model-filter-auto-size {
     width: 100%;
 }
-.model-filter-button{
+
+.model-filter-button {
     height: 33px;
 }
+
 .model-filter-dropdown-multi-select {
     margin-right: 5px;
 }
+
 .model-instance-changeable {
     padding: 5px;
     border-bottom: inset 2px #696969;
 }
-.model-instance-changeable >.new-model-input> .btn-block{
-margin-top: 5px;
+
+.model-instance-changeable > .new-model-input > .btn-block {
+    margin-top: 5px;
 }
+
 .model-management-grid {
     margin-top: 10px;
     background: rgba(222, 222, 225, 0.2)
@@ -103,18 +115,14 @@ margin-top: 5px;
     color: red;
 }
 
-.model-management-grid-cell{
+.model-management-grid-cell {
     text-align: center;
 }
 
-
 .model-management-grid-header {
-
     text-align: center;
     height: 31px;
 }
-
-
 
 .model-management-modal-logic {
     left: 1%;
@@ -122,12 +130,16 @@ margin-top: 5px;
 
 .model-management-modal-save {
     top: 170px;
-    left: 50%;
+
 }
 
 .model-management-model-backdrop {
     background: rgba(0, 0, 0, 0);
 
+}
+
+.model-name-grid {
+    margin-top: 5px;
 }
 
 .model-preview {
@@ -171,7 +183,7 @@ margin-top: 5px;
 
 .new-model-input {
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .next-todo > .btn {
@@ -207,12 +219,14 @@ margin-top: 5px;
     padding-bottom: 7px;
     margin-bottom: 0;
 }
+
 .switch {
     margin-top: 5px;
     left: 35%;
     position: relative;
     top: 1px
 }
+
 .switch-instance {
     margin-top: 5px;
     margin-left: 10px;
@@ -234,10 +248,12 @@ margin-top: 5px;
     overflow: hidden;
     width: 90%;
 }
-.sweetAlert{
+
+.sweetAlert {
     top: 40% !important;
-    left: 65%!important;
+    left: 65% !important;
 }
+
 .tag-list li a {
     display: inline;
 }

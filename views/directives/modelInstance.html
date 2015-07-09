@@ -28,10 +28,11 @@
             <input type="text" class="form-control" required="modelInstanceCtrl.required"
                    ng-model="modelInstanceCtrl.datasource.title"
                    placeholder="{{'modelNamePlaceholder'|translate}}"/>
-            <button ng-click="modelInstanceCtrl.changeModelName()"
+            <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.changeModelName()"
                     class="btn btn-success btn-block">{{'change'|translate}}
             </button>
         </div>
+
     </div>
     <!--管理模式下-->
     <div ng-if="modelInstanceCtrl.isManagement">
@@ -65,7 +66,7 @@
         </div>
         <button ng-click="modelInstanceCtrl.deleteModel()"
                 ng-disabled="!modelInstanceCtrl.datasource.title"
-                class="btn btn-danger   instance-button">
+                class="btn btn-danger   instance-delete-button">
             {{'deleteModel'|translate}}
         </button>
     </div>

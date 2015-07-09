@@ -1,0 +1,6 @@
+<button ng-click="grid.appScope.showModelDetail(row.entity)" class="btn btn-outline"><a>{{row.entity.modelName}}</a>
+</button>
+<div class="model-name-grid pull-left">
+    <button title="{{'saveAs'|translate}}" class="btn btn-default btn-xs btn-outline" ng-click="grid.appScope.saveAsModel(row.entity)"><i class="fa fa-floppy-o fa-lg"></i></button>
+    <button title="{{'edit'|translate}}" class="btn btn-default  btn-xs btn-outline" ng-click="grid.appScope.editModel(row.entity)"><i class="fa fa-pencil-square-o fa-lg"></i></button>
+</div>
