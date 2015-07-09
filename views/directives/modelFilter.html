@@ -1,4 +1,4 @@
-<div class="form-inline model-filter" ng-enter="modelFilterCtrl.doFilter(modelFilterCtrl.datasource)"><!--需修改-->
+<div class="form-inline model-filter" ng-enter="modelFilterCtrl.filterClick(modelFilterCtrl.datasource)"><!--需修改-->
 <span ng-class="{false:'model-filter-auto-size'}[modelFilterCtrl.autoSize]" class="btn-group" dropdown
       auto-close="outsideClick">
      <button ng-class="{false:'model-filter-auto-size'}[modelFilterCtrl.autoSize]"
@@ -21,7 +21,7 @@
                placeholder="{{modelFilterCtrl.queryPlaceholder}}"
                ng-model="modelFilterCtrl.datasource.q" />
         <button class="btn btn-success btn-xs model-filter-button"
-                ng-click="modelFilterCtrl.doFilter(modelFilterCtrl.datasource)"
+                ng-click="modelFilterCtrl.filterClick(modelFilterCtrl.datasource)"
                 >
             {{'filter'|translate}}
         </button>

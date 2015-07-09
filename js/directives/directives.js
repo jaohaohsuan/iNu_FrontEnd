@@ -182,19 +182,21 @@
                 doFilter:'='
             },
             templateUrl: 'views/directives/modelFilter.html',
-            controller: ['$element', '$window', '$scope', modelFilterController],
+            controller: ['$element', '$window', '$scope','$timeout', modelFilterController],
             controllerAs: 'modelFilterCtrl',
             bindToController: true
 
         };
 
-        function modelFilterController($element, $window, $scope) {
+        function modelFilterController($element, $window, $scope,$timeout) {
+            var doFilterTimer;
             var self = this;
+            self.filterClick = filterClick;
             self.selectedItems = [];
             self.selectedText = self.tagsPlaceholder;
             self.itemClicked = itemClicked;
             self.modelKeyword='';
-
+            $scope.$on('$destroy', destroyListener);
             function changeSelectedText(selectedItems) {
                 if (selectedItems.length <= 0) self.selectedText = self.tagsPlaceholder;
                 else {
@@ -204,7 +206,15 @@
                 }
 
             }
-
+            function destroyListener(event) {
+                $timeout.cancel(doFilterTimer);
+            }
+            function filterClick(datasource){
+                if (doFilterTimer) $timeout.cancel(doFilterTimer);
+                doFilterTimer = $timeout(function(){
+                    if (self.doFilter) self.doFilter(datasource);
+                },500)
+            }
             function itemClicked(item) {
                 var idx = self.selectedItems.indexOf(item);
                 if (idx != -1)  self.selectedItems.splice(idx, 1);
