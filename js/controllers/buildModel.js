@@ -462,7 +462,7 @@
                     cellTemplate: 'views/buildModel_modelManagement_modelName_grid.html',
                     enableColumnMenu: false,
                     enableHiding: false,
-                    minWidth: 120
+                    minWidth: 200
 
                 },
                 {
@@ -492,7 +492,8 @@
                     cellClass: 'model-management-grid-cell',
                     cellTemplate: '<div class="switch-instance inline-block"><div class="onoffswitch"><input type="checkbox" ng-checked="row.entity.enabled" ng-model="row.entity.enabled"  ng-click="grid.appScope.changeModelStatus(row.entity)" class="onoffswitch-checkbox" id="modelManagent{{row.entity.modelName}}"><label class="onoffswitch-label" for="modelManagent{{row.entity.modelName}}"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>',
                     enableColumnMenu: false,
-                    enableSorting: false
+                    enableSorting: false,
+                    maxWidth:120
                 }
             ],
             exporterMenuPdf: false,

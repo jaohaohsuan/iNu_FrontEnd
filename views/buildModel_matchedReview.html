@@ -34,7 +34,7 @@
                             <div nested-scroll
                                  ng-class="{true:'matched-review-model-preview'}[matchedReviewCtrl.models.length>5]"
                                  class="list-group matched-reviewed-model-list-group">
-                                <a class="list-group-item text-center" ng-repeat="model in matchedReviewCtrl.models"
+                                <a class="list-group-item text-center animated flipInX" ng-repeat="model in matchedReviewCtrl.models"
                                    ng-click="matchedReviewCtrl.showModelDetail(model)">{{model.title}}</a>
                             </div>
                         </div>

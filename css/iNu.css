@@ -51,7 +51,8 @@ span > a:link {
     margin-left: 2px;
 }
 .instance-delete-button {
-    margin-top: -15px;
+    width: 30%;
+    margin-top: 2px;
     margin-left: 10px;
 }
 .matched-review-grid {
@@ -90,8 +91,11 @@ span > a:link {
 
 .model-filter-button {
     height: 33px;
+    margin-left: 3px!important;
 }
-
+.model-filter span{
+    margin-bottom: 5px;
+}
 .model-filter-dropdown-multi-select {
     margin-right: 5px;
 }
@@ -106,7 +110,7 @@ span > a:link {
 }
 
 .model-management-grid {
-    margin-top: 10px;
+    margin-top: 2px;
     background: rgba(222, 222, 225, 0.2)
 }
 
@@ -140,6 +144,7 @@ span > a:link {
 
 .model-name-grid {
     margin-top: 5px;
+    padding-right: 2px;
 }
 
 .model-preview {
