@@ -1,8 +1,8 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location', createModelController])
-        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', matchedReviewedController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location','API_PATH', createModelController])
+        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService','API_PATH', matchedReviewedController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', modelManagementController])
 
 
@@ -39,9 +39,9 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, $anchorScroll, $location) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, $anchorScroll, $location,API_PATH) {
         var modelGroupSelectedTimeout;
-        var templateUrl = 'http://10.85.1.156:32772/_query/template';
+        var templateUrl = API_PATH+'_query/template';
         var self = this;
         self.addModelGroup = addModelGroup; //增加模型組
         self.addTab = addTab; //增加tab
@@ -392,7 +392,7 @@
         }
     }
 
-    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService) {
+    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService,API_PATH) {
         var self = this;
         self.buildSections = [];
         self.modelTitle = ''; //顯示模型邏輯詞區的title
@@ -417,8 +417,8 @@
         }
         self.selectedItems = [];
         self.showModelDetail = showModelDetail;
-        $scope.$on('minimalizaSidebar', setInputSize);
-        buildModelService.setQueriesBinding('http://10.85.1.156:32772/_query/template/search',self.queriesCollection,self.queriesBinding);//需修改
+
+        buildModelService.setQueriesBinding(API_PATH+'_query/template/search',self.queriesCollection,self.queriesBinding);//需修改
         function filterModelGroup(queriesBinding) {//需修改
             buildModelService.searchByQueries(self.queriesCollection,queriesBinding,'search',function(items){
                 self.models = items;
@@ -433,12 +433,7 @@
         }
 
         ////////////////////不綁定區//////////////
-        function setInputSize() {
-            var parentWidth = $('input.matched-review-keyword-text').parent().innerWidth();
-            console.log(parentWidth)
-            console.log($('input.matched-review-keyword-text').innerWidth())
-            //$('input.matched-review-keyword-text').innerWidth(parentWidth)
-        }
+
     }
 
     function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert) {
@@ -514,7 +509,7 @@
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
         $scope.showModelDetail = showModelDetail;
-        buildModelService.setQueriesBinding('http://10.85.1.156:32772/_query/template/search',self.queriesCollection,self.queriesBinding);//需修改
+        buildModelService.setQueriesBinding(API_PATH+'_query/template/search',self.queriesCollection,self.queriesBinding);//需修改
 
         function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
             //entity.enabled=!entity.enabled;
