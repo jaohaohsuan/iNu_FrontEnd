@@ -95,7 +95,8 @@
                     <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2 pull-left btn btn-success btn-rounded  "
                             ng-click="createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
                             ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">
-                        <i class="fa fa-arrow-left fa-lg"></i>{{"join"|translate}}
+                        <i set-class-with-width base-width="992" more-width-class="fa fa-arrow-left fa-lg"
+                           less-width-class="fa fa-arrow-up fa-lg"></i>{{"join"|translate}}
                     </button>
                     <div class="pull-right" ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
                         <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success "
@@ -144,8 +145,9 @@
                 <div class="row">
                     <button class="col-xs-6 col-md-4 col-sm-4 col-lg-2  pull-left btn btn-success  btn-rounded "
                             ng-disabled="createModelCtrl.editBinding.component.selected.length <= 0"
-                            ng-click="createModelCtrl.addToSectionFromComponent()"><i
-                            class="fa fa-arrow-left fa-lg"></i>{{"join"|translate}}
+                            ng-click="createModelCtrl.addToSectionFromComponent()">
+                        <i set-class-with-width base-width="992" more-width-class="fa fa-arrow-left fa-lg"
+                           less-width-class="fa fa-arrow-up fa-lg"></i>{{"join"|translate}}
                     </button>
                     <div class="pull-right" ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
                         <label class="col-xs-6 col-md-4 col-sm-4 btn btn-success"

@@ -138,6 +138,7 @@
         };
     }
 
+
     function inject() {
         return {
             restrict: 'A',
@@ -207,7 +208,7 @@
             }
 
             function destroyListener(event) {
-               if (doFilterTimer) $timeout.cancel(doFilterTimer);
+                if (doFilterTimer) $timeout.cancel(doFilterTimer);
             }
 
             function filterClick(datasource) {
@@ -253,12 +254,12 @@
                 title: '@'
             },
             templateUrl: 'views/directives/modelInstance.html',
-            controller: ['$scope','$timeout',modelInstanceController],
+            controller: ['$scope', '$timeout', modelInstanceController],
             controllerAs: 'modelInstanceCtrl',
             bindToController: true
         };
 
-        function modelInstanceController($scope,$timeout) {
+        function modelInstanceController($scope, $timeout) {
             var saveTimeout;
             var self = this;
             self.saveConfiguration = saveConfiguration;
@@ -268,14 +269,14 @@
             self.required = false;
             $scope.$on('$destroy', destroyListener);
             function destroyListener(event) {
-               if (saveTimeout) $timeout.cancel(saveTimeout);
+                if (saveTimeout) $timeout.cancel(saveTimeout);
             }
 
             function saveConfiguration(datasource) {
                 if (saveTimeout) $timeout.cancel(saveTimeout);
-                saveTimeout = $timeout(function(){//延遲500毫秒，避免短時間進行儲存動作
+                saveTimeout = $timeout(function () {//延遲500毫秒，避免短時間進行儲存動作
                     self.doSave(datasource);
-                },500)
+                }, 500)
             }
 
             function modelClicked(model) {
@@ -343,6 +344,28 @@
 
             function up() {
                 $scope.number++;
+            }
+        }
+
+        return directive;
+    }
+
+    function setClassWithWidth() {
+        var directive = {
+            scope: {
+                baseWidth: '@',
+                moreWidthClass: '@',
+                lessWidthClass: '@'
+            },
+            link: setClassWithWidthLink
+        }
+
+        function setClassWithWidthLink(scope, ele) {
+            console.log(scope.baseWidth, window.innerWidth)
+            if (window.innerWidth > scope.baseWidth) {
+                ele.addClass(scope.moreWidthClass)
+            } else {
+                ele.addClass(scope.lessWidthClass)
             }
         }
 
@@ -727,4 +750,5 @@
         .directive('modelInstance', modelInstance) //模型實例視窗
         .directive('ngEnter', ngEnter)
         .directive('nestedScroll', nestedScroll)
+        .directive('setClassWithWidth', setClassWithWidth)
 })();
