@@ -17,7 +17,7 @@
                        class="btn btn-success btn-outline animated fadeInLeft"
                        ng-model="tag.selected"
                        ng-repeat="tag in modelInstanceCtrl.datasource.tags track by $index"
-                       ng-click="modelInstanceCtrl.modelClicked(tag)"
+                       ng-click="modelInstanceCtrl.tagClicked(tag,modelInstanceCtrl.datasource)"
                        btn-checkbox>{{tag.name}}
                 </label>
             </div>
@@ -46,10 +46,10 @@
         </button>
     </div>
 
-    <div class="btn-group-sm" ng-show="modelInstanceCtrl.isInstance">
+    <div class="input-group" ng-show="modelInstanceCtrl.isInstance">
         <!-- confirmed-click:按下確認後綁定的事件 confirm-click:確認視窗內容的文字-->
 
-        <label class="checkOnline">{{'onlineModel'|translate}}？</label>
+        <label class="checkOnline">{{'onlineModel'|translate}}</label>
 
         <div class="switch-instance inline-block">
             <div class="onoffswitch">
@@ -66,7 +66,7 @@
         </div>
         <button ng-click="modelInstanceCtrl.deleteModel()"
                 ng-disabled="!modelInstanceCtrl.datasource.title"
-                class="btn btn-danger pull-right  instance-delete-button">
+                class="btn btn-danger   instance-delete-button">
             {{'deleteModel'|translate}}
         </button>
     </div>
