@@ -579,13 +579,24 @@
                 self.editBinding = {
                     configuration: {
                         title: '',
-                        tags: []
+                        tags: [],
+                        allTags:[]
                     }
                 };
+                self.queryBinding = {
+                   search:{
+                       q: '',
+                       tags: []
+                   }
+                }
                 self.temporaryCollection = {
                     collection: {}
                 }
-                buildModelService.setTemporary(entity.href, self.temporaryCollection, null, null, self.editBinding);
+                buildModelService.setQueriesBinding(API_PATH +  '_query/template/search',null,self.queryBinding,function(){
+                    self.editBinding.configuration.allTags = angular.copy(self.queryBinding.search.tags);
+                    buildModelService.setTemporary(entity.href, self.temporaryCollection, null, null, self.editBinding);
+                })
+
 
                 self.closeModal = closeModal;
                 function closeModal() {
