@@ -266,8 +266,8 @@
             var self = this;
             self.saveConfiguration = saveConfiguration;
             self.changeText = 'changeConfig';
+            self.isDisabled = true;
             self.tagClicked = tagClicked;
-            self.selectedTags = [];
             self.required = false;
             $scope.$on('$destroy', destroyListener);
             function destroyListener(event) {
@@ -281,10 +281,8 @@
                 }, 500)
             }
 
-            function tagClicked(tag,datasource) {
-                var idx = self.selectedTags.indexOf(tag);
-                if (idx != -1) self.selectedTags.splice(idx, 1);
-                else self.selectedTags.push(tag);
+            function tagClicked(datasource) {
+                self.isDisabled = false;
                 if (selectedTimeout) $timeout.cancel(selectedTimeout);
                 if (self.selectedEventhandler){
                     selectedTimeout = $timeout(function(){

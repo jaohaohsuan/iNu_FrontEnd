@@ -17,7 +17,7 @@
                        class="btn btn-success btn-outline animated fadeInLeft"
                        ng-model="tag.selected"
                        ng-repeat="tag in modelInstanceCtrl.datasource.tags track by $index"
-                       ng-click="modelInstanceCtrl.tagClicked(tag,modelInstanceCtrl.datasource)"
+                       ng-click="modelInstanceCtrl.tagClicked(modelInstanceCtrl.datasource)"
                        btn-checkbox>{{tag.name}}
                 </label>
             </div>
@@ -27,6 +27,7 @@
             <label>{{'modelName'|translate}}:</label>
             <input type="text" class="form-control" required
                    ng-model="modelInstanceCtrl.datasource.title"
+                   ng-change="modelInstanceCtrl.isDisabled = false"
                    placeholder="{{'modelNamePlaceholder'|translate}}"/>
             <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.saveConfiguration(modelInstanceCtrl.datasource)"
                     class="btn btn-success btn-block">{{'change'|translate}}
@@ -37,11 +38,11 @@
     <!--管理模式下-->
     <div ng-if="modelInstanceCtrl.isManagement">
         <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.saveModel('save')"
-                ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.selectedTags.length<=0">
+                ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.isDisabled">
             {{'saveAsModel'|translate}}
         </button>
         <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.saveModel('online')"
-                ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.selectedTags.length<=0">
+                ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.isDisabled">
             {{'saveModelAndOnline'|translate}}
         </button>
     </div>
@@ -65,7 +66,7 @@
             </div>
         </div>
         <button ng-click="modelInstanceCtrl.deleteModel()"
-                ng-disabled="!modelInstanceCtrl.datasource.title "
+                ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.isDisabled"
                 class="btn btn-danger   instance-delete-button">
             {{'deleteModel'|translate}}
         </button>
