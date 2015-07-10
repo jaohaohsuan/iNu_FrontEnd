@@ -71,23 +71,22 @@
             named: {}
         };
         self.enabledModel = enabledModel;
-        self.filterModelGroup = filterModelGroup;//需修改
+        self.filterModelGroup = filterModelGroup;
         self.isInstance = false;
         self.isRounded = isRounded;
-        self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
         self.nextToDo = nextToDo;
-        self.queriesCollection = {//需修改
+        self.queriesCollection = {
             queries: []
         };
-        self.queriesBinding = {//需修改
+        self.queriesBinding = {
             search: {}
         };
-        self.renameModel = renameModel;
         self.roles = [
             {'name': '角色：全部', 'content': 'ALL'},
             {'name': '角色：A', 'content': 'A'},
             {'name': '角色：B', 'content': 'B'}
         ];
+        self.saveConfiguration = saveConfiguration;
         self.saveAs = saveAs;
         self.saveAsName = '';
         self.sections = [];
@@ -279,24 +278,11 @@
             return window.innerWidth < 768
         }
 
-        function modelGroupsSelectedHandler(selectedModelGroups) {
-            if (modelGroupSelectedTimeout) $timeout.cancel(modelGroupSelectedTimeout);
-            modelGroupSelectedTimeout = $timeout(function () {
-                console.log(selectedModelGroups)
-            }, 1000); // delay 1000 ms
-        }
 
         function nextToDo() {
             self.nextView = true;
             self.saveAsNameInputFocus = true;
         }
-
-        function renameModel(data) {
-            console.log(data)
-            if(data.title.length>0)
-            SweetAlert.swal('renamed', '', 'success');
-        }
-
 
         function saveAs(condition) {
             if (self.editBinding.expansion.title.length <= 0) return;
@@ -328,6 +314,11 @@
                 };
                 return next[condition]();
             }
+        }
+
+        function saveConfiguration(configuration) {
+            buildModelService.saveConfiguration(self.temporaryCollection,configuration);
+            SweetAlert.swal('saved', '', 'success');
         }
 
         function sectionsClear(section, item) {

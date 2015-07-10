@@ -42,10 +42,11 @@
                 data.value = configuration[data.name];
             })
             var template = {template: angular.copy(temporaryCollection.collection.template)};
-            jsonMethodService.put(configuration.href,template).then(function(response){
-                console.log(response);
-            })
-            console.log(configuration)
+            console.log(JSON.stringify(template));
+//            jsonMethodService.put(configuration.href,template).then(function(response){
+//                console.log(response);
+//            })
+//            console.log(configuration)
         }
 
         function searchByQueries(queriesCollection,queryBinding,rel,successCallback,errorCallback){

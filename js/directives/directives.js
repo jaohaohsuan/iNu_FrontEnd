@@ -207,7 +207,7 @@
             }
 
             function destroyListener(event) {
-                $timeout.cancel(doFilterTimer);
+               if (doFilterTimer) $timeout.cancel(doFilterTimer);
             }
 
             function filterClick(datasource) {
@@ -244,36 +244,45 @@
                 addTags: '=',
                 datasource: '=',
                 deleteModel: '=',
-                enableModel: '=',
+                enableModel: '=',//上下線
                 isInstance: '=', //是否是實例模式
                 isManagement: '=', //是否是模型管理下
                 modelName: '=',//另存模型名稱
-                renameModel: '=',
-                saveModel: '=',
-                selectedEventhandler: '=',
+                doSave: '=',//rename更改為doSave->變更
+                doSaveAs: '=',//saveModel更改為doSaveAs->另存
                 title: '@'
             },
             templateUrl: 'views/directives/modelInstance.html',
-            controller: modelInstanceController,
+            controller: ['$scope','$timeout',modelInstanceController],
             controllerAs: 'modelInstanceCtrl',
             bindToController: true
         };
 
-        function modelInstanceController($scope) {
+        function modelInstanceController($scope,$timeout) {
+            var saveTimeout;
             var self = this;
-
+            self.saveConfiguration = saveConfiguration;
             self.changeText = 'changeConfig';
             self.modelClicked = modelClicked;
-            self.selectedModelGroups = [];
+            self.selectedTags = [];
             self.required = false;
+            $scope.$on('$destroy', destroyListener);
+            function destroyListener(event) {
+               if (saveTimeout) $timeout.cancel(saveTimeout);
+            }
 
+            function saveConfiguration(datasource) {
+                if (saveTimeout) $timeout.cancel(saveTimeout);
+                saveTimeout = $timeout(function(){//延遲500毫秒，避免短時間進行儲存動作
+                    self.doSave(datasource);
+                },500)
+            }
 
             function modelClicked(model) {
                 if (!self.selectedEventhandler) return;
-                var idx = self.selectedModelGroups.indexOf(model);
-                if (idx != -1) self.selectedModelGroups.splice(idx, 1);
-                else self.selectedModelGroups.push(model);
-                self.selectedEventhandler(self.selectedModelGroups);
+                var idx = self.selectedTags.indexOf(model);
+                if (idx != -1) self.selectedTags.splice(idx, 1);
+                else self.selectedTags.push(model);
             }
         }
 
