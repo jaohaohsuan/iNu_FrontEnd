@@ -279,8 +279,8 @@
             return window.innerWidth < 768
         }
 
-        function modelInstanceSelected(configuration){
-            if (!self.isInstance) buildModelService.saveConfiguration(self.temporaryCollection,configuration);
+        function modelInstanceSelected(configuration) {
+            if (!self.isInstance) buildModelService.saveConfiguration(self.temporaryCollection, configuration);
         }
 
         function nextToDo() {
@@ -321,7 +321,7 @@
         }
 
         function saveConfiguration(configuration) {
-            buildModelService.saveConfiguration(self.temporaryCollection,configuration);
+            buildModelService.saveConfiguration(self.temporaryCollection, configuration);
             SweetAlert.swal('saved', '', 'success');
         }
 
@@ -438,6 +438,7 @@
 
         var enableModelTimeout;
         var self = this;
+
         $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
         self.datasource = [];
         $scope.editModel = editModel;
@@ -509,6 +510,7 @@
         $scope.showModelDetail = showModelDetail;
         buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);//需修改
 
+
         function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
             //entity.enabled=!entity.enabled;
             // if(enableModelTimeout) $timeout.cancel(enableModelTimeout);
@@ -573,25 +575,26 @@
             function saveAsController($modalInstance, $timeout) {
                 var modelGroupSelectedTimeout;
                 var self = this;
+                self.addTags = addTags;
                 self.saveModel = saveModel;
                 self.title = $translate.instant('saveAsNewModel')
                 self.editBinding = {
                     configuration: {
                         title: '',
                         tags: [],
-                        allTags:[]
+                        allTags: []
                     }
                 };
                 self.queryBinding = {
-                   search:{
-                       q: '',
-                       tags: []
-                   }
+                    search: {
+                        q: '',
+                        tags: []
+                    }
                 }
                 self.temporaryCollection = {
                     collection: {}
                 }
-                buildModelService.setQueriesBinding(API_PATH +  '_query/template/search',null,self.queryBinding,function(){
+                buildModelService.setQueriesBinding(API_PATH + '_query/template/search', null, self.queryBinding, function () {
                     self.editBinding.configuration.allTags = angular.copy(self.queryBinding.search.tags);
                     buildModelService.setTemporary(entity.href, self.temporaryCollection, null, null, self.editBinding);
                 })
@@ -601,8 +604,34 @@
                 function closeModal() {
                     $modalInstance.close();
                 }
+                function addTags() {
+                    SweetAlert.swal({
+                            title: $translate.instant('newModelsName'), //讀取多語系key
+                            type: 'input',
+                            showCancelButton: true,
+                            inputPlaceholder: $translate.instant('newModelsName'),
+                            confirmButtonColor: '#1C84C6',
+                            confirmButtonText: $translate.instant('sure'),
+                            cancelButtonText: $translate.instant('cancel'),
+                            closeOnConfirm: false,
+                            closeOnCancel: true,
+                            animation: false
+                        },
+                        function (inputValue) {
+                            if (inputValue === false) return false;
+                            if (inputValue === '' || !inputValue.trim().length) {
+                                swal.showInputError('You need to write something!');
+                                return false
+                            }
+                            swal('Nice!', 'You wrote: ' + inputValue, 'success');
+                            self.editBinding.configuration.tags.push({
+                                'name': inputValue
+                            })
+                         });
 
+                }
                 function saveModel(type) {
+                    alert(type)
                     buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.configuration.title, self.editBinding.configuration.tags, function (location) {
                         swal(
                             {title: "Success", timer: 1000, type: 'success', showConfirmButton: false}
