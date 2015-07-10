@@ -9,9 +9,10 @@
     <div ng-class="{true:'model-instance-changeable'}[modelInstanceCtrl.isInstance]">
         <div class="form-inline">
             <h3> {{'models'|translate}}:
-                <button class="btn btn-success btn-xs fa fa-plus" ng-click="modelInstanceCtrl.addTags()"></button>
+                <button class="btn btn-success btn-xs fa fa-plus" ng-click="modelInstanceCtrl.add(modelInstanceCtrl.datasource)"></button>
             </h3>
-            <div nested-scroll class="btn-group btn-group-vertical btn-block  "
+            <div id="modelInstanceTags"
+                 nested-scroll class="btn-group btn-group-vertical btn-block  "
                  ng-class="{true:'models-select'}[modelInstanceCtrl.datasource.tags.length>4]">
                 <label id="models{{tag.name}}"
                        class="btn btn-success btn-outline animated fadeInLeft"

@@ -104,7 +104,7 @@
         initial(templateLocation.path, templateUrl);
         $scope.$on('$destroy', destroyListener);
         $scope.$on('tabClicked', tabClicked);
-        function addTags() {
+        function addTags(successCallback) {
             SweetAlert.swal({
                     title: $translate.instant('newModelsName'), //讀取多語系key
                     type: 'input',
@@ -123,15 +123,16 @@
                         swal.showInputError('You need to write something!');
                         return false
                     }
-                    swal('Nice!', 'You wrote: ' + inputValue, 'success');
                     self.editBinding.configuration.tags.push({
-                        'name': inputValue
+                        name: inputValue,
+                        selected: true
                     })
-                    $location.hash('models' + inputValue);
-                    $anchorScroll('models' + inputValue);
+
+                    buildModelService.saveConfiguration(self.temporaryCollection,self.editBinding.configuration,function(){
+                        swal('Nice!', 'You wrote: ' + inputValue, 'success');
+                        successCallback();
+                    })
                 });
-
-
         }
 
         function addTab() {

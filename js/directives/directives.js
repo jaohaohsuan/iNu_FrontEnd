@@ -264,12 +264,22 @@
             var selectedTimeout;
             var saveTimeout;
             var self = this;
+            self.add = add;
             self.saveConfiguration = saveConfiguration;
             self.changeText = 'changeConfig';
             self.isDisabled = true;
             self.tagClicked = tagClicked;
             self.required = false;
             $scope.$on('$destroy', destroyListener);
+            function add(datasource){
+                if (self.addTags) self.addTags(function(){
+                    var elem = document.getElementById('modelInstanceTags');
+                    elem.scrollTop = elem.scrollHeight;
+//                    $('#modelInstanceTags').scrollTop($('#modelInstanceTags').height())
+//                    window.scrollTo(0,document.body.scrollHeight);
+                });
+
+            }
             function destroyListener(event) {
                 $timeout.cancel(saveTimeout,selectedTimeout);
             }
