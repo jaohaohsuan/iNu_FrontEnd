@@ -171,11 +171,10 @@
             <div class="ibox-title"><h2>{{"config"|translate}}</h2></div>
             <div class="ibox-content">
                 <model-instance datasource="createModelCtrl.editBinding.configuration"
-                                selected-eventhandler="createModelCtrl.modelGroupsSelectedHandler"
                                 add-tags="createModelCtrl.addTags"
                                 delete-model="createModelCtrl.deleteModel"
                                 enable-model="createModelCtrl.enabledModel"
-                                rename-model="createModelCtrl.renameModel"
+                                do-save="createModelCtrl.saveConfiguration"
                                 is-instance="createModelCtrl.isInstance">
                 </model-instance>
 

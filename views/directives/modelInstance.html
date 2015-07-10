@@ -28,7 +28,7 @@
             <input type="text" class="form-control" required
                    ng-model="modelInstanceCtrl.datasource.title"
                    placeholder="{{'modelNamePlaceholder'|translate}}"/>
-            <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.renameModel(modelInstanceCtrl.datasource)"
+            <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.saveConfiguration(modelInstanceCtrl.datasource)"
                     class="btn btn-success btn-block">{{'change'|translate}}
             </button>
         </div>
@@ -37,11 +37,11 @@
     <!--管理模式下-->
     <div ng-if="modelInstanceCtrl.isManagement">
         <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.saveModel('save')"
-                ng-disabled="!modelInstanceCtrl.datasource.title||modelInstanceCtrl.selectedModelGroups.length<=0">
+                ng-disabled="!modelInstanceCtrl.datasource.title||modelInstanceCtrl.selectedTags.length<=0">
             {{'saveAsModel'|translate}}
         </button>
         <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.saveModel('online')"
-                ng-disabled="!modelInstanceCtrl.datasource.title||modelInstanceCtrl.selectedModelGroups.length<=0">
+                ng-disabled="!modelInstanceCtrl.datasource.title||modelInstanceCtrl.selectedTags.length<=0">
             {{'saveModelAndOnline'|translate}}
         </button>
     </div>
