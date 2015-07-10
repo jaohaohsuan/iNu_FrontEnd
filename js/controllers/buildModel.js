@@ -550,7 +550,7 @@
             templateLocation.path = entity.href;
         }
 
-        function filterModel(queriesBinding) {//需修改
+        function filterModel(queriesBinding) {
             if (self.gridOptions.data)  self.gridOptions.data.length = 0;
             buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 angular.forEach(items, function (item) {

@@ -99,16 +99,16 @@
             return isequal;
         }
 
-        function setConfigurationTemporary(href,datas, editBinding) {//配置區塊資料綁定
-            editBinding.configuration.href = href;
+        function setConfigurationTemporary(href,datas, configurationBinding) {//配置區塊資料綁定
+            configurationBinding.href = href;
             angular.forEach(datas, function (data) {
                 if (data.name === 'tags') {
                     var selectedTags = tagsToArrayObject(data.value);
-                    if (editBinding.configuration.allTags){
-                        data.value = markedSelectedTags(editBinding.configuration.allTags,selectedTags);
+                    if (configurationBinding.allTags){
+                        data.value = markedSelectedTags(configurationBinding.allTags,selectedTags);
                     }else data.value = selectedTags;
                 }
-                editBinding.configuration[data.name] = data.value;
+                configurationBinding[data.name] = data.value;
             })
         }
 
@@ -151,7 +151,7 @@
 
         function setQueriesBinding(href,queriesCollection, queriesBinding,successCallback) {
             jsonMethodService.get(href).then(function(collectionjson){
-                queriesCollection.queries = angular.copy(collectionjson.collection.queries);
+                if (queriesCollection) queriesCollection.queries = angular.copy(collectionjson.collection.queries);
                 angular.forEach(collectionjson.collection.queries, function (query) {
                     angular.forEach(query.data, function (data) {
                         query[data.name] = data.prompt;
@@ -186,8 +186,8 @@
                         setModelSections(sections);//設定查詢條件的綁定
                     }
                     if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
-                    if (editBinding) {
-                        setConfigurationTemporary(href,item.data, editBinding);//設定配置區塊的資料綁定
+                    if (editBinding.configuration) {
+                        setConfigurationTemporary(href,item.data, editBinding.configuration);//設定配置區塊的資料綁定
                     }
                 })
             }, function () {
