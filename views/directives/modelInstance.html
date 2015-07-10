@@ -30,6 +30,7 @@
                    ng-change="modelInstanceCtrl.isDisabled = false"
                    placeholder="{{'modelNamePlaceholder'|translate}}"/>
             <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.saveConfiguration(modelInstanceCtrl.datasource)"
+                    ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.isDisabled"
                     class="btn btn-success btn-block">{{'change'|translate}}
             </button>
         </div>
