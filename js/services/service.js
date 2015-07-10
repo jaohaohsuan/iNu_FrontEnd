@@ -196,7 +196,7 @@
 
         function tagsToArrayObject(tags){
             if (tags.length > 0){
-                return tags.split(/\s+/).map(function (e) {
+                return tags.trim().split(/\s+/).map(function (e) {
                     return {"name": e}
                 });
             }else return [];
