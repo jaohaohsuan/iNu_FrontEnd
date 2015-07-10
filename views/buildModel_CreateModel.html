@@ -197,8 +197,10 @@
                     <i class="fa fa-info-circle"></i>{{'next'|translate}}
                 </button>
                 <!--創建模型顯示控件-->
-                <form class="form-group animated fadeIn" ng-show="createModelCtrl.nextView">
-                    <input type="text" class="form-control btn-block"
+                <form name="nextView" class="form-group animated fadeIn" ng-show="createModelCtrl.nextView">
+                    <input type="text" class="form-control btn-block" name="modelTile"
+                           ng-model-options="{ updateOn: 'blur' }"
+                           ng-keyup="createModelCtrl.resetTitle($event)"
                            ng-model="createModelCtrl.editBinding.expansion.title"
                            placeholder="{{'modelNamePlaceholder'|translate}}"
                            focus="createModelCtrl.saveAsNameInputFocus" required/>

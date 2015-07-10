@@ -43,6 +43,7 @@
         var modelGroupSelectedTimeout;
         var templateUrl = API_PATH + '_query/template';
         var self = this;
+
         self.addTags = addTags; //增加模型組
         self.addTab = addTab; //增加tab
         self.addToSectionFromSyntax = addToSectionFromSyntax;
@@ -82,6 +83,7 @@
         self.queriesBinding = {
             search: {}
         };
+        self.resetTitle = resetTitle;
         self.roles = [
             {'name': '角色：全部', 'content': 'ALL'},
             {'name': '角色：A', 'content': 'A'},
@@ -287,7 +289,11 @@
             self.nextView = true;
             self.saveAsNameInputFocus = true;
         }
-
+        function resetTitle(e){ //讓input內容恢復binding的資料
+            if(e.keyCode===27){
+                $scope.nextView.modelTile.$rollbackViewValue(); //formName.inputName
+            }
+        };
         function saveAs(condition) {
             if (self.editBinding.expansion.title.length <= 0) return;
             else {
