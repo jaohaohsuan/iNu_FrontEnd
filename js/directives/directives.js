@@ -368,10 +368,11 @@
             })
             function setClass(innerWidth){
                 ele.removeClass()
-                if (innerWidth > scope.baseWidth) {
+                if (innerWidth >= scope.baseWidth) {
                     ele.addClass(scope.moreWidthClass)
                 } else {
                     ele.addClass(scope.lessWidthClass)
+
                 }
             }
 
@@ -485,6 +486,7 @@
             restrict: 'A',
             template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="" ng-click="minimalize()"><i class="fa fa-bars"></i></a>',
             controller: function ($rootScope, $scope, $element) {
+
                 $scope.minimalize = function () {
                     $rootScope.$broadcast('minimalizaSidebar')
                     $("body").toggleClass("mini-navbar");
@@ -506,6 +508,10 @@
                         // Remove all inline style from jquery fadeIn function to reset menu state
                         $('#side-menu').removeAttr('style');
                     }
+                }
+
+                if(window.innerWidth<1025){
+                    $scope.minimalize();
                 }
             }
         };
