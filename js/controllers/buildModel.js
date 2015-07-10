@@ -129,8 +129,12 @@
                         name: inputValue,
                         selected: true
                     })
-                    buildModelService.saveConfiguration(self.temporaryCollection,self.editBinding.configuration,function(){
+                    buildModelService.saveConfiguration(self.temporaryCollection, self.editBinding.configuration, function () {
                         swal('Nice!', 'You wrote: ' + inputValue, 'success');
+                        self.queriesBinding.search.tags = angular.copy(self.editBinding.configuration.tags);
+                        self.queriesBinding.search.tags = self.queriesBinding.search.tags.map(function (tag) {
+                            return {name: tag.name}
+                        })
                         if (successCallback) successCallback();
                     })
                 });
@@ -610,6 +614,7 @@
                 function closeModal() {
                     $modalInstance.close();
                 }
+
                 function addTags(successCallback) {
                     SweetAlert.swal({
                             title: $translate.instant('newModelsName'), //讀取多語系key
@@ -634,13 +639,14 @@
                                 name: inputValue,
                                 selected: true
                             })
-                            buildModelService.saveConfiguration(self.temporaryCollection,self.editBinding.configuration,function(){
+                            buildModelService.saveConfiguration(self.temporaryCollection, self.editBinding.configuration, function () {
                                 swal('Nice!', 'You wrote: ' + inputValue, 'success');
                                 if (successCallback) successCallback();
                             })
-                         });
+                        });
 
                 }
+
                 function saveModel(type) {
                     alert(type)
                     buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.configuration.title, self.editBinding.configuration.tags, function (location) {
