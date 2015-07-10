@@ -19,18 +19,7 @@
                     if (errorCallback) errorCallback(response);
                 })
         }
-        function save(temporaryCollection,configuration,successCallback,errCallback){
-            configuration = angular.copy(configuration);
-            configuration.tags = tagsJoinBySelected(configuration.tags);
-            angular.forEach(temporaryCollection.collection.template.data,function(data){
-                data.value = configuration[data.name];
-            })
-            var template = {template: angular.copy(temporaryCollection.collection.template)};
-            jsonMethodService.put(configuration.href,template).then(function(response){
-                console.log(response);
-            })
-            console.log(configuration)
-        }
+
 
         function saveAs(temporaryCollection, title, tags, successCallback, errorCallback) {
             var href = jsonParseService.findItemValueFromArray(temporaryCollection.items, "href", "template").href;
@@ -44,6 +33,19 @@
                 }, function (response) {
                     if (errorCallback) errorCallback(response);
                 })
+        }
+
+        function saveConfiguration(temporaryCollection,configuration,successCallback,errCallback){//儲存配置
+            configuration = angular.copy(configuration);
+            configuration.tags = tagsJoinBySelected(configuration.tags);
+            angular.forEach(temporaryCollection.collection.template.data,function(data){
+                data.value = configuration[data.name];
+            })
+            var template = {template: angular.copy(temporaryCollection.collection.template)};
+            jsonMethodService.put(configuration.href,template).then(function(response){
+                console.log(response);
+            })
+            console.log(configuration)
         }
 
         function searchByQueries(queriesCollection,queryBinding,rel,successCallback,errorCallback){
@@ -74,7 +76,8 @@
                 if (errorCallback) errorCallback();
             })
         }
-        function setConfigurationTemporary(datas, editBinding) {//配置區塊資料綁定
+        function setConfigurationTemporary(href,datas, editBinding) {//配置區塊資料綁定
+            editBinding.configuration.href = href;
             angular.forEach(datas, function (data) {
                 if (data.name === 'tags') {
                     data.value = tagsToArrayObject(data.value);
@@ -158,7 +161,7 @@
                     }
                     if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
                     if (editBinding) {
-                        setConfigurationTemporary(item.data, editBinding);//設定配置區塊的資料綁定
+                        setConfigurationTemporary(href,item.data, editBinding);//設定配置區塊的資料綁定
                     }
                 })
             }, function () {
@@ -216,8 +219,8 @@
 
         return{
             addToCurrentSection: addToCurrentSection,
-            save: save,
             saveAs: saveAs,
+            saveConfiguration: saveConfiguration,
             searchByQueries: searchByQueries,
             setQueriesBinding: setQueriesBinding,
             setTemplate: setTemplate,
