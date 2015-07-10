@@ -361,12 +361,20 @@
         }
 
         function setClassWithWidthLink(scope, ele) {
-            console.log(scope.baseWidth, window.innerWidth)
-            if (window.innerWidth > scope.baseWidth) {
-                ele.addClass(scope.moreWidthClass)
-            } else {
-                ele.addClass(scope.lessWidthClass)
+            scope.$watch(function(){
+                return window.innerWidth;
+            },function(innerWidth){
+                setClass(innerWidth)
+            })
+            function setClass(innerWidth){
+                ele.removeClass()
+                if (innerWidth > scope.baseWidth) {
+                    ele.addClass(scope.moreWidthClass)
+                } else {
+                    ele.addClass(scope.lessWidthClass)
+                }
             }
+
         }
 
         return directive;
