@@ -17,7 +17,7 @@
                        class="btn btn-success btn-outline animated fadeInLeft"
                        ng-model="tag.selected"
                        ng-repeat="tag in modelInstanceCtrl.datasource.tags track by $index"
-                       ng-click="modelInstanceCtrl.modelClicked(tag)"
+                       ng-click="modelInstanceCtrl.tagClicked(tag,modelInstanceCtrl.datasource)"
                        btn-checkbox>{{tag.name}}
                 </label>
             </div>

@@ -54,9 +54,8 @@
             })
             var template = {template: angular.copy(temporaryCollection.collection.template)};
             jsonMethodService.put(configuration.href,template).then(function(response){
-                console.log(response);
+                if (successCallback) successCallback(response);
             })
-            console.log(configuration)
         }
 
         function searchByQueries(queriesCollection,queryBinding,rel,successCallback,errorCallback){

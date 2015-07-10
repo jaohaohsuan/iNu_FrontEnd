@@ -249,8 +249,9 @@
                 isInstance: '=', //是否是實例模式
                 isManagement: '=', //是否是模型管理下
                 modelName: '=',//另存模型名稱
-                doSave: '=',//rename更改為doSave->變更
-                doSaveAs: '=',//saveModel更改為doSaveAs->另存
+                doSave: '=',//變更
+                doSaveAs: '=',//另存
+                selectedEventhandler: '=',
                 title: '@'
             },
             templateUrl: 'views/directives/modelInstance.html',
@@ -260,16 +261,17 @@
         };
 
         function modelInstanceController($scope, $timeout) {
+            var selectedTimeout;
             var saveTimeout;
             var self = this;
             self.saveConfiguration = saveConfiguration;
             self.changeText = 'changeConfig';
-            self.modelClicked = modelClicked;
+            self.tagClicked = tagClicked;
             self.selectedTags = [];
             self.required = false;
             $scope.$on('$destroy', destroyListener);
             function destroyListener(event) {
-                if (saveTimeout) $timeout.cancel(saveTimeout);
+                $timeout.cancel(saveTimeout,selectedTimeout);
             }
 
             function saveConfiguration(datasource) {
@@ -279,11 +281,16 @@
                 }, 500)
             }
 
-            function modelClicked(model) {
-                if (!self.selectedEventhandler) return;
-                var idx = self.selectedTags.indexOf(model);
+            function tagClicked(tag,datasource) {
+                var idx = self.selectedTags.indexOf(tag);
                 if (idx != -1) self.selectedTags.splice(idx, 1);
-                else self.selectedTags.push(model);
+                else self.selectedTags.push(tag);
+                if (selectedTimeout) $timeout.cancel(selectedTimeout);
+                if (self.selectedEventhandler){
+                    selectedTimeout = $timeout(function(){
+                        self.selectedEventhandler(datasource);
+                    });
+                }
             }
         }
 
