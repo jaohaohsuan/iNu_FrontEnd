@@ -354,16 +354,17 @@
         }
 
         function initial(locationUrl, templateUrl) {
-            if (!locationUrl)//location不存在代表為首頁template
-            {
-                buildModelService.setTemplate(templateUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
-
-            } else {//設定Temporary
-                buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
-                self.isInstance = true;
-
-            }
             buildModelService.setQueriesBinding(templateUrl + '/search', self.queriesCollection, self.queriesBinding, function () {
+                self.editBinding.configuration.allTags = angular.copy(self.queriesBinding.search.tags);
+                if (!locationUrl)//location不存在代表為首頁template
+                {
+                    buildModelService.setTemplate(templateUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
+
+                } else {//設定Temporary
+                    buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
+                    self.isInstance = true;
+
+                }
                 buildModelService.searchByQueries(self.queriesCollection, self.queriesBinding.search, 'search', function (items) {
                     self.editBinding.component.items = items;
                     self.editBinding.component.selected = [];

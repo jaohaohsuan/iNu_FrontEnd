@@ -20,6 +20,17 @@
                 })
         }
 
+        function markedSelectedTags(allTags,selectedTags){
+            angular.forEach(allTags,function(tag){
+                selectedTags.some(function(selectedTag){
+                    if (IsSelfAttrsEqObjX(tag,selectedTag)){
+                        tag.selected = true;
+                        return true;
+                    }
+                })
+            })
+            return angular.copy(allTags);
+        }
 
         function saveAs(temporaryCollection, title, tags, successCallback, errorCallback) {
             var href = jsonParseService.findItemValueFromArray(temporaryCollection.items, "href", "template").href;
@@ -42,11 +53,10 @@
                 data.value = configuration[data.name];
             })
             var template = {template: angular.copy(temporaryCollection.collection.template)};
-            console.log(JSON.stringify(template));
-//            jsonMethodService.put(configuration.href,template).then(function(response){
-//                console.log(response);
-//            })
-//            console.log(configuration)
+            jsonMethodService.put(configuration.href,template).then(function(response){
+                console.log(response);
+            })
+            console.log(configuration)
         }
 
         function searchByQueries(queriesCollection,queryBinding,rel,successCallback,errorCallback){
@@ -77,11 +87,27 @@
                 if (errorCallback) errorCallback();
             })
         }
+        function IsSelfAttrsEqObjX(self, ObjX) {//比較共同欄位
+            var isequal = false;
+            for (var thisKey in self) {
+                if (!ObjX[thisKey] || thisKey == '$$hashKey') continue;
+                if (self[thisKey] != ObjX[thisKey]) {
+                    isequal = false;
+                    break;
+                }
+                isequal = true;
+            }
+            return isequal;
+        }
+
         function setConfigurationTemporary(href,datas, editBinding) {//配置區塊資料綁定
             editBinding.configuration.href = href;
             angular.forEach(datas, function (data) {
                 if (data.name === 'tags') {
-                    data.value = tagsToArrayObject(data.value);
+                    var selectedTags = tagsToArrayObject(data.value);
+                    if (editBinding.configuration.allTags){
+                        data.value = markedSelectedTags(editBinding.configuration.allTags,selectedTags);
+                    }else data.value = selectedTags;
                 }
                 editBinding.configuration[data.name] = data.value;
             })
