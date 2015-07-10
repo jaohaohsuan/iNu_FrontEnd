@@ -280,7 +280,7 @@
         }
 
         function modelInstanceSelected(configuration){
-            buildModelService.saveConfiguration(self.temporaryCollection,configuration);
+            if (!self.isInstance) buildModelService.saveConfiguration(self.temporaryCollection,configuration);
         }
 
         function nextToDo() {
