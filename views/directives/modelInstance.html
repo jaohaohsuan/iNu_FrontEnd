@@ -37,11 +37,11 @@
     <!--管理模式下-->
     <div ng-if="modelInstanceCtrl.isManagement">
         <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.saveModel('save')"
-                ng-disabled="!modelInstanceCtrl.datasource.title||modelInstanceCtrl.selectedTags.length<=0">
+                ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.selectedTags.length<=0">
             {{'saveAsModel'|translate}}
         </button>
         <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.saveModel('online')"
-                ng-disabled="!modelInstanceCtrl.datasource.title||modelInstanceCtrl.selectedTags.length<=0">
+                ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.selectedTags.length<=0">
             {{'saveModelAndOnline'|translate}}
         </button>
     </div>
@@ -65,7 +65,7 @@
             </div>
         </div>
         <button ng-click="modelInstanceCtrl.deleteModel()"
-                ng-disabled="!modelInstanceCtrl.datasource.title"
+                ng-disabled="!modelInstanceCtrl.datasource.title "
                 class="btn btn-danger   instance-delete-button">
             {{'deleteModel'|translate}}
         </button>

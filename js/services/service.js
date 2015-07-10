@@ -186,7 +186,7 @@
                         setModelSections(sections);//設定查詢條件的綁定
                     }
                     if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
-                    if (editBinding.configuration) {
+                    if (editBinding && editBinding.hasOwnProperty('configuration')) {
                         setConfigurationTemporary(href,item.data, editBinding.configuration);//設定配置區塊的資料綁定
                     }
                 })

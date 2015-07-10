@@ -573,7 +573,6 @@
             function saveAsController($modalInstance, $timeout) {
                 var modelGroupSelectedTimeout;
                 var self = this;
-                self.modelGroupsSelectedHandler = modelGroupsSelectedHandler;
                 self.saveModel = saveModel;
                 self.title = $translate.instant('saveAsNewModel')
                 self.editBinding = {
@@ -601,13 +600,6 @@
                 self.closeModal = closeModal;
                 function closeModal() {
                     $modalInstance.close();
-                }
-
-                function modelGroupsSelectedHandler(selectedModelGroups) {
-                    if (modelGroupSelectedTimeout) $timeout.cancel(modelGroupSelectedTimeout);
-                    modelGroupSelectedTimeout = $timeout(function () {
-                        console.log(selectedModelGroups)
-                    }, 1000); // delay 1000 ms
                 }
 
                 function saveModel(type) {
