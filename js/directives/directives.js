@@ -261,20 +261,12 @@
 
         function modelInstanceController($scope) {
             var self = this;
-            self.changeModelName = changeModelName;
+
             self.changeText = 'changeConfig';
             self.modelClicked = modelClicked;
             self.selectedModelGroups = [];
             self.required = false;
-            function changeModelName() {
 
-                if (!self.modelName || !self.modelName.length)
-                    self.required = true;
-                else {
-                    self.renameModel(); //在完成的時候給前端控制
-                }
-
-            }
 
             function modelClicked(model) {
                 if (!self.selectedEventhandler) return;

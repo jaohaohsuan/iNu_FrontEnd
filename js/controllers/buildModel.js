@@ -1,9 +1,9 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location','API_PATH', createModelController])
-        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService','API_PATH', matchedReviewedController])
-        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert','API_PATH', modelManagementController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location', 'API_PATH', createModelController])
+        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', matchedReviewedController])
+        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', 'API_PATH', modelManagementController])
 
 
     function buildModelController($scope, $timeout, $translate) {
@@ -39,11 +39,11 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, $anchorScroll, $location,API_PATH) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, $anchorScroll, $location, API_PATH) {
         var modelGroupSelectedTimeout;
-        var templateUrl = API_PATH+'_query/template';
+        var templateUrl = API_PATH + '_query/template';
         var self = this;
-        self.addModelGroup = addModelGroup; //增加模型組
+        self.addTags = addTags; //增加模型組
         self.addTab = addTab; //增加tab
         self.addToSectionFromSyntax = addToSectionFromSyntax;
         self.addToSectionFromComponent = addToSectionFromComponent;
@@ -104,7 +104,7 @@
         initial(templateLocation.path, templateUrl);
         $scope.$on('$destroy', destroyListener);
         $scope.$on('tabClicked', tabClicked);
-        function addModelGroup() {
+        function addTags() {
             SweetAlert.swal({
                     title: $translate.instant('newModelsName'), //讀取多語系key
                     type: 'input',
@@ -124,7 +124,7 @@
                         return false
                     }
                     swal('Nice!', 'You wrote: ' + inputValue, 'success');
-                    self.modelDatasource.models.push({
+                    self.editBinding.configuration.tags.push({
                         'name': inputValue
                     })
                     $location.hash('models' + inputValue);
@@ -269,7 +269,7 @@
         }
 
         function filterModelGroup(queriesBinding) {//需修改
-            buildModelService.searchByQueries(self.queriesCollection,queriesBinding,'search',function(items){
+            buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 self.editBinding.component.items = items;
                 self.editBinding.component.selected = [];
             })
@@ -291,7 +291,9 @@
             self.saveAsNameInputFocus = true;
         }
 
-        function renameModel() {
+        function renameModel(data) {
+            console.log(data)
+            if(data.title.length>0)
             SweetAlert.swal('renamed', '', 'success');
         }
 
@@ -370,8 +372,8 @@
                 self.isInstance = true;
 
             }
-            buildModelService.setQueriesBinding(templateUrl + '/search',self.queriesCollection,self.queriesBinding,function(){
-                buildModelService.searchByQueries(self.queriesCollection,self.queriesBinding.search,'search',function(items){
+            buildModelService.setQueriesBinding(templateUrl + '/search', self.queriesCollection, self.queriesBinding, function () {
+                buildModelService.searchByQueries(self.queriesCollection, self.queriesBinding.search, 'search', function (items) {
                     self.editBinding.component.items = items;
                     self.editBinding.component.selected = [];
                 })
@@ -392,7 +394,7 @@
         }
     }
 
-    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService,API_PATH) {
+    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH) {
         var self = this;
         self.buildSections = [];
         self.modelTitle = ''; //顯示模型邏輯詞區的title
@@ -418,9 +420,9 @@
         self.selectedItems = [];
         self.showModelDetail = showModelDetail;
 
-        buildModelService.setQueriesBinding(API_PATH+'_query/template/search',self.queriesCollection,self.queriesBinding);//需修改
+        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);//需修改
         function filterModelGroup(queriesBinding) {//需修改
-            buildModelService.searchByQueries(self.queriesCollection,queriesBinding,'search',function(items){
+            buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 self.models = items;
             })
         }
@@ -436,7 +438,7 @@
 
     }
 
-    function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert,API_PATH) {
+    function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert, API_PATH) {
 
         var enableModelTimeout;
         var self = this;
@@ -488,7 +490,7 @@
                     cellTemplate: '<div class="switch-instance inline-block"><div class="onoffswitch"><input type="checkbox" ng-checked="row.entity.enabled" ng-model="row.entity.enabled"  ng-click="grid.appScope.changeModelStatus(row.entity)" class="onoffswitch-checkbox" id="modelManagent{{row.entity.modelName}}"><label class="onoffswitch-label" for="modelManagent{{row.entity.modelName}}"><span class="onoffswitch-inner"></span><span class="onoffswitch-switch"></span></label></div></div>',
                     enableColumnMenu: false,
                     enableSorting: false,
-                    maxWidth:120
+                    maxWidth: 120
                 }
             ],
             exporterMenuPdf: false,
@@ -509,7 +511,7 @@
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
         $scope.showModelDetail = showModelDetail;
-        buildModelService.setQueriesBinding(API_PATH+'_query/template/search',self.queriesCollection,self.queriesBinding);//需修改
+        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);//需修改
 
         function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
             //entity.enabled=!entity.enabled;
@@ -554,7 +556,7 @@
 
         function filterModel(queriesBinding) {//需修改
             if (self.gridOptions.data)  self.gridOptions.data.length = 0;
-            buildModelService.searchByQueries(self.queriesCollection,queriesBinding,'search',function(items){
+            buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 angular.forEach(items, function (item) {
                     var data = setGridData(item);
                     self.gridOptions.data.push(data);

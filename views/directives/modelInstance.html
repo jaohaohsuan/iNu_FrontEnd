@@ -25,10 +25,10 @@
 
         <div class="form-inline new-model-input" ng-show="modelInstanceCtrl.isInstance||modelInstanceCtrl.isManagement">
             <label>{{'modelName'|translate}}:</label>
-            <input type="text" class="form-control" required="modelInstanceCtrl.required"
+            <input type="text" class="form-control" required
                    ng-model="modelInstanceCtrl.datasource.title"
                    placeholder="{{'modelNamePlaceholder'|translate}}"/>
-            <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.changeModelName()"
+            <button ng-show="modelInstanceCtrl.isInstance" ng-click="modelInstanceCtrl.renameModel(modelInstanceCtrl.datasource)"
                     class="btn btn-success btn-block">{{'change'|translate}}
             </button>
         </div>
