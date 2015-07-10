@@ -74,6 +74,7 @@
         self.filterModelGroup = filterModelGroup;
         self.isInstance = false;
         self.isRounded = isRounded;
+        self.modelInstanceSelected = modelInstanceSelected;
         self.nextToDo = nextToDo;
         self.queriesCollection = {
             queries: []
@@ -278,6 +279,9 @@
             return window.innerWidth < 768
         }
 
+        function modelInstanceSelected(configuration){
+            if (!self.isInstance) buildModelService.saveConfiguration(self.temporaryCollection,configuration);
+        }
 
         function nextToDo() {
             self.nextView = true;
