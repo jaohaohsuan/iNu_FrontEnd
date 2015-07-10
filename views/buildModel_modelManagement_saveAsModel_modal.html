@@ -2,8 +2,7 @@
     <div class="ibox-content"><span ng-click="saveAsCtrl.closeModal()"
                                     class="btn text-danger fa fa-remove fa-lg pull-right"></span>
         <model-instance datasource="saveAsCtrl.editBinding.configuration" is-management="true"
-                        selected-eventhandler="saveAsCtrl.modelGroupsSelectedHandler"
-                        title="{{::saveAsCtrl.title}}" save-model="saveAsCtrl.saveModel">
+                        title="{{::saveAsCtrl.title}}" do-save-as="saveAsCtrl.saveModel">
         </model-instance>
     </div>
 </div>

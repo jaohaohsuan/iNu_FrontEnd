@@ -37,11 +37,11 @@
     </div>
     <!--管理模式下-->
     <div ng-if="modelInstanceCtrl.isManagement">
-        <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.saveModel('save')"
+        <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.doSaveAs()"
                 ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.isDisabled">
             {{'saveAsModel'|translate}}
         </button>
-        <button class="btn btn-success btn-block instance-button" ng-click="modelInstanceCtrl.saveModel('online')"
+        <button class="btn btn-success btn-block instance-button" ng-click=""
                 ng-disabled="!modelInstanceCtrl.datasource.title || modelInstanceCtrl.isDisabled">
             {{'saveModelAndOnline'|translate}}
         </button>
