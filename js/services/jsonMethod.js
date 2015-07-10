@@ -46,10 +46,28 @@
                     });
                 return deferred.promise;
             }
+            function put(href, data) {
+                var deferred = $q.defer();
+                var urlToGo =  href;
+                $http(
+                    {
+                        method: "PUT", data: data,
+                        url: urlToGo,
+                        headers: {'Content-Type': 'application/vnd.collection+json'}
+                    }
+                )
+                    .success(function (response) {
+                        deferred.resolve(response);
+                    }).error(function (response) {
+                        deferred.reject(response);
+                    });
+                return deferred.promise;
+            }
             return{
                 DELETE: DELETE,
                 get: get,
-                post: post
+                post: post,
+                put: put
             };
         })
 })();

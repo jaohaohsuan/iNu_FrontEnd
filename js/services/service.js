@@ -19,6 +19,18 @@
                     if (errorCallback) errorCallback(response);
                 })
         }
+        function save(temporaryCollection,configuration,successCallback,errCallback){
+            configuration = angular.copy(configuration);
+            configuration.tags = tagsJoinBySelected(configuration.tags);
+            angular.forEach(temporaryCollection.collection.template.data,function(data){
+                data.value = configuration[data.name];
+            })
+            var template = {template: angular.copy(temporaryCollection.collection.template)};
+            jsonMethodService.put(configuration.href,template).then(function(response){
+                console.log(response);
+            })
+            console.log(configuration)
+        }
 
         function saveAs(temporaryCollection, title, tags, successCallback, errorCallback) {
             var href = jsonParseService.findItemValueFromArray(temporaryCollection.items, "href", "template").href;
@@ -204,6 +216,7 @@
 
         return{
             addToCurrentSection: addToCurrentSection,
+            save: save,
             saveAs: saveAs,
             searchByQueries: searchByQueries,
             setQueriesBinding: setQueriesBinding,
