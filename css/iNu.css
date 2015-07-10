@@ -106,9 +106,6 @@ i.fa.fa-info-circle {
     overflow: auto;
 }
 
-.matched-review-model-preview::-webkit-scrollbar {
-    display: none;
-}
 
 .margins-div {
     margin: 0 0 0 2px;
@@ -187,9 +184,7 @@ i.fa.fa-info-circle {
     overflow: auto;
 }
 
-.model-preview::-webkit-scrollbar {
-    display: none;
-}
+
 
 .models-select {
     height: 120px;
@@ -211,9 +206,7 @@ i.fa.fa-info-circle {
     overflow: auto;
 }
 
-.models-drop::-webkit-scrollbar {
-    display: none;
-}
+
 
 .models-label {
     position: relative;
