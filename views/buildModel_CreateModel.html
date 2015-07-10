@@ -2,10 +2,13 @@
     <!--查詢條件-->
     <div class="col-md-4 col-xs-12  col-sm-12">
         <div class="ibox">
-            <div class="ibox-title"><h2>{{"queryConditions"|translate}}<span title="{{'undo'|translate}}"
-                                                                             class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right"
-                                                                             ng-click="createModelCtrl.undo()"
-                                                                             ng-show="createModelCtrl.showUndo"></span>
+            <div class="ibox-title"><h2>{{"queryConditions"|translate}}
+                <!--<label class="btn btn-success btn-outline pull-right">matched</label>-->
+                <span title="{{'undo'|translate}}"
+                      class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right"
+                      ng-click="createModelCtrl.undo()"
+                      ng-show="createModelCtrl.showUndo">
+                </span>
             </h2></div>
             <div class="ibox-content">
                 <!--auto render-->
@@ -22,7 +25,9 @@
                         </div>
                     </item-template>
                 </build-section>
+
             </div>
+
         </div>
     </div>
     <!--模型創建-->
@@ -31,7 +36,7 @@
             <div class="ibox-title"><h2>{{"logicWord"|translate}}</h2></div>
             <div class="ibox-content">
 
-                <h4>{{"keywordTitle"|translate}}：</h4>
+                <h3>{{"keywordTitle"|translate}}：</h3>
                 <tags-input ng-model="createModelCtrl.editBinding.syntax.query"
                             min-length="0"
                             add-on-space="true"
@@ -80,7 +85,7 @@
                     </div>
                 </div>
 
-                <h4>{{"keywordRole"|translate}}：</h4>
+                <h3>{{"keywordRole"|translate}}：</h3>
                 <select class="form-control m-b" ng-model="createModelCtrl.editBinding.syntax.role"
                         ng-options="role.name for role in  createModelCtrl.roles">
                     <option value="">----</option>

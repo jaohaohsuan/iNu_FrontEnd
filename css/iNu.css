@@ -4,7 +4,6 @@ body {
     font-family: Microsoft YaHei, SimHei, Microsoft JhengHei, sans-serif;
 
 }
-
 span > a:link {
     color: #328F7B;
 }
@@ -14,7 +13,14 @@ span > a:link {
 .border-radius {
     border-radius: 6px
 }
-
+.build-section-head{
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+.build-section-body{
+    padding-top: 5px;
+    padding-bottom: 6px;
+}
 .checkOnline {
     position: relative;
     bottom: 10px;
