@@ -127,10 +127,9 @@
                         name: inputValue,
                         selected: true
                     })
-
                     buildModelService.saveConfiguration(self.temporaryCollection,self.editBinding.configuration,function(){
                         swal('Nice!', 'You wrote: ' + inputValue, 'success');
-                        successCallback();
+                        if (successCallback) successCallback();
                     })
                 });
         }
@@ -605,7 +604,7 @@
                 function closeModal() {
                     $modalInstance.close();
                 }
-                function addTags() {
+                function addTags(successCallback) {
                     SweetAlert.swal({
                             title: $translate.instant('newModelsName'), //讀取多語系key
                             type: 'input',
@@ -624,9 +623,14 @@
                                 swal.showInputError('You need to write something!');
                                 return false
                             }
-                            swal('Nice!', 'You wrote: ' + inputValue, 'success');
+
                             self.editBinding.configuration.tags.push({
-                                'name': inputValue
+                                name: inputValue,
+                                selected: true
+                            })
+                            buildModelService.saveConfiguration(self.temporaryCollection,self.editBinding.configuration,function(){
+                                swal('Nice!', 'You wrote: ' + inputValue, 'success');
+                                if (successCallback) successCallback();
                             })
                          });
 

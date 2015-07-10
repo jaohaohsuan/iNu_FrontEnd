@@ -272,11 +272,10 @@
             self.required = false;
             $scope.$on('$destroy', destroyListener);
             function add(datasource){
+                self.isDisabled = false;
                 if (self.addTags) self.addTags(function(){
                     var elem = document.getElementById('modelInstanceTags');
                     elem.scrollTop = elem.scrollHeight;
-//                    $('#modelInstanceTags').scrollTop($('#modelInstanceTags').height())
-//                    window.scrollTo(0,document.body.scrollHeight);
                 });
 
             }
@@ -285,6 +284,7 @@
             }
 
             function saveConfiguration(datasource) {
+                self.isDisabled = true;
                 if (saveTimeout) $timeout.cancel(saveTimeout);
                 saveTimeout = $timeout(function () {//延遲500毫秒，避免短時間進行儲存動作
                     self.doSave(datasource);
