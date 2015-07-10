@@ -4,8 +4,21 @@ body {
     font-family: Microsoft YaHei, SimHei, Microsoft JhengHei, sans-serif;
 
 }
+
+number-picker {
+    margin-right: 5px;
+}
+
 span > a:link {
     color: #328F7B;
+}
+
+i.fa.fa-arrow-left {
+    margin-right: 5px;
+}
+
+i.fa.fa-info-circle {
+    margin-right: 5px;
 }
 
 /*Class��*/
@@ -13,14 +26,21 @@ span > a:link {
 .border-radius {
     border-radius: 6px
 }
-.build-section-head{
+
+.build-section-head {
     padding-top: 6px;
     padding-bottom: 6px;
 }
-.build-section-body{
+
+.build-section-body {
     padding-top: 5px;
     padding-bottom: 6px;
 }
+
+.build-model-logic .distance {
+    margin-top: -15px;
+}
+
 .checkOnline {
     position: relative;
     bottom: 10px;
@@ -56,11 +76,13 @@ span > a:link {
     margin-top: 15px;
     margin-left: 2px;
 }
+
 .instance-delete-button {
     width: 30%;
     margin-top: 2px;
     margin-left: 10px;
 }
+
 .matched-review-grid {
     background: rgba(222, 222, 225, 0.2);
 }
@@ -97,11 +119,13 @@ span > a:link {
 
 .model-filter-button {
     height: 33px;
-    margin-left: 3px!important;
+    margin-left: 3px !important;
 }
-.model-filter span{
+
+.model-filter span {
     margin-bottom: 5px;
 }
+
 .model-filter-dropdown-multi-select {
     margin-right: 5px;
 }
