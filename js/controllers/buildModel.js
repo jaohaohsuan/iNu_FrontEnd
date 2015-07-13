@@ -9,7 +9,9 @@
     function buildModelController($scope, $timeout, $translate) {
         var self = this;
         //self.modelBroadcast = modelBroadcast;
+
         self.removeTab = removeTab;
+        self.pagingIndex = 0;
         self.tabIndex = 0;
         self.tabs = [ //頁籤標題
             {title: 'createModel', active: true},
@@ -17,24 +19,37 @@
             {title: 'modelManagement'},
             {title: 'modules'}
         ];
-
         self.tabClicked = tabClicked;
-        $scope.$on('addTab', function (event, tab) { //接收增加頁籤的廣播
-            self.tabs.splice(self.tabIndex + 1, 0, tab);
-            self.tabIndex++;
-        });
+        $scope.$on('addTab',addTab);
+        $scope.$on('changeTabName',changeTabName);
+
+        function addTab(event, tab) { //接收增加頁籤的廣播
+            if (tab) {
+                self.tabs.splice( ++self.pagingIndex , 0, tab);
+                self.tabIndex = self.pagingIndex;
+            }
+        }
+
+        function changeTabName(event,title){
+            if (title) {
+                self.tabs[self.tabIndex].tabName = title;
+            }
+        }
 
         function removeTab(tab) {
             $timeout(function () { //刪除tab 不知為何需要用timeout才不會讓網址跑掉
-                self.tabIndex--;
+                self.pagingIndex--;
                 self.tabs.splice(self.tabs.indexOf(tab), 1);
-                if (self.tabIndex === 0) {
-                    self.tabs[self.tabIndex].active = true;
+                if (self.pagingIndex === 0) {
+                    self.tabs[self.pagingIndex].active = true;
                 }
+                self.tabIndex = self.pagingIndex;
             }, 0);
         }
 
-        function tabClicked() {
+        function tabClicked(tab) {
+            var index = self.tabs.indexOf(tab);
+            self.tabIndex = index;
             $scope.$broadcast('tabClicked');
         }
     }
@@ -331,8 +346,11 @@
         }
 
         function saveConfiguration(configuration) {
-            buildModelService.saveConfiguration(self.temporaryCollection, configuration);
-            SweetAlert.swal('saved', '', 'success');
+            buildModelService.saveConfiguration(self.temporaryCollection, configuration,function(){
+                $scope.$emit('changeTabName', configuration.title);
+                SweetAlert.swal('saved', '', 'success');
+            });
+
         }
 
         function sectionsClear(section, item) {
@@ -426,8 +444,8 @@
         self.selectedItems = [];
         self.showModelDetail = showModelDetail;
 
-        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);//需修改
-        function filterModelGroup(queriesBinding) {//需修改
+        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);
+        function filterModelGroup(queriesBinding) {
             buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 self.models = items;
             })
