@@ -23,7 +23,7 @@
         function markedSelectedTags(allTags,selectedTags){
             angular.forEach(allTags,function(tag){
                 selectedTags.some(function(selectedTag){
-                    if (IsSelfAttrsEqObjX(tag,selectedTag)){
+                    if (IsSelfAttrsEqObjX(tag,selectedTag)){//比較共同欄位值，進行標記selected
                         tag.selected = true;
                         return true;
                     }
@@ -69,7 +69,7 @@
                     searchHref = query.href + '?';
                     angular.forEach(query.data,function(data){
                         data.prompt = queryBinding[data.name];
-                        if (data.prompt.length > 0) searchHref += data.name + '=' + data.prompt + '&'
+                        if (data.prompt.length > 0) searchHref += data.name + '=' + data.prompt + '&'//當有查詢資料再進行參數的設定
                     })
                     return true;
                 }
@@ -214,7 +214,7 @@
                         text += $translate.instant("AND");
                         itemInfoStruct[syntaxProperty] = text;
                     },
-                    "operator": function () {
+                    "operator": function () {//AND OR
                         itemInfoStruct[syntaxProperty] = $translate.instant(value);
                     },
                     "slop": function () {
@@ -229,13 +229,13 @@
             return itemInfoStruct;
         }
 
-        function tagsJoinBySelected(tagsArrayObject) {
+        function tagsJoinBySelected(tagsArrayObject) {//將arrayObject格式的tags轉換回空白隔開字串
             return tagsArrayObject.map(function (tag) {
                 if (tag.selected) return tag.name;
             }).join(' ').trim();
         }
 
-        function tagsToArrayObject(tags){
+        function tagsToArrayObject(tags){//將tags以空白切割，重組成arrayObject讓view綁定
             if (tags.length > 0){
                 return tags.trim().split(/\s+/).map(function (e) {
                     return {"name": e}
