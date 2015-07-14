@@ -1,10 +1,8 @@
 WEBVTT 
 
-00:00:01.000 --> 00:00:06.000 
-<c.ttt>測試Class</c>
 
 00:00:08.000 --> 00:00:12.000 
-I put in 15 hours of work today
+<c.vtt-highlight>I put in 15 hours of work today</c>
 
 00:00:12.000 --> 00:00:16.000
 and I'll work 17 tomorrow

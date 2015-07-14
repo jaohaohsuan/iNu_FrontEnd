@@ -449,6 +449,7 @@
         self.queriesCollection = {
             queries: []
         }
+
         self.selectedItems = [];
         self.showModelDetail = showModelDetail;
 
@@ -475,7 +476,7 @@
                 self.init = init;
                 self.onSeek = onSeek;
                 self.playPause = playPause;
-
+                self.setHtmltoCue = setHtmltoCue;
                 function init() {
                     video = $('video').get(0);
                 }
@@ -486,8 +487,7 @@
                 }
 
                 function playPause() {
-                     console.log( $('#track').get(0).track.cues);
-                     self.cues =   $('#track').get(0).track.cues;
+                    self.cues = pushCues($('#track').get(0).track.cues);
                     self.player.playPause();
                     self.player.setVolume(0);
                     if (video.paused) {
@@ -500,6 +500,22 @@
                 }
             }
 
+            function pushCues(cues) {
+                var cueHtmls = [];
+                angular.forEach(cues, function (cue) {
+                    cueHtmls.push(cue)
+                })
+                return cueHtmls;
+            }
+
+            function setHtmltoCue(index, cue) {
+                var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
+                if (incue[0]) { //如果有取道
+                    var div = incue[0].parentElement; //取得上一層的DIV
+                    div.removeChild(incue[0]) //刪掉原本的
+                    div.replaceChild((cue.getCueAsHTML()), div.firstChild); //換成當前dom的內容
+                }
+            }
 
         }
 

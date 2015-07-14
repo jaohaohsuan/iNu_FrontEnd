@@ -6,7 +6,7 @@
         <source src="mp3/paulallen.mp3"/>
         <track id="track" src="mp3/paulallen.vtt" kind="captions" default/>
     </video>
-    <div ng-repeat="cue in playVideoCtrl.cues">
-       {{cue.getCueAsHTML()}}
+    <div id="cueDiv{{$index}}"  ng-repeat="cue in playVideoCtrl.cues">
+       <span id="cue{{$index}}"> {{playVideoCtrl.setHtmltoCue($index,cue)}}</span>
     </div>
 </div>

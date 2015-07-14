@@ -24,17 +24,17 @@ span > a:link {
     color: #328F7B;
 }
 video{
-   /*display: none;*/
+   display: none;
 }
 video::cue{
     font-size: 28px;
 }
-video::cue(c.ttt){
-    color: #00f123;
-}
-video::cue(v[voice="Larry"]){
-    color: #ff0000;
-}
+/*video::cue(c.ttt){*/
+    /*color: #00f123;*/
+/*}*/
+/*video::cue(v[voice="Larry"]){*/
+    /*color: #ff0000;*/
+/*}*/
 
 /*Class��*/
 
@@ -307,3 +307,6 @@ video::cue(v[voice="Larry"]){
     display: inline;
 }
 
+.vtt-highlight{
+    color: #ff0000;
+}
