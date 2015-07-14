@@ -9,9 +9,7 @@ number-picker {
     margin-right: 5px;
 }
 
-span > a:link {
-    color: #328F7B;
-}
+
 
 i.fa.fa-arrow-left {
     margin-right: 5px;
@@ -21,6 +19,21 @@ i.fa.fa-arrow-up {
 }
 i.fa.fa-info-circle {
     margin-right: 5px;
+}
+span > a:link {
+    color: #328F7B;
+}
+video{
+   /*display: none;*/
+}
+video::cue{
+    font-size: 28px;
+}
+video::cue(c.ttt){
+    color: #00f123;
+}
+video::cue(v[voice="Larry"]){
+    color: #ff0000;
 }
 
 /*Class��*/
@@ -58,6 +71,9 @@ i.fa.fa-info-circle {
 .clear-button:hover {
     background-color: rgba(0, 0, 0, 0.1);
     color: #fff;
+}
+.cursor-pointer {
+    cursor: pointer;
 }
 
 .dropdown-multi-select {
@@ -291,6 +307,3 @@ i.fa.fa-info-circle {
     display: inline;
 }
 
-.cursor-pointer {
-    cursor: pointer;
-}

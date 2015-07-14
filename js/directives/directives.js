@@ -49,6 +49,8 @@
         return directive;
     }
 
+
+
     function confirmClick() {
         var directive = {
             link: confirmClickLink,
@@ -271,16 +273,17 @@
             self.tagClicked = tagClicked;
             self.required = false;
             $scope.$on('$destroy', destroyListener);
-            function add(datasource){
+            function add(datasource) {
                 self.isDisabled = false;
-                if (self.addTags) self.addTags(function(){
+                if (self.addTags) self.addTags(function () {
                     var elem = document.getElementById('modelInstanceTags');
                     elem.scrollTop = elem.scrollHeight;
                 });
 
             }
+
             function destroyListener(event) {
-                $timeout.cancel(saveTimeout,selectedTimeout);
+                $timeout.cancel(saveTimeout, selectedTimeout);
             }
 
             function saveConfiguration(datasource) {
@@ -294,8 +297,8 @@
             function tagClicked(datasource) {
                 self.isDisabled = false;
                 if (selectedTimeout) $timeout.cancel(selectedTimeout);
-                if (self.selectedEventhandler){
-                    selectedTimeout = $timeout(function(){
+                if (self.selectedEventhandler) {
+                    selectedTimeout = $timeout(function () {
                         self.selectedEventhandler(datasource);
                     });
                 }
@@ -376,12 +379,12 @@
         }
 
         function setClassWithWidthLink(scope, ele) {
-            scope.$watch(function(){
+            scope.$watch(function () {
                 return window.innerWidth;
-            },function(innerWidth){
+            }, function (innerWidth) {
                 setClass(innerWidth)
             })
-            function setClass(innerWidth){
+            function setClass(innerWidth) {
                 ele.removeClass()
                 if (innerWidth >= scope.baseWidth) {
                     ele.addClass(scope.moreWidthClass)
@@ -394,6 +397,36 @@
         }
 
         return directive;
+    }
+
+    function wavesurfer() {
+        var direcvive = {
+            restrict: 'E',
+            scope: {
+                player: '=',
+                onSeek: '='
+            },
+            link: wavesurferLink
+        }
+
+        function wavesurferLink(scope, ele, att) {
+            ele.css('display', 'block');
+
+            var options = angular.extend({
+                container: ele[0]
+            }, att);
+            var wavesurfer = WaveSurfer.create(options);
+            if (att.url) {
+                wavesurfer.load(att.url, att.data || null);
+            }
+
+            scope.player = wavesurfer;
+            wavesurfer.on('seek', function (e) {
+                scope.$eval(scope.onSeek);
+            })
+        }
+
+        return direcvive;
     }
 
 ///////////////////////////////////////////////////////////////
@@ -525,7 +558,7 @@
                     }
                 }
 
-                if(window.innerWidth<1025){
+                if (window.innerWidth < 1025) {
                     $scope.minimalize();
                 }
             }
@@ -780,4 +813,5 @@
         .directive('ngEnter', ngEnter)
         .directive('nestedScroll', nestedScroll)
         .directive('setClassWithWidth', setClassWithWidth)
+        .directive('wavesurfer', wavesurfer)
 })();

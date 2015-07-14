@@ -20,17 +20,17 @@
             {title: 'modules'}
         ];
         self.tabClicked = tabClicked;
-        $scope.$on('addTab',addTab);
-        $scope.$on('changeTabName',changeTabName);
+        $scope.$on('addTab', addTab);
+        $scope.$on('changeTabName', changeTabName);
 
         function addTab(event, tab) { //接收增加頁籤的廣播
             if (tab) {
-                self.tabs.splice( ++self.pagingIndex , 0, tab);
+                self.tabs.splice(++self.pagingIndex, 0, tab);
                 self.tabIndex = self.pagingIndex;
             }
         }
 
-        function changeTabName(event,title){
+        function changeTabName(event, title) {
             if (title) {
                 self.tabs[self.tabIndex].tabName = title;
             }
@@ -308,8 +308,9 @@
             self.nextView = true;
             self.saveAsNameInputFocus = true;
         }
-        function resetTitle(e){ //讓input內容恢復binding的資料
-            if(e.keyCode===27){
+
+        function resetTitle(e) { //讓input內容恢復binding的資料
+            if (e.keyCode === 27) {
                 $scope.nextView.modelTile.$rollbackViewValue(); //formName.inputName
             }
         };
@@ -346,7 +347,7 @@
         }
 
         function saveConfiguration(configuration) {
-            buildModelService.saveConfiguration(self.temporaryCollection, configuration,function(){
+            buildModelService.saveConfiguration(self.temporaryCollection, configuration, function () {
                 $scope.$emit('changeTabName', configuration.title);
                 SweetAlert.swal('saved', '', 'success');
             });
@@ -419,7 +420,9 @@
     }
 
     function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH) {
+
         var self = this;
+
         self.buildSections = [];
         self.modelTitle = ''; //顯示模型邏輯詞區的title
         self.datasource = [];
@@ -428,21 +431,27 @@
         self.gridOptions = {
             columnDefs: [
                 {
-                    name: 'test'
+                    name: 'name',
+                    field: 'name',
+                    cellTemplate: '<div><a class="btn" ng-click="grid.appScope.play()">{{row.entity.name}}</a></div>'
                 }
             ]
         };
-        self.isShowModelDetail = false
+        self.isShowModelDetail = false;
         self.modelKeyword = '';
         self.models = [];
         self.queriesBinding = {
             search: {}
         }
+
+        $scope.play = playVideo;
+
         self.queriesCollection = {
             queries: []
         }
         self.selectedItems = [];
         self.showModelDetail = showModelDetail;
+
 
         buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);
         function filterModelGroup(queriesBinding) {
@@ -451,11 +460,57 @@
             })
         }
 
+        function playVideo() {
+
+            var modalInstance = $modal.open({
+                controller: playVideoController,
+                controllerAs: 'playVideoCtrl',
+                templateUrl: 'views/buildModel_matchedReview_video_modal.html'
+            });
+
+            function playVideoController() {
+                var video;
+                var track;
+                var self = this;
+                self.init = init;
+                self.onSeek = onSeek;
+                self.playPause = playPause;
+
+                function init() {
+                    video = $('video').get(0);
+                }
+
+                function onSeek() {
+                    video.currentTime = self.player.getCurrentTime();
+                    console.log(video.currentTime);
+                }
+
+                function playPause() {
+                     console.log( $('#track').get(0).track.cues);
+                     self.cues =   $('#track').get(0).track.cues;
+                    self.player.playPause();
+                    self.player.setVolume(0);
+                    if (video.paused) {
+                        video.play();
+                    }
+                    else {
+                        video.pause();
+                    }
+
+                }
+            }
+
+
+        }
+
         function showModelDetail(entity) {
             if (self.buildSections.length > 0) self.buildSections.length = 0;
             buildModelService.setTemporary(entity.href, null, self.buildSections);
             self.isShowModelDetail = true;
             self.modelTitle = entity.title;
+            self.gridOptions.data.push(
+                {'name': '123'}
+            )
         }
 
         ////////////////////不綁定區//////////////
@@ -601,7 +656,7 @@
             })
 
             function saveAsController($modalInstance, $timeout) {
-                var modelGroupSelectedTimeout;
+                var modalGroupSelectedTimeout;
                 var self = this;
                 self.addTags = addTags;
                 self.saveModel = saveModel;
@@ -679,7 +734,7 @@
 
 
         function showModelDetail(entity) { //打開modal顯示模型邏輯詞曲
-            var modelInstance = $modal.open({
+            var modalInstance = $modal.open({
                 backdropClass: 'model-management-model-backdrop',
                 controller: ['$modalInstance', 'title', showModelDetailController],
                 controllerAs: 'detailCtrl',
