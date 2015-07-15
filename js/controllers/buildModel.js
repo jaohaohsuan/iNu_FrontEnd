@@ -485,7 +485,7 @@
                     console.log(cue.text)
                     console.log( self.player)
                     audio.currentTime = cue.startTime;
-                    self.player.seekTo(cue.startTime/self.player.backend.scheduledPause)
+                    self.player.seekTo(cue.startTime/audio.duration)
                 }
 
                 function checkCurrentCue(cue) {
@@ -512,7 +512,7 @@
                 function modalClosing(){ //modal關閉後清空Wavesurfer
                      self.player.empty()
                 }
-                
+
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
                     console.log(audio.currentTime);
