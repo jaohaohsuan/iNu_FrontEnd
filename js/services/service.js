@@ -74,7 +74,6 @@
                     return true;
                 }
             })
-
             jsonMethodService.get(searchHref).then(function(collectionjson){
                 angular.forEach(collectionjson.collection.items, function (item) {
                     angular.forEach(item.data, function (data) {//將每個item內的data[]轉換成key/value的形式以利綁定
@@ -231,7 +230,7 @@
 
         function tagsJoinBySelected(tagsArrayObject) {//將arrayObject格式的tags轉換回空白隔開字串
             return tagsArrayObject.map(function (tag) {
-                if (tag.selected) return tag.name;
+                if (tag.selected == true) return tag.name;
             }).join(' ').trim();
         }
 
