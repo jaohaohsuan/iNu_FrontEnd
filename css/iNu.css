@@ -72,6 +72,9 @@ video::cue{
     background-color: rgba(0, 0, 0, 0.1);
     color: #fff;
 }
+.current-cue{
+    color: #006621;
+}
 .cursor-pointer {
     cursor: pointer;
 }
@@ -310,3 +313,4 @@ video::cue{
 .vtt-highlight{
     color: #ff0000;
 }
+

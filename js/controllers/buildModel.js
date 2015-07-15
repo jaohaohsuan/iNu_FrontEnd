@@ -470,53 +470,66 @@
             });
 
             function playVideoController() {
-                var video;
+                var audio;
                 var track;
                 var self = this;
+          ;
+                self.currentCue = false;
                 self.init = init;
                 self.onSeek = onSeek;
                 self.playPause = playPause;
                 self.setHtmltoCue = setHtmltoCue;
+
+                function checkCurrentCue(cue){
+                    console.log(cue)
+                }
                 function init() {
-                    video = $('video').get(0);
+                    audio = $('audio').get(0);
+                    track = $('#track').get(0).track;
+                    $(track).on('cuechange', function () {
+                        console.log(track)
+                        console.log(track.activeCues)
+                        checkCurrentCue(track.activeCues)
+                    })
                 }
 
                 function onSeek() {
-                    video.currentTime = self.player.getCurrentTime();
-                    console.log(video.currentTime);
+                    audio.currentTime = self.player.getCurrentTime();
+                    console.log(audio.currentTime);
+                    console.log(self.cues);
+
+
                 }
 
                 function playPause() {
-                    self.cues = pushCues($('#track').get(0).track.cues);
+                    self.cues = track.cues;
                     self.player.playPause();
                     self.player.setVolume(0);
-                    if (video.paused) {
-                        video.play();
+                    if (audio.paused) {
+                        audio.play();
                     }
                     else {
-                        video.pause();
+                        audio.pause();
                     }
 
                 }
             }
 
-            function pushCues(cues) {
-                var cueHtmls = [];
-                angular.forEach(cues, function (cue) {
-                    cueHtmls.push(cue)
-                })
-                return cueHtmls;
-            }
+            //function pushCues(cues) {
+            //    var cueHtmls = [];
+            //    angular.forEach(cues, function (cue) {
+            //        cueHtmls.push(cue)
+            //    })
+            //    return cueHtmls;
+            //}
 
             function setHtmltoCue(index, cue) {
                 var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
-                if (incue[0]) { //如果有取道
-                    var div = incue[0].parentElement; //取得上一層的DIV
-                    div.removeChild(incue[0]) //刪掉原本的
-                    div.replaceChild((cue.getCueAsHTML()), div.firstChild); //換成當前dom的內容
+                //console.log(incue)
+                if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
+                    $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
                 }
             }
-
         }
 
         function showModelDetail(entity) {

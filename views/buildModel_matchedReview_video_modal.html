@@ -1,12 +1,12 @@
 <div ng-init="playVideoCtrl.init()">
     <wavesurfer player="playVideoCtrl.player" url="mp3/paulallen.mp3" height="32"
                 on-seek="playVideoCtrl.onSeek"></wavesurfer>
-    <a ng-click="playVideoCtrl.playPause()" g href class="btn">Play</a>
-    <video>
+    <button ng-click="playVideoCtrl.playPause()"   class="btn fa fa-play"></button>
+    <audio >
         <source src="mp3/paulallen.mp3"/>
         <track id="track" src="mp3/paulallen.vtt" kind="captions" default/>
-    </video>
+    </audio>
     <div id="cueDiv{{$index}}"  ng-repeat="cue in playVideoCtrl.cues">
-       <span id="cue{{$index}}"> {{playVideoCtrl.setHtmltoCue($index,cue)}}</span>
+       <span class="btn" id="cue{{$index}}" ng-class="{true:'current-cue'[playVideoCtrl.currentCue]}"> {{playVideoCtrl.setHtmltoCue($index,cue)}}</span>
     </div>
 </div>
