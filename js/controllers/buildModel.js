@@ -473,16 +473,24 @@
                 var audio;
                 var track;
                 var self = this;
-          ;
+                self.changeCue = changeCue;
                 self.currentCue = false;
                 self.init = init;
                 self.onSeek = onSeek;
                 self.playPause = playPause;
                 self.setHtmltoCue = setHtmltoCue;
 
-                function checkCurrentCue(cue){
-                    console.log(cue)
+                function changeCue(cue) {
+                    console.log(cue.text)
+                    audio.currentTime = cue.startTime;
+                    self.player.seekTo(cue.startTime/audio.duration)
                 }
+
+                function checkCurrentCue(cue) {
+                    console.log(cue)
+                    console.log(audio.seeking)
+                }
+
                 function init() {
                     audio = $('audio').get(0);
                     track = $('#track').get(0).track;
@@ -496,6 +504,7 @@
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
                     console.log(audio.currentTime);
+                    console.log(audio);
                     console.log(self.cues);
 
 
