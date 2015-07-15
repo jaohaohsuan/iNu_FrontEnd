@@ -464,13 +464,13 @@
         function playVideo() {
 
             var modalInstance = $modal.open({
-                controller: playVideoController,
+                controller:['$modalInstance', playVideoController],
                 controllerAs: 'playVideoCtrl',
                 templateUrl: 'views/buildModel_matchedReview_video_modal.html'
             });
 
             function playVideoController() {
-                var audio;
+                //var audio;
                 var track;
                 var self = this;
                 self.changeCue = changeCue;
@@ -479,11 +479,12 @@
                 self.onSeek = onSeek;
                 self.playPause = playPause;
                 self.setHtmltoCue = setHtmltoCue;
-
+                modalInstance.result.then('',modalClosing);
                 function changeCue(cue) {
                     console.log(cue.text)
-                    audio.currentTime = cue.startTime;
-                    self.player.seekTo(cue.startTime/audio.duration)
+                    console.log( self.player)
+                    //audio.currentTime = cue.startTime;
+                    self.player.seekTo(cue.startTime/self.player.backend.scheduledPause)
                 }
 
                 function checkCurrentCue(cue) {
@@ -492,7 +493,7 @@
                 }
 
                 function init() {
-                    audio = $('audio').get(0);
+                    //audio = $('audio').get(0);
                     track = $('#track').get(0).track;
                     $(track).on('cuechange', function () {
                         console.log(track)
@@ -500,11 +501,13 @@
                         checkCurrentCue(track.activeCues)
                     })
                 }
-
+                function modalClosing(){
+                     self.player.empty()
+                }
                 function onSeek() {
-                    audio.currentTime = self.player.getCurrentTime();
-                    console.log(audio.currentTime);
-                    console.log(audio);
+                    //audio.currentTime = self.player.getCurrentTime();
+                    //console.log(audio.currentTime);
+                    //console.log(audio);
                     console.log(self.cues);
 
 
@@ -513,13 +516,13 @@
                 function playPause() {
                     self.cues = track.cues;
                     self.player.playPause();
-                    self.player.setVolume(0);
-                    if (audio.paused) {
-                        audio.play();
-                    }
-                    else {
-                        audio.pause();
-                    }
+                    //self.player.setVolume(0);
+                    //if (audio.paused) {
+                    //    audio.play();
+                    //}
+                    //else {
+                    //    audio.pause();
+                    //}
 
                 }
             }

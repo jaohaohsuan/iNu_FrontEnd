@@ -3,7 +3,7 @@
                 on-seek="playVideoCtrl.onSeek"></wavesurfer>
     <button ng-click="playVideoCtrl.playPause()"   class="btn fa fa-play"></button>
     <audio >
-        <source src="mp3/paulallen.mp3"/>
+        <!--<source src="mp3/paulallen.mp3"/>-->
         <track id="track" src="mp3/paulallen.vtt" kind="captions" default/>
     </audio>
     <div id="cueDiv{{$index}}"  ng-repeat="cue in playVideoCtrl.cues">
