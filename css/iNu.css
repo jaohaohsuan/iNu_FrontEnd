@@ -73,7 +73,7 @@ video::cue{
     color: #fff;
 }
 .current-cue{
-    color: #006621;
+    color: #006621 !important;
 }
 .cursor-pointer {
     cursor: pointer;

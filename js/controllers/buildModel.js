@@ -464,26 +464,27 @@
         function playVideo() {
 
             var modalInstance = $modal.open({
-                controller:['$modalInstance', playVideoController],
+                controller:['$scope', playVideoController],
                 controllerAs: 'playVideoCtrl',
                 templateUrl: 'views/buildModel_matchedReview_video_modal.html'
             });
 
-            function playVideoController() {
-                //var audio;
+            function playVideoController($scope) {
+                var audio;
                 var track;
                 var self = this;
                 self.changeCue = changeCue;
-                self.currentCue = false;
+                self.currentCue = true;
                 self.init = init;
                 self.onSeek = onSeek;
                 self.playPause = playPause;
                 self.setHtmltoCue = setHtmltoCue;
-                modalInstance.result.then('',modalClosing);
+                modalInstance.result.then('',modalClosing); //當modal被關掉時
+                $scope.$on('wavesurferInit',getWavesurfer); //當wavesurfer準備好後
                 function changeCue(cue) {
                     console.log(cue.text)
                     console.log( self.player)
-                    //audio.currentTime = cue.startTime;
+                    audio.currentTime = cue.startTime;
                     self.player.seekTo(cue.startTime/self.player.backend.scheduledPause)
                 }
 
@@ -491,38 +492,46 @@
                     console.log(cue)
                     console.log(audio.seeking)
                 }
-
+                function getWavesurfer(e,wavesurfer){
+                        self.player = wavesurfer; //指定Wavesurfer
+                    self.player.on('ready',function(){ //Wavesurfer ready後綁定字幕
+                        self.cues = track.cues;
+                        $scope.$apply();
+                    })
+                    self.player.on('seek',onSeek); //當點選音波時
+                }
                 function init() {
-                    //audio = $('audio').get(0);
+                    audio = $('audio').get(0);
                     track = $('#track').get(0).track;
-                    $(track).on('cuechange', function () {
+                    $(track).on('cuechange', function () { //當當前字幕改變時
                         console.log(track)
                         console.log(track.activeCues)
                         checkCurrentCue(track.activeCues)
                     })
                 }
-                function modalClosing(){
+                function modalClosing(){ //modal關閉後清空Wavesurfer
                      self.player.empty()
                 }
+                
                 function onSeek() {
-                    //audio.currentTime = self.player.getCurrentTime();
-                    //console.log(audio.currentTime);
-                    //console.log(audio);
+                    audio.currentTime = self.player.getCurrentTime();
+                    console.log(audio.currentTime);
+                    console.log(audio);
                     console.log(self.cues);
 
 
                 }
 
                 function playPause() {
-                    self.cues = track.cues;
+
                     self.player.playPause();
-                    //self.player.setVolume(0);
-                    //if (audio.paused) {
-                    //    audio.play();
-                    //}
-                    //else {
-                    //    audio.pause();
-                    //}
+                    self.player.setVolume(0);
+                    if (audio.paused) {
+                        audio.play();
+                    }
+                    else {
+                        audio.pause();
+                    }
 
                 }
             }

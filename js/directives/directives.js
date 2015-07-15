@@ -50,7 +50,6 @@
     }
 
 
-
     function confirmClick() {
         var directive = {
             link: confirmClickLink,
@@ -402,10 +401,11 @@
     function wavesurfer() {
         var direcvive = {
             restrict: 'E',
-            scope: {
-                player: '=',
-                onSeek: '='
-            },
+            //scope: {
+            //    onSeek: '=',
+            //    onReady:'=',
+            //    player: '='
+            //},
             link: wavesurferLink
         }
 
@@ -413,17 +413,24 @@
             ele.css('display', 'block');
 
             var options = angular.extend({
-                container: ele[0]
+                container: ele[0],
             }, att);
             var wavesurfer = WaveSurfer.create(options);
             if (att.url) {
                 wavesurfer.load(att.url, att.data || null);
             }
-
-            scope.player = wavesurfer;
-            wavesurfer.on('seek', function (e) {
-                scope.$eval(scope.onSeek);
-            })
+            scope.$emit('wavesurferInit', wavesurfer);
+            //scope.player = wavesurfer;
+            //
+            //wavesurfer.on('ready', function () {
+            //    scope.$eval(scope.onReady);
+            //})
+            //wavesurfer.on('seek', function (e) {
+            //    scope.$eval(scope.onSeek);
+            //    //var lowpass = wavesurfer.backend.ac.createBiquadFilter();
+            //    //console.log(lowpass)
+            //    //wavesurfer.backend.setFilter(lowpass);
+            //})
         }
 
         return direcvive;
