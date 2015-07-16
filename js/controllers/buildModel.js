@@ -485,7 +485,6 @@
                 function changeCue(cue) {
                     audio.currentTime = cue.startTime;
                     self.player.seekTo(cue.startTime / self.player.getDuration())
-                    markedhighlight([cue]);
                 }
 
 
@@ -504,31 +503,28 @@
                     track = $('#track').get(0).track;
                     cuesId = [];
                     $(track).on('cuechange', function () { //當當前字幕改變時
-                        var index = markedhighlight(track.activeCues);
-                        var cueDiv = document.getElementsByClassName('cue-div');
-                        console.log(cueDiv)
-                        cueDiv[0].scrollTop = getScrollHeight(index);
+                        markedhighlight(track.activeCues);
                         $scope.$apply();
                     })
                 }
 
                 function markedhighlight(activeCues) {//標記highlight
+                    if (activeCues.length <= 0) return;
                     var search = {searched: false};
-                    var index
                     for (var idx = self.cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
                         var cue = self.cues[idx];
                         cue.highlight = false;//尚未搜尋到之前都將highlight設為false
-                        if (activeCues && !search.searched) {//與目前的cues進行startTime的比對
+                        if (!search.searched) {//與目前的cues進行startTime的比對
                             angular.forEach(activeCues, function (activeCue) {
                                 if (cue.startTime == activeCue.startTime) {
                                     search.searched = true;
-                                    index = idx;
+                                    var cueDiv = document.getElementsByClassName('cue-div');
+                                    cueDiv[0].scrollTop = getScrollHeight(idx);;
                                 }
                             })
                         }
                         if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
                     }
-                    return index;
                 }
 
                 function modalClosing() { //modal關閉後清空Wavesurfer
@@ -537,9 +533,9 @@
 
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
-                    console.log(audio.currentTime);
-                    console.log(audio);
-                    console.log(self.cues);
+//                    console.log(audio.currentTime);
+//                    console.log(audio);
+//                    console.log(self.cues);
 
 
                 }
