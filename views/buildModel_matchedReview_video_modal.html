@@ -1,10 +1,18 @@
 <div ng-init="playVideoCtrl.init()">
+    <div ng-hide="playVideoCtrl.showAudioContoller" class="sk-spinner sk-spinner-three-bounce">
+        <div class="sk-bounce1"></div>
+        <div class="sk-bounce2"></div>
+        <div class="sk-bounce3"></div>
+    </div>
     <wavesurfer url="mp3/paulallen.mp3" height="32"></wavesurfer>
-    <button ng-click="playVideoCtrl.playPause()" class="btn fa fa-play"></button>
     <audio>
         <source ng-src="mp3/paulallen.mp3"/>
         <track id="track" ng-src="mp3/paulallen.vtt" kind="captions" default/>
     </audio>
+    <div ng-show="playVideoCtrl.showAudioContoller">
+        <button ng-click="playVideoCtrl.playPause()" class="btn fa" ng-class="{true:'fa-pause',false:'fa-play'}[playVideoCtrl.playing]" ></button>
+        <button ng-click="playVideoCtrl.mute()" class="btn fa fa-volume-off"></button>
+    </div>
     <div class="cue-div">
         <div id="cueDiv{{$index}}" ng-repeat="cue in playVideoCtrl.cues">
         <span class="btn" ng-click="playVideoCtrl.changeCue(cue)" id="cue{{$index}}"

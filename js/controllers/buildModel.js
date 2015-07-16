@@ -477,9 +477,11 @@
                 self.changeCue = changeCue;
                 self.currentCue = true;
                 self.init = init;
-                self.onSeek = onSeek;
+                self.mute = mute;
                 self.playPause = playPause;
+                self.playing = false;
                 self.setHtmltoCue = setHtmltoCue;
+                self.showAudioContoller = false;
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
                 function changeCue(cue) {
@@ -487,16 +489,6 @@
                     self.player.seekTo(cue.startTime / self.player.getDuration())
                 }
 
-
-                function getWavesurfer(e, wavesurfer) {
-                    self.player = wavesurfer; //指定Wavesurfer
-                    self.player.on('ready', function () { //Wavesurfer ready後綁定字幕
-                        self.cues = track.cues;
-                        $scope.$apply();
-                    });
-
-                    self.player.on('seek', onSeek); //當點選音波時
-                }
 
                 function init() {
                     audio = $('audio').get(0);
@@ -506,6 +498,58 @@
                         markedhighlight(track.activeCues);
                         $scope.$apply();
                     })
+                }
+
+
+                function modalClosing() { //modal關閉後清空Wavesurfer
+                    self.player.empty()
+                }
+                function mute(){
+                    audio.volume=0;
+                }
+
+
+
+                function playPause() {
+                    if (audio.paused) {
+                        audio.play();
+                        self.player.playPause();
+                        self.playing= true;
+                    }
+                    else {
+                        audio.pause();
+                        self.player.playPause();
+                        self.playing=false;
+                    }
+                }
+
+                function setHtmltoCue(index, cue) {
+
+                    var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
+                    if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
+                        $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
+                        cuesId.push(incue[0].id);
+                    }
+                }
+
+                /////////////不綁定區///////////////
+                function getScrollHeight(index) { //當前cue的index
+                    var scrollHeight = 0;
+                    if (index > 0) {
+                        for (var i = 0; i < index; i++) {
+                            var currentCueElement = document.getElementById(cuesId[i]); //取得當前綁定cue的element的高度
+                            scrollHeight += currentCueElement.offsetHeight;
+                        }
+                    }
+                    return scrollHeight;
+                }
+
+                function getWavesurfer(e, wavesurfer) {
+                    self.player = wavesurfer; //指定Wavesurfer
+                    self.player.setVolume(0);
+                    self.player.on('ready',onReady); //Wavesurfer ready後綁定字幕
+                    self.player.on('finish',onFinish); //當播放完畢時
+                    self.player.on('seek', onSeek); //當點選音波時
                 }
 
                 function markedhighlight(activeCues) {//標記highlight
@@ -519,60 +563,26 @@
                                 if (cue.startTime == activeCue.startTime) {
                                     search.searched = true;
                                     var cueDiv = document.getElementsByClassName('cue-div');
-                                    cueDiv[0].scrollTop = getScrollHeight(idx);;
+                                    cueDiv[0].scrollTop = getScrollHeight(idx);
                                 }
                             })
                         }
                         if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
                     }
                 }
-
-                function modalClosing() { //modal關閉後清空Wavesurfer
-                    self.player.empty()
+                function onFinish(){
+                    self.playing=false;
+                    $scope.$apply();
                 }
-
+                function onReady(){
+                    self.cues = track.cues;
+                    self.showAudioContoller = true;
+                    $scope.$apply();
+                }
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
-//                    console.log(audio.currentTime);
-//                    console.log(audio);
-//                    console.log(self.cues);
-
-
                 }
 
-                function playPause() {
-
-                    self.player.playPause();
-                    self.player.setVolume(0);
-                    if (audio.paused) {
-                        audio.play();
-                    }
-                    else {
-                        audio.pause();
-                    }
-
-                }
-
-                function getScrollHeight(index) {
-                    var scrollHeight = 0;
-                    if (index > 0) {
-                        for (var i = 0; i < index; i++) {
-                            var currentCueElement = document.getElementById(cuesId[i]);
-                            scrollHeight += currentCueElement.offsetHeight;
-                        }
-                    }
-
-                    return scrollHeight;
-                }
-
-                function setHtmltoCue(index, cue) {
-                    var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
-                    //console.log(incue)
-                    if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
-                        $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
-                        cuesId.push(incue[0].id);
-                    }
-                }
             }
         }
 
