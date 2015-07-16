@@ -464,7 +464,7 @@
         function playVideo() {
 
             var modalInstance = $modal.open({
-                controller: ['$scope',  playVideoController],
+                controller: ['$scope', playVideoController],
                 controllerAs: 'playVideoCtrl',
                 templateUrl: 'views/buildModel_matchedReview_video_modal.html'
             });
@@ -483,10 +483,8 @@
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
                 function changeCue(cue) {
-//                    console.log(cue.text)
-//                    console.log(self.player)
                     audio.currentTime = cue.startTime;
-                    self.player.seekTo(cue.startTime / audio.duration)
+                    self.player.seekTo(cue.startTime / self.player.getDuration())
                     markedhighlight([cue]);
                 }
 
@@ -494,10 +492,8 @@
                 function getWavesurfer(e, wavesurfer) {
                     self.player = wavesurfer; //指定Wavesurfer
                     self.player.on('ready', function () { //Wavesurfer ready後綁定字幕
-
                         self.cues = track.cues;
                         $scope.$apply();
-                        console.log(typeof self.cues)
                     });
 
                     self.player.on('seek', onSeek); //當點選音波時
@@ -508,25 +504,31 @@
                     track = $('#track').get(0).track;
                     cuesId = [];
                     $(track).on('cuechange', function () { //當當前字幕改變時
-                        markedhighlight(track.activeCues);
+                        var index = markedhighlight(track.activeCues);
+                        var cueDiv = document.getElementsByClassName('cue-div');
+                        console.log(cueDiv)
+                        cueDiv[0].scrollTop = getScrollHeight(index);
                         $scope.$apply();
                     })
                 }
 
-                function markedhighlight(activeCues){//標記highlight
+                function markedhighlight(activeCues) {//標記highlight
                     var search = {searched: false};
-                    for (var idx = self.cues.length - 1;idx >= 0;idx--){//由後往前搜尋並標記
-                       var cue = self.cues[idx];
+                    var index
+                    for (var idx = self.cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
+                        var cue = self.cues[idx];
                         cue.highlight = false;//尚未搜尋到之前都將highlight設為false
-                       if (activeCues && !search.searched){//與目前的cues進行startTime的比對
-                           angular.forEach(activeCues,function(activeCue){
-                               if (cue.startTime == activeCue.startTime){
-                                   search.searched = true;
-                               }
-                           })
-                       }
+                        if (activeCues && !search.searched) {//與目前的cues進行startTime的比對
+                            angular.forEach(activeCues, function (activeCue) {
+                                if (cue.startTime == activeCue.startTime) {
+                                    search.searched = true;
+                                    index = idx;
+                                }
+                            })
+                        }
                         if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
                     }
+                    return index;
                 }
 
                 function modalClosing() { //modal關閉後清空Wavesurfer
@@ -555,12 +557,23 @@
 
                 }
 
+                function getScrollHeight(index) {
+                    var scrollHeight = 0;
+                    if (index > 0) {
+                        for (var i = 0; i < index; i++) {
+                            var currentCueElement = document.getElementById(cuesId[i]);
+                            scrollHeight += currentCueElement.offsetHeight;
+                        }
+                    }
+
+                    return scrollHeight;
+                }
+
                 function setHtmltoCue(index, cue) {
                     var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
                     //console.log(incue)
                     if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
                         $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
-                        console.log(incue[0].id)
                         cuesId.push(incue[0].id);
                     }
                 }
