@@ -472,28 +472,58 @@
             function playVideoController($scope) {
                 var audio;
                 var cuesId;
+
                 var track;
                 var self = this;
                 self.changeCue = changeCue;
                 self.currentCue = true;
+                self.goBackward = goBackward;
+                self.goDownVolume = goDownVolume;
+                self.goForward = goForward;
+                self.goUpVolume = goUpVolume;
                 self.init = init;
                 self.mute = mute;
                 self.playPause = playPause;
                 self.playing = false;
                 self.setHtmltoCue = setHtmltoCue;
                 self.showAudioContoller = false;
+
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
+
                 function changeCue(cue) {
                     audio.currentTime = cue.startTime;
                     self.player.seekTo(cue.startTime / self.player.getDuration())
                 }
 
+                function goBackward() {
+                    self.player.skipBackward();
+                    audio.currentTime = self.player.getCurrentTime();
+                }
+
+                function goDownVolume(value) {
+                    if (audio.volume >= 0.1) {
+                        audio.volume -= value;
+                    }
+                }
+
+                function goForward() {
+                    self.player.skipForward();
+                    audio.currentTime = self.player.getCurrentTime();
+                    console.log(audio.currentTime)
+                }
+
+                function goUpVolume(value) {
+                    if (audio.volume < 1) {
+                        audio.volume += value;
+                    }
+                }
 
                 function init() {
                     audio = $('audio').get(0);
                     track = $('#track').get(0).track;
                     cuesId = [];
+                    self.currentVolume = audio.volume;
                     $(track).on('cuechange', function () { //當當前字幕改變時
                         markedhighlight(track.activeCues);
                         $scope.$apply();
@@ -504,22 +534,24 @@
                 function modalClosing() { //modal關閉後清空Wavesurfer
                     self.player.empty()
                 }
-                function mute(){
-                    audio.volume=0;
+
+                function mute() {
+                    if (audio.muted == true)
+                        audio.muted = false;
+                    else
+                        audio.muted = true;
                 }
-
-
 
                 function playPause() {
                     if (audio.paused) {
                         audio.play();
                         self.player.playPause();
-                        self.playing= true;
+                        self.playing = true;
                     }
                     else {
                         audio.pause();
                         self.player.playPause();
-                        self.playing=false;
+                        self.playing = false;
                     }
                 }
 
@@ -547,8 +579,8 @@
                 function getWavesurfer(e, wavesurfer) {
                     self.player = wavesurfer; //指定Wavesurfer
                     self.player.setVolume(0);
-                    self.player.on('ready',onReady); //Wavesurfer ready後綁定字幕
-                    self.player.on('finish',onFinish); //當播放完畢時
+                    self.player.on('ready', onReady); //Wavesurfer ready後綁定字幕
+                    self.player.on('finish', onFinish); //當播放完畢時
                     self.player.on('seek', onSeek); //當點選音波時
                 }
 
@@ -570,15 +602,18 @@
                         if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
                     }
                 }
-                function onFinish(){
-                    self.playing=false;
+
+                function onFinish() {
+                    self.playing = false;
                     $scope.$apply();
                 }
-                function onReady(){
+
+                function onReady() {
                     self.cues = track.cues;
                     self.showAudioContoller = true;
                     $scope.$apply();
                 }
+
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
                 }

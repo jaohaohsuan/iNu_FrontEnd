@@ -12,6 +12,10 @@
     <div ng-show="playVideoCtrl.showAudioContoller">
         <button ng-click="playVideoCtrl.playPause()" class="btn fa" ng-class="{true:'fa-pause',false:'fa-play'}[playVideoCtrl.playing]" ></button>
         <button ng-click="playVideoCtrl.mute()" class="btn fa fa-volume-off"></button>
+        <button ng-click="playVideoCtrl.goUpVolume(0.1)" class="btn fa fa-volume-up"></button>
+        <button ng-click="playVideoCtrl.goDownVolume(0.1)" class="btn fa fa-volume-down"></button>
+        <button ng-click="playVideoCtrl.goBackward()" class="btn fa fa-backward"></button>
+        <button ng-click="playVideoCtrl.goForward()" class="btn fa fa-forward"></button>
     </div>
     <div class="cue-div">
         <div id="cueDiv{{$index}}" ng-repeat="cue in playVideoCtrl.cues">
