@@ -475,6 +475,7 @@
                 var cueDiv;
                 var track;
                 var self = this;
+                self.autoScroll = true;
                 self.changeCue = changeCue;
                 self.currentCue = true;
                 self.goBackward = goBackward;
@@ -510,7 +511,7 @@
                 function goForward() {
                     self.player.skipForward();
                     audio.currentTime = self.player.getCurrentTime();
-                    if(self.player.getCurrentTime()===self.player.getDuration()|| self.player.getCurrentTime()===0){
+                    if (self.player.getCurrentTime() === self.player.getDuration() || self.player.getCurrentTime() === 0) {
                         self.player.play();
                         self.player.stop();
                         resetCueDivScrollTop();
@@ -599,7 +600,7 @@
                             angular.forEach(activeCues, function (activeCue) {
                                 if (cue.startTime == activeCue.startTime) {
                                     search.searched = true;
-                                    cueDiv[0].scrollTop = getScrollHeight(idx);
+                                    if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
                                 }
                             })
                         }
@@ -624,9 +625,10 @@
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
                 }
-                function resetCueDivScrollTop(){
+
+                function resetCueDivScrollTop() {
                     markedhighlight(self.cues[0]);
-                    cueDiv[0].scrollTop=0;
+                    cueDiv[0].scrollTop = 0;
                 }
             }
 
