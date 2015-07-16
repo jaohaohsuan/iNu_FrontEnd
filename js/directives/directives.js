@@ -414,6 +414,8 @@
 
             var options = angular.extend({
                 container: ele[0],
+                waveColor: 'violet',
+                progressColor: 'purple'
             }, att);
             var wavesurfer = WaveSurfer.create(options);
             if (att.url) {

@@ -72,6 +72,10 @@ video::cue{
     background-color: rgba(0, 0, 0, 0.1);
     color: #fff;
 }
+.cue-div{
+    height: 360px;
+    overflow: auto;
+}
 .current-cue{
     color: #006621 !important;
 }

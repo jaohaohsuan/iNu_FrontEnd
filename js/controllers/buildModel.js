@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', '$anchorScroll', '$location', 'API_PATH', createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', 'API_PATH', createModelController])
         .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', matchedReviewedController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', 'API_PATH', modelManagementController])
 
@@ -54,7 +54,7 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, $anchorScroll, $location, API_PATH) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, API_PATH) {
         var modelGroupSelectedTimeout;
         var templateUrl = API_PATH + '_query/template';
         var self = this;
@@ -464,13 +464,14 @@
         function playVideo() {
 
             var modalInstance = $modal.open({
-                controller:['$scope', playVideoController],
+                controller: ['$scope',  playVideoController],
                 controllerAs: 'playVideoCtrl',
                 templateUrl: 'views/buildModel_matchedReview_video_modal.html'
             });
 
             function playVideoController($scope) {
                 var audio;
+                var cuesId;
                 var track;
                 var self = this;
                 self.changeCue = changeCue;
@@ -479,38 +480,43 @@
                 self.onSeek = onSeek;
                 self.playPause = playPause;
                 self.setHtmltoCue = setHtmltoCue;
-                modalInstance.result.then('',modalClosing); //當modal被關掉時
-                $scope.$on('wavesurferInit',getWavesurfer); //當wavesurfer準備好後
+                modalInstance.result.then('', modalClosing); //當modal被關掉時
+                $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
                 function changeCue(cue) {
                     console.log(cue.text)
-                    console.log( self.player)
+                    console.log(self.player)
                     audio.currentTime = cue.startTime;
-                    self.player.seekTo(cue.startTime/audio.duration)
+                    self.player.seekTo(cue.startTime / audio.duration)
                 }
 
-                function checkCurrentCue(cue) {
-                    console.log(cue)
-                    console.log(audio.seeking)
+                function checkCurrentCue(track) {
+
+                    console.log(track)
                 }
-                function getWavesurfer(e,wavesurfer){
-                        self.player = wavesurfer; //指定Wavesurfer
-                    self.player.on('ready',function(){ //Wavesurfer ready後綁定字幕
+
+                function getWavesurfer(e, wavesurfer) {
+                    self.player = wavesurfer; //指定Wavesurfer
+                    self.player.on('ready', function () { //Wavesurfer ready後綁定字幕
+
                         self.cues = track.cues;
                         $scope.$apply();
-                    })
-                    self.player.on('seek',onSeek); //當點選音波時
+                        console.log(typeof self.cues)
+                    });
+
+                    self.player.on('seek', onSeek); //當點選音波時
                 }
+
                 function init() {
                     audio = $('audio').get(0);
                     track = $('#track').get(0).track;
+                    cuesId = [];
                     $(track).on('cuechange', function () { //當當前字幕改變時
-                        console.log(track)
-                        console.log(track.activeCues)
-                        checkCurrentCue(track.activeCues)
+                        checkCurrentCue(track)
                     })
                 }
-                function modalClosing(){ //modal關閉後清空Wavesurfer
-                     self.player.empty()
+
+                function modalClosing() { //modal關閉後清空Wavesurfer
+                    self.player.empty()
                 }
 
                 function onSeek() {
@@ -534,21 +540,15 @@
                     }
 
                 }
-            }
 
-            //function pushCues(cues) {
-            //    var cueHtmls = [];
-            //    angular.forEach(cues, function (cue) {
-            //        cueHtmls.push(cue)
-            //    })
-            //    return cueHtmls;
-            //}
-
-            function setHtmltoCue(index, cue) {
-                var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
-                //console.log(incue)
-                if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
-                    $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
+                function setHtmltoCue(index, cue) {
+                    var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
+                    //console.log(incue)
+                    if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
+                        $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
+                        console.log(incue[0].id)
+                        cuesId.push(incue[0].id);
+                    }
                 }
             }
         }
