@@ -472,7 +472,7 @@
             function playVideoController($scope) {
                 var audio;
                 var cuesId;
-
+                var cueDiv;
                 var track;
                 var self = this;
                 self.changeCue = changeCue;
@@ -508,10 +508,13 @@
                 }
 
                 function goForward() {
-
                     self.player.skipForward();
                     audio.currentTime = self.player.getCurrentTime();
-                    console.log(audio.currentTime)
+                    if(self.player.getCurrentTime()==self.player.getDuration()){
+                        self.player.play();
+                        self.player.stop();
+                        resetCueDivScrollTop();
+                    }
                 }
 
                 function goUpVolume(value) {
@@ -523,10 +526,12 @@
                 function init() {
                     audio = $('audio').get(0);
                     track = $('#track').get(0).track;
+                    cueDiv = document.getElementsByClassName('cue-div');
                     cuesId = [];
                     $(track).on('cuechange', function () { //當當前字幕改變時
                         markedhighlight(track.activeCues);
                         $scope.$apply();
+
                     })
                 }
 
@@ -585,7 +590,6 @@
                 }
 
                 function markedhighlight(activeCues) {//標記highlight
-
                     if (activeCues.length <= 0) return;
                     var search = {searched: false};
                     for (var idx = self.cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
@@ -595,8 +599,6 @@
                             angular.forEach(activeCues, function (activeCue) {
                                 if (cue.startTime == activeCue.startTime) {
                                     search.searched = true;
-                                    var cueDiv = document.getElementsByClassName('cue-div');
-                                    console.log(idx)
                                     cueDiv[0].scrollTop = getScrollHeight(idx);
                                 }
                             })
@@ -609,6 +611,7 @@
                     self.playing = false;
                     self.player.stop();
                     audio.pause();
+                    resetCueDivScrollTop();
                     $scope.$apply();
                 }
 
@@ -621,8 +624,12 @@
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
                 }
-
+                function resetCueDivScrollTop(){
+                    markedhighlight(self.cues[0]);
+                    cueDiv[0].scrollTop=0;
+                }
             }
+
         }
 
         function showModelDetail(entity) {
@@ -650,9 +657,7 @@
         self.filterModel = filterModel;
         self.gridOptions = {
             columnDefs: [
-
                 {
-
                     field: 'modelName',
                     displayName: '{{"modelName"|translate}}',
                     cellClass: 'model-management-grid-cell',
@@ -665,7 +670,6 @@
 
                 },
                 {
-
                     field: 'role',
                     displayName: '{{"role"|translate}}',
                     headerCellFilter: 'translate',
@@ -674,7 +678,6 @@
                     enableColumnMenu: false
                 },
                 {
-
                     field: 'history',
                     displayName: '{{"history"|translate}}',
                     headerCellFilter: 'translate',
