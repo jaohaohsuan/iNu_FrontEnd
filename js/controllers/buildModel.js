@@ -510,7 +510,7 @@
                 function goForward() {
                     self.player.skipForward();
                     audio.currentTime = self.player.getCurrentTime();
-                    if(self.player.getCurrentTime()==self.player.getDuration()){
+                    if(self.player.getCurrentTime()===self.player.getDuration()|| self.player.getCurrentTime()===0){
                         self.player.play();
                         self.player.stop();
                         resetCueDivScrollTop();
