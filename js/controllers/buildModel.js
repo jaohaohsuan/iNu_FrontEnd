@@ -508,6 +508,7 @@
                 }
 
                 function goForward() {
+
                     self.player.skipForward();
                     audio.currentTime = self.player.getCurrentTime();
                     console.log(audio.currentTime)
@@ -523,7 +524,6 @@
                     audio = $('audio').get(0);
                     track = $('#track').get(0).track;
                     cuesId = [];
-                    self.currentVolume = audio.volume;
                     $(track).on('cuechange', function () { //當當前字幕改變時
                         markedhighlight(track.activeCues);
                         $scope.$apply();
@@ -545,12 +545,12 @@
                 function playPause() {
                     if (audio.paused) {
                         audio.play();
-                        self.player.playPause();
+                        self.player.play();
                         self.playing = true;
                     }
                     else {
                         audio.pause();
-                        self.player.playPause();
+                        self.player.pause();
                         self.playing = false;
                     }
                 }
@@ -585,6 +585,7 @@
                 }
 
                 function markedhighlight(activeCues) {//標記highlight
+
                     if (activeCues.length <= 0) return;
                     var search = {searched: false};
                     for (var idx = self.cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
@@ -595,6 +596,7 @@
                                 if (cue.startTime == activeCue.startTime) {
                                     search.searched = true;
                                     var cueDiv = document.getElementsByClassName('cue-div');
+                                    console.log(idx)
                                     cueDiv[0].scrollTop = getScrollHeight(idx);
                                 }
                             })
@@ -605,6 +607,8 @@
 
                 function onFinish() {
                     self.playing = false;
+                    self.player.stop();
+                    audio.pause();
                     $scope.$apply();
                 }
 
