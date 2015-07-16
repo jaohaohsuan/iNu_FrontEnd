@@ -627,8 +627,10 @@
                 }
 
                 function resetCueDivScrollTop() {
-                    markedhighlight(self.cues[0]);
-                    cueDiv[0].scrollTop = 0;
+                    if (self.autoScroll){
+                        markedhighlight(self.cues[0]);
+                        cueDiv[0].scrollTop = 0;
+                    }
                 }
             }
 
