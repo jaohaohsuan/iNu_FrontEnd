@@ -464,6 +464,7 @@
         function playVideo() {
 
             var modalInstance = $modal.open({
+                backdropClass: 'model-backdrop',
                 controller: ['$scope', playVideoController],
                 controllerAs: 'playVideoCtrl',
                 templateUrl: 'views/buildModel_matchedReview_video_modal.html'
@@ -776,7 +777,7 @@
 
         function saveAsModel(entity) { //打開modal另存模型
             var modelInstance = $modal.open({
-                backdropClass: 'model-management-model-backdrop', //打開modal後背景的CSS
+                backdropClass: 'modal-backdrop', //打開modal後背景的CSS
                 controller: ['$modalInstance', '$timeout', saveAsController],
                 controllerAs: 'saveAsCtrl',
                 size: 'sm',
@@ -864,7 +865,7 @@
 
         function showModelDetail(entity) { //打開modal顯示模型邏輯詞曲
             var modalInstance = $modal.open({
-                backdropClass: 'model-management-model-backdrop',
+                backdropClass: 'modal-backdrop',
                 controller: ['$modalInstance', 'title', showModelDetailController],
                 controllerAs: 'detailCtrl',
                 templateUrl: 'views/buildModel_modelManagement_modelDetailModal.html',
