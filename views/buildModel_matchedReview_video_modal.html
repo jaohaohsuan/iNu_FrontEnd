@@ -10,8 +10,13 @@
         <track id="track" ng-src="mp3/paulallen.vtt" kind="captions" default/>
     </audio>
     <div ng-show="playVideoCtrl.showAudioContoller">
-        <div class="pull-right"><label>Auto Scroll</label><input icheck type="checkbox"
-                                                                 ng-model="playVideoCtrl.autoScroll"/></div>
+        <div class="pull-right">
+            <input id="autoScroll"  type="checkbox"
+                   ng-model="playVideoCtrl.autoScroll"/>
+            <label for="autoScroll" class="fa fa-2x"
+                   ng-class="{true:'fa-lock',false:'fa-unlock-alt'}[playVideoCtrl.autoScroll]"></label>
+        </div>
+
         <button ng-click="playVideoCtrl.playPause()" class="btn fa"
                 ng-class="{true:'fa-pause',false:'fa-play'}[playVideoCtrl.playing]"></button>
         <button ng-click="playVideoCtrl.mute()" class="btn fa fa-volume-off"></button>

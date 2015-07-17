@@ -9,15 +9,25 @@ number-picker {
     margin-right: 5px;
 }
 
-
-
 i.fa.fa-arrow-left {
     margin-right: 5px;
 }
+
 i.fa.fa-arrow-up {
     margin-right: 5px;
 }
+
 i.fa.fa-info-circle {
+    margin-right: 5px;
+}
+
+input#autoScroll {
+    visibility: hidden;
+}
+label[for=autoScroll]{
+    cursor: pointer;
+    position: relative;
+    top: 5px;
     margin-right: 5px;
 }
 span > a:link {
@@ -25,10 +35,10 @@ span > a:link {
 }
 
 /*video::cue(c.ttt){*/
-    /*color: #00f123;*/
+/*color: #00f123;*/
 /*}*/
 /*video::cue(v[voice="Larry"]){*/
-    /*color: #ff0000;*/
+/*color: #ff0000;*/
 /*}*/
 
 /*Class��*/
@@ -67,24 +77,30 @@ span > a:link {
     background-color: rgba(0, 0, 0, 0.1);
     color: #fff;
 }
-.cue-div{
+
+.cue-div {
     height: 300px;
     margin-top: 5px;
     overflow: auto;
     padding: 10px;
+
 }
-.cues{
+
+.cues {
     cursor: pointer;
     margin-bottom: 10px;
     font-size: 18px;
     display: block;
 }
-.cues:hover{
+
+.cues:hover {
     font-weight: 900;
 }
-.current-cue{
+
+.current-cue {
     color: #006621 !important;
 }
+
 .cursor-pointer {
     cursor: pointer;
 }
@@ -134,7 +150,6 @@ span > a:link {
     height: 250px;
     overflow: auto;
 }
-
 
 .margins-div {
     margin: 0 0 0 2px;
@@ -213,8 +228,6 @@ span > a:link {
     overflow: auto;
 }
 
-
-
 .models-select {
     height: 120px;
     margin-top: 5px;
@@ -234,8 +247,6 @@ span > a:link {
     height: 200px;
     overflow: auto;
 }
-
-
 
 .models-label {
     position: relative;
@@ -320,7 +331,7 @@ span > a:link {
     display: inline;
 }
 
-.vtt-highlight{
+.vtt-highlight {
     color: #ff0000;
 }
 
