@@ -23,12 +23,7 @@ i.fa.fa-info-circle {
 span > a:link {
     color: #328F7B;
 }
-video{
-   display: none;
-}
-video::cue{
-    font-size: 28px;
-}
+
 /*video::cue(c.ttt){*/
     /*color: #00f123;*/
 /*}*/
@@ -73,8 +68,19 @@ video::cue{
     color: #fff;
 }
 .cue-div{
-    height: 360px;
+    height: 300px;
+    margin-top: 5px;
     overflow: auto;
+    padding: 10px;
+}
+.cues{
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 18px;
+    display: block;
+}
+.cues:hover{
+    font-weight: 900;
 }
 .current-cue{
     color: #006621 !important;

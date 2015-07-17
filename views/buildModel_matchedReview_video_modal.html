@@ -10,7 +10,8 @@
         <track id="track" ng-src="mp3/paulallen.vtt" kind="captions" default/>
     </audio>
     <div ng-show="playVideoCtrl.showAudioContoller">
-        <div class="pull-right" ><label>Auto Scroll</label><input icheck type="checkbox" ng-model="playVideoCtrl.autoScroll"/></div>
+        <div class="pull-right"><label>Auto Scroll</label><input icheck type="checkbox"
+                                                                 ng-model="playVideoCtrl.autoScroll"/></div>
         <button ng-click="playVideoCtrl.playPause()" class="btn fa"
                 ng-class="{true:'fa-pause',false:'fa-play'}[playVideoCtrl.playing]"></button>
         <button ng-click="playVideoCtrl.mute()" class="btn fa fa-volume-off"></button>
@@ -20,9 +21,8 @@
         <button ng-click="playVideoCtrl.goForward()" class="btn fa fa-forward"></button>
     </div>
     <div class="cue-div">
-        <div id="cueDiv{{$index}}" ng-repeat="cue in playVideoCtrl.cues">
-        <span class="btn" ng-click="playVideoCtrl.changeCue(cue)" id="cue{{$index}}"
+        <span class="cues" ng-repeat="cue in playVideoCtrl.cues" ng-click="playVideoCtrl.changeCue(cue)"
+              id="cue{{$index}}"
               ng-class="{true:'current-cue'}[cue.highlight]"> {{playVideoCtrl.setHtmltoCue($index,cue)}}</span>
-        </div>
     </div>
 </div>
