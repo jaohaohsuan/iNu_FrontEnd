@@ -474,7 +474,9 @@
                 var audio;
                 var cuesId;
                 var cueDiv;
+                var preCurrentSecond = -1;
                 var track;
+                var trackStartTimeSeconds = {};//存放字幕起始秒數
                 var self = this;
                 self.autoScroll = true;
                 self.changeCue = changeCue;
@@ -530,10 +532,10 @@
                     track = $('#track').get(0).track;
                     cueDiv = document.getElementsByClassName('cue-div');
                     cuesId = [];
-                    $(track).on('cuechange', function () { //當當前字幕改變時
-                        markedhighlight(self.cues, self.player.getCurrentTime());
-
-                    })
+//                    $(track).on('cuechange', function () { //當當前字幕改變時
+//                        markedhighlight(self.cues, self.player.getCurrentTime());
+//
+//                    })
                 }
 
 
@@ -600,10 +602,11 @@
                     self.player.on('ready', onReady); //Wavesurfer ready後綁定字幕
                     self.player.on('finish', onFinish); //當播放完畢時
                     self.player.on('seek', onSeek); //當點選音波時
+                    self.player.on('audioprocess',onAudioProcess);//當檔處理時
                 }
 
                 function markedhighlight(cues, currentTime) {//標記highlight
-
+                    console.log(currentTime);
                     if (currentTime && currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
                         cueDiv[0].scrollTop = 0;
                     }
@@ -624,17 +627,28 @@
                     }
 
                 }
-
+                function onAudioProcess(time){
+                    var currentSecond = Math.floor(time);
+                    if (preCurrentSecond != currentSecond && trackStartTimeSeconds[currentSecond]) {
+                        markedhighlight(self.cues, self.player.getCurrentTime());
+                        preCurrentSecond = currentSecond;
+                    }
+                }
                 function onFinish() {
                     self.playing = false;
                     self.player.stop();
                     audio.pause();
                     resetCueDivScrollTop();
+                    preCurrentSecond = -1;
                     $scope.$apply();
                 }
 
                 function onReady() {
                     self.cues = track.cues;
+                    trackStartTimeSeconds = {};
+                    angular.forEach(self.cues,function(cue){
+                        trackStartTimeSeconds[Math.floor(cue.startTime)] = true;
+                    })
                     self.showAudioContoller = true;
                     $scope.$apply();
                 }
