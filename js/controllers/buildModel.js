@@ -477,6 +477,7 @@
                 var preCurrentSecond = -1;
                 var track;
                 var trackStartTimeSeconds = {};//存放字幕起始秒數
+                var volume=1;
                 var self = this;
                 self.autoScroll = true;
                 self.changeCue = changeCue;
@@ -496,24 +497,25 @@
                 $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
 
                 function changeCue(cue) {
-                    audio.currentTime = cue.startTime;
+                    //audio.currentTime = cue.startTime;
                     self.player.seekTo(cue.startTime / self.player.getDuration())
                 }
 
                 function goBackward() {
                     self.player.skipBackward();
-                    audio.currentTime = self.player.getCurrentTime();
+                    //audio.currentTime = self.player.getCurrentTime();
                 }
 
                 function goDownVolume(value) {
-                    if (audio.volume >= 0.1) {
-                        audio.volume -= value;
+                    if (volume >= 0.1) {
+                       volume -= value;
+                        self.player.setVolume(volume)
                     }
                 }
 
                 function goForward() {
                     self.player.skipForward();
-                    audio.currentTime = self.player.getCurrentTime();
+                    //audio.currentTime = self.player.getCurrentTime();
                     if (self.player.getCurrentTime() === self.player.getDuration() || self.player.getCurrentTime() === 0) {
                         self.player.play();
                         self.player.stop();
@@ -522,8 +524,9 @@
                 }
 
                 function goUpVolume(value) {
-                    if (audio.volume < 1) {
-                        audio.volume += value;
+                    if (volume < 1) {
+                        volume += value;
+                        self.player.setVolume(volume)
                     }
                 }
 
@@ -544,10 +547,11 @@
                 }
 
                 function mute() {
-                    if (audio.muted == true)
-                        audio.muted = false;
-                    else
-                        audio.muted = true;
+                    //if (audio.muted == true)
+                    //    audio.muted = false;
+                    //else
+                    //    audio.muted = true;
+                    self.player.toggleMute();
                 }
 
                 function playPause() {
@@ -598,7 +602,7 @@
 
                 function getWavesurfer(e, wavesurfer) {
                     self.player = wavesurfer; //指定Wavesurfer
-                    self.player.setVolume(0);
+                    self.player.setVolume(volume);
                     self.player.on('ready', onReady); //Wavesurfer ready後綁定字幕
                     self.player.on('finish', onFinish); //當播放完畢時
                     self.player.on('seek', onSeek); //當點選音波時
