@@ -437,7 +437,23 @@
 
         return direcvive;
     }
-
+    function wavesurferTimeLine(){
+        var directive = {
+            restrict:'E',
+            scope:{
+                wavesurfer:'='
+            },
+            link:wavesurferTimeLineLink
+        }
+        function wavesurferTimeLineLink(scope,ele,att){
+            var timeline = Object.create(WaveSurfer.Timeline);
+            timeline.init({
+                wavesurfer:scope.wavesurfer,
+                container:ele[0]
+            });
+        }
+        return directive;
+    }
 ///////////////////////////////////////////////////////////////
     function pageTitle($rootScope, $translate) {
         var directive = {
@@ -823,4 +839,5 @@
         .directive('nestedScroll', nestedScroll)
         .directive('setClassWithWidth', setClassWithWidth)
         .directive('wavesurfer', wavesurfer)
+        .directive('wavesurferTimeLine',wavesurferTimeLine)
 })();
