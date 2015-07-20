@@ -471,20 +471,23 @@
             });
 
             function playVideoController($scope) {
-                var audio;
-                var cuesId;
-                var cueDiv;
+                //var audio;
+                var cuesId = []; //存放cuesId的陣列
+                var cueDiv; //.cue-div element
                 var preCurrentSecond = -1;
-                var track;
+                var speed = 1; //播放速度
+                var track; //track element
                 var trackStartTimeSeconds = {};//存放字幕起始秒數
-                var volume=1;
+                var volume = 1; //播放音量
                 var self = this;
                 self.autoScroll = true;
                 self.changeCue = changeCue;
                 self.currentCue = true;
                 self.goBackward = goBackward;
+                self.goBackwardFast = goBackwardFast;
                 self.goDownVolume = goDownVolume;
                 self.goForward = goForward;
+                self.goForwardFast = goForwardFast;
                 self.goUpVolume = goUpVolume;
                 self.init = init;
                 self.mute = mute;
@@ -506,9 +509,14 @@
                     //audio.currentTime = self.player.getCurrentTime();
                 }
 
+                function goBackwardFast(value) {
+                    speed = speed - value < 0.1 ? 0.1 : speed - value
+                    self.player.setPlaybackRate(speed);
+                }
+
                 function goDownVolume(value) {
-                    if (volume >= 0.1) {
-                       volume -= value;
+                    if (volume >= 0) {
+                        volume -= value;
                         self.player.setVolume(volume)
                     }
                 }
@@ -523,6 +531,13 @@
                     }
                 }
 
+                function goForwardFast(value) {
+                    if (speed >= 0.1) {
+                        speed =speed+ value;
+                        self.player.setPlaybackRate(speed);
+                    }
+                }
+
                 function goUpVolume(value) {
                     if (volume < 1) {
                         volume += value;
@@ -534,7 +549,6 @@
                     audio = $('audio').get(0);
                     track = $('#track').get(0).track;
                     cueDiv = document.getElementsByClassName('cue-div');
-                    cuesId = [];
 //                    $(track).on('cuechange', function () { //當當前字幕改變時
 //                        markedhighlight(self.cues, self.player.getCurrentTime());
 //
@@ -603,10 +617,11 @@
                 function getWavesurfer(e, wavesurfer) {
                     self.player = wavesurfer; //指定Wavesurfer
                     self.player.setVolume(volume);
+                    self.player.setPlaybackRate(speed);
                     self.player.on('ready', onReady); //Wavesurfer ready後綁定字幕
                     self.player.on('finish', onFinish); //當播放完畢時
                     self.player.on('seek', onSeek); //當點選音波時
-                    self.player.on('audioprocess',onAudioProcess);//當檔處理時
+                    self.player.on('audioprocess', onAudioProcess);//當檔處理時
                 }
 
                 function markedhighlight(cues, currentTime) {//標記highlight
@@ -631,13 +646,15 @@
                     }
 
                 }
-                function onAudioProcess(time){
+
+                function onAudioProcess(time) {
                     var currentSecond = Math.floor(time);
                     if (preCurrentSecond != currentSecond && trackStartTimeSeconds[currentSecond]) {
                         markedhighlight(self.cues, self.player.getCurrentTime());
                         preCurrentSecond = currentSecond;
                     }
                 }
+
                 function onFinish() {
                     self.playing = false;
                     self.player.stop();
@@ -650,7 +667,7 @@
                 function onReady() {
                     self.cues = track.cues;
                     trackStartTimeSeconds = {};
-                    angular.forEach(self.cues,function(cue){
+                    angular.forEach(self.cues, function (cue) {
                         trackStartTimeSeconds[Math.floor(cue.startTime)] = true;
                     })
                     self.showAudioContoller = true;
