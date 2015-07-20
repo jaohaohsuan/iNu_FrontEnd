@@ -603,6 +603,10 @@
                 }
 
                 function markedhighlight(cues,currentTime) {//標記highlight
+                    console.log(currentTime)
+                    if(currentTime<cues[0].startTime){ //目前時間小於cues的第一筆時，將scroll top 拉到最前面
+                        cueDiv[0].scrollTop = 0;
+                    }
                     var search = {searched: false};
                     for (var idx = cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
                         var cue = cues[idx];
