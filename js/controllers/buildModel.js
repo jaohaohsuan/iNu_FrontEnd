@@ -531,7 +531,7 @@
                     cueDiv = document.getElementsByClassName('cue-div');
                     cuesId = [];
                     $(track).on('cuechange', function () { //當當前字幕改變時
-                        markedhighlight(self.cues,self.player.getCurrentTime());
+                        markedhighlight(self.cues, self.player.getCurrentTime());
 
                     })
                 }
@@ -602,9 +602,9 @@
                     self.player.on('seek', onSeek); //當點選音波時
                 }
 
-                function markedhighlight(cues,currentTime) {//標記highlight
-                    console.log(currentTime)
-                    if(currentTime<cues[0].startTime){ //目前時間小於cues的第一筆時，將scroll top 拉到最前面
+                function markedhighlight(cues, currentTime) {//標記highlight
+
+                    if (currentTime && currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
                         cueDiv[0].scrollTop = 0;
                     }
                     var search = {searched: false};
@@ -619,7 +619,7 @@
                         }
                         if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
                     }
-                    if(!$scope.$$phase) {
+                    if (!$scope.$$phase) {
                         $scope.$apply();
                     }
 
@@ -641,7 +641,7 @@
 
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
-                    markedhighlight(self.cues,self.player.getCurrentTime());
+                    markedhighlight(self.cues, self.player.getCurrentTime());
 //                    findCueWithCurrentTime(self.player.getCurrentTime());
                 }
 
