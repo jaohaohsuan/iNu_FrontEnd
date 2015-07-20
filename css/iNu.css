@@ -94,10 +94,13 @@ span > a:link {
 }
 
 .cues:hover {
-    font-weight: 900;
+    position: relative;
+    top: 2px;
+    left: 2px;
+    font-size:160%;
 }
 
-.current-cue {
+.cue-highlight {
     color: #006621 !important;
 }
 
@@ -147,8 +150,8 @@ span > a:link {
 }
 
 .matched-review-model-preview {
-    height: 250px;
-    overflow: auto;
+    height: 220px;
+    overflow: scroll;
 }
 
 .margins-div {
@@ -166,6 +169,7 @@ span > a:link {
 .model-filter-button {
     height: 33px;
     margin-left: 3px !important;
+
 }
 
 .model-filter span {

@@ -28,6 +28,6 @@
     <div class="cue-div">
         <span class="cues" ng-repeat="cue in playVideoCtrl.cues" ng-click="playVideoCtrl.changeCue(cue)"
               id="cue{{$index}}"
-              ng-class="{true:'current-cue'}[cue.highlight]"> {{playVideoCtrl.setHtmltoCue($index,cue)}}</span>
+              ng-class="{true:'cue-highlight'}[cue.highlight]"> {{playVideoCtrl.setHtmltoCue($index,cue)}}</span>
     </div>
 </div>

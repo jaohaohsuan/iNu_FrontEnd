@@ -572,12 +572,24 @@
                 }
 
                 /////////////不綁定區///////////////
+                function findCueWithCurrentTime(currentTime) {
+                    var currentCue = [];
+                    for (var i = 0; i < self.cues.length; i++) {
+                        if (self.cues[i].startTime > currentTime) {
+                            currentCue.push(self.cues[i]);
+                            break;
+                        }
+                    }
+                    markedhighlight(currentCue)
+
+                }
+
                 function getScrollHeight(index) { //當前cue的index
                     var scrollHeight = 0;
                     if (index > 0) {
                         for (var i = 0; i < index; i++) {
-                            var currentCueElement = document.getElementById(cuesId[i]); //取得當前綁定cue的element的高度
-                            scrollHeight += currentCueElement.offsetHeight;
+                            var currentCueElement = $('#' + cuesId[i]); //取得當前綁定cue的element的高度
+                            scrollHeight += currentCueElement[0].offsetHeight + 3;
                         }
                     }
                     return scrollHeight;
@@ -625,10 +637,11 @@
 
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
+                    findCueWithCurrentTime(self.player.getCurrentTime());
                 }
 
                 function resetCueDivScrollTop() {
-                    if (self.autoScroll){
+                    if (self.autoScroll) {
                         markedhighlight(self.cues[0]);
                         cueDiv[0].scrollTop = 0;
                     }
