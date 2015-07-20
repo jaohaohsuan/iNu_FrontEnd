@@ -531,7 +531,8 @@
                     cueDiv = document.getElementsByClassName('cue-div');
                     cuesId = [];
                     $(track).on('cuechange', function () { //當當前字幕改變時
-                        markedhighlight(track.activeCues);
+                        console.log('cuechange')
+                        markedhighlight(self.cues,self.player.getCurrentTime());
                         $scope.$apply();
 
                     })
@@ -572,17 +573,17 @@
                 }
 
                 /////////////不綁定區///////////////
-                function findCueWithCurrentTime(currentTime) {
-                    var currentCue = [];
-                    for (var i = 0; i < self.cues.length; i++) {
-                        if (self.cues[i].startTime > currentTime) {
-                            currentCue.push(self.cues[i]);
-                            break;
-                        }
-                    }
-                    markedhighlight(currentCue)
-
-                }
+//                function findCueWithCurrentTime(currentTime) {
+//                    var currentCue = [];
+//                    for (var i = 0; i < self.cues.length; i++) {
+//                        if (self.cues[i].startTime > currentTime) {
+//                            currentCue.push(self.cues[i]);
+//                            break;
+//                        }
+//                    }
+//                    markedhighlight(currentCue)
+//
+//                }
 
                 function getScrollHeight(index) { //當前cue的index
                     var scrollHeight = 0;
@@ -603,19 +604,18 @@
                     self.player.on('seek', onSeek); //當點選音波時
                 }
 
-                function markedhighlight(activeCues) {//標記highlight
-                    if (activeCues.length <= 0) return;
+                function markedhighlight(cues,currentTime) {//標記highlight
+
                     var search = {searched: false};
-                    for (var idx = self.cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
-                        var cue = self.cues[idx];
+                    for (var idx = cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
+                        var cue = cues[idx];
                         cue.highlight = false;//尚未搜尋到之前都將highlight設為false
-                        if (!search.searched) {//與目前的cues進行startTime的比對
-                            angular.forEach(activeCues, function (activeCue) {
-                                if (cue.startTime == activeCue.startTime) {
-                                    search.searched = true;
-                                    if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
-                                }
-                            })
+                        if (!search.searched) {
+                            if (currentTime >= cue.startTime) {//目前時間 >= cue的起始時間代表已搜尋到
+                                console.log(currentTime)
+                                search.searched = true;
+                                if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
+                            }
                         }
                         if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
                     }
@@ -637,7 +637,10 @@
 
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
-                    findCueWithCurrentTime(self.player.getCurrentTime());
+                    markedhighlight(self.cues,self.player.getCurrentTime());
+                    console.log('seek')
+                    $scope.$apply();
+//                    findCueWithCurrentTime(self.player.getCurrentTime());
                 }
 
                 function resetCueDivScrollTop() {
