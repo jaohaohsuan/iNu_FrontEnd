@@ -531,9 +531,7 @@
                     cueDiv = document.getElementsByClassName('cue-div');
                     cuesId = [];
                     $(track).on('cuechange', function () { //當當前字幕改變時
-                        console.log('cuechange')
                         markedhighlight(self.cues,self.player.getCurrentTime());
-                        $scope.$apply();
 
                     })
                 }
@@ -605,20 +603,22 @@
                 }
 
                 function markedhighlight(cues,currentTime) {//標記highlight
-
                     var search = {searched: false};
                     for (var idx = cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
                         var cue = cues[idx];
                         cue.highlight = false;//尚未搜尋到之前都將highlight設為false
                         if (!search.searched) {
                             if (currentTime >= cue.startTime) {//目前時間 >= cue的起始時間代表已搜尋到
-                                console.log(currentTime)
                                 search.searched = true;
                                 if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
                             }
                         }
                         if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
                     }
+                    if(!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+
                 }
 
                 function onFinish() {
@@ -638,8 +638,6 @@
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
                     markedhighlight(self.cues,self.player.getCurrentTime());
-                    console.log('seek')
-                    $scope.$apply();
 //                    findCueWithCurrentTime(self.player.getCurrentTime());
                 }
 
