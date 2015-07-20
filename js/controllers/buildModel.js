@@ -610,7 +610,7 @@
                 }
 
                 function markedhighlight(cues, currentTime) {//標記highlight
-                    console.log(currentTime);
+                    currentTime = currentTime.toFixed(3);//四捨五入到小數點第三位
                     if (currentTime && currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
                         cueDiv[0].scrollTop = 0;
                     }
