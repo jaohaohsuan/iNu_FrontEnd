@@ -474,7 +474,6 @@
                 //var audio;
                 var cuesId = []; //存放cuesId的陣列
                 var cueDiv; //.cue-div element
-                var preCurrentSecond = -1;
                 var speed = 1; //播放速度
                 var track; //track element
                 var trackStartTimeSeconds = {};//存放字幕起始秒數
@@ -649,9 +648,8 @@
 
                 function onAudioProcess(time) {
                     var currentSecond = Math.floor(time);
-                    if (preCurrentSecond != currentSecond && trackStartTimeSeconds[currentSecond]) {
+                    if (trackStartTimeSeconds[currentSecond]) {
                         markedhighlight(self.cues, self.player.getCurrentTime());
-                        preCurrentSecond = currentSecond;
                     }
                 }
 
@@ -660,7 +658,6 @@
                     self.player.stop();
                     audio.pause();
                     resetCueDivScrollTop();
-                    preCurrentSecond = -1;
                     $scope.$apply();
                 }
 
