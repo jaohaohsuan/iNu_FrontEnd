@@ -7,12 +7,12 @@
     <wavesurfer url="mp3/paulallen.mp3" height="32"></wavesurfer>
     <wavesurfer-time-line wavesurfer="playVideoCtrl.player"></wavesurfer-time-line>
     <audio>
-        <track id="track" ng-src="mp3/paulallen.vtt" kind="captions" default/>
+        <track id="track" ng-src="mp3/paulallen.vtt" kind="captions" default />
     </audio>
     <div ng-show="playVideoCtrl.showAudioContoller">
         <div class="pull-right">
-            <input id="autoScroll"  type="checkbox"
-                   ng-model="playVideoCtrl.autoScroll"/>
+            <input id="autoScroll" type="checkbox"
+                   ng-model="playVideoCtrl.autoScroll" />
             <label for="autoScroll" class="fa fa-2x"
                    ng-class="{true:'fa-lock',false:'fa-unlock-alt'}[playVideoCtrl.autoScroll]"></label>
         </div>
@@ -20,8 +20,8 @@
         <button title="{{playVideoCtrl.playPauseText}}" ng-click="playVideoCtrl.playPause()" class="btn fa"
                 ng-class="{true:'fa-pause',false:'fa-play'}[playVideoCtrl.playing]"></button>
         <button title="{{'mute'|translate}}" ng-click="playVideoCtrl.mute()" class="btn fa fa-volume-off"></button>
-        <button title="{{'volumeUp'|translate}}" ng-click="playVideoCtrl.goUpVolume(0.1)" class="btn fa fa-volume-up"></button>
         <button title="{{'volumeDown'|translate}}" ng-click="playVideoCtrl.goDownVolume(0.1)" class="btn fa fa-volume-down"></button>
+        <button title="{{'volumeUp'|translate}}" ng-click="playVideoCtrl.goUpVolume(0.1)" class="btn fa fa-volume-up"></button>
         <button title="{{'backward'|translate}}" ng-click="playVideoCtrl.goBackward()" class="btn fa fa-backward"></button>
         <button title="{{'forward'|translate}}" ng-click="playVideoCtrl.goForward()" class="btn fa fa-forward"></button>
         <button title="{{'fastBackward'|translate}}" ng-click="playVideoCtrl.goBackwardFast(0.1)" class="btn fa fa-fast-backward"></button>
@@ -30,6 +30,6 @@
     <div class="cue-div">
         <span class="cues" ng-repeat="cue in playVideoCtrl.cues" ng-click="playVideoCtrl.changeCue(cue)"
               id="cue{{$index}}"
-              ng-class="{'cue-highlight':cue.highlight}"> {{playVideoCtrl.setHtmltoCue($index,cue)}}</span>
+              ng-class="{'cue-highlight':cue.highlight}">{{playVideoCtrl.setHtmltoCue($index,cue)}}</span>
     </div>
 </div>
