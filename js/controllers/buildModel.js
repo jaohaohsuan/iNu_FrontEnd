@@ -474,10 +474,12 @@
                 //var audio;
                 var cuesId = []; //存放cuesId的陣列
                 var cueDiv; //.cue-div element
+                var floorDecimalPlaces = 2;//小數點後N位，前端固定無條件捨去到小數點第二位。
+                var maxStartTimeSeconds = {};//存放字幕起始時間中，相同秒數的最大值
+                var preSecond = -1;//紀錄播放中的上一秒
                 var speed = 1; //播放速度
                 var tempVolume;
                 var track; //track element
-                var trackStartTimeSeconds = {};//存放字幕起始秒數
                 var volume = 1; //播放音量
                 var self = this;
                 self.autoScroll = true;
@@ -503,6 +505,10 @@
                 function changeCue(cue) {
                     //audio.currentTime = cue.startTime;
                     self.player.seekTo(cue.startTime / self.player.getDuration())
+                }
+                function floorDecimal(num,places){//無條件捨去小數點N位
+                    var deciman = Math.pow(10,places);
+                    return Math.floor(num * deciman) / deciman;
                 }
 
                 function goBackward() {
@@ -636,7 +642,8 @@
 
                 function markedhighlight(cues, currentTime) {//標記highlight
                     if (!currentTime) return;
-                    currentTime = currentTime.toFixed(3);//四捨五入到小數點第三位
+                    currentTime = floorDecimal(currentTime,floorDecimalPlaces);//無條件捨去到小數點N位
+                    console.log(currentTime);
                     if (currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
                         cueDiv[0].scrollTop = 0;
                     }
@@ -645,7 +652,7 @@
                         var cue = cues[idx];
                         cue.highlight = false;//尚未搜尋到之前都將highlight設為false
                         if (!search.searched) {
-                            if (currentTime >= cue.startTime) {//目前時間 >= cue的起始時間代表已搜尋到
+                            if (currentTime >= floorDecimal(cue.startTime,floorDecimalPlaces)) {//目前時間 >= cue的起始時間代表已搜尋到
                                 search.searched = true;
                                 if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
                             }
@@ -655,13 +662,15 @@
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
-
                 }
 
                 function onAudioProcess(time) {
-                    var currentSecond = Math.floor(time);
-                    if (trackStartTimeSeconds[currentSecond]) {
+                    var currentSecond = Math.floor(time);//取得秒數
+                    var maxStartTime = maxStartTimeSeconds[currentSecond];//根據秒為單位，取得該秒內最大值
+                    //判斷前一秒與這一秒不相同時且取該秒內最大值進行highlight
+                    if (maxStartTime && preSecond != currentSecond && time >= maxStartTime) {
                         markedhighlight(self.cues, self.player.getCurrentTime());
+                        preSecond = currentSecond;
                     }
                 }
 
@@ -675,9 +684,15 @@
 
                 function onReady() {
                     self.cues = track.cues;
-                    trackStartTimeSeconds = {};
+                    maxStartTimeSeconds = {};
                     angular.forEach(self.cues, function (cue) {
-                        trackStartTimeSeconds[Math.floor(cue.startTime)] = true;
+                        var startTimeSecond = Math.floor(cue.startTime);//取出字幕起始時間的秒數
+                        if (!maxStartTimeSeconds[startTimeSecond]){//以秒數當key進行初始化
+                            maxStartTimeSeconds[startTimeSecond] = -1;
+                        }
+                        if (floorDecimal(cue.startTime,floorDecimalPlaces) > maxStartTimeSeconds[startTimeSecond]){//以無條件捨去N位當作判斷依據
+                            maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime,floorDecimalPlaces);//無條件捨去到小數點2位
+                        }
                     })
                     self.showAudioContoller = true;
                     $scope.$apply();
