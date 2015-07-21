@@ -333,6 +333,15 @@ span > a:link {
     display: inline;
 }
 
+.video-keywords {
+    background: #d55f3c;
+    border: 4px solid rgba(222, 222, 225, 0.2);
+    color: #fff;
+    display:inline-block;
+    position: relative;
+    margin-bottom:3px;
+}
+
 .vtt-highlight {
     color: #ff0000;
 }

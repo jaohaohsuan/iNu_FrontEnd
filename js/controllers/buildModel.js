@@ -467,6 +467,7 @@
                 backdropClass: 'model-backdrop',
                 controller: ['$scope', playVideoController],
                 controllerAs: 'playVideoCtrl',
+                size:'lg',
                 templateUrl: 'views/buildModel_matchedReview_video_modal.html'
             });
 
@@ -490,10 +491,13 @@
                 self.goForwardFast = goForwardFast;
                 self.goUpVolume = goUpVolume;
                 self.init = init;
+                self.keywords = [];
                 self.mute = mute;
+                self.perWidthSecond = 0;
                 self.playPause = playPause;
                 self.playPauseText = $translate.instant('play');
                 self.playing = false;
+                self.seekTo = seekTo;
                 self.setHtmltoCue = setHtmltoCue;
                 self.showAudioContoller = false;
 
@@ -590,7 +594,9 @@
                         self.playing = true;
                     }
                 }
-
+                function seekTo(second) {
+                    self.player.seekTo(second / self.player.getDuration());
+                }
                 function setHtmltoCue(index, cue) {
 
                     var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
@@ -673,6 +679,9 @@
                 }
 
                 function onReady() {
+                    self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
+                    console.log(self.perWidthSecond)
+                    self.keywords = [{ 'keyword': '你好', 'time': '5.835' }, { 'keyword': 'I put', 'time': '8.000' }, { 'keyword': 'work today', 'time': '10.280' }, { 'keyword': 'owns', 'time': '30.000' }];
                     self.cues = track.cues;
                     trackStartTimeSeconds = {};
                     angular.forEach(self.cues, function (cue) {
