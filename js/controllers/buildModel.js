@@ -512,15 +512,11 @@
 
                 function goBackwardFast(value) {
                     speed = speed - value < 0.1 ? 0.1 : speed - value
-                    self.player.setPlaybackRate(speed);
+                    self.player.setPlaybackRate(speed.toFixed(1));
                 }
 
                 function goDownVolume(value) {
-
-                    volume = volume - value < 0.1 ? 0 : volume - value;
                     self.player.setVolume(volume)
-
-                    console.log(volume);
                 }
 
                 function goForward() {
@@ -540,16 +536,13 @@
                 function goForwardFast(value) {
                     if (speed >= 0.1) {
                         speed = speed + value;
-                        self.player.setPlaybackRate(speed);
+                        self.player.setPlaybackRate(speed.toFixed(1));
                     }
                 }
 
                 function goUpVolume(value) {
-
                     volume = volume + value > 1 ? 1 : volume + value;
                     self.player.setVolume(volume)
-
-                    console.log(volume);
                 }
 
                 function init() {
