@@ -525,11 +525,15 @@
 
                 function goForward() {
                     self.player.skipForward();
+                    console.log(self.player.getCurrentTime())
                     //audio.currentTime = self.player.getCurrentTime();
                     if (self.player.getCurrentTime() === self.player.getDuration() || self.player.getCurrentTime() === 0) {
-                        self.player.play();
-                        self.player.stop();
-                        resetCueDivScrollTop();
+                        if (self.player.isPlaying()) {
+                            self.player.play();
+                        } else {
+                            self.player.seekTo(0);
+                        }
+                        //self.playing = false;
                     }
                 }
 
@@ -621,7 +625,7 @@
                     if (index > 0) {
                         for (var i = 0; i < index; i++) {
                             var currentCueElement = $('#' + cuesId[i]); //取得當前綁定cue的element的高度
-                            scrollHeight += currentCueElement[0].offsetHeight + 3;
+                            scrollHeight += currentCueElement[0].offsetHeight + 4;
                         }
                     }
                     return scrollHeight;
@@ -670,7 +674,7 @@
                 function onFinish() {
                     self.playing = false;
                     self.player.stop();
-                    audio.pause();
+                    //audio.pause();
                     resetCueDivScrollTop();
                     $scope.$apply();
                 }
