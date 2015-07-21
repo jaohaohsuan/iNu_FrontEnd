@@ -475,6 +475,7 @@
                 var cuesId = []; //存放cuesId的陣列
                 var cueDiv; //.cue-div element
                 var speed = 1; //播放速度
+                var tempVolume;
                 var track; //track element
                 var trackStartTimeSeconds = {};//存放字幕起始秒數
                 var volume = 1; //播放音量
@@ -515,10 +516,11 @@
                 }
 
                 function goDownVolume(value) {
-                    if (volume >= 0) {
-                        volume -= value;
-                        self.player.setVolume(volume)
-                    }
+
+                    volume = volume - value < 0.1 ? 0 : volume - value;
+                    self.player.setVolume(volume)
+
+                    console.log(volume);
                 }
 
                 function goForward() {
@@ -539,10 +541,11 @@
                 }
 
                 function goUpVolume(value) {
-                    if (volume < 1) {
-                        volume += value;
-                        self.player.setVolume(volume)
-                    }
+
+                    volume = volume + value > 1 ? 1 : volume + value;
+                    self.player.setVolume(volume)
+
+                    console.log(volume);
                 }
 
                 function init() {
@@ -565,7 +568,15 @@
                     //    audio.muted = false;
                     //else
                     //    audio.muted = true;
-                    self.player.toggleMute();
+
+                    if (volume === 0) {
+                        self.player.setVolume(tempVolume);
+                        volume = tempVolume;
+                    } else {
+                        self.player.setVolume(0);
+                        tempVolume = volume;
+                        volume = 0;
+                    }
                 }
 
                 function playPause() {

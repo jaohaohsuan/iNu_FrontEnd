@@ -2,12 +2,9 @@
 
 body {
     font-family: Microsoft YaHei, SimHei, Microsoft JhengHei, sans-serif;
-
 }
 
-number-picker {
-    margin-right: 5px;
-}
+
 
 i.fa.fa-arrow-left {
     margin-right: 5px;
@@ -24,12 +21,18 @@ i.fa.fa-info-circle {
 input#autoScroll {
     visibility: hidden;
 }
-label[for=autoScroll]{
+
+label[for=autoScroll] {
     cursor: pointer;
     position: relative;
     top: 5px;
     margin-right: 5px;
 }
+
+number-picker {
+    margin-right: 5px;
+}
+
 span > a:link {
     color: #328F7B;
 }
@@ -44,7 +47,7 @@ span > a:link {
 /*Class��*/
 
 .border-radius {
-    border-radius: 6px
+    border-radius: 6px;
 }
 
 .build-section-head {
@@ -73,17 +76,16 @@ span > a:link {
     color: #fff;
 }
 
-.clear-button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    color: #fff;
-}
+    .clear-button:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        color: #fff;
+    }
 
 .cue-div {
     height: 300px;
     margin-top: 5px;
     overflow: auto;
     padding: 10px;
-
 }
 
 .cues {
@@ -93,12 +95,12 @@ span > a:link {
     display: block;
 }
 
-.cues:hover {
-    position: relative;
-    top: 2px;
-    left: 2px;
-    font-size:160%;
-}
+    .cues:hover {
+        position: relative;
+        top: 2px;
+        left: 2px;
+        font-size: 160%;
+    }
 
 .cue-highlight {
     color: #006621 !important;
@@ -169,7 +171,6 @@ span > a:link {
 .model-filter-button {
     height: 33px;
     margin-left: 3px !important;
-
 }
 
 .model-filter span {
@@ -185,19 +186,19 @@ span > a:link {
     border-bottom: inset 2px #696969;
 }
 
-.model-instance-changeable > .new-model-input > .btn-block {
-    margin-top: 5px;
-}
+    .model-instance-changeable > .new-model-input > .btn-block {
+        margin-top: 5px;
+    }
 
 .model-management-grid {
     margin-top: 2px;
-    background: rgba(222, 222, 225, 0.2)
+    background: rgba(222, 222, 225, 0.2);
 }
 
-.model-management-grid > a {
-    margin-left: 5px;
-    color: red;
-}
+    .model-management-grid > a {
+        margin-left: 5px;
+        color: red;
+    }
 
 .model-management-grid-cell {
     text-align: center;
@@ -214,12 +215,10 @@ span > a:link {
 
 .model-management-modal-save {
     top: 170px;
-
 }
 
 .modal-backdrop {
     background: rgba(0, 0, 0, 0);
-
 }
 
 .model-name-grid {
@@ -255,7 +254,7 @@ span > a:link {
 .models-label {
     position: relative;
     left: -50px;
-    top: 30px
+    top: 30px;
 }
 
 .new-model-input {
@@ -279,16 +278,15 @@ span > a:link {
     top: 15px;
 }
 
-.number-arrow > span > a {
-    position: relative;
-    color: #328F7B;
-    display: block;
-    float: none;
-    padding: 1px;
-    margin-left: 1px;
-    margin-top: -11px;
-
-}
+    .number-arrow > span > a {
+        position: relative;
+        color: #328F7B;
+        display: block;
+        float: none;
+        padding: 1px;
+        margin-left: 1px;
+        margin-top: -11px;
+    }
 
 .number-input {
     height: 30px;
@@ -301,7 +299,7 @@ span > a:link {
     margin-top: 5px;
     left: 35%;
     position: relative;
-    top: 1px
+    top: 1px;
 }
 
 .switch-instance {
@@ -338,4 +336,3 @@ span > a:link {
 .vtt-highlight {
     color: #ff0000;
 }
-
