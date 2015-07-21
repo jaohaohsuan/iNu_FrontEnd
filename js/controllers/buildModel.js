@@ -2,7 +2,7 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', 'API_PATH', createModelController])
-        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', matchedReviewedController])
+        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', '$translate', matchedReviewedController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', 'API_PATH', modelManagementController])
 
 
@@ -14,10 +14,10 @@
         self.pagingIndex = 0;
         self.tabIndex = 0;
         self.tabs = [ //頁籤標題
-            {title: 'createModel', active: true},
-            {title: 'matchedReview'},
-            {title: 'modelManagement'},
-            {title: 'modules'}
+            { title: 'createModel', active: true },
+            { title: 'matchedReview' },
+            { title: 'modelManagement' },
+            { title: 'modules' }
         ];
         self.tabClicked = tabClicked;
         $scope.$on('addTab', addTab);
@@ -100,9 +100,9 @@
         };
         self.resetTitle = resetTitle;
         self.roles = [
-            {'name': '角色：全部', 'content': 'ALL'},
-            {'name': '角色：A', 'content': 'A'},
-            {'name': '角色：B', 'content': 'B'}
+            { 'name': '角色：全部', 'content': 'ALL' },
+            { 'name': '角色：A', 'content': 'A' },
+            { 'name': '角色：B', 'content': 'B' }
         ];
         self.saveConfiguration = saveConfiguration;
         self.saveAs = saveAs;
@@ -123,17 +123,17 @@
         $scope.$on('tabClicked', tabClicked);
         function addTags(successCallback) {
             SweetAlert.swal({
-                    title: $translate.instant('newModelsName'), //讀取多語系key
-                    type: 'input',
-                    showCancelButton: true,
-                    inputPlaceholder: $translate.instant('newModelsName'),
-                    confirmButtonColor: '#1C84C6',
-                    confirmButtonText: $translate.instant('sure'),
-                    cancelButtonText: $translate.instant('cancel'),
-                    closeOnConfirm: false,
-                    closeOnCancel: true,
-                    animation: false
-                },
+                title: $translate.instant('newModelsName'), //讀取多語系key
+                type: 'input',
+                showCancelButton: true,
+                inputPlaceholder: $translate.instant('newModelsName'),
+                confirmButtonColor: '#1C84C6',
+                confirmButtonText: $translate.instant('sure'),
+                cancelButtonText: $translate.instant('cancel'),
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                animation: false
+            },
                 function (inputValue) {
                     if (inputValue === false) return false;
                     if (inputValue === '' || !inputValue.trim().length) {
@@ -148,7 +148,7 @@
                         swal('Nice!', 'You wrote: ' + inputValue, 'success');
                         self.queriesBinding.search.tags = angular.copy(self.editBinding.configuration.tags);
                         self.queriesBinding.search.tags = self.queriesBinding.search.tags.map(function (tag) {
-                            return {name: tag.name}
+                            return { name: tag.name }
                         })
                         if (successCallback) successCallback();
                     })
@@ -157,17 +157,17 @@
 
         function addTab() {
             SweetAlert.swal({
-                    title: $translate.instant('newComponentName'), //讀取多語系key
-                    type: 'input',
-                    showCancelButton: true,
-                    inputPlaceholder: $translate.instant('newComponentName'),
-                    confirmButtonColor: '#1C84C6',
-                    confirmButtonText: $translate.instant('sure'),
-                    cancelButtonText: $translate.instant('cancel'),
-                    closeOnConfirm: false,
-                    closeOnCancel: true,
-                    animation: false
-                },
+                title: $translate.instant('newComponentName'), //讀取多語系key
+                type: 'input',
+                showCancelButton: true,
+                inputPlaceholder: $translate.instant('newComponentName'),
+                confirmButtonColor: '#1C84C6',
+                confirmButtonText: $translate.instant('sure'),
+                cancelButtonText: $translate.instant('cancel'),
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                animation: false
+            },
                 function (inputValue) {
                     if (inputValue === false) return false;
                     if (inputValue === '' || !inputValue.trim().length) {
@@ -181,7 +181,7 @@
                         type: 'success',
                         showConfirmButton: false
                     });
-                    $scope.$emit('addTab', {title: 'createModel', active: true, addable: true, tabName: inputValue});
+                    $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
                     templateLocation.path = inputValue; //設定URL Service的path變數
                 });
 
@@ -195,7 +195,7 @@
                 else data.value = self.editBinding.syntax[data.name]
             })
             var href = self.editCollection[syntaxIdentity].href;
-            var template = {template: angular.copy(self.editCollection[syntaxIdentity].template)};
+            var template = { template: angular.copy(self.editCollection[syntaxIdentity].template) };
             var occurrence = self.editBinding.syntax.occurrence;
             var successCallback = function () {
                 syntaxInputClear();
@@ -211,7 +211,7 @@
                     var id = component.href.substr(component.href.lastIndexOf('/') + 1);
                     kvDatas.storedQueryId.value = id;
                     kvDatas.storedQueryTitle.value = component.title;
-                    var template = {template: angular.copy(self.editCollection.named.template)};
+                    var template = { template: angular.copy(self.editCollection.named.template) };
                     var href = self.editCollection.named.href;
                     var occurrence = self.editBinding.component.occurrence;
                     var successCallback = function () {
@@ -249,15 +249,15 @@
 
         function deleteModel() {
             SweetAlert.swal({
-                    title: $translate.instant('sureDelete'), //讀取多語系key
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#DD6B55',
-                    confirmButtonText: $translate.instant('sure'),
-                    cancelButtonText: $translate.instant('cancel'),
-                    closeOnConfirm: false,
-                    closeOnCancel: true
-                },
+                title: $translate.instant('sureDelete'), //讀取多語系key
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: $translate.instant('sure'),
+                cancelButtonText: $translate.instant('cancel'),
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
                 function (isConfirm) {
                     if (isConfirm) {
                         SweetAlert.swal('deleted', '', 'success');
@@ -337,7 +337,7 @@
                     'save': function () {
                         buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.expansion.title, self.editBinding.configuration.tags, function (location) {
                             swal(
-                                {title: 'Success', timer: 1000, type: 'success', showConfirmButton: false}
+                                { title: 'Success', timer: 1000, type: 'success', showConfirmButton: false }
                             );
                         })
                     }
@@ -381,7 +381,7 @@
             self.showUndo = false;
         }
 
-//////////////////不綁定區//////////////////
+        //////////////////不綁定區//////////////////
         function destroyListener(event) {
             $timeout.cancel(modelGroupSelectedTimeout);
         }
@@ -419,7 +419,7 @@
         }
     }
 
-    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH) {
+    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH, $translate) {
 
         var self = this;
 
@@ -491,6 +491,7 @@
                 self.init = init;
                 self.mute = mute;
                 self.playPause = playPause;
+                self.playPauseText = $translate.instant('play');
                 self.playing = false;
                 self.setHtmltoCue = setHtmltoCue;
                 self.showAudioContoller = false;
@@ -532,7 +533,7 @@
 
                 function goForwardFast(value) {
                     if (speed >= 0.1) {
-                        speed =speed+ value;
+                        speed = speed + value;
                         self.player.setPlaybackRate(speed);
                     }
                 }
@@ -548,10 +549,10 @@
                     audio = $('audio').get(0);
                     track = $('#track').get(0).track;
                     cueDiv = document.getElementsByClassName('cue-div');
-//                    $(track).on('cuechange', function () { //當當前字幕改變時
-//                        markedhighlight(self.cues, self.player.getCurrentTime());
-//
-//                    })
+                    //                    $(track).on('cuechange', function () { //當當前字幕改變時
+                    //                        markedhighlight(self.cues, self.player.getCurrentTime());
+                    //
+                    //                    })
                 }
 
 
@@ -568,15 +569,17 @@
                 }
 
                 function playPause() {
-                    if (audio.paused) {
-                        audio.play();
-                        self.player.play();
-                        self.playing = true;
-                    }
-                    else {
-                        audio.pause();
+                    if (self.player.isPlaying()) {
+                        //audio.play();
+                        self.playPauseText = $translate.instant('play');
                         self.player.pause();
                         self.playing = false;
+                    }
+                    else {
+                        //audio.pause();
+                        self.playPauseText = $translate.instant('pause');
+                        self.player.play();
+                        self.playing = true;
                     }
                 }
 
@@ -590,17 +593,17 @@
                 }
 
                 /////////////不綁定區///////////////
-//                function findCueWithCurrentTime(currentTime) {
-//                    var currentCue = [];
-//                    for (var i = 0; i < self.cues.length; i++) {
-//                        if (self.cues[i].startTime > currentTime) {
-//                            currentCue.push(self.cues[i]);
-//                            break;
-//                        }
-//                    }
-//                    markedhighlight(currentCue)
-//
-//                }
+                //                function findCueWithCurrentTime(currentTime) {
+                //                    var currentCue = [];
+                //                    for (var i = 0; i < self.cues.length; i++) {
+                //                        if (self.cues[i].startTime > currentTime) {
+                //                            currentCue.push(self.cues[i]);
+                //                            break;
+                //                        }
+                //                    }
+                //                    markedhighlight(currentCue)
+                //
+                //                }
 
                 function getScrollHeight(index) { //當前cue的index
                     var scrollHeight = 0;
@@ -628,7 +631,7 @@
                     if (currentTime && currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
                         cueDiv[0].scrollTop = 0;
                     }
-                    var search = {searched: false};
+                    var search = { searched: false };
                     for (var idx = cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
                         var cue = cues[idx];
                         cue.highlight = false;//尚未搜尋到之前都將highlight設為false
@@ -674,7 +677,7 @@
                 function onSeek() {
                     audio.currentTime = self.player.getCurrentTime();
                     markedhighlight(self.cues, self.player.getCurrentTime());
-//                    findCueWithCurrentTime(self.player.getCurrentTime());
+                    //                    findCueWithCurrentTime(self.player.getCurrentTime());
                 }
 
                 function resetCueDivScrollTop() {
@@ -693,7 +696,7 @@
             self.isShowModelDetail = true;
             self.modelTitle = entity.title;
             self.gridOptions.data.push(
-                {'name': '123'}
+                { 'name': '123' }
             )
         }
 
@@ -816,7 +819,7 @@
         }
 
         function filterModel(queriesBinding) {
-            if (self.gridOptions.data)  self.gridOptions.data.length = 0;
+            if (self.gridOptions.data) self.gridOptions.data.length = 0;
             buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 angular.forEach(items, function (item) {
                     var data = setGridData(item);
@@ -870,17 +873,17 @@
 
                 function addTags(successCallback) {
                     SweetAlert.swal({
-                            title: $translate.instant('newModelsName'), //讀取多語系key
-                            type: 'input',
-                            showCancelButton: true,
-                            inputPlaceholder: $translate.instant('newModelsName'),
-                            confirmButtonColor: '#1C84C6',
-                            confirmButtonText: $translate.instant('sure'),
-                            cancelButtonText: $translate.instant('cancel'),
-                            closeOnConfirm: false,
-                            closeOnCancel: true,
-                            animation: false
-                        },
+                        title: $translate.instant('newModelsName'), //讀取多語系key
+                        type: 'input',
+                        showCancelButton: true,
+                        inputPlaceholder: $translate.instant('newModelsName'),
+                        confirmButtonColor: '#1C84C6',
+                        confirmButtonText: $translate.instant('sure'),
+                        cancelButtonText: $translate.instant('cancel'),
+                        closeOnConfirm: false,
+                        closeOnCancel: true,
+                        animation: false
+                    },
                         function (inputValue) {
                             if (inputValue === false) return false;
                             if (inputValue === '' || !inputValue.trim().length) {
@@ -904,7 +907,7 @@
                     alert(type)
                     buildModelService.saveAs(self.temporaryCollection.collection, self.editBinding.configuration.title, self.editBinding.configuration.tags, function (location) {
                         swal(
-                            {title: "Success", timer: 1000, type: 'success', showConfirmButton: false}
+                            { title: "Success", timer: 1000, type: 'success', showConfirmButton: false }
                         );
                         $modalInstance.close();
                     })
@@ -942,7 +945,7 @@
             }
         }
 
-/////////////////////////////////////////不綁定區//////////////////////////////////
+        /////////////////////////////////////////不綁定區//////////////////////////////////
 
         function setGridData(items) {
 
@@ -951,7 +954,7 @@
             var status = $translate.instant(datas.status.value);
             var title = datas.title.value;
             var enabled = (datas.status.value === 'enabled' ? true : false)
-            var gridDatas = {'href': href, 'modelName': title, 'role': 'A', 'status': status, 'enabled': enabled}
+            var gridDatas = { 'href': href, 'modelName': title, 'role': 'A', 'status': status, 'enabled': enabled }
             return gridDatas;
         }
 
