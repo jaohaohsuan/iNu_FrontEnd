@@ -320,7 +320,16 @@
         };
         return directive;
     }
-
+    function ngRepeatEnd($timeout) {
+        var directive = function (scope, ele, att) {
+            if (scope.$last) {
+                $timeout(function () {
+                    scope.$emit('ngRepeatEnd')
+                })
+            }
+        };
+        return directive;
+    }
     function nestedScroll() {
         var directive =
             function (scope, element) {
@@ -839,5 +848,6 @@
         .directive('nestedScroll', nestedScroll)
         .directive('setClassWithWidth', setClassWithWidth)
         .directive('wavesurfer', wavesurfer)
-        .directive('wavesurferTimeLine',wavesurferTimeLine)
+        .directive('wavesurferTimeLine', wavesurferTimeLine)
+    .directive('ngRepeatEnd', ['$timeout', ngRepeatEnd]);
 })();

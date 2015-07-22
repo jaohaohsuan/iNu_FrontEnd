@@ -467,7 +467,7 @@
                 backdropClass: 'model-backdrop',
                 controller: ['$scope', playVideoController],
                 controllerAs: 'playVideoCtrl',
-                size:'lg',
+                size: 'lg',
                 templateUrl: 'views/buildModel_matchedReview_video_modal.html'
             });
 
@@ -501,17 +501,22 @@
                 self.playing = false;
                 self.seekTo = seekTo;
                 self.setHtmltoCue = setHtmltoCue;
+
                 self.showAudioContoller = false;
 
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
-
+                $scope.$on('ngRepeatEnd', function () {
+                    for (var i = 0 ; i < self.keywords.length; i++) {
+                        setKeywordTop(i - 1, i);
+                    }
+                })
                 function changeCue(cue) {
                     //audio.currentTime = cue.startTime;
                     self.player.seekTo(cue.startTime / self.player.getDuration())
                 }
-                function floorDecimal(num,places){//無條件捨去小數點N位
-                    var deciman = Math.pow(10,places);
+                function floorDecimal(num, places) {//無條件捨去小數點N位
+                    var deciman = Math.pow(10, places);
                     return Math.floor(num * deciman) / deciman;
                 }
 
@@ -648,7 +653,7 @@
 
                 function markedhighlight(cues, currentTime) {//標記highlight
                     if (!currentTime) return;
-                    currentTime = floorDecimal(currentTime,floorDecimalPlaces);//無條件捨去到小數點N位
+                    currentTime = floorDecimal(currentTime, floorDecimalPlaces);//無條件捨去到小數點N位
                     console.log(currentTime);
                     if (currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
                         cueDiv[0].scrollTop = 0;
@@ -658,7 +663,7 @@
                         var cue = cues[idx];
                         cue.highlight = false;//尚未搜尋到之前都將highlight設為false
                         if (!search.searched) {
-                            if (currentTime >= floorDecimal(cue.startTime,floorDecimalPlaces)) {//目前時間 >= cue的起始時間代表已搜尋到
+                            if (currentTime >= floorDecimal(cue.startTime, floorDecimalPlaces)) {//目前時間 >= cue的起始時間代表已搜尋到
                                 search.searched = true;
                                 if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
                             }
@@ -690,19 +695,19 @@
 
                 function onReady() {
                     self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
-                    console.log(self.perWidthSecond)
                     self.keywords = [{ 'keyword': '你好', 'time': '5.835' }, { 'keyword': 'I put', 'time': '8.000' }, { 'keyword': 'work today', 'time': '10.280' }, { 'keyword': 'owns', 'time': '30.000' }];
                     self.cues = track.cues;
                     maxStartTimeSeconds = {};
                     angular.forEach(self.cues, function (cue) {
                         var startTimeSecond = Math.floor(cue.startTime);//取出字幕起始時間的秒數
-                        if (!maxStartTimeSeconds[startTimeSecond]){//以秒數當key進行初始化
+                        if (!maxStartTimeSeconds[startTimeSecond]) {//以秒數當key進行初始化
                             maxStartTimeSeconds[startTimeSecond] = -1;
                         }
-                        if (floorDecimal(cue.startTime,floorDecimalPlaces) > maxStartTimeSeconds[startTimeSecond]){//以無條件捨去N位當作判斷依據
-                            maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime,floorDecimalPlaces);//無條件捨去到小數點2位
+                        if (floorDecimal(cue.startTime, floorDecimalPlaces) > maxStartTimeSeconds[startTimeSecond]) {//以無條件捨去N位當作判斷依據
+                            maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime, floorDecimalPlaces);//無條件捨去到小數點2位
                         }
                     })
+                   
                     self.showAudioContoller = true;
                     $scope.$apply();
                 }
@@ -717,6 +722,20 @@
                     if (self.autoScroll) {
                         markedhighlight(self.cues[0]);
                         cueDiv[0].scrollTop = 0;
+                    }
+                }
+
+                function setKeywordTop(index1, index2) {
+                    if (index1 < 0) return 0;
+                    else {
+                        var div1 = $('#video-keywords' + index1)
+                        var div2 = $('#video-keywords' + index2)
+                        console.log(div1)
+                        //console.log(div2[0].children[0].offsetLeft, div1[0].children[0].offsetLeft,div1[0].children[0].offsetWidth)
+                        if ((div2[0].children[0].offsetLeft - div1[0].children[0].offsetLeft) > div1[0].children[0].offsetWidth) {
+                            console.log(div1)
+                            div2.offset({ top: div1[0].offsetTop });
+                        }
                     }
                 }
             }
