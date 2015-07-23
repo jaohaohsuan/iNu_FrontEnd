@@ -465,14 +465,20 @@
 
             var modalInstance = $modal.open({
                 backdropClass: 'model-backdrop',
-                controller: ['$scope', playVideoController],
+                controller: ['$scope', 'url', '$http',  playVideoController],
                 controllerAs: 'playVideoCtrl',
                 size: 'lg',
-                templateUrl: 'views/buildModel_matchedReview_video_modal.html'
+                templateUrl: 'views/buildModel_matchedReview_video_modal.html',
+                resolve: {
+                    url: function () {
+                        return 'http://10.85.1.156:32772/_vtt/lte-2015.07.23/logs/AU65HybJXO2P0lmdbHY3?_id=2115239037';
+                    }
+                }
             });
 
-            function playVideoController($scope) {
+            function playVideoController($scope, url, $http) {
                 //var audio;
+             
                 var cuesId = []; //存放cuesId的陣列
                 var cueDiv; //.cue-div element
                 var floorDecimalPlaces = 2;//小數點後N位，前端固定無條件捨去到小數點第二位。
@@ -485,6 +491,7 @@
                 var self = this;
                 self.autoScroll = true;
                 self.changeCue = changeCue;
+                self.cues = [];
                 self.currentCue = true;
                 self.goBackward = goBackward;
                 self.goBackwardFast = goBackwardFast;
@@ -492,7 +499,6 @@
                 self.goForward = goForward;
                 self.goForwardFast = goForwardFast;
                 self.goUpVolume = goUpVolume;
-                self.init = init;
                 self.keywords = [];
                 self.mute = mute;
                 self.perWidthSecond = 0;
@@ -500,6 +506,7 @@
                 self.playPauseText = $translate.instant('play');
                 self.playing = false;
                 self.seekTo = seekTo;
+                //self.setCh = setCh;
                 self.setHtmltoCue = setHtmltoCue;
                 self.showAudioContoller = false;
                 self.showSpeed = false;
@@ -554,6 +561,7 @@
                 }
 
                 function goDownVolume(value) {
+                    volume = volume - value <0.1 ? 0.1 : volume - value;
                     self.player.setVolume(volume)
                 }
 
@@ -584,17 +592,7 @@
                     self.player.setVolume(volume)
                 }
 
-                function init() {
-                    audio = $('audio').get(0);
-                    track = $('#track').get(0).track;
-                    cueDiv = document.getElementsByClassName('cue-div');
-                    //                    $(track).on('cuechange', function () { //當當前字幕改變時
-                    //                        markedhighlight(self.cues, self.player.getCurrentTime());
-                    //
-                    //                    })
-                }
-
-
+           
                 function modalClosing() { //modal關閉後清空Wavesurfer
                     self.player.empty()
                 }
@@ -631,6 +629,18 @@
                 }
                 function seekTo(second) {
                     self.player.seekTo(second / self.player.getDuration());
+                }
+                function setCh() {
+                    var x = Math.random() * 10;
+                    var y = Math.random() * 10;
+                    var z = Math.random() * 10;
+                    console.log(x,y,z)
+                    var source = self.player.backend.ac.createBufferSource();
+                    var panner = self.player.backend.ac.createPanner();
+                    panner.setPosition(x,y,z)
+                    //source.connect(splitter);
+                    self.player.backend.setFilter(panner);
+                    console.log(self.player)
                 }
                 function setHtmltoCue(index, cue) {
 
@@ -707,12 +717,27 @@
                 }
 
                 function onReady() {
-                    console.log(self.player)
+                    //track = $('#track').get(0).track;
+                    cueDiv = document.getElementsByClassName('cue-div');
                     self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
                     self.keywords = [{ 'keyword': 'I put', 'time': '8.000' },
                         { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
                     ];
-                    self.cues = track.cues;
+
+                
+                    $http.get(url).success(function (value) {
+                        var parser = new WebVTT.Parser(window, WebVTT.StringDecoder());
+                        console.log(parser)
+                        parser.oncue = function (cue) {
+                            console.log(cue)
+                            self.cues.push(cue);
+                        };
+                        console.log(parser.parse(value));
+                        parser.flush();
+                    })
+                    
+               
+
                     maxStartTimeSeconds = {};
                     angular.forEach(self.cues, function (cue) {
                         var startTimeSecond = Math.floor(cue.startTime);//取出字幕起始時間的秒數
@@ -729,7 +754,7 @@
                 }
 
                 function onSeek() {
-                    audio.currentTime = self.player.getCurrentTime();
+                    //audio.currentTime = self.player.getCurrentTime();
                     markedhighlight(self.cues, self.player.getCurrentTime());
                     //                    findCueWithCurrentTime(self.player.getCurrentTime());
                 }

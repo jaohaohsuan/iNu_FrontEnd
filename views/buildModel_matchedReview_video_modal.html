@@ -1,4 +1,4 @@
-<div ng-init="playVideoCtrl.init()">
+<div >
     <div ng-hide="playVideoCtrl.showAudioContoller" class="sk-spinner sk-spinner-three-bounce">
         <div class="sk-bounce1"></div>
         <div class="sk-bounce2"></div>
@@ -10,9 +10,7 @@
     </div>
     <wavesurfer url="mp3/paulallen.mp3" height="32"></wavesurfer>
     <wavesurfer-time-line wavesurfer="playVideoCtrl.player"></wavesurfer-time-line>
-    <audio>
-        <track id="track" ng-src="mp3/paulallen.vtt" kind="captions" default />
-    </audio>
+ 
     <div ng-show="playVideoCtrl.showAudioContoller">
         <div class="pull-right">
             <input id="autoScroll" type="checkbox"
@@ -31,6 +29,7 @@
         <button title="{{'fastBackward'|translate}}" ng-click="playVideoCtrl.goBackwardFast(0.1)" class="btn fa fa-fast-backward"></button>
         <button title="{{'fastForward'|translate}}" ng-click="playVideoCtrl.goForwardFast(0.1)" class="btn fa fa-fast-forward"></button>
         <span class="play-rate" ng-show="playVideoCtrl.showSpeed">{{'playRate'|translate}}:{{playVideoCtrl.player.backend.playbackRate}}x</span>
+        <!--<button class="btn fa fa-lightbulb-o" ng-click="playVideoCtrl.setCh()"></button>-->
     </div>
     <div class="cue-div">
         <span class="cues" ng-repeat="cue in playVideoCtrl.cues" ng-click="playVideoCtrl.changeCue(cue)"
