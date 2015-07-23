@@ -675,6 +675,7 @@
                 }
 
                 function markedhighlight(cues, currentTime) {//標記highlight
+                    console.log(cues)
                     if (!currentTime) return;
                     currentTime = floorDecimal(currentTime, floorDecimalPlaces);//無條件捨去到小數點N位
                     console.log(currentTime);
@@ -699,6 +700,7 @@
                 }
 
                 function onAudioProcess(time) {
+                    console.log(time)
                     var currentSecond = Math.floor(time);//取得秒數
                     var maxStartTime = maxStartTimeSeconds[currentSecond];//根據秒為單位，取得該秒內最大值
                     //判斷前一秒與這一秒不相同時且取該秒內最大值進行highlight
@@ -729,28 +731,33 @@
                         var parser = new WebVTT.Parser(window, WebVTT.StringDecoder());
                         console.log(parser)
                         parser.oncue = function (cue) {
-                            console.log(cue)
+                    
                             self.cues.push(cue);
                         };
-                        console.log(parser.parse(value));
+                        parser.parse(value);
                         parser.flush();
-                    })
-                    
-               
 
-                    maxStartTimeSeconds = {};
-                    angular.forEach(self.cues, function (cue) {
-                        var startTimeSecond = Math.floor(cue.startTime);//取出字幕起始時間的秒數
-                        if (!maxStartTimeSeconds[startTimeSecond]) {//以秒數當key進行初始化
-                            maxStartTimeSeconds[startTimeSecond] = -1;
-                        }
-                        if (floorDecimal(cue.startTime, floorDecimalPlaces) > maxStartTimeSeconds[startTimeSecond]) {//以無條件捨去N位當作判斷依據
-                            maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime, floorDecimalPlaces);//無條件捨去到小數點2位
+                        maxStartTimeSeconds = {};
+                        angular.forEach(self.cues, function (cue) {
+
+                            var startTimeSecond = Math.floor(cue.startTime);//取出字幕起始時間的秒數
+                            if (!maxStartTimeSeconds[startTimeSecond]) {//以秒數當key進行初始化
+                                maxStartTimeSeconds[startTimeSecond] = -1;
+                            }
+                            if (floorDecimal(cue.startTime, floorDecimalPlaces) > maxStartTimeSeconds[startTimeSecond]) {//以無條件捨去N位當作判斷依據
+                                maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime, floorDecimalPlaces);//無條件捨去到小數點2位
+                            }
+                        })
+
+                        self.showAudioContoller = true;
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
                         }
                     })
+                   
+                  
 
-                    self.showAudioContoller = true;
-                    $scope.$apply();
+                  
                 }
 
                 function onSeek() {
