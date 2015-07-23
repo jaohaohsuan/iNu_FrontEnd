@@ -138,12 +138,26 @@ span > a:link {
     float: none;
 }
 
+
+.iNu-logo-login {
+    position: relative;
+    left: -22px;
+}
+
+.iNu-logo-s {
+    left: 0 !important;
+}
+
 .matched-review-grid {
     background: rgba(222, 222, 225, 0.2);
 }
 
 .matched-review-keyword {
     margin-top: 2px;
+    width: 100%;
+}
+
+.matched-review-modal {
     width: 100%;
 }
 
@@ -337,11 +351,29 @@ span > a:link {
     background: #d55f3c;
     border: 4px solid rgba(222, 222, 225, 0.2);
     color: #fff;
-    display:inline-block;
+    display: inline-block;
     position: relative;
-    margin-bottom:3px;
+    margin-top: 3px;
 }
 
 .vtt-highlight {
     color: #ff0000;
+}
+/*id*/
+[id^='video-keywords'] {
+    position: relative;
+    display: block;
+    width: auto;
+}
+
+#iNu-logo-s {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    position: relative;
+    left: 60px;
+}
+#iNu-logo {
+   position:absolute;
+   left:40%;  
+   top:25%;
 }

@@ -1,7 +1,7 @@
 (function () {
 
     function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdleProvider, KeepaliveProvider) {
-        $urlRouterProvider.otherwise("/main");
+        $urlRouterProvider.otherwise("/main/index");
         // Configure Idle settings
 //    IdleProvider.idle(5); // in seconds
 //    IdleProvider.timeout(120); // in seconds
@@ -28,6 +28,10 @@
                 data:{
                     title:"INU"
                 }
+            })
+            .state('main.index', {
+                url: '/index',
+                templateUrl: "views/logo.html",
             })
 //        .state('main.businessTrend',{
 //            url: '/businessTrend',
