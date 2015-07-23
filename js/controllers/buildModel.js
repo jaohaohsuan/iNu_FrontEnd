@@ -507,8 +507,30 @@
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
                 $scope.$on('ngRepeatEnd', function () {
+                    var videoKeywordDivName = '#video-keywords';
+                    var maxPosition = -1;
+                    var appendId = 0;
                     for (var i = 0 ; i < self.keywords.length; i++) {
-                        setKeywordTop(i - 1, i);
+                        var keyword = self.keywords[i];
+                        var childSpan = $(videoKeywordDivName + i + ' > span');//取得目前div內的span元素
+                        var appendDiv = $(videoKeywordDivName + appendId);//根據appendId取得div
+                        var start = keyword.time * self.perWidthSecond;//計算關鍵字起始位置
+                        if (start >= maxPosition) {//當起始位置 > 目前長度最長的位置時，appendId設為0
+                            appendId = 0;
+                            appendDiv = $(videoKeywordDivName + appendId);
+                        }
+                        var innerChilds  = appendDiv[0].children;//取得appendDiv內的所有子元素
+                        var leftPosition = start;
+                        if (i != appendId) {//如果要加進去的appendDiv與目前所在的Div不相等則進行位置的調整
+                            angular.forEach(innerChilds,function(child){
+                                leftPosition -= child.offsetWidth;
+                            })
+                        }
+                        childSpan.appendTo(appendDiv);//將子元素移動到appendDiv
+                        appendId++;
+                        childSpan.css({left: leftPosition});//設定正確位置
+                        var lastPosition = start + childSpan.outerWidth()
+                        if (maxPosition <  lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                     }
                 })
                 function changeCue(cue) {
@@ -618,17 +640,6 @@
                 }
 
                 /////////////不綁定區///////////////
-                //                function findCueWithCurrentTime(currentTime) {
-                //                    var currentCue = [];
-                //                    for (var i = 0; i < self.cues.length; i++) {
-                //                        if (self.cues[i].startTime > currentTime) {
-                //                            currentCue.push(self.cues[i]);
-                //                            break;
-                //                        }
-                //                    }
-                //                    markedhighlight(currentCue)
-                //
-                //                }
 
                 function getScrollHeight(index) { //當前cue的index
                     var scrollHeight = 0;
@@ -695,7 +706,9 @@
 
                 function onReady() {
                     self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
-                    self.keywords = [{ 'keyword': '你好', 'time': '5.835' }, { 'keyword': 'I put', 'time': '8.000' }, { 'keyword': 'work today', 'time': '10.280' }, { 'keyword': 'owns', 'time': '30.000' }];
+                    self.keywords = [{ 'keyword': 'I put', 'time': '8.000' },
+                        { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' },{ 'keyword': 'Allen', 'time': '34.000' },{ 'keyword': 'every', 'time': '38.000' }
+                        ];
                     self.cues = track.cues;
                     maxStartTimeSeconds = {};
                     angular.forEach(self.cues, function (cue) {
@@ -728,13 +741,16 @@
                 function setKeywordTop(index1, index2) {
                     if (index1 < 0) return 0;
                     else {
-                        var div1 = $('#video-keywords' + index1)
-                        var div2 = $('#video-keywords' + index2)
+                        var div1 = $('#video-keywords' + index1);
+                        var div2 = $('#video-keywords' + index2);
+                        var childElement = $('#video-keywords' + index2 + ' > span');
                         console.log(div1)
                         //console.log(div2[0].children[0].offsetLeft, div1[0].children[0].offsetLeft,div1[0].children[0].offsetWidth)
                         if ((div2[0].children[0].offsetLeft - div1[0].children[0].offsetLeft) > div1[0].children[0].offsetWidth) {
-                            console.log(div1)
-                            div2.offset({ top: div1[0].offsetTop });
+                            console.log(childElement.offset().left)
+                            childElement.offset({left: childElement.offset().left - div1[0].children[0].offsetWidth})
+                            childElement.appendTo(div1)
+//                            div2.animate({ top: '0px' });
                         }
                     }
                 }

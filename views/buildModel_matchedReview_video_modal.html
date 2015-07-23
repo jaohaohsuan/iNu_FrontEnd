@@ -6,7 +6,7 @@
     </div>
     <!--ng-style="{top:playVideoCtrl.setKeywordTop($index-1,$index)+'px'}"--> 
     <div id="video-keywords{{$index}}" ng-repeat="keyword in playVideoCtrl.keywords">
-        <span class="video-keywords" ng-style="{'left':keyword.time*playVideoCtrl.perWidthSecond+'px'}" ng-click="playVideoCtrl.seekTo(keyword.time)" ng-repeat-end>{{keyword.keyword}} </span>
+        <span class="video-keywords"  ng-click="playVideoCtrl.seekTo(keyword.time)" ng-repeat-end>{{keyword.keyword}} </span>
     </div>
     <wavesurfer url="mp3/paulallen.mp3" height="32"></wavesurfer>
     <wavesurfer-time-line wavesurfer="playVideoCtrl.player"></wavesurfer-time-line>
