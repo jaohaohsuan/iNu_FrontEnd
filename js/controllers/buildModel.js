@@ -501,8 +501,8 @@
                 self.playing = false;
                 self.seekTo = seekTo;
                 self.setHtmltoCue = setHtmltoCue;
-
                 self.showAudioContoller = false;
+                self.showSpeed = false;
 
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
@@ -519,18 +519,18 @@
                             appendId = 0;
                             appendDiv = $(videoKeywordDivName + appendId);
                         }
-                        var innerChilds  = appendDiv[0].children;//取得appendDiv內的所有子元素
+                        var innerChilds = appendDiv[0].children;//取得appendDiv內的所有子元素
                         var leftPosition = start;
                         if (i != appendId) {//如果要加進去的appendDiv與目前所在的Div不相等則進行位置的調整
-                            angular.forEach(innerChilds,function(child){
+                            angular.forEach(innerChilds, function (child) {
                                 leftPosition -= child.offsetWidth;
                             })
                         }
                         childSpan.appendTo(appendDiv);//將子元素移動到appendDiv
                         appendId++;
-                        childSpan.css({left: leftPosition});//設定正確位置
+                        childSpan.css({ left: leftPosition });//設定正確位置
                         var lastPosition = start + childSpan.outerWidth()
-                        if (maxPosition <  lastPosition) maxPosition = lastPosition;//設定長度最長的位置
+                        if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                     }
                 })
                 function changeCue(cue) {
@@ -544,6 +544,7 @@
 
                 function goBackward() {
                     self.player.skipBackward();
+                    self.showSpeed = true;
                     //audio.currentTime = self.player.getCurrentTime();
                 }
 
@@ -574,6 +575,7 @@
                     if (speed >= 0.1) {
                         speed = speed + value;
                         self.player.setPlaybackRate(speed.toFixed(1));
+                        self.showSpeed = true;
                     }
                 }
 
@@ -705,10 +707,11 @@
                 }
 
                 function onReady() {
+                    console.log(self.player)
                     self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
                     self.keywords = [{ 'keyword': 'I put', 'time': '8.000' },
-                        { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' },{ 'keyword': 'Allen', 'time': '34.000' },{ 'keyword': 'every', 'time': '38.000' }
-                        ];
+                        { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
+                    ];
                     self.cues = track.cues;
                     maxStartTimeSeconds = {};
                     angular.forEach(self.cues, function (cue) {
@@ -720,7 +723,7 @@
                             maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime, floorDecimalPlaces);//無條件捨去到小數點2位
                         }
                     })
-                   
+
                     self.showAudioContoller = true;
                     $scope.$apply();
                 }
@@ -738,22 +741,22 @@
                     }
                 }
 
-                function setKeywordTop(index1, index2) {
-                    if (index1 < 0) return 0;
-                    else {
-                        var div1 = $('#video-keywords' + index1);
-                        var div2 = $('#video-keywords' + index2);
-                        var childElement = $('#video-keywords' + index2 + ' > span');
-                        console.log(div1)
-                        //console.log(div2[0].children[0].offsetLeft, div1[0].children[0].offsetLeft,div1[0].children[0].offsetWidth)
-                        if ((div2[0].children[0].offsetLeft - div1[0].children[0].offsetLeft) > div1[0].children[0].offsetWidth) {
-                            console.log(childElement.offset().left)
-                            childElement.offset({left: childElement.offset().left - div1[0].children[0].offsetWidth})
-                            childElement.appendTo(div1)
-//                            div2.animate({ top: '0px' });
-                        }
-                    }
-                }
+                //function setKeywordTop(index1, index2) {
+                //    if (index1 < 0) return 0;
+                //    else {
+                //        var div1 = $('#video-keywords' + index1);
+                //        var div2 = $('#video-keywords' + index2);
+                //        var childElement = $('#video-keywords' + index2 + ' > span');
+                //        console.log(div1)
+                //        console.log(div2[0].children[0].offsetLeft, div1[0].children[0].offsetLeft,div1[0].children[0].offsetWidth)
+                //        if ((div2[0].children[0].offsetLeft - div1[0].children[0].offsetLeft) > div1[0].children[0].offsetWidth) {
+                //            console.log(childElement.offset().left)
+                //            childElement.offset({ left: childElement.offset().left - div1[0].children[0].offsetWidth })
+                //            childElement.appendTo(div1)
+                //                                        div2.animate({ top: '0px' });
+                //        }
+                //    }
+                //}
             }
 
         }

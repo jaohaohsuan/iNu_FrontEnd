@@ -30,6 +30,7 @@
         <button title="{{'forward'|translate}}" ng-click="playVideoCtrl.goForward()" class="btn fa fa-forward"></button>
         <button title="{{'fastBackward'|translate}}" ng-click="playVideoCtrl.goBackwardFast(0.1)" class="btn fa fa-fast-backward"></button>
         <button title="{{'fastForward'|translate}}" ng-click="playVideoCtrl.goForwardFast(0.1)" class="btn fa fa-fast-forward"></button>
+        <span class="play-rate" ng-show="playVideoCtrl.showSpeed">{{'playRate'|translate}}:{{playVideoCtrl.player.backend.playbackRate}}x</span>
     </div>
     <div class="cue-div">
         <span class="cues" ng-repeat="cue in playVideoCtrl.cues" ng-click="playVideoCtrl.changeCue(cue)"

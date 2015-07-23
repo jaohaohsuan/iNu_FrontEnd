@@ -309,20 +309,12 @@ span > a:link {
     margin-bottom: 0;
 }
 
-.switch {
-    margin-top: 5px;
-    left: 35%;
-    position: relative;
-    top: 1px;
-}
 
-.switch-instance {
-    margin-top: 5px;
-    margin-left: 10px;
-    position: relative;
-    top: 1px;
+.play-rate{
+    font-size:18px;
+    position:relative;
+    top:5px;
 }
-
 .public-component-filter {
     margin-bottom: 10px;
 }
@@ -341,6 +333,20 @@ span > a:link {
 .sweetAlert {
     top: 40% !important;
     left: 65% !important;
+}
+
+.switch {
+    margin-top: 5px;
+    left: 35%;
+    position: relative;
+    top: 1px;
+}
+
+.switch-instance {
+    margin-top: 5px;
+    margin-left: 10px;
+    position: relative;
+    top: 1px;
 }
 
 .tag-list li a {
@@ -371,14 +377,15 @@ span > a:link {
     margin-top: 10px;
     position: relative;
     left: 60px;
-      max-width:100%;
+    max-width: 100%;
 }
+
 #iNu-logo {
-  position:absolute;
-    top:0;
-    bottom:0;
-    right:0;
-    left:0;
-    max-width:100%;
-    margin:auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    max-width: 100%;
+    margin: auto;
 }
