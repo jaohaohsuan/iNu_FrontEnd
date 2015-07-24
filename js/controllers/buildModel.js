@@ -433,7 +433,7 @@
                 {
                     name: 'name',
                     field: 'name',
-                    cellTemplate: '<div><a class="btn" ng-click="grid.appScope.play()">{{row.entity.name}}</a></div>'
+                    cellTemplate: '<div><a class="btn" ng-click="grid.appScope.playAudio()">{{row.entity.name}}</a></div>'
                 }
             ]
         };
@@ -444,7 +444,7 @@
             search: {}
         }
 
-        $scope.play = playVideo;
+        $scope.playAudio = playAudio;
 
         self.queriesCollection = {
             queries: []
@@ -461,326 +461,32 @@
             })
         }
 
-        function playVideo() {
+        function playAudio() {
 
             var modalInstance = $modal.open({
                 backdropClass: 'model-backdrop',
-                controller: ['$scope', 'url', '$http', playVideoController],
-                controllerAs: 'playVideoCtrl',
+                controller: ['audioHref', 'vttHref', playVideoController],
+                controllerAs: 'playAudioCtrl',
                 size: 'lg',
-                templateUrl: 'views/buildModel_matchedReview_video_modal.html',
+                template: '<play-audio-file audio-href="playAudioCtrl.audioHref" vtt-href=" playAudioCtrl.vttHref" player="playAudioCtrl.player"></play-audio-file>',
                 resolve: {
-                    url: function () {
+                    audioHref: function () {
+                        return 'mp3/paulallen.mp3';
+                    },
+                    vttHref: function () {
                         return 'http://10.85.1.156:32772/_vtt/lte-2015.07.23/logs/AU65HybJXO2P0lmdbHY3?_id=2115239037';
                     }
                 }
             });
 
-            function playVideoController($scope, url, $http) {
-                //var audio;
-
-                var cuesId = []; //存放cuesId的陣列
-                var cueDiv; //.cue-div element
-                var floorDecimalPlaces = 2;//小數點後N位，前端固定無條件捨去到小數點第二位。
-                var maxStartTimeSeconds = {};//存放字幕起始時間中，相同秒數的最大值
-                var preSecond = -1;//紀錄播放中的上一秒
-                var speed = 1; //播放速度
-                var tempVolume;
-                var track; //track element
-                var volume = 1; //播放音量
+            function playVideoController(audioHref, vttHref) {
                 var self = this;
-                self.autoScroll = true;
-                self.changeCue = changeCue; //點下cue後(字幕)
-                self.cues = [];
-                self.currentCue = true;
-                self.goBackward = goBackward; //倒帶
-                self.goBackwardFast = goBackwardFast; //減速
-                self.goDownVolume = goDownVolume; //降音量
-                self.goForward = goForward; //快轉
-                self.goForwardFast = goForwardFast; //加速
-                self.goUpVolume = goUpVolume; //增音量
-                self.keywords = [];
-                self.mute = mute;   //靜音
-                self.perWidthSecond = 0;
-                self.playPause = playPause; //暫停或播放
-                self.playPauseText = $translate.instant('play'); 
-                self.playing = false;
-                self.seekTo = seekTo; //點擊音波切換時間
-                //self.setCh = setCh;
-                self.setHtmltoCue = setHtmltoCue; //將cue換成HTML
-                self.showAudioContoller = false; //show按鈕區塊
-                self.showSpeed = false; //show 速度狀態
-
+                self.audioHref = audioHref;
+                self.vttHref = vttHref;
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
-                $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
-                $scope.$on('ngRepeatEnd', setKeywordsPosition) //keywords repeat完後
-                function changeCue(cue) {
-                    //audio.currentTime = cue.startTime;
-                    self.player.seekTo(cue.startTime / self.player.getDuration())
-                }
-                function floorDecimal(num, places) {//無條件捨去小數點N位
-                    var deciman = Math.pow(10, places);
-                    return Math.floor(num * deciman) / deciman;
-                }
-
-                function goBackward() {
-                    self.player.skipBackward();
-                    self.showSpeed = true;
-                    //audio.currentTime = self.player.getCurrentTime();
-                }
-
-                function goBackwardFast(value) {
-                    speed = speed - value < 0.1 ? 0.1 : speed - value
-                    self.player.setPlaybackRate(speed.toFixed(1));
-                }
-
-                function goDownVolume(value) {
-                    volume = volume - value < 0.1 ? 0.1 : volume - value;
-                    self.player.setVolume(volume)
-                }
-
-                function goForward() {
-                    self.player.skipForward();
-                    console.log(self.player.getCurrentTime())
-                    //audio.currentTime = self.player.getCurrentTime();
-                    if (self.player.getCurrentTime() === self.player.getDuration() || self.player.getCurrentTime() === 0) {
-                        if (self.player.isPlaying()) {
-                            self.player.play();
-                        } else {
-                            self.player.seekTo(0);
-                        }
-                        //self.playing = false;
-                    }
-                }
-
-                function goForwardFast(value) {
-                    if (speed >= 0.1) {
-                        speed = speed + value;
-                        self.player.setPlaybackRate(speed.toFixed(1));
-                        self.showSpeed = true;
-                    }
-                }
-
-                function goUpVolume(value) {
-                    volume = volume + value > 1 ? 1 : volume + value;
-                    self.player.setVolume(volume)
-                }
-
-
                 function modalClosing() { //modal關閉後清空Wavesurfer
                     self.player.empty()
                 }
-
-                function mute() {
-                    //if (audio.muted == true)
-                    //    audio.muted = false;
-                    //else
-                    //    audio.muted = true;
-
-                    if (volume === 0) { //當靜音時恢復原本的音量
-                        self.player.setVolume(tempVolume);
-                        volume = tempVolume;
-                    } else {
-                        self.player.setVolume(0);
-                        tempVolume = volume; //暫存原本的音量
-                        volume = 0;
-                    }
-                }
-
-                function playPause() {
-                    if (self.player.isPlaying()) { //當播放時
-                        //audio.play();
-                        self.playPauseText = $translate.instant('play');
-                        self.player.pause();
-                        self.playing = false;
-                    }
-                    else {
-                        //audio.pause();
-                        self.playPauseText = $translate.instant('pause');
-                        self.player.play();
-                        self.playing = true;
-                    }
-                }
-                function seekTo(second) {
-                    self.player.seekTo(second / self.player.getDuration()); //切換
-                }
-                function setCh() {
-                    var x = Math.random() * 10;
-                    var y = Math.random() * 10;
-                    var z = Math.random() * 10;
-                    console.log(x, y, z)
-                    var source = self.player.backend.ac.createBufferSource();
-                    var panner = self.player.backend.ac.createPanner();
-                    panner.setPosition(x, y, z)
-                    //source.connect(splitter);
-                    self.player.backend.setFilter(panner);
-                    console.log(self.player)
-                }
-                function setHtmltoCue(index, cue) {
-
-                    var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
-                    if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
-                        //console.log(cue.getCueAsHTML())
-                        $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
-                        cuesId.push(incue[0].id);
-                    }
-                }
-
-                /////////////不綁定區///////////////
-
-                function getScrollHeight(index) { //當前cue的index
-                    var scrollHeight = 0;
-                    if (index > 0) {
-                        for (var i = 0; i < index; i++) {
-                            var currentCueElement = $('#' + cuesId[i]); //取得當前綁定cue的element的高度
-                            scrollHeight += currentCueElement[0].offsetHeight + 4;
-                        }
-                    }
-                    return scrollHeight;
-                }
-
-                function getWavesurfer(e, wavesurfer) {
-                    self.player = wavesurfer; //指定Wavesurfer
-                    self.player.setVolume(volume);
-                    self.player.setPlaybackRate(speed);
-                    self.player.on('ready', onReady); //Wavesurfer ready後綁定字幕
-                    self.player.on('finish', onFinish); //當播放完畢時
-                    self.player.on('seek', onSeek); //當點選音波時
-                    self.player.on('audioprocess', onAudioProcess);//當檔處理時
-                }
-
-                function markedhighlight(cues, currentTime) {//標記highlight
-                    console.log(cues)
-                    if (!currentTime) return;
-                    currentTime = floorDecimal(currentTime, floorDecimalPlaces);//無條件捨去到小數點N位
-                    console.log(currentTime);
-                    if (currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
-                        cueDiv[0].scrollTop = 0;
-                    }
-                    var search = { searched: false };
-                    for (var idx = cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
-                        var cue = cues[idx];
-                        cue.highlight = false;//尚未搜尋到之前都將highlight設為false
-                        if (!search.searched) {
-                            if (currentTime >= floorDecimal(cue.startTime, floorDecimalPlaces)) {//目前時間 >= cue的起始時間代表已搜尋到
-                                search.searched = true;
-                                if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
-                            }
-                        }
-                        if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
-                    }
-                    if (!$scope.$$phase) {
-                        $scope.$apply();
-                    }
-                }
-
-                function onAudioProcess(time) {
-                    var currentSecond = Math.floor(time);//取得秒數
-                    var maxStartTime = maxStartTimeSeconds[currentSecond];//根據秒為單位，取得該秒內最大值
-                    //判斷前一秒與這一秒不相同時且取該秒內最大值進行highlight
-                    if (maxStartTime && preSecond != currentSecond && time >= maxStartTime) {
-                        markedhighlight(self.cues, self.player.getCurrentTime());
-                        preSecond = currentSecond;
-                    }
-                }
-
-                function onFinish() {
-                    self.playing = false;
-                    self.player.stop();
-                    //audio.pause();
-                    resetCueDivScrollTop();
-                    $scope.$apply();
-                }
-
-                function onReady() {
-                    //track = $('#track').get(0).track;
-                    cueDiv = document.getElementsByClassName('cue-div'); //取到cue存放的div
-                    self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
-                    self.keywords = [{ 'keyword': 'I put', 'time': '8.000' }, //取得關鍵字
-                        { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
-                    ];
-                    $http.get(url).success(function (value) { //取得VTT內容
-                        var parser = new WebVTT.Parser(window, WebVTT.StringDecoder());
-                        parser.oncue = function (cue) {
-                            self.cues.push(cue);
-                        };
-                        parser.parse(value);
-                        parser.flush();
-                        maxStartTimeSeconds = {};
-                        angular.forEach(self.cues, function (cue) {
-                            var startTimeSecond = Math.floor(cue.startTime);//取出字幕起始時間的秒數
-                            if (!maxStartTimeSeconds[startTimeSecond]) {//以秒數當key進行初始化
-                                maxStartTimeSeconds[startTimeSecond] = -1;
-                            }
-                            if (floorDecimal(cue.startTime, floorDecimalPlaces) > maxStartTimeSeconds[startTimeSecond]) {//以無條件捨去N位當作判斷依據
-                                maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime, floorDecimalPlaces);//無條件捨去到小數點2位
-                            }
-                        })
-                        self.showAudioContoller = true;
-                        if (!$scope.$$phase) {
-                            $scope.$apply();
-                        }
-                        console.log(self.cues)
-                    })
-                }
-
-                function onSeek() {
-                    //audio.currentTime = self.player.getCurrentTime();
-                    markedhighlight(self.cues, self.player.getCurrentTime());
-                    //                    findCueWithCurrentTime(self.player.getCurrentTime());
-                }
-
-                function resetCueDivScrollTop() {
-                    if (self.autoScroll) {
-                        markedhighlight(self.cues[0]);
-                        cueDiv[0].scrollTop = 0;
-                    }
-                }
-
-                function setKeywordsPosition() {
-                    var videoKeywordDivName = '#video-keywords';
-                    var maxPosition = -1;
-                    var appendId = 0;
-                    for (var i = 0 ; i < self.keywords.length; i++) {
-                        var keyword = self.keywords[i];
-                        var childSpan = $(videoKeywordDivName + i + ' > span');//取得目前div內的span元素
-                        var appendDiv = $(videoKeywordDivName + appendId);//根據appendId取得div
-                        var start = keyword.time * self.perWidthSecond;//計算關鍵字起始位置
-                        if (start >= maxPosition) {//當起始位置 > 目前長度最長的位置時，appendId設為0
-                            appendId = 0;
-                            appendDiv = $(videoKeywordDivName + appendId);
-                        }
-                        var innerChilds = appendDiv[0].children;//取得appendDiv內的所有子元素
-                        var leftPosition = start;
-                        if (i != appendId) {//如果要加進去的appendDiv與目前所在的Div不相等則進行位置的調整
-                            angular.forEach(innerChilds, function (child) {
-                                leftPosition -= child.offsetWidth;
-                            })
-                        }
-                        childSpan.appendTo(appendDiv);//將子元素移動到appendDiv
-                        appendId++;
-                        childSpan.css({ left: leftPosition });//設定正確位置
-                        var lastPosition = start + childSpan.outerWidth()
-                        if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
-                    }
-                }
-
-                //function setKeywordTop(index1, index2) {
-                //    if (index1 < 0) return 0;
-                //    else {
-                //        var div1 = $('#video-keywords' + index1);
-                //        var div2 = $('#video-keywords' + index2);
-                //        var childElement = $('#video-keywords' + index2 + ' > span');
-                //        console.log(div1)
-                //        console.log(div2[0].children[0].offsetLeft, div1[0].children[0].offsetLeft,div1[0].children[0].offsetWidth)
-                //        if ((div2[0].children[0].offsetLeft - div1[0].children[0].offsetLeft) > div1[0].children[0].offsetWidth) {
-                //            console.log(childElement.offset().left)
-                //            childElement.offset({ left: childElement.offset().left - div1[0].children[0].offsetWidth })
-                //            childElement.appendTo(div1)
-                //                                        div2.animate({ top: '0px' });
-                //        }
-                //    }
-                //}
             }
 
         }
