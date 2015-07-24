@@ -383,7 +383,7 @@
                 audioHref:'=', //音檔位置
                 vttHref: '=', //VTT位置
                 player: '=' ,//讓player可以對外
-                keywords:'='
+                keywords:'='//音檔關鍵字
             },
             controller: ['$scope', '$http', '$translate','$q', playAudioFileController],
             controllerAs: 'playAudioFileCtrl',

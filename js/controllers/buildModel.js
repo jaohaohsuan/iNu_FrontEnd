@@ -468,7 +468,7 @@
                 controller: ['audioHref', 'vttHref', playVideoController],
                 controllerAs: 'playAudioCtrl',
                 size: 'lg',
-                template: '<play-audio-file audio-href="playAudioCtrl.audioHref" vtt-href=" playAudioCtrl.vttHref" player="playAudioCtrl.player"></play-audio-file>',
+                template: '<play-audio-file audio-href="playAudioCtrl.audioHref" vtt-href=" playAudioCtrl.vttHref" player="playAudioCtrl.player" keywords="playAudioCtrl.keywords"></play-audio-file>',
                 resolve: {
                     audioHref: function () {
                         return 'mp3/paulallen.mp3';
@@ -482,6 +482,9 @@
             function playVideoController(audioHref, vttHref) {
                 var self = this;
                 self.audioHref = audioHref;
+                self.keywords = [{ 'keyword': 'I put', 'time': '8.000' }, //取得關鍵字
+                 { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
+                ]; //改成由API取得
                 self.vttHref = vttHref;
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 function modalClosing() { //modal關閉後清空Wavesurfer
