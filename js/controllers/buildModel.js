@@ -465,7 +465,7 @@
 
             var modalInstance = $modal.open({
                 backdropClass: 'model-backdrop',
-                controller: ['$scope', 'url', '$http',  playVideoController],
+                controller: ['$scope', 'url', '$http', playVideoController],
                 controllerAs: 'playVideoCtrl',
                 size: 'lg',
                 templateUrl: 'views/buildModel_matchedReview_video_modal.html',
@@ -478,7 +478,7 @@
 
             function playVideoController($scope, url, $http) {
                 //var audio;
-             
+
                 var cuesId = []; //存放cuesId的陣列
                 var cueDiv; //.cue-div element
                 var floorDecimalPlaces = 2;//小數點後N位，前端固定無條件捨去到小數點第二位。
@@ -490,56 +490,30 @@
                 var volume = 1; //播放音量
                 var self = this;
                 self.autoScroll = true;
-                self.changeCue = changeCue;
+                self.changeCue = changeCue; //點下cue後(字幕)
                 self.cues = [];
                 self.currentCue = true;
-                self.goBackward = goBackward;
-                self.goBackwardFast = goBackwardFast;
-                self.goDownVolume = goDownVolume;
-                self.goForward = goForward;
-                self.goForwardFast = goForwardFast;
-                self.goUpVolume = goUpVolume;
+                self.goBackward = goBackward; //倒帶
+                self.goBackwardFast = goBackwardFast; //減速
+                self.goDownVolume = goDownVolume; //降音量
+                self.goForward = goForward; //快轉
+                self.goForwardFast = goForwardFast; //加速
+                self.goUpVolume = goUpVolume; //增音量
                 self.keywords = [];
-                self.mute = mute;
+                self.mute = mute;   //靜音
                 self.perWidthSecond = 0;
-                self.playPause = playPause;
-                self.playPauseText = $translate.instant('play');
+                self.playPause = playPause; //暫停或播放
+                self.playPauseText = $translate.instant('play'); 
                 self.playing = false;
-                self.seekTo = seekTo;
+                self.seekTo = seekTo; //點擊音波切換時間
                 //self.setCh = setCh;
-                self.setHtmltoCue = setHtmltoCue;
-                self.showAudioContoller = false;
-                self.showSpeed = false;
+                self.setHtmltoCue = setHtmltoCue; //將cue換成HTML
+                self.showAudioContoller = false; //show按鈕區塊
+                self.showSpeed = false; //show 速度狀態
 
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
-                $scope.$on('ngRepeatEnd', function () {
-                    var videoKeywordDivName = '#video-keywords';
-                    var maxPosition = -1;
-                    var appendId = 0;
-                    for (var i = 0 ; i < self.keywords.length; i++) {
-                        var keyword = self.keywords[i];
-                        var childSpan = $(videoKeywordDivName + i + ' > span');//取得目前div內的span元素
-                        var appendDiv = $(videoKeywordDivName + appendId);//根據appendId取得div
-                        var start = keyword.time * self.perWidthSecond;//計算關鍵字起始位置
-                        if (start >= maxPosition) {//當起始位置 > 目前長度最長的位置時，appendId設為0
-                            appendId = 0;
-                            appendDiv = $(videoKeywordDivName + appendId);
-                        }
-                        var innerChilds = appendDiv[0].children;//取得appendDiv內的所有子元素
-                        var leftPosition = start;
-                        if (i != appendId) {//如果要加進去的appendDiv與目前所在的Div不相等則進行位置的調整
-                            angular.forEach(innerChilds, function (child) {
-                                leftPosition -= child.offsetWidth;
-                            })
-                        }
-                        childSpan.appendTo(appendDiv);//將子元素移動到appendDiv
-                        appendId++;
-                        childSpan.css({ left: leftPosition });//設定正確位置
-                        var lastPosition = start + childSpan.outerWidth()
-                        if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
-                    }
-                })
+                $scope.$on('ngRepeatEnd', setKeywordsPosition) //keywords repeat完後
                 function changeCue(cue) {
                     //audio.currentTime = cue.startTime;
                     self.player.seekTo(cue.startTime / self.player.getDuration())
@@ -561,7 +535,7 @@
                 }
 
                 function goDownVolume(value) {
-                    volume = volume - value <0.1 ? 0.1 : volume - value;
+                    volume = volume - value < 0.1 ? 0.1 : volume - value;
                     self.player.setVolume(volume)
                 }
 
@@ -592,7 +566,7 @@
                     self.player.setVolume(volume)
                 }
 
-           
+
                 function modalClosing() { //modal關閉後清空Wavesurfer
                     self.player.empty()
                 }
@@ -603,18 +577,18 @@
                     //else
                     //    audio.muted = true;
 
-                    if (volume === 0) {
+                    if (volume === 0) { //當靜音時恢復原本的音量
                         self.player.setVolume(tempVolume);
                         volume = tempVolume;
                     } else {
                         self.player.setVolume(0);
-                        tempVolume = volume;
+                        tempVolume = volume; //暫存原本的音量
                         volume = 0;
                     }
                 }
 
                 function playPause() {
-                    if (self.player.isPlaying()) {
+                    if (self.player.isPlaying()) { //當播放時
                         //audio.play();
                         self.playPauseText = $translate.instant('play');
                         self.player.pause();
@@ -628,16 +602,16 @@
                     }
                 }
                 function seekTo(second) {
-                    self.player.seekTo(second / self.player.getDuration());
+                    self.player.seekTo(second / self.player.getDuration()); //切換
                 }
                 function setCh() {
                     var x = Math.random() * 10;
                     var y = Math.random() * 10;
                     var z = Math.random() * 10;
-                    console.log(x,y,z)
+                    console.log(x, y, z)
                     var source = self.player.backend.ac.createBufferSource();
                     var panner = self.player.backend.ac.createPanner();
-                    panner.setPosition(x,y,z)
+                    panner.setPosition(x, y, z)
                     //source.connect(splitter);
                     self.player.backend.setFilter(panner);
                     console.log(self.player)
@@ -646,6 +620,7 @@
 
                     var incue = angular.element('#cue' + index); //由ID取得當前repeat到的
                     if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
+                        //console.log(cue.getCueAsHTML())
                         $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
                         cuesId.push(incue[0].id);
                     }
@@ -700,7 +675,6 @@
                 }
 
                 function onAudioProcess(time) {
-                    console.log(time)
                     var currentSecond = Math.floor(time);//取得秒數
                     var maxStartTime = maxStartTimeSeconds[currentSecond];//根據秒為單位，取得該秒內最大值
                     //判斷前一秒與這一秒不相同時且取該秒內最大值進行highlight
@@ -720,26 +694,20 @@
 
                 function onReady() {
                     //track = $('#track').get(0).track;
-                    cueDiv = document.getElementsByClassName('cue-div');
+                    cueDiv = document.getElementsByClassName('cue-div'); //取到cue存放的div
                     self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
-                    self.keywords = [{ 'keyword': 'I put', 'time': '8.000' },
+                    self.keywords = [{ 'keyword': 'I put', 'time': '8.000' }, //取得關鍵字
                         { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
                     ];
-
-                
-                    $http.get(url).success(function (value) {
+                    $http.get(url).success(function (value) { //取得VTT內容
                         var parser = new WebVTT.Parser(window, WebVTT.StringDecoder());
-                        console.log(parser)
                         parser.oncue = function (cue) {
-                    
                             self.cues.push(cue);
                         };
                         parser.parse(value);
                         parser.flush();
-
                         maxStartTimeSeconds = {};
                         angular.forEach(self.cues, function (cue) {
-
                             var startTimeSecond = Math.floor(cue.startTime);//取出字幕起始時間的秒數
                             if (!maxStartTimeSeconds[startTimeSecond]) {//以秒數當key進行初始化
                                 maxStartTimeSeconds[startTimeSecond] = -1;
@@ -748,16 +716,12 @@
                                 maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime, floorDecimalPlaces);//無條件捨去到小數點2位
                             }
                         })
-
                         self.showAudioContoller = true;
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
+                        console.log(self.cues)
                     })
-                   
-                  
-
-                  
                 }
 
                 function onSeek() {
@@ -770,6 +734,34 @@
                     if (self.autoScroll) {
                         markedhighlight(self.cues[0]);
                         cueDiv[0].scrollTop = 0;
+                    }
+                }
+
+                function setKeywordsPosition() {
+                    var videoKeywordDivName = '#video-keywords';
+                    var maxPosition = -1;
+                    var appendId = 0;
+                    for (var i = 0 ; i < self.keywords.length; i++) {
+                        var keyword = self.keywords[i];
+                        var childSpan = $(videoKeywordDivName + i + ' > span');//取得目前div內的span元素
+                        var appendDiv = $(videoKeywordDivName + appendId);//根據appendId取得div
+                        var start = keyword.time * self.perWidthSecond;//計算關鍵字起始位置
+                        if (start >= maxPosition) {//當起始位置 > 目前長度最長的位置時，appendId設為0
+                            appendId = 0;
+                            appendDiv = $(videoKeywordDivName + appendId);
+                        }
+                        var innerChilds = appendDiv[0].children;//取得appendDiv內的所有子元素
+                        var leftPosition = start;
+                        if (i != appendId) {//如果要加進去的appendDiv與目前所在的Div不相等則進行位置的調整
+                            angular.forEach(innerChilds, function (child) {
+                                leftPosition -= child.offsetWidth;
+                            })
+                        }
+                        childSpan.appendTo(appendDiv);//將子元素移動到appendDiv
+                        appendId++;
+                        childSpan.css({ left: leftPosition });//設定正確位置
+                        var lastPosition = start + childSpan.outerWidth()
+                        if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                     }
                 }
 
