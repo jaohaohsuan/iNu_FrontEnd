@@ -380,17 +380,17 @@
             restrict: 'E',
             templateUrl: 'views/directives/playAudioFile.html',
             scope: {
-                audioHref:'=', //音檔位置
+                audioHref: '=', //音檔位置
                 vttHref: '=', //VTT位置
-                player: '=' ,//讓player可以對外
-                keywords:'='//音檔關鍵字
+                player: '=',//讓player可以對外
+                keywords: '='//音檔關鍵字
             },
-            controller: ['$scope', '$http', '$translate','$q', playAudioFileController],
+            controller: ['$scope', '$http', '$translate', '$q', '$timeout', playAudioFileController],
             controllerAs: 'playAudioFileCtrl',
             bindToController: true
         }
-            
-        function playAudioFileController($scope, $http, $translate, $q) {
+
+        function playAudioFileController($scope, $http, $translate, $q, $timeout) {
             var cuesId = []; //存放cuesId的陣列
             var cueDiv; //.cue-div element
             var floorDecimalPlaces = 2;//小數點後N位，前端固定無條件捨去到小數點第二位。
@@ -422,7 +422,7 @@
             self.showAudioContoller = false; //show按鈕區塊
             self.showSpeed = false; //show 速度狀態
 
-          
+
             $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
             $scope.$on('ngRepeatEnd', setKeywordsPosition) //keywords repeat完後
             function changeCue(cue) {
@@ -478,7 +478,7 @@
             }
 
 
-           
+
 
             function mute() {
                 //if (audio.muted == true)
@@ -511,6 +511,7 @@
                 }
             }
             function seekTo(second) {
+
                 self.player.seekTo(second / self.player.getDuration()); //切換
             }
             function setCh() {
@@ -559,7 +560,6 @@
             }
 
             function markedhighlight(cues, currentTime) {//標記highlight
-                console.log(cues)
                 if (!currentTime) return;
                 currentTime = floorDecimal(currentTime, floorDecimalPlaces);//無條件捨去到小數點N位
                 console.log(currentTime);
@@ -578,9 +578,8 @@
                     }
                     if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
                 }
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
+
+
             }
 
             function onAudioProcess(time) {
@@ -588,7 +587,7 @@
                 var maxStartTime = maxStartTimeSeconds[currentSecond];//根據秒為單位，取得該秒內最大值
                 //判斷前一秒與這一秒不相同時且取該秒內最大值進行highlight
                 if (maxStartTime && preSecond != currentSecond && time >= maxStartTime) {
-                    markedhighlight(self.cues, self.player.getCurrentTime());
+                    $timeout(markedhighlight(self.cues, self.player.getCurrentTime()));
                     preSecond = currentSecond;
                 }
             }
@@ -605,12 +604,10 @@
                 //track = $('#track').get(0).track;
                 cueDiv = document.getElementsByClassName('cue-div'); //取到cue存放的div
                 self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
-                self.keywords = [{ 'keyword': 'I put', 'time': '8.000' }, //取得關鍵字
-                    { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
-                ];
+                self.insideKeywords = angular.copy(self.keywords)
                 var deferred = $q.defer();
                 function getVtt(vttHref) {
-                    var cues=[];
+                    var cues = [];
                     $http.get(vttHref).success(function (data, status, headers, config) { //取得VTT內容
                         var parser = new WebVTT.Parser(window, WebVTT.StringDecoder());
                         parser.oncue = function (cue) {
@@ -628,11 +625,11 @@
                                 maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime, floorDecimalPlaces);//無條件捨去到小數點2位
                             }
                         })
-                        
-                     
+
+
                         deferred.resolve(cues);
-                      
-                        
+
+
                     }).error(function (data, status, headers, config) {
                         deferred.reject(data);
                     })
@@ -641,10 +638,9 @@
 
                 getVtt(self.vttHref).then(function (data) {
                     self.cues = data;
-                    console.log(self.cues)
                 }, function (data) {
                 })
-              
+
                 self.showAudioContoller = true;
                 if (!$scope.$$phase) {
                     $scope.$apply();
