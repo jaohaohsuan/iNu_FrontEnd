@@ -471,10 +471,10 @@
                 template: '<play-audio-file audio-href="playAudioCtrl.audioHref" vtt-href=" playAudioCtrl.vttHref" player="playAudioCtrl.player" keywords="playAudioCtrl.keywords"></play-audio-file>',
                 resolve: {
                     audioHref: function () {
-                        return 'mp3/paulallen.mp3';
+                        return '';
                     },
                     vttHref: function () {
-                        return 'http://10.85.1.156:32772/_vtt/lte-2015.07.23/logs/AU65HybJXO2P0lmdbHY3?_id=2115239037';
+                        return 'mp3/paulallen.vtt';
                     }
                 }
             });

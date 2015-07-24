@@ -1,5 +1,5 @@
 ﻿<div>
-    <div ng-hide="playAudioFileCtrl.showAudioContoller" class="sk-spinner sk-spinner-three-bounce">
+    <div ng-hide="playAudioFileCtrl.showAudioContoller || playAudioFileCtrl.hideWaitWaveReady" class="sk-spinner sk-spinner-three-bounce">
         <div class="sk-bounce1"></div>
         <div class="sk-bounce2"></div>
         <div class="sk-bounce3"></div>
@@ -28,7 +28,7 @@
         <button title="{{'fastBackward'|translate}}" ng-click="playAudioFileCtrl.goBackwardFast(0.1)" class="btn fa fa-fast-backward"></button>
         <button title="{{'fastForward'|translate}}" ng-click="playAudioFileCtrl.goForwardFast(0.1)" class="btn fa fa-fast-forward"></button>
         <span class="play-rate" ng-show="playAudioFileCtrl.showSpeed">{{'playRate'|translate}}:{{playAudioFileCtrl.player.backend.playbackRate}}x</span>
-        <!--<button class="btn fa fa-lightbulb-o" ng-click="playVideoCtrl.setCh()"></button>-->
+        <button class="btn fa fa-lightbulb-o" ng-click="playAudioFileCtrl.setCh()"></button>
     </div>
     <div class="cue-div">
         <span class="cues" ng-repeat="cue in playAudioFileCtrl.cues" ng-click="playAudioFileCtrl.changeCue(cue)"

@@ -385,12 +385,12 @@
                 player: '=',//讓player可以對外
                 keywords: '='//音檔關鍵字
             },
-            controller: ['$scope', '$http', '$translate', '$q', '$timeout', playAudioFileController],
+            controller: ['$scope', '$http', '$translate', '$q', '$timeout', '$element', playAudioFileController],
             controllerAs: 'playAudioFileCtrl',
             bindToController: true
         }
 
-        function playAudioFileController($scope, $http, $translate, $q, $timeout) {
+        function playAudioFileController($scope, $http, $translate, $q, $timeout, $element) {
             var cuesId = []; //存放cuesId的陣列
             var cueDiv; //.cue-div element
             var floorDecimalPlaces = 2;//小數點後N位，前端固定無條件捨去到小數點第二位。
@@ -417,7 +417,7 @@
             self.playPauseText = $translate.instant('play');
             self.playing = false;
             self.seekTo = seekTo; //點擊音波切換時間
-            //self.setCh = setCh;
+            self.setCh = setCh;
             self.setHtmltoCue = setHtmltoCue; //將cue換成HTML
             self.showAudioContoller = false; //show按鈕區塊
             self.showSpeed = false; //show 速度狀態
@@ -515,15 +515,15 @@
                 self.player.seekTo(second / self.player.getDuration()); //切換
             }
             function setCh() {
-                var x = Math.random() * 10;
-                var y = Math.random() * 10;
-                var z = Math.random() * 10;
-                console.log(x, y, z)
-                var source = self.player.backend.ac.createBufferSource();
+                var x = -45 * (Math.PI / 180);
+                console.log(x)
+                //var source = self.player.backend.ac.createBufferSource();
                 var panner = self.player.backend.ac.createPanner();
-                panner.setPosition(x, y, z)
-                //source.connect(splitter);
+                panner.setPosition(x, 0, 0);
                 self.player.backend.setFilter(panner);
+                console.log(self.player)
+                //source.connect(splitter);
+              
                 console.log(self.player)
             }
             function setHtmltoCue(index, cue) {
@@ -537,7 +537,36 @@
             }
 
             /////////////不綁定區///////////////
+            function getVtt(vttHref) {
+                var deferred = $q.defer();
+                var cues = [];
+                $http.get(vttHref).success(function (data, status, headers, config) { //取得VTT內容
+                    var parser = new WebVTT.Parser(window, WebVTT.StringDecoder());
+                    parser.oncue = function (cue) {
+                        cues.push(cue);
+                    };
+                    parser.parse(data);
+                    parser.flush();
+                    maxStartTimeSeconds = {};
+                    angular.forEach(cues, function (cue) {
+                        var startTimeSecond = Math.floor(cue.startTime);//取出字幕起始時間的秒數
+                        if (!maxStartTimeSeconds[startTimeSecond]) {//以秒數當key進行初始化
+                            maxStartTimeSeconds[startTimeSecond] = -1;
+                        }
+                        if (floorDecimal(cue.startTime, floorDecimalPlaces) > maxStartTimeSeconds[startTimeSecond]) {//以無條件捨去N位當作判斷依據
+                            maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime, floorDecimalPlaces);//無條件捨去到小數點2位
+                        }
+                    })
 
+
+                    deferred.resolve(cues);
+
+
+                }).error(function (data, status, headers, config) {
+                    deferred.reject(data);
+                })
+                return deferred.promise;
+            }
             function getScrollHeight(index) { //當前cue的index
                 var scrollHeight = 0;
                 if (index > 0) {
@@ -551,12 +580,32 @@
 
             function getWavesurfer(e, wavesurfer) {
                 self.player = wavesurfer; //指定Wavesurfer
-                self.player.setVolume(volume);
-                self.player.setPlaybackRate(speed);
-                self.player.on('ready', onReady); //Wavesurfer ready後綁定字幕
-                self.player.on('finish', onFinish); //當播放完畢時
-                self.player.on('seek', onSeek); //當點選音波時
-                self.player.on('audioprocess', onAudioProcess);//當檔處理時
+
+                if (self.audioHref) { //如果有音檔
+                    self.player.setVolume(volume);
+                    self.player.setPlaybackRate(speed);
+                    self.player.on('ready', onReady); //Wavesurfer ready後綁定字幕
+                    self.player.on('finish', onFinish); //當播放完畢時
+                    self.player.on('seek', onSeek); //當點選音波時
+                    self.player.on('audioprocess', onAudioProcess);//當檔處理時
+                }
+                else {
+                    $timeout(getVtt(self.vttHref).then(function (data) {
+                        self.cues = data;
+                        var buffer = self.player.backend.ac.createBufferSource();
+                        buffer.duration = self.cues[self.cues.length - 1].endTime;
+                        self.player.backend.buffer = buffer;
+                        console.log(self.player.getDuration());
+                        self.hideWaitWaveReady = true;
+                        self.perWidthSecond = $element[0].firstChild.offsetWidth / self.player.getDuration();
+                        self.insideKeywords = angular.copy(self.keywords)
+                        self.player.on('ready', function () {alert(1) })
+                     
+                    }, function (data) {
+                    }));
+
+                }
+              
             }
 
             function markedhighlight(cues, currentTime) {//標記highlight
@@ -605,36 +654,7 @@
                 cueDiv = document.getElementsByClassName('cue-div'); //取到cue存放的div
                 self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
                 self.insideKeywords = angular.copy(self.keywords)
-                var deferred = $q.defer();
-                function getVtt(vttHref) {
-                    var cues = [];
-                    $http.get(vttHref).success(function (data, status, headers, config) { //取得VTT內容
-                        var parser = new WebVTT.Parser(window, WebVTT.StringDecoder());
-                        parser.oncue = function (cue) {
-                            cues.push(cue);
-                        };
-                        parser.parse(data);
-                        parser.flush();
-                        maxStartTimeSeconds = {};
-                        angular.forEach(cues, function (cue) {
-                            var startTimeSecond = Math.floor(cue.startTime);//取出字幕起始時間的秒數
-                            if (!maxStartTimeSeconds[startTimeSecond]) {//以秒數當key進行初始化
-                                maxStartTimeSeconds[startTimeSecond] = -1;
-                            }
-                            if (floorDecimal(cue.startTime, floorDecimalPlaces) > maxStartTimeSeconds[startTimeSecond]) {//以無條件捨去N位當作判斷依據
-                                maxStartTimeSeconds[startTimeSecond] = floorDecimal(cue.startTime, floorDecimalPlaces);//無條件捨去到小數點2位
-                            }
-                        })
 
-
-                        deferred.resolve(cues);
-
-
-                    }).error(function (data, status, headers, config) {
-                        deferred.reject(data);
-                    })
-                    return deferred.promise;
-                }
 
                 getVtt(self.vttHref).then(function (data) {
                     self.cues = data;
