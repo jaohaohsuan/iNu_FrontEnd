@@ -380,9 +380,10 @@
             restrict: 'E',
             templateUrl: 'views/directives/playAudioFile.html',
             scope: {
-                audioHref:'=',
-                vttHref: '=',
-                player:'='
+                audioHref:'=', //音檔位置
+                vttHref: '=', //VTT位置
+                player: '=' ,//讓player可以對外
+                keywords:'='
             },
             controller: ['$scope', '$http', '$translate','$q', playAudioFileController],
             controllerAs: 'playAudioFileCtrl',
@@ -390,15 +391,13 @@
         }
             
         function playAudioFileController($scope, $http, $translate, $q) {
-            //var audio;
-
             var cuesId = []; //存放cuesId的陣列
             var cueDiv; //.cue-div element
             var floorDecimalPlaces = 2;//小數點後N位，前端固定無條件捨去到小數點第二位。
             var maxStartTimeSeconds = {};//存放字幕起始時間中，相同秒數的最大值
             var preSecond = -1;//紀錄播放中的上一秒
             var speed = 1; //播放速度
-            var tempVolume;
+            var tempVolume; //存放調靜音時的temp音量
             var track; //track element
             var volume = 1; //播放音量
             var self = this;
@@ -412,7 +411,6 @@
             self.goForward = goForward; //快轉
             self.goForwardFast = goForwardFast; //加速
             self.goUpVolume = goUpVolume; //增音量
-            self.keywords = [];
             self.mute = mute;   //靜音
             self.perWidthSecond = 0;
             self.playPause = playPause; //暫停或播放
