@@ -84,9 +84,8 @@
                 </div>
 
                 <h3>{{"keywordRole"|translate}}：</h3>
-                <select class="form-control m-b" ng-model="createModelCtrl.editBinding.syntax.role"
-                        ng-options="role.name for role in  createModelCtrl.roles">
-                    <option value="">----</option>
+                <select class="form-control m-b" ng-model="createModelCtrl.editBinding.syntax.field"
+                        ng-options="field as field|translate for field in  createModelCtrl.editBinding.syntax.fields">
                 </select>
 
                 <hr/>

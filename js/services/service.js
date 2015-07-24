@@ -113,9 +113,13 @@
 
         function setEditBinding(editBinding, bindGroup, datas) {
             angular.forEach(datas, function (data) {
-                if (data.name == 'query') {
-                    editBinding[bindGroup].query = data.value.split('\\s');
-                } else {
+                if (data.name.indexOf('query') != -1) {
+                    editBinding[bindGroup][data.name] = data.value.split(/\s+/);
+                } else if (data.name.indexOf('field') != -1) {
+                    editBinding[bindGroup].fields = data.prompt.split(/\s+/);
+                    editBinding[bindGroup][data.name] = data.value;
+                }
+                else {
                     editBinding[bindGroup][data.name] = data.value;
                 }
             })
