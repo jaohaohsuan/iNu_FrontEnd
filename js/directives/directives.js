@@ -523,7 +523,7 @@
                 self.player.backend.setFilter(panner);
                 console.log(self.player)
                 //source.connect(splitter);
-              
+
                 console.log(self.player)
             }
             function setHtmltoCue(index, cue) {
@@ -584,7 +584,7 @@
                 if (!self.audioHref) {
                     $timeout(getVtt(self.vttHref).then(function (data) {
                         self.cues = data;
-                        if (!self.audioHref){//如果沒有音檔來源，則以字幕的最後時間點產生假音檔
+                        if (!self.audioHref) {//如果沒有音檔來源，則以字幕的最後時間點產生假音檔
                             var audioContext = self.player.backend.ac;
                             var bufferSize = self.cues[self.cues.length - 1].endTime * audioContext.sampleRate,
                                 noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate),
@@ -615,12 +615,13 @@
             }
 
             function markedhighlight(cues, currentTime) {//標記highlight
-//                if (!currentTime) return;
-                $timeout(function(){
+                //                if (!currentTime) return;
+                $timeout(function () {
                     currentTime = floorDecimal(currentTime, floorDecimalPlaces);//無條件捨去到小數點N位
-                    console.log(currentTime);
-                    if (currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
-                        cueDiv[0].scrollTop = 0;
+                    if (currentTime <= cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
+                     if (cueDiv[0]) {
+                            cueDiv[0].scrollTop = 0;
+                        }
                     }
                     var search = { searched: false };
                     for (var idx = cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
