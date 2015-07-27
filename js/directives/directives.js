@@ -580,54 +580,61 @@
 
             function getWavesurfer(e, wavesurfer) {
                 self.player = wavesurfer; //指定Wavesurfer
-
-                if (self.audioHref) { //如果有音檔
-                    self.player.setVolume(volume);
-                    self.player.setPlaybackRate(speed);
-                    self.player.on('ready', onReady); //Wavesurfer ready後綁定字幕
-                    self.player.on('finish', onFinish); //當播放完畢時
-                    self.player.on('seek', onSeek); //當點選音波時
-                    self.player.on('audioprocess', onAudioProcess);//當檔處理時
-                }
-                else {
+                cueDiv = document.getElementsByClassName('cue-div'); //取到cue存放的div
+                if (!self.audioHref) {
                     $timeout(getVtt(self.vttHref).then(function (data) {
                         self.cues = data;
-                        var buffer = self.player.backend.ac.createBufferSource();
-                        buffer.duration = self.cues[self.cues.length - 1].endTime;
-                        self.player.backend.buffer = buffer;
-                        console.log(self.player.getDuration());
-                        self.hideWaitWaveReady = true;
-                        self.perWidthSecond = $element[0].firstChild.offsetWidth / self.player.getDuration();
-                        self.insideKeywords = angular.copy(self.keywords)
-                        self.player.on('ready', function () {alert(1) })
-                     
+                        if (!self.audioHref){//如果沒有音檔來源，則以字幕的最後時間點產生假音檔
+                            var audioContext = self.player.backend.ac;
+                            var bufferSize = self.cues[self.cues.length - 1].endTime * audioContext.sampleRate,
+                                noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate),
+                                output = noiseBuffer.getChannelData(0);
+                            for (var i = 0; i < bufferSize; i++) {
+                                output[i] = 0;
+                            }
+                            var source = audioContext.createBufferSource();//創建來源
+                            source.buffer = noiseBuffer;//設定產生出來的buffer
+                            self.player.backend.buffer = noiseBuffer;
+                            self.player.backend.ac = audioContext;
+                            self.insideKeywords = angular.copy(self.keywords)
+                            self.player.empty();
+                            self.player.drawBuffer();
+                            self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
+                            self.showAudioContoller = true;
+                        }
                     }, function (data) {
                     }));
-
                 }
-              
+                self.player.setVolume(volume);
+                self.player.setPlaybackRate(speed);
+                self.player.on('ready', onReady); //Wavesurfer ready後綁定字幕
+                self.player.on('finish', onFinish); //當播放完畢時
+                self.player.on('seek', onSeek); //當點選音波時
+                self.player.on('audioprocess', onAudioProcess);//當檔處理時
+
             }
 
             function markedhighlight(cues, currentTime) {//標記highlight
-                if (!currentTime) return;
-                currentTime = floorDecimal(currentTime, floorDecimalPlaces);//無條件捨去到小數點N位
-                console.log(currentTime);
-                if (currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
-                    cueDiv[0].scrollTop = 0;
-                }
-                var search = { searched: false };
-                for (var idx = cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
-                    var cue = cues[idx];
-                    cue.highlight = false;//尚未搜尋到之前都將highlight設為false
-                    if (!search.searched) {
-                        if (currentTime >= floorDecimal(cue.startTime, floorDecimalPlaces)) {//目前時間 >= cue的起始時間代表已搜尋到
-                            search.searched = true;
-                            if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
-                        }
+//                if (!currentTime) return;
+                $timeout(function(){
+                    currentTime = floorDecimal(currentTime, floorDecimalPlaces);//無條件捨去到小數點N位
+                    console.log(currentTime);
+                    if (currentTime < cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
+                        cueDiv[0].scrollTop = 0;
                     }
-                    if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
-                }
-
+                    var search = { searched: false };
+                    for (var idx = cues.length - 1; idx >= 0; idx--) {//由後往前搜尋並標記
+                        var cue = cues[idx];
+                        cue.highlight = false;//尚未搜尋到之前都將highlight設為false
+                        if (!search.searched) {
+                            if (currentTime >= floorDecimal(cue.startTime, floorDecimalPlaces)) {//目前時間 >= cue的起始時間代表已搜尋到
+                                search.searched = true;
+                                if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
+                            }
+                        }
+                        if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
+                    }
+                })
 
             }
 
@@ -636,7 +643,7 @@
                 var maxStartTime = maxStartTimeSeconds[currentSecond];//根據秒為單位，取得該秒內最大值
                 //判斷前一秒與這一秒不相同時且取該秒內最大值進行highlight
                 if (maxStartTime && preSecond != currentSecond && time >= maxStartTime) {
-                    $timeout(markedhighlight(self.cues, self.player.getCurrentTime()));
+                    markedhighlight(self.cues, self.player.getCurrentTime());
                     preSecond = currentSecond;
                 }
             }
@@ -644,14 +651,14 @@
             function onFinish() {
                 self.playing = false;
                 self.player.stop();
-                //audio.pause();
+                console.log(self.player.getCurrentTime())
+                markedhighlight(self.cues, self.player.getCurrentTime());
                 resetCueDivScrollTop();
                 $scope.$apply();
             }
 
             function onReady() {
                 //track = $('#track').get(0).track;
-                cueDiv = document.getElementsByClassName('cue-div'); //取到cue存放的div
                 self.perWidthSecond = self.player.drawer.width / self.player.getDuration();
                 self.insideKeywords = angular.copy(self.keywords)
 
@@ -668,14 +675,11 @@
             }
 
             function onSeek() {
-                //audio.currentTime = self.player.getCurrentTime();
                 markedhighlight(self.cues, self.player.getCurrentTime());
-                //                    findCueWithCurrentTime(self.player.getCurrentTime());
             }
 
             function resetCueDivScrollTop() {
                 if (self.autoScroll) {
-                    markedhighlight(self.cues[0]);
                     cueDiv[0].scrollTop = 0;
                 }
             }
