@@ -482,8 +482,8 @@
             function playVideoController(audioHref, vttHref) {
                 var self = this;
                 self.audioHref = audioHref;
-                self.keywords = [{ 'keyword': 'I put', 'time': '8.000' }, //取得關鍵字
-                 { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
+                self.keywords = [{ 'keyword': 'I put', 'time': '00:00:08.000' }, //取得關鍵字
+                 { 'keyword': 'someday', 'time': '00:00:16.875' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
                 ]; //改成由API取得
                 self.vttHref = vttHref;
                 modalInstance.result.then('', modalClosing); //當modal被關掉時

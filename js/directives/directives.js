@@ -511,7 +511,7 @@
                 }
             }
             function seekTo(second) {
-
+                second = hmsfToSeconds(second);
                 self.player.seekTo(second / self.player.getDuration()); //切換
             }
             function setCh() {
@@ -613,7 +613,16 @@
                 self.player.on('audioprocess', onAudioProcess);//當檔處理時
 
             }
+            function hmsfToSeconds(str){
+                var p = str.split(':'),
+                    result = 0, seconds = 1;
 
+                while (p.length > 0) {
+                    result += seconds * p.pop();
+                    seconds *= 60;
+                }
+                return result;
+            }
             function markedhighlight(cues, currentTime) {//標記highlight
                 //                if (!currentTime) return;
                 $timeout(function () {
@@ -693,7 +702,7 @@
                     var keyword = self.keywords[i];
                     var childSpan = $(videoKeywordDivName + i + ' > span');//取得目前div內的span元素
                     var appendDiv = $(videoKeywordDivName + appendId);//根據appendId取得div
-                    var start = keyword.time * self.perWidthSecond;//計算關鍵字起始位置
+                    var start = hmsfToSeconds(keyword.time) * self.perWidthSecond;//計算關鍵字起始位置
                     if (start >= maxPosition) {//當起始位置 > 目前長度最長的位置時，appendId設為0
                         appendId = 0;
                         appendDiv = $(videoKeywordDivName + appendId);
