@@ -45,6 +45,13 @@ span > a:link {
 /*}*/
 
 /*Class��*/
+.agent0 {
+    color: red !important;
+}
+
+.audio-contoller-div {
+    display: inline-block;
+}
 
 .border-radius {
     border-radius: 6px;
@@ -309,12 +316,27 @@ span > a:link {
     margin-bottom: 0;
 }
 
-
-.play-rate{
-    font-size:18px;
-    position:relative;
-    top:5px;
+.panner-div {
+    display: inline-block;
+    position: relative;
+    top: 10px;
 }
+
+    .panner-div > label {
+        margin-top: 10px;
+    }
+
+    .panner-div > div {
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+.play-rate {
+    font-size: 18px;
+    position: relative;
+    top: 5px;
+}
+
 .public-component-filter {
     margin-bottom: 10px;
 }
@@ -361,6 +383,8 @@ span > a:link {
     position: relative;
     margin-top: 3px;
 }
+
+
 
 .vtt-highlight {
     color: #ff0000;

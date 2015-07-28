@@ -72,6 +72,7 @@
   "password": "密码",
   "pause": "停止",
   "play": "播放",
+  "playback":"回放",
   "playRate": "播放速度",
   "queryConditions": "查询条件",
   "queryPlaceholder": "请输入标题/关键词…",

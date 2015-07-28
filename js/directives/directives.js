@@ -412,13 +412,14 @@
             self.goForwardFast = goForwardFast; //加速
             self.goUpVolume = goUpVolume; //增音量
             self.mute = mute;   //靜音
+            self.pannerValue = 0;
             self.perWidthSecond = 0;
             self.playPause = playPause; //暫停或播放
             self.playPauseText = $translate.instant('play');
             self.playing = false;
             self.seekTo = seekTo; //點擊音波切換時間
-            self.setCh = setCh;
             self.setHtmltoCue = setHtmltoCue; //將cue換成HTML
+            self.setPanner = setPanner; //設定左右聲道
             self.showAudioContoller = false; //show按鈕區塊
             self.showSpeed = false; //show 速度狀態
 
@@ -446,7 +447,7 @@
             }
 
             function goDownVolume(value) {
-                volume = volume - value < 0.1 ? 0.1 : volume - value;
+                volume = volume - value < 0.1 ? 0 : volume - value;
                 self.player.setVolume(volume)
             }
 
@@ -514,17 +515,18 @@
                 second = hmsfToSeconds(second);
                 self.player.seekTo(second / self.player.getDuration()); //切換
             }
-            function setCh() {
-                var x = -45 * (Math.PI / 180);
-                console.log(x)
+            function setPanner() {
+                var xDeg = parseInt(self.pannerValue);
+                var zDeg = xDeg + 90;
+                if (zDeg > 90) {
+                    zDeg = 180 - zDeg;
+                }
+                var x = Math.sin(xDeg * (Math.PI / 180));
+                var z = Math.sin(zDeg * (Math.PI / 180));
                 //var source = self.player.backend.ac.createBufferSource();
                 var panner = self.player.backend.ac.createPanner();
-                panner.setPosition(x, 0, 0);
+                panner.setPosition(x, 0, z);
                 self.player.backend.setFilter(panner);
-                console.log(self.player)
-                //source.connect(splitter);
-
-                console.log(self.player)
             }
             function setHtmltoCue(index, cue) {
 
@@ -613,7 +615,7 @@
                 self.player.on('audioprocess', onAudioProcess);//當檔處理時
 
             }
-            function hmsfToSeconds(str){
+            function hmsfToSeconds(str) {
                 var p = str.split(':'),
                     result = 0, seconds = 1;
 
@@ -628,7 +630,7 @@
                 $timeout(function () {
                     currentTime = floorDecimal(currentTime, floorDecimalPlaces);//無條件捨去到小數點N位
                     if (currentTime <= cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
-                     if (cueDiv[0]) {
+                        if (cueDiv[0]) {
                             cueDiv[0].scrollTop = 0;
                         }
                     }

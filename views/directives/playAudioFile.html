@@ -17,18 +17,23 @@
             <label for="autoScroll" class="fa fa-2x" title="{{'autoScroll'|translate}}"
                    ng-class="{true:'fa-lock',false:'fa-unlock-alt'}[playAudioFileCtrl.autoScroll]"></label>
         </div>
-
-        <button title="{{playAudioFileCtrl.playPauseText}}" ng-click="playAudioFileCtrl.playPause()" class="btn fa"
-                ng-class="{true:'fa-pause',false:'fa-play'}[playAudioFileCtrl.playing]"></button>
-        <button title="{{'mute'|translate}}" ng-click="playAudioFileCtrl.mute()" class="btn fa fa-volume-off"></button>
-        <button title="{{'volumeDown'|translate}}" ng-click="playAudioFileCtrl.goDownVolume(0.1)" class="btn fa fa-volume-down"></button>
-        <button title="{{'volumeUp'|translate}}" ng-click="playAudioFileCtrl.goUpVolume(0.1)" class="btn fa fa-volume-up"></button>
-        <button title="{{'backward'|translate}}" ng-click="playAudioFileCtrl.goBackward()" class="btn fa fa-backward"></button>
-        <button title="{{'forward'|translate}}" ng-click="playAudioFileCtrl.goForward()" class="btn fa fa-forward"></button>
-        <button title="{{'fastBackward'|translate}}" ng-click="playAudioFileCtrl.goBackwardFast(0.1)" class="btn fa fa-fast-backward"></button>
-        <button title="{{'fastForward'|translate}}" ng-click="playAudioFileCtrl.goForwardFast(0.1)" class="btn fa fa-fast-forward"></button>
+        <div class="audio-contoller-div">
+            <button title="{{playAudioFileCtrl.playPauseText}}" ng-click="playAudioFileCtrl.playPause()" class="btn fa"
+                    ng-class="{true:'fa-pause',false:'fa-play'}[playAudioFileCtrl.playing]"></button>
+            <button title="{{'mute'|translate}}" ng-click="playAudioFileCtrl.mute()" class="btn fa fa-volume-off"></button>
+            <button title="{{'volumeDown'|translate}}" ng-click="playAudioFileCtrl.goDownVolume(0.1)" class="btn fa fa-volume-down"></button>
+            <button title="{{'volumeUp'|translate}}" ng-click="playAudioFileCtrl.goUpVolume(0.1)" class="btn fa fa-volume-up"></button>
+            <button title="{{'backward'|translate}}" ng-click="playAudioFileCtrl.goBackward()" class="btn fa fa-backward"></button>
+            <button title="{{'forward'|translate}}" ng-click="playAudioFileCtrl.goForward()" class="btn fa fa-forward"></button>
+            <button title="{{'fastBackward'|translate}}" ng-click="playAudioFileCtrl.goBackwardFast(0.1)" class="btn fa fa-fast-backward"></button>
+            <button title="{{'fastForward'|translate}}" ng-click="playAudioFileCtrl.goForwardFast(0.1)" class="btn fa fa-fast-forward"></button>
+        </div>
         <span class="play-rate" ng-show="playAudioFileCtrl.showSpeed">{{'playRate'|translate}}:{{playAudioFileCtrl.player.backend.playbackRate}}x</span>
-        <button class="btn fa fa-lightbulb-o" ng-click="playAudioFileCtrl.setCh()"></button>
+        <div class="panner-div">
+            <label class="col-xs-2">Left</label>
+            <div class="col-xs-8"><input type="range" ng-model="playAudioFileCtrl.pannerValue" min="-90" max="90" ng-change="playAudioFileCtrl.setPanner()" /></div>
+            <label class="col-xs-2">Right</label>
+        </div>
     </div>
     <div class="cue-div">
         <span class="cues" ng-repeat="cue in playAudioFileCtrl.cues" ng-click="playAudioFileCtrl.changeCue(cue)"

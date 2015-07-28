@@ -431,9 +431,26 @@
         self.gridOptions = {
             columnDefs: [
                 {
-                    name: 'name',
-                    field: 'name',
-                    cellTemplate: '<div><a class="btn" ng-click="grid.appScope.playAudio()">{{row.entity.name}}</a></div>'
+                    displayName: '{{"datasourceName"|translate}}',
+                    field: 'datasourceName',
+                    headerCellFilter: 'translate',
+                   
+                },
+                {
+                    displayName: '{{"serialNumber"|translate}}',
+                    headerCellFilter: 'translate',
+                    field: 'serialNumber',
+                },
+                {
+                    displayName: '{{"matchedKeywords"|translate}}',
+                    headerCellFilter: 'translate',
+                    field: 'matchedKeywords',
+                },
+                {
+                    displayName: '{{"advanceOperation"|translate}}',
+                    headerCellFilter: 'translate',
+                    field: 'advanceOperation',
+                    cellTemplate: '<div><a class="btn fa fa-play" ng-click="grid.appScope.playAudio()">{{"playback"|translate}}</a></div>'
                 }
             ]
         };
@@ -471,10 +488,10 @@
                 template: '<play-audio-file audio-href="playAudioCtrl.audioHref" vtt-href=" playAudioCtrl.vttHref" player="playAudioCtrl.player" keywords="playAudioCtrl.keywords"></play-audio-file>',
                 resolve: {
                     audioHref: function () {
-                        return '';
+                        return 'mp3/8.mp3';
                     },
                     vttHref: function () {
-                        return 'mp3/paulallen.vtt';
+                        return 'http://10.85.1.156:32772/_vtt/lte-2015.07.27/logs/AU7O14REVJ41Vu7eujL-?_id=417960200';
                     }
                 }
             });
@@ -482,12 +499,13 @@
             function playVideoController(audioHref, vttHref) {
                 var self = this;
                 self.audioHref = audioHref;
-                self.keywords = [{ 'keyword': 'I put', 'time': '00:00:08.000' }, //取得關鍵字
-                 { 'keyword': 'someday', 'time': '00:00:16.875' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
+                self.keywords = [{ 'keyword': 'I put', 'time': '8.000' }, //取得關鍵字
+                 { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
                 ]; //改成由API取得
                 self.vttHref = vttHref;
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 function modalClosing() { //modal關閉後清空Wavesurfer
+                    console.log(self.player);
                     self.player.empty()
                 }
             }
@@ -500,7 +518,7 @@
             self.isShowModelDetail = true;
             self.modelTitle = entity.title;
             self.gridOptions.data.push(
-                { 'name': '123' }
+                { 'datasourceName': '123' }
             )
         }
 
