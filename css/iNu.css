@@ -37,6 +37,26 @@ span > a:link {
     color: #328F7B;
 }
 
+span[title="R0"]:before{
+    content:"C:";
+    padding-right:5px;
+    padding-left:2px;
+    color:darkgray;
+}
+span[title="R1"]:before{
+    content:"A:";
+    padding-right:5px;
+    padding-left:2px;
+    color:gray;
+}
+span[title="R0"],
+span[title="R1"] {
+    background: url("../../images/user.png") no-repeat;
+    padding-left:22px;
+    padding-top:-6px;
+    position:relative;
+    display:block;
+}
 /*video::cue(c.ttt){*/
 /*color: #00f123;*/
 /*}*/
@@ -117,6 +137,10 @@ span > a:link {
     cursor: pointer;
 }
 
+.customer0 {
+    color: purple;
+}
+
 .dropdown-multi-select {
     height: 30px;
     top: -1px;
@@ -155,6 +179,12 @@ span > a:link {
     left: 0 !important;
 }
 
+.matched-view-advance-operation-div > a {
+    margin-left: 5px;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
 .matched-review-grid {
     background: rgba(222, 222, 225, 0.2);
 }
@@ -179,6 +209,10 @@ span > a:link {
 
 .margins-div {
     margin: 0 0 0 2px;
+}
+
+.modal-backdrop {
+    background: rgba(0, 0, 0, 0);
 }
 
 .model-filter > .inline-block {
@@ -238,9 +272,7 @@ span > a:link {
     top: 170px;
 }
 
-.modal-backdrop {
-    background: rgba(0, 0, 0, 0);
-}
+
 
 .model-name-grid {
     margin-top: 5px;

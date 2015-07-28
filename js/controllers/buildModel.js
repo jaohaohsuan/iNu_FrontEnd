@@ -434,7 +434,7 @@
                     displayName: '{{"datasourceName"|translate}}',
                     field: 'datasourceName',
                     headerCellFilter: 'translate',
-                   
+
                 },
                 {
                     displayName: '{{"serialNumber"|translate}}',
@@ -450,7 +450,7 @@
                     displayName: '{{"advanceOperation"|translate}}',
                     headerCellFilter: 'translate',
                     field: 'advanceOperation',
-                    cellTemplate: '<div><a class="btn fa fa-play" ng-click="grid.appScope.playAudio()">{{"playback"|translate}}</a></div>'
+                    cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio()">{{"playback"|translate}}</a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail()">{{"lookOver"|translate}}</a></div>'
                 }
             ]
         };
@@ -468,6 +468,7 @@
         }
 
         self.selectedItems = [];
+        $scope.showAudioDetail = showAudioDetail;
         self.showModelDetail = showModelDetail;
 
 
@@ -481,7 +482,7 @@
         function playAudio() {
 
             var modalInstance = $modal.open({
-                backdropClass: 'model-backdrop',
+                backdropClass: 'modal-backdrop',
                 controller: ['audioHref', 'vttHref', playVideoController],
                 controllerAs: 'playAudioCtrl',
                 size: 'lg',
@@ -499,8 +500,8 @@
             function playVideoController(audioHref, vttHref) {
                 var self = this;
                 self.audioHref = audioHref;
-                self.keywords = [{ 'keyword': 'I put', 'time': '8.000' }, //取得關鍵字
-                 { 'keyword': 'someday', 'time': '16.800' }, { 'keyword': 'meanwhile', 'time': '26.000' }, { 'keyword': 'Allen', 'time': '34.000' }, { 'keyword': 'every', 'time': '38.000' }
+                self.keywords = [{ 'keyword': '钱', 'time': '00:00:38.650' }, //取得關鍵字
+                 { 'keyword': '被骗', 'time': '00:00:43.690' }, { 'keyword': '国家', 'time': '00:00:55.890' }, { 'keyword': '钱', 'time': '00:02:29.740' }, { 'keyword': '股票', 'time': '00:03:51.400' }
                 ]; //改成由API取得
                 self.vttHref = vttHref;
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
@@ -511,7 +512,13 @@
             }
 
         }
-
+        function showAudioDetail() {
+            var modalInstance = $modal.open({
+                backdropClass: 'modal-backdrop',
+                size: 'lg',
+                template: '<h1>123</h1>'
+            })
+        }
         function showModelDetail(entity) {
             if (self.buildSections.length > 0) self.buildSections.length = 0;
             buildModelService.setTemporary(entity.href, null, self.buildSections);

@@ -570,11 +570,12 @@
                 return deferred.promise;
             }
             function getScrollHeight(index) { //當前cue的index
+
                 var scrollHeight = 0;
                 if (index > 0) {
                     for (var i = 0; i < index; i++) {
                         var currentCueElement = $('#' + cuesId[i]); //取得當前綁定cue的element的高度
-                        scrollHeight += currentCueElement[0].offsetHeight + 4;
+                        scrollHeight += (currentCueElement[0].offsetHeight + 4) + (i * 0.1);
                     }
                 }
                 return scrollHeight;
