@@ -1,8 +1,8 @@
 (function () {
     angular.module('iNu')
-        .service('buildModelService', ['jsonMethodService', 'jsonParseService', '$translate', buildModelService])
+        .service('buildModelService', ['jsonMethodService', 'jsonParseService', '$translate', '$timeout', buildModelService])
         .service('templateLocation', templateLocation)
-    function buildModelService(jsonMethodService, jsonParseService, $translate) {
+    function buildModelService(jsonMethodService, jsonParseService, $translate, $timeout) {
         function addToCurrentSection(href, template, sections, occurrence, successCallback, errorCallback) {
             jsonMethodService.post(href, template).then(
                 function (response) {
@@ -20,10 +20,10 @@
                 })
         }
 
-        function markedSelectedTags(allTags,selectedTags){
-            angular.forEach(allTags,function(tag){
-                selectedTags.some(function(selectedTag){
-                    if (IsSelfAttrsEqObjX(tag,selectedTag)){//比較共同欄位值，進行標記selected
+        function markedSelectedTags(allTags, selectedTags) {
+            angular.forEach(allTags, function (tag) {
+                selectedTags.some(function (selectedTag) {
+                    if (IsSelfAttrsEqObjX(tag, selectedTag)) {//比較共同欄位值，進行標記selected
                         tag.selected = true;
                         return true;
                     }
@@ -37,7 +37,7 @@
             var kvTemplate = jsonParseService.getObjectMappingNameToValueFromDatas(temporaryCollection.template.data);
             kvTemplate.title.value = title;
             kvTemplate.tags.value = tagsJoinBySelected(tags);
-            var template = {template: angular.copy(temporaryCollection.template)};
+            var template = { template: angular.copy(temporaryCollection.template) };
             jsonMethodService.post(href, template).then(
                 function (response) {
                     if (successCallback) successCallback(response.headers('Location'));
@@ -46,42 +46,42 @@
                 })
         }
 
-        function saveConfiguration(temporaryCollection,configuration,successCallback,errCallback){//儲存配置
+        function saveConfiguration(temporaryCollection, configuration, successCallback, errCallback) {//儲存配置
             configuration = angular.copy(configuration);
             configuration.tags = tagsJoinBySelected(configuration.tags);
-            angular.forEach(temporaryCollection.collection.template.data,function(data){
+            angular.forEach(temporaryCollection.collection.template.data, function (data) {
                 data.value = configuration[data.name];
             })
-            var template = {template: angular.copy(temporaryCollection.collection.template)};
-            jsonMethodService.put(configuration.href,template).then(function(response){
+            var template = { template: angular.copy(temporaryCollection.collection.template) };
+            jsonMethodService.put(configuration.href, template).then(function (response) {
                 if (successCallback) successCallback(response);
             })
         }
 
-        function searchByQueries(queriesCollection,queryBinding,rel,successCallback,errorCallback){
+        function searchByQueries(queriesCollection, queryBinding, rel, successCallback, errorCallback) {
             queryBinding = angular.copy(queryBinding);
-            if (queryBinding.tags){
+            if (queryBinding.tags) {
                 queryBinding.tags = tagsJoinBySelected(queryBinding.tags);
             }
             var searchHref = '';
-            queriesCollection.queries.some(function(query){
-                if (query.rel === rel){//匹配到指定的rel進行搜尋的url參數設定
+            queriesCollection.queries.some(function (query) {
+                if (query.rel === rel) {//匹配到指定的rel進行搜尋的url參數設定
                     searchHref = query.href + '?';
-                    angular.forEach(query.data,function(data){
+                    angular.forEach(query.data, function (data) {
                         data.prompt = queryBinding[data.name];
                         if (data.prompt.length > 0) searchHref += data.name + '=' + data.prompt + '&'//當有查詢資料再進行參數的設定
                     })
                     return true;
                 }
             })
-            jsonMethodService.get(searchHref).then(function(collectionjson){
+            jsonMethodService.get(searchHref).then(function (collectionjson) {
                 angular.forEach(collectionjson.collection.items, function (item) {
                     angular.forEach(item.data, function (data) {//將每個item內的data[]轉換成key/value的形式以利綁定
                         item[data.name] = data.value;
                     })
                 })
                 if (successCallback) successCallback(angular.copy(collectionjson.collection.items));
-            },function(){
+            }, function () {
                 if (errorCallback) errorCallback();
             })
         }
@@ -98,14 +98,14 @@
             return isequal;
         }
 
-        function setConfigurationTemporary(href,datas, configurationBinding) {//配置區塊資料綁定
+        function setConfigurationTemporary(href, datas, configurationBinding) {//配置區塊資料綁定
             configurationBinding.href = href;
             angular.forEach(datas, function (data) {
                 if (data.name === 'tags') {
                     var selectedTags = tagsToArrayObject(data.value);
-                    if (configurationBinding.allTags){
-                        data.value = markedSelectedTags(configurationBinding.allTags,selectedTags);
-                    }else data.value = selectedTags;
+                    if (configurationBinding.allTags) {
+                        data.value = markedSelectedTags(configurationBinding.allTags, selectedTags);
+                    } else data.value = selectedTags;
                 }
                 configurationBinding[data.name] = data.value;
             })
@@ -151,9 +151,40 @@
             })
 
         }
+        function setPreview(previewLink, previewList) {
+            if (previewList.length > 0) previewList.length = 0;
+            var preview = { 'href': '', 'highlight': [], 'keywords': [] }
+            jsonMethodService.get(previewLink.href).then(function (collectionjson) {
+                console.log(collectionjson);
+                angular.forEach(collectionjson.collection.items, function (datas) {
+                     preview['href'] = datas.href;
+                    angular.forEach(datas.data, function (data) {
+                        var value = data.value;
+                        var name = data.name;
+                        var previewMapping = {
+                            "highlight": function () {
+                                preview[name] = data.array;
+                            },
+                            "keywords": function () {
+                                preview[name] = data.value;
+                            }
+                        }
+                        if (!previewMapping.hasOwnProperty(name)) {
+                            return;
+                        }
+                        previewMapping[name]();
+                    })
+                    console.log(preview)
+                    previewList.push(preview);
+                    preview = { 'href': '', 'highlight': [], 'keywords': [] }
+                })
+                
 
-        function setQueriesBinding(href,queriesCollection, queriesBinding,successCallback) {
-            jsonMethodService.get(href).then(function(collectionjson){
+            }, function (data) {
+            })
+        }
+        function setQueriesBinding(href, queriesCollection, queriesBinding, successCallback) {
+            jsonMethodService.get(href).then(function (collectionjson) {
                 if (queriesCollection) queriesCollection.queries = angular.copy(collectionjson.collection.queries);
                 angular.forEach(collectionjson.collection.queries, function (query) {
                     angular.forEach(query.data, function (data) {
@@ -161,40 +192,52 @@
                     })
                     delete query.data;
                     query.q = '';
-                    query.tags = tagsToArrayObject(query.tags,'name');
+                    query.tags = tagsToArrayObject(query.tags, 'name');
                     queriesBinding[query.rel] = query;
                 })
                 if (successCallback) successCallback();
             })
         }
 
-        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding) {
+        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding, previews) {
             jsonMethodService.get(href).then(function (collectionjson) {
                 var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
-                setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding);//設定temporary結構
+                setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding, previews);//設定temporary結構
             })
         }
 
-        function setTemporary(href, temporaryCollection, sections, editCollection, editBinding) {
-            jsonMethodService.get(href).then(function (collectionjson) {
-                if (temporaryCollection) temporaryCollection.collection = angular.copy(collectionjson.collection);
-                angular.forEach(collectionjson.collection.items, function (item) {
-                    var linksObj = jsonParseService.getLinksObjFromLinks(item.links, 'rel'); //將items裡面的links用rel分類
-                    var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
-                    var tmpSections = linksObj['section'];//用來增加查詢條件的(match near named)
-                    if (sections) {
-                        angular.forEach(tmpSections, function (section) {
-                            sections.push(section);
-                        })
-                        setModelSections(sections);//設定查詢條件的綁定
-                    }
-                    if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
-                    if (editBinding && editBinding.hasOwnProperty('configuration')) {
-                        setConfigurationTemporary(href,item.data, editBinding.configuration);//設定配置區塊的資料綁定
-                    }
+        function setTemporary(href, temporaryCollection, sections, editCollection, editBinding, previewList, successCallback) {
+            $timeout(function () {
+                jsonMethodService.get(href).then(function (collectionjson) {
+                    if (temporaryCollection) temporaryCollection.collection = angular.copy(collectionjson.collection);
+                    angular.forEach(collectionjson.collection.items, function (item) {
+                        var linksObj = jsonParseService.getLinksObjFromLinks(item.links, 'rel'); //將items裡面的links用rel分類
+                        var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
+                        var tmpSections = linksObj['section'];//用來增加查詢條件的(match near named)
+                        var tmpPreviews = linksObj['preview'];
+                        if (sections) {
+                            angular.forEach(tmpSections, function (section) {
+                                sections.push(section);
+                            })
+                            setModelSections(sections);//設定查詢條件的綁定
+                        }
+                        if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
+                        if (editBinding && editBinding.hasOwnProperty('configuration')) {
+                            setConfigurationTemporary(href, item.data, editBinding.configuration);//設定配置區塊的資料綁定
+                        }
+                        if (previewList) {
+                            angular.forEach(tmpPreviews, function (tmpPreview) {
+                                setPreview(tmpPreview, previewList);
+
+                            })
+
+                        }
+                    })
+
+                }, function () {
                 })
-            }, function () {
             })
+          
         }
 
         function sectionItemFormat(datas, queryProperty, syntaxProperty, slopProperty, editableProperty) {
@@ -238,15 +281,15 @@
             }).join(' ').trim();
         }
 
-        function tagsToArrayObject(tags){//將tags以空白切割，重組成arrayObject讓view綁定
-            if (tags.length > 0){
+        function tagsToArrayObject(tags) {//將tags以空白切割，重組成arrayObject讓view綁定
+            if (tags.length > 0) {
                 return tags.trim().split(/\s+/).map(function (e) {
-                    return {"name": e}
+                    return { "name": e }
                 });
-            }else return [];
+            } else return [];
         }
 
-        return{
+        return {
             addToCurrentSection: addToCurrentSection,
             saveAs: saveAs,
             saveConfiguration: saveConfiguration,

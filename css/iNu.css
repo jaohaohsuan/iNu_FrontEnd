@@ -38,21 +38,21 @@ span > a:link {
 }
 
 span[title="R0"]:before{
-    content:"C:";
+    content:attr(title)':';
     padding-right:5px;
     padding-left:2px;
     color:darkgray;
 }
 span[title="R1"]:before{
-    content:"A:";
+  content:attr(title)':';
     padding-right:5px;
     padding-left:2px;
     color:gray;
 }
 span[title="R0"],
 span[title="R1"] {
-    background: url("../../images/user.png") no-repeat;
-    padding-left:22px;
+
+ 
     padding-top:-6px;
     position:relative;
     display:block;
@@ -423,8 +423,9 @@ span[title="R1"] {
 }
 /*id*/
 [id^='video-keywords'] {
+    cursor:pointer;
     position: relative;
-    display: block;
+    display: inline-block;
     width: auto;
 }
 

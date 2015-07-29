@@ -2,7 +2,7 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', 'API_PATH', createModelController])
-        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', '$translate', matchedReviewedController])
+        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', '$translate', '$timeout', matchedReviewedController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', 'API_PATH', modelManagementController])
 
 
@@ -395,6 +395,7 @@
 
                 } else {//設定Temporary
                     buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
+
                     self.isInstance = true;
 
                 }
@@ -419,7 +420,7 @@
         }
     }
 
-    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH, $translate) {
+    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH, $translate, $timeout) {
 
         var self = this;
 
@@ -450,18 +451,19 @@
                     displayName: '{{"advanceOperation"|translate}}',
                     headerCellFilter: 'translate',
                     field: 'advanceOperation',
-                    cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio()">{{"playback"|translate}}</a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail()">{{"lookOver"|translate}}</a></div>'
+                    cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio(row.entity)">{{"playback"|translate}}</a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail()">{{"lookOver"|translate}}</a></div>'
                 }
-            ]
+            ],
+            data: []
         };
         self.isShowModelDetail = false;
         self.modelKeyword = '';
         self.models = [];
+        $scope.playAudio = playAudio;
+        self.previewCollection = [];
         self.queriesBinding = {
             search: {}
         }
-
-        $scope.playAudio = playAudio;
 
         self.queriesCollection = {
             queries: []
@@ -479,34 +481,40 @@
             })
         }
 
-        function playAudio() {
-
+        function playAudio(entity) {
+            console.log(entity);
             var modalInstance = $modal.open({
                 backdropClass: 'modal-backdrop',
-                controller: ['audioHref', 'vttHref', playVideoController],
+                controller: ['audioHref', 'vttHref','highlightKeywords', playVideoController],
                 controllerAs: 'playAudioCtrl',
                 size: 'lg',
                 template: '<play-audio-file audio-href="playAudioCtrl.audioHref" vtt-href=" playAudioCtrl.vttHref" player="playAudioCtrl.player" keywords="playAudioCtrl.keywords"></play-audio-file>',
                 resolve: {
                     audioHref: function () {
-                        return 'mp3/8.mp3';
+                        return '';
                     },
                     vttHref: function () {
-                        return 'http://10.85.1.156:32772/_vtt/lte-2015.07.27/logs/AU7O14REVJ41Vu7eujL-?_id=417960200';
+                        return entity.vttHref;
+                    },
+                    highlightKeywords: function () {
+                        return entity.highlight;
                     }
                 }
             });
 
-            function playVideoController(audioHref, vttHref) {
+            function playVideoController(audioHref, vttHref, highlightKeywords) {
                 var self = this;
                 self.audioHref = audioHref;
-                self.keywords = [{ 'keyword': '钱', 'time': '00:00:38.650' }, //取得關鍵字
-                 { 'keyword': '被骗', 'time': '00:00:43.690' }, { 'keyword': '国家', 'time': '00:00:55.890' }, { 'keyword': '钱', 'time': '00:02:29.740' }, { 'keyword': '股票', 'time': '00:03:51.400' }
-                ]; //改成由API取得
+                self.keywords = []; //改成由API取得
+                angular.forEach(highlightKeywords, function (keyword) {
+                    var keywords = keyword.split(' ');
+                    var keywordsJSON = { 'keyword': keywords[1], 'time': keywords[0] };
+                    self.keywords.push(keywordsJSON);
+                })
+
                 self.vttHref = vttHref;
                 modalInstance.result.then('', modalClosing); //當modal被關掉時
                 function modalClosing() { //modal關閉後清空Wavesurfer
-                    console.log(self.player);
                     self.player.empty()
                 }
             }
@@ -520,17 +528,29 @@
             })
         }
         function showModelDetail(entity) {
+
+
+
             if (self.buildSections.length > 0) self.buildSections.length = 0;
-            buildModelService.setTemporary(entity.href, null, self.buildSections);
+            if (self.gridOptions.data.length > 0) self.gridOptions.data.length = 0;
+            buildModelService.setTemporary(entity.href, null, self.buildSections, null, null, self.previewCollection)
+            console.log(self.previewCollection)
             self.isShowModelDetail = true;
             self.modelTitle = entity.title;
-            self.gridOptions.data.push(
-                { 'datasourceName': '123' }
-            )
+
+            angular.forEach(self.previewCollection, function (preview) {
+                console.log(preview);
+                self.gridOptions.data.push(
+
+                    { 'datasourceName': '123', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
+                    );
+            })
+            //         self.gridOptions.data.push(
+            //                 { 'datasourceName': '123', 'matchedKeywords': self.previewCollection.keywords }
+            //                 );
         }
 
         ////////////////////不綁定區//////////////
-
     }
 
     function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert, API_PATH) {
@@ -651,6 +671,7 @@
             if (self.gridOptions.data) self.gridOptions.data.length = 0;
             buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 angular.forEach(items, function (item) {
+                    console.log(item)
                     var data = setGridData(item);
                     self.gridOptions.data.push(data);
                 })
