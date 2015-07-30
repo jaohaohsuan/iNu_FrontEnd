@@ -65,6 +65,8 @@
             .state('main.crossAnalysis', {
                 url: '/crossAnalysis',
                 templateUrl: "views/crossAnalysis.html",
+                controller: 'crossAnalysisController',
+                controllerAs: 'crossAnalysisCtrl',
                 data: {
                     title: 'crossAnalysis'
                 }

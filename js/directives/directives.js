@@ -179,12 +179,12 @@
                 showAudioDetail: '='
             },
             template: '<div ui-grid="matchedReviewGridCtrl.gridOptions"  ui-grid-auto-resize class="matched-review-grid"></div>',
-            controller: ['$scope', matchedReviewGridController],
+            controller: ['$scope', '$modal', matchedReviewGridController],
             controllerAs: 'matchedReviewGridCtrl',
             bindToController: true
 
         }
-        function matchedReviewGridController($scope) {
+        function matchedReviewGridController($scope, $modal) {
             var self = this;
             self.gridOptions = {
                 columnDefs: [
@@ -217,11 +217,51 @@
             $scope.showAudioDetail = showAudioDetail;
 
             function playAudio(entity) {
-                if (self.playAudio) self.playAudio(entity);
+                var modalInstance = $modal.open({
+                    backdropClass: 'modal-backdrop',
+                    controller: ['audioHref', 'vttHref', 'highlightKeywords', playVideoController],
+                    controllerAs: 'playAudioCtrl',
+                    size: 'lg',
+                    template: '<play-audio-file audio-href="playAudioCtrl.audioHref" vtt-href=" playAudioCtrl.vttHref" player="playAudioCtrl.player" keywords="playAudioCtrl.keywords"></play-audio-file>',
+                    resolve: {
+                        audioHref: function () {
+                            return '';
+                        },
+                        vttHref: function () {
+                            return entity.vttHref;
+                        },
+                        highlightKeywords: function () {
+                            return entity.highlight;
+                        }
+                    }
+                });
+
+                function playVideoController(audioHref, vttHref, highlightKeywords) {
+                    var self = this;
+                    self.audioHref = audioHref;
+                    self.keywords = []; //改成由API取得
+                    angular.forEach(highlightKeywords, function (keyword) {
+                        var keywords = keyword.split(' ');
+                        var keywordsJSON = { 'keyword': keywords[1], 'time': keywords[0] };
+                        self.keywords.push(keywordsJSON);
+                    })
+
+                    self.keywords.push({ 'keyword': 'Last2', 'time': '00:07:17.20' })
+                    self.keywords.push({ 'keyword': 'Last', 'time': '00:07:18.20' })
+                    self.vttHref = vttHref;
+                    modalInstance.result.then('', modalClosing); //當modal被關掉時
+                    function modalClosing() { //modal關閉後清空Wavesurfer
+                        self.player.empty()
+                    }
+                }
             }
 
             function showAudioDetail(entity) {
-                if (self.showAudioDetail) self.showAudioDetail(entity);
+                var modalInstance = $modal.open({
+                    backdropClass: 'modal-backdrop',
+                    size: 'lg',
+                    template: '<h1>123</h1>'
+                })
             }
         }
         return directive
@@ -1302,10 +1342,10 @@
         .directive('ngEnter', ngEnter)
         .directive('nestedScroll', nestedScroll)
         .directive('setClassWithWidth', setClassWithWidth)
-        .directive('wavesurfer', wavesurfer)
-        .directive('wavesurferTimeLine', wavesurferTimeLine)
-        .directive('ngRepeatEnd', ['$timeout', ngRepeatEnd])
-        .directive('playAudioFile', playAudioFile)
-        .directive('matchedReviewGrid', matchedReviewGrid)
+        .directive('wavesurfer', wavesurfer) //音波圖
+        .directive('wavesurferTimeLine', wavesurferTimeLine) //音波圖時間軸
+        .directive('ngRepeatEnd', ['$timeout', ngRepeatEnd]) 
+        .directive('playAudioFile', playAudioFile) //播放音檔內容
+        .directive('matchedReviewGrid', matchedReviewGrid) //瀏覽音檔Grid
 
 })();

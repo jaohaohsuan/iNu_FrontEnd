@@ -3,12 +3,14 @@
     <div class="col-md-4 col-xs-12  col-sm-12">
         <div class="ibox">
             <div class="ibox-title">
-                <h2>{{"queryConditions"|translate}}
+                <h2>
+                    {{"queryConditions"|translate}}
                     <span title="{{'undo'|translate}}"
-                      class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right"
-                      ng-click="createModelCtrl.undo()"
-                      ng-show="createModelCtrl.showUndo">
+                          class="btn btn-default btn-outline fa fa-undo animated wobble  pull-right"
+                          ng-click="createModelCtrl.undo()"
+                          ng-show="createModelCtrl.showUndo">
                     </span>
+                    <label class="pull-right btn btn-default" ng-click="createModelCtrl.viewTemporaryAudio()">View</label>
                 </h2>
             </div>
             <div class="ibox-content">
@@ -25,14 +27,16 @@
                             {{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}
                         </div>
                     </item-template>
-                <build-section>
+                    <build-section>
             </div>
         </div>
     </div>
     <!--模型創建-->
     <div class="col-md-5 col-xs-12 col-sm-12 build-model-logic">
         <div class="ibox">
-            <div class="ibox-title"><h2>{{"logicWord"|translate}}</h2></div>
+            <div class="ibox-title">
+                <h2>{{"logicWord"|translate}}</h2>
+            </div>
             <div class="ibox-content">
 
                 <h3>{{"keywordTitle"|translate}}：</h3>
@@ -46,31 +50,37 @@
                             add-on-enter="true"
                             tags-repeat="true"
                             placeholder="{{'keywordPlaceholder'|translate}}"
-                            focus="createModelCtrl.editBinding.syntax.focus"
-                        >
+                            focus="createModelCtrl.editBinding.syntax.focus">
                     <auto-complete source="createModelCtrl.autoTips($query)"
                                    min-length="0"
                                    select-first-match="false"></auto-complete>
                 </tags-input>
 
                 <div>
-                    <div class="radio "><label> <input icheck type="radio" name="modelRadio" value="OR"
-                                                       ng-model="createModelCtrl.editBinding.syntax.operator"
-                                                       ng-change="createModelCtrl.editBinding.syntax.syntaxIdentity = 'match'">
-                        {{"eitherAccord"|translate}}
-                    </label></div>
-                    <div class="radio"><label> <input icheck type="radio" name="modelRadio" value="AND"
-                                                      ng-model="createModelCtrl.editBinding.syntax.operator">
-                        {{"allAccord"|translate}}
-                    </label></div>
+                    <div class="radio ">
+                        <label>
+                            <input icheck type="radio" name="modelRadio" value="OR"
+                                   ng-model="createModelCtrl.editBinding.syntax.operator"
+                                   ng-change="createModelCtrl.editBinding.syntax.syntaxIdentity = 'match'">
+                            {{"eitherAccord"|translate}}
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input icheck type="radio" name="modelRadio" value="AND"
+                                   ng-model="createModelCtrl.editBinding.syntax.operator">
+                            {{"allAccord"|translate}}
+                        </label>
+                    </div>
                 </div>
 
                 <div class="form-inline col-xs-offset-1 distance" ng-show="createModelCtrl.editBinding.syntax.operator=='AND'">
                     <div class="checkbox">
-                        <label><input icheck type="checkbox" name="radioTest"
-                                      ng-model="createModelCtrl.editBinding.syntax.syntaxIdentity"
-                                      ng-true-value="'near'"
-                                      ng-false-value="'match'">
+                        <label>
+                            <input icheck type="checkbox" name="radioTest"
+                                   ng-model="createModelCtrl.editBinding.syntax.syntaxIdentity"
+                                   ng-true-value="'near'"
+                                   ng-false-value="'match'">
                             {{"wordDistance"|translate}}：
                         </label>
                         <number-picker number="createModelCtrl.editBinding.syntax.slop" size="3"></number-picker>
@@ -85,10 +95,9 @@
 
                 <h3>{{"keywordRole"|translate}}：</h3>
                 <select class="form-control m-b" ng-model="createModelCtrl.editBinding.syntax.field"
-                        ng-options="field as field|translate for field in  createModelCtrl.editBinding.syntax.fields">
-                </select>
+                        ng-options="field as field|translate for field in  createModelCtrl.editBinding.syntax.fields"></select>
 
-                <hr/>
+                <hr />
                 <div class="row">
                     <button class="col-xs-3 btn btn-success btn-rounded  "
                             ng-click="createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
@@ -120,13 +129,12 @@
             </div>
             <div class="ibox-content">
                 <form class="form-group">
-                    <model-filter
-                            auto-size="true"
-                            datasource="createModelCtrl.queriesBinding.search"
-                            tag-display-property="{{::'name'}}"
-                            query-placeholder="{{::'queryPlaceholder'|translate}}"
-                            tags-placeholder="{{::'tagsPlaceholder'|translate}}"
-                            do-filter="createModelCtrl.filterModelGroup">
+                    <model-filter auto-size="true"
+                                  datasource="createModelCtrl.queriesBinding.search"
+                                  tag-display-property="{{::'name'}}"
+                                  query-placeholder="{{::'queryPlaceholder'|translate}}"
+                                  tags-placeholder="{{::'tagsPlaceholder'|translate}}"
+                                  do-filter="createModelCtrl.filterModelGroup">
                     </model-filter>
                 </form>
                 <div nested-scroll class="btn-group btn-group-vertical btn-block "
@@ -139,7 +147,7 @@
                         {{item.title}}
                     </label>
                 </div>
-                <hr/>
+                <hr />
                 <div class="row">
                     <button class="col-xs-3 btn btn-success  btn-rounded "
                             ng-disabled="createModelCtrl.editBinding.component.selected.length <= 0"
@@ -202,7 +210,7 @@
                            ng-keyup="createModelCtrl.resetTitle($event)"
                            ng-model="createModelCtrl.editBinding.expansion.title"
                            placeholder="{{'modelNamePlaceholder'|translate}}"
-                           focus="createModelCtrl.saveAsNameInputFocus" required/>
+                           focus="createModelCtrl.saveAsNameInputFocus" required />
                     <button class="btn btn-success btn-block"
                             ng-click="createModelCtrl.saveAs('save')">
                         {{'saveModel'|translate}}

@@ -1,6 +1,7 @@
 (function () {
     angular.module('iNu')
         .service('buildModelService', ['jsonMethodService', 'jsonParseService', '$translate', '$timeout', buildModelService])
+        .service('previewService', previewService)
         .service('templateLocation', templateLocation)
     function buildModelService(jsonMethodService, jsonParseService, $translate, $timeout) {
         function addToCurrentSection(href, template, sections, occurrence, successCallback, errorCallback) {
@@ -197,7 +198,7 @@
             })
         }
 
-        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding, previews, successCallBack) {
+        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding,  successCallBack) {
             jsonMethodService.get(href).then(function (collectionjson) {
                 var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
                 setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding, function (previewList) {
@@ -301,6 +302,10 @@
         }
     }
 
+    function previewService() {
+        var self = this;
+      
+    }
     function templateLocation() {
         var self = this;
     }

@@ -1,8 +1,8 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', 'API_PATH', createModelController])
-        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', '$translate', '$timeout', matchedReviewedController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', 'API_PATH','previewService', createModelController])
+        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', '$translate', '$timeout','previewService', matchedReviewedController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', 'API_PATH', modelManagementController])
 
 
@@ -54,7 +54,7 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, API_PATH) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, API_PATH, previewService) {
         var modelGroupSelectedTimeout;
         var templateUrl = API_PATH + '_query/template';
         var self = this;
@@ -118,6 +118,7 @@
         };
         self.toggleSelection = toggleSelection;
         self.undo = undo;
+        self.viewTemporaryAudio = viewTemporaryAudio
         initial(templateLocation.path, templateUrl);
         $scope.$on('$destroy', destroyListener);
         $scope.$on('tabClicked', tabClicked);
@@ -380,7 +381,11 @@
         function undo() {
             self.showUndo = false;
         }
-
+        function viewTemporaryAudio() {
+            buildModelService.setTemplate(templateUrl, null, null, null, null, function (previewList) {
+                previewService.previewList = previewList;
+            });
+        }
         //////////////////不綁定區//////////////////
         function destroyListener(event) {
             $timeout.cancel(modelGroupSelectedTimeout);
@@ -420,7 +425,7 @@
         }
     }
 
-    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH, $translate, $timeout) {
+    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH, $translate, $timeout, previewService) {
         var doFilterTimer;
         var self = this;
 
@@ -433,7 +438,6 @@
         self.modelKeyword = '';
         self.models = [];
         self.modelTitle = ''; //顯示模型邏輯詞區的title
-        self.playAudio = playAudio;
         self.previewCollection = [];
         self.queriesBinding = {
             search: {}
@@ -444,7 +448,6 @@
         }
 
         self.selectedItems = [];
-        self.showAudioDetail = showAudioDetail;
         self.showModelDetail = showModelDetail;
 
 
@@ -456,51 +459,8 @@
             })
         }
 
-        function playAudio(entity) {
-            var modalInstance = $modal.open({
-                backdropClass: 'modal-backdrop',
-                controller: ['audioHref', 'vttHref', 'highlightKeywords', playVideoController],
-                controllerAs: 'playAudioCtrl',
-                size: 'lg',
-                template: '<play-audio-file audio-href="playAudioCtrl.audioHref" vtt-href=" playAudioCtrl.vttHref" player="playAudioCtrl.player" keywords="playAudioCtrl.keywords"></play-audio-file>',
-                resolve: {
-                    audioHref: function () {
-                        return '';
-                    },
-                    vttHref: function () {
-                        return entity.vttHref;
-                    },
-                    highlightKeywords: function () {
-                        return entity.highlight;
-                    }
-                }
-            });
-
-            function playVideoController(audioHref, vttHref, highlightKeywords) {
-                var self = this;
-                self.audioHref = audioHref;
-                self.keywords = []; //改成由API取得
-                angular.forEach(highlightKeywords, function (keyword) {
-                    var keywords = keyword.split(' ');
-                    var keywordsJSON = { 'keyword': keywords[1], 'time': keywords[0] };
-                    self.keywords.push(keywordsJSON);
-                })
-
-                self.vttHref = vttHref;
-                modalInstance.result.then('', modalClosing); //當modal被關掉時
-                function modalClosing() { //modal關閉後清空Wavesurfer
-                    self.player.empty()
-                }
-            }
-
-        }
-        function showAudioDetail() {
-            var modalInstance = $modal.open({
-                backdropClass: 'modal-backdrop',
-                size: 'lg',
-                template: '<h1>123</h1>'
-            })
-        }
+    
+   
         function showModelDetail(model) {
             if (doFilterTimer) $timeout.cancel(doFilterTimer);
             doFilterTimer = $timeout(function () {

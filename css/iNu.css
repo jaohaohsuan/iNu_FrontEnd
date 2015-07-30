@@ -142,7 +142,9 @@ wavesurfer {
 .customer0 {
     color: purple;
 }
-
+.coross-analysis-div{
+    width:98%;
+}
 .dropdown-multi-select {
     height: 30px;
     top: -1px;
