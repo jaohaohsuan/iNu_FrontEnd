@@ -501,18 +501,18 @@
                 template: '<h1>123</h1>'
             })
         }
-        function showModelDetail(entity) {
+        function showModelDetail(model) {
             if (doFilterTimer) $timeout.cancel(doFilterTimer);
             doFilterTimer = $timeout(function () {
                 if (self.buildSections.length > 0) self.buildSections.length = 0;
                 if (self.gridData.length > 0) self.gridData.length = 0;
-                buildModelService.setTemporary(entity.href, null, self.buildSections, null, null, function (previews) {
+                buildModelService.setTemporary(model.href, null, self.buildSections, null, null, function (previews) {
                     self.previewCollection = previews;
                     self.isShowModelDetail = true;
-                    self.modelTitle = entity.title;
+                    self.modelTitle = model.title;
                     angular.forEach(self.previewCollection, function (preview) {
                         self.gridData.push(
-                            { 'datasourceName': '123', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
+                            { 'datasourceName': model.title, 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
                             );
                     })
                 })
