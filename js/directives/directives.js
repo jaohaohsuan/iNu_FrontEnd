@@ -753,30 +753,40 @@
             }
 
             function setKeywordsPosition() {
+                
                 var videoKeywordDivName = '#video-keywords';
                 var maxPosition = -1;
-                var appendId = 0;
+                var lastPosition = 0;
                 for (var i = 0 ; i < self.keywords.length; i++) {
                     var keyword = self.keywords[i];
-                    var childSpan = $(videoKeywordDivName + i + ' > span');//取得目前div內的span元素
-                    var appendDiv = $(videoKeywordDivName + appendId);//根據appendId取得div
-                    var start = hmsfToSeconds(keyword.time) * self.perWidthSecond;//計算關鍵字起始位置
-                    if (start >= maxPosition) {//當起始位置 > 目前長度最長的位置時，appendId設為0
-                        appendId = 0;
-                        appendDiv = $(videoKeywordDivName + appendId);
+                    var currentSpan = $(videoKeywordDivName + i );//取得目前div內的span元素
+                    var appendDiv = $(videoKeywordDivName + 0);//根據appendId取得div
+                    var leftPosition = hmsfToSeconds(keyword.time) * self.perWidthSecond;//計算關鍵字起始位置
+                    //if (start >= maxPosition) {//當起始位置 > 目前長度最長的位置時，appendId設為0
+                    //    appendId = 0;
+                    //    appendDiv = $(videoKeywordDivName + appendId);
+                    //}
+                    //var innerChilds = appendDiv[0].children;//取得appendDiv內的所有子元素
+                    //var leftPosition = start;
+                    //if (i != appendId) {//如果要加進去的appendDiv與目前所在的Div不相等則進行位置的調整
+                    //    angular.forEach(innerChilds, function (child) {
+                    //        console.log(leftPosition, child)
+                    //        leftPosition = child.outerWidth();
+                    //    })
+                    //}
+                    console.log(leftPosition, currentSpan.text(),  currentSpan.outerWidth(), lastPosition)
+                    if (leftPosition  < lastPosition) {
+                        leftPosition = lastPosition+1;
                     }
-                    var innerChilds = appendDiv[0].children;//取得appendDiv內的所有子元素
-                    var leftPosition = start;
-                    if (i != appendId) {//如果要加進去的appendDiv與目前所在的Div不相等則進行位置的調整
-                        angular.forEach(innerChilds, function (child) {
-                            leftPosition -= child.offsetWidth;
-                        })
+                    if (leftPosition + currentSpan.outerWidth() > self.player.drawer.width) { //當關鍵字超出音坡時 鎖在音波範圍內
+                        leftPosition -= currentSpan.outerWidth()
                     }
-                    childSpan.appendTo(appendDiv);//將子元素移動到appendDiv
-                    appendId++;
-                    childSpan.css({ left: leftPosition });//設定正確位置
-                    var lastPosition = start + childSpan.outerWidth()
-                    if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
+            
+                    //childSpan.appendTo(appendDiv);//將子元素移動到appendDiv
+                    //appendId++;
+                    currentSpan.css({ left: leftPosition });//設定正確位置
+                    lastPosition = leftPosition + currentSpan.outerWidth()
+                    //if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                 }
             }
 

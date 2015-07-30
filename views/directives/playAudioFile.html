@@ -4,8 +4,8 @@
         <div class="sk-bounce2"></div>
         <div class="sk-bounce3"></div>
     </div>
-    <div id="video-keywords{{$index}}" ng-repeat="keyword in playAudioFileCtrl.insideKeywords">
-        <span class="video-keywords" ng-click="playAudioFileCtrl.seekTo(keyword.time)" ng-repeat-end>{{keyword.keyword}} </span>
+    <div>
+        <span id="video-keywords{{$index}}" ng-repeat="keyword in playAudioFileCtrl.insideKeywords" class="video-keywords" ng-click="playAudioFileCtrl.seekTo(keyword.time)" ng-repeat-end>{{keyword.keyword}} </span>
     </div>
     <wavesurfer url="{{playAudioFileCtrl.audioHref}}" height="32"></wavesurfer>
     <wavesurfer-time-line wavesurfer="playAudioFileCtrl.player"></wavesurfer-time-line>

@@ -37,25 +37,25 @@ span > a:link {
     color: #328F7B;
 }
 
-span[title="R0"]:before{
-    content:attr(title)':';
-    padding-right:5px;
-    padding-left:2px;
-    color:darkgray;
+span[title="R0"]:before {
+    content: attr(title)':';
+    padding-right: 5px;
+    padding-left: 2px;
+    color: darkgray;
 }
-span[title="R1"]:before{
-  content:attr(title)':';
-    padding-right:5px;
-    padding-left:2px;
-    color:gray;
+
+span[title="R1"]:before {
+    content: attr(title)':';
+    padding-right: 5px;
+    padding-left: 2px;
+    color: gray;
 }
+
 span[title="R0"],
 span[title="R1"] {
-
- 
-    padding-top:-6px;
-    position:relative;
-    display:block;
+    padding-top: -6px;
+    position: relative;
+    display: block;
 }
 /*video::cue(c.ttt){*/
 /*color: #00f123;*/
@@ -63,7 +63,9 @@ span[title="R1"] {
 /*video::cue(v[voice="Larry"]){*/
 /*color: #ff0000;*/
 /*}*/
-
+wavesurfer {
+    padding-top: 30px;
+}
 /*Class��*/
 .agent0 {
     color: red !important;
@@ -412,8 +414,10 @@ span[title="R1"] {
     border: 4px solid rgba(222, 222, 225, 0.2);
     color: #fff;
     display: inline-block;
-    position: relative;
+    position: absolute;
     margin-top: 3px;
+    width: auto;
+      cursor: pointer;
 }
 
 
@@ -423,12 +427,7 @@ span[title="R1"] {
     color: #ff0000;
 }
 /*id*/
-[id^='video-keywords'] {
-    cursor:pointer;
-    position: relative;
-    display: block;
-    width: auto;
-}
+
 
 #iNu-logo-s {
     margin-bottom: 10px;
