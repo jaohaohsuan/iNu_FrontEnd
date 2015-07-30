@@ -153,7 +153,7 @@
         }
         function setPreview(previewLink, successCallBack, errorCallback) {
             var previewList = [];
-            $timeout(jsonMethodService.get(previewLink.href).then(function (collectionjson) {
+          jsonMethodService.get(previewLink.href).then(function (collectionjson) {
                 angular.forEach(collectionjson.collection.items, function (datas) {
                     var preview = { 'href': '', 'highlight': [], 'keywords': [] }
                     preview['href'] = datas.href;
@@ -178,7 +178,7 @@
                 if (successCallBack) successCallBack(angular.copy(previewList));
             }, function (data) {
                 if (errorCallback) errorCallback(data);
-            }))
+            })
 
         }
         function setQueriesBinding(href, queriesCollection, queriesBinding, successCallback) {
