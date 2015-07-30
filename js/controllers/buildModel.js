@@ -421,45 +421,19 @@
     }
 
     function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH, $translate, $timeout) {
-
+        var doFilterTimer;
         var self = this;
 
         self.buildSections = [];
-        self.modelTitle = ''; //顯示模型邏輯詞區的title
         self.datasource = [];
         self.dropdownAutoSize = false;
         self.filterModelGroup = filterModelGroup;
-        self.gridOptions = {
-            columnDefs: [
-                {
-                    displayName: '{{"datasourceName"|translate}}',
-                    field: 'datasourceName',
-                    headerCellFilter: 'translate',
-
-                },
-                {
-                    displayName: '{{"serialNumber"|translate}}',
-                    headerCellFilter: 'translate',
-                    field: 'serialNumber',
-                },
-                {
-                    displayName: '{{"matchedKeywords"|translate}}',
-                    headerCellFilter: 'translate',
-                    field: 'matchedKeywords',
-                },
-                {
-                    displayName: '{{"advanceOperation"|translate}}',
-                    headerCellFilter: 'translate',
-                    field: 'advanceOperation',
-                    cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio(row.entity)">{{"playback"|translate}}</a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail()">{{"lookOver"|translate}}</a></div>'
-                }
-            ],
-            data: []
-        };
+        self.gridData = [];
         self.isShowModelDetail = false;
         self.modelKeyword = '';
         self.models = [];
-        $scope.playAudio = playAudio;
+        self.modelTitle = ''; //顯示模型邏輯詞區的title
+        self.playAudio = playAudio;
         self.previewCollection = [];
         self.queriesBinding = {
             search: {}
@@ -470,11 +444,12 @@
         }
 
         self.selectedItems = [];
-        $scope.showAudioDetail = showAudioDetail;
+        self.showAudioDetail = showAudioDetail;
         self.showModelDetail = showModelDetail;
 
 
         buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);
+
         function filterModelGroup(queriesBinding) {
             buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 self.models = items;
@@ -482,10 +457,9 @@
         }
 
         function playAudio(entity) {
-            console.log(entity);
             var modalInstance = $modal.open({
                 backdropClass: 'modal-backdrop',
-                controller: ['audioHref', 'vttHref','highlightKeywords', playVideoController],
+                controller: ['audioHref', 'vttHref', 'highlightKeywords', playVideoController],
                 controllerAs: 'playAudioCtrl',
                 size: 'lg',
                 template: '<play-audio-file audio-href="playAudioCtrl.audioHref" vtt-href=" playAudioCtrl.vttHref" player="playAudioCtrl.player" keywords="playAudioCtrl.keywords"></play-audio-file>',
@@ -528,26 +502,24 @@
             })
         }
         function showModelDetail(entity) {
+            if (doFilterTimer) $timeout.cancel(doFilterTimer);
+            doFilterTimer = $timeout(function () {
+                if (self.buildSections.length > 0) self.buildSections.length = 0;
+                if (self.gridData.length > 0) self.gridData.length = 0;
+                buildModelService.setTemporary(entity.href, null, self.buildSections, null, null, function (previews) {
+                    self.previewCollection = previews;
+                    self.isShowModelDetail = true;
+                    self.modelTitle = entity.title;
+                    angular.forEach(self.previewCollection, function (preview) {
+                        self.gridData.push(
+                            { 'datasourceName': '123', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
+                            );
+                    })
+                })
+            }, 300)
 
 
 
-            if (self.buildSections.length > 0) self.buildSections.length = 0;
-            if (self.gridOptions.data.length > 0) self.gridOptions.data.length = 0;
-            buildModelService.setTemporary(entity.href, null, self.buildSections, null, null, self.previewCollection)
-            console.log(self.previewCollection)
-            self.isShowModelDetail = true;
-            self.modelTitle = entity.title;
-
-            angular.forEach(self.previewCollection, function (preview) {
-                console.log(preview);
-                self.gridOptions.data.push(
-
-                    { 'datasourceName': '123', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
-                    );
-            })
-            //         self.gridOptions.data.push(
-            //                 { 'datasourceName': '123', 'matchedKeywords': self.previewCollection.keywords }
-            //                 );
         }
 
         ////////////////////不綁定區//////////////

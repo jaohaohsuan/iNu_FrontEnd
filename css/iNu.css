@@ -418,6 +418,7 @@ span[title="R1"] {
 
 
 
+
 .vtt-highlight {
     color: #ff0000;
 }
@@ -425,7 +426,7 @@ span[title="R1"] {
 [id^='video-keywords'] {
     cursor:pointer;
     position: relative;
-    display: inline-block;
+    display: block;
     width: auto;
 }
 

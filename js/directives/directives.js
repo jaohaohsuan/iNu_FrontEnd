@@ -170,7 +170,62 @@
             }
         };
     }
+    function matchedReviewGrid() {
+        var directive = {
+            restrict: 'E',
+            scope: {
+                datasource: '=',
+                playAudio: '=',
+                showAudioDetail: '='
+            },
+            template: '<div ui-grid="matchedReviewGridCtrl.gridOptions"  ui-grid-auto-resize class="matched-review-grid"></div>',
+            controller: ['$scope', matchedReviewGridController],
+            controllerAs: 'matchedReviewGridCtrl',
+            bindToController: true
 
+        }
+        function matchedReviewGridController($scope) {
+            var self = this;
+            self.gridOptions = {
+                columnDefs: [
+                    {
+                        displayName: '{{"datasourceName"|translate}}',
+                        field: 'datasourceName',
+                        headerCellFilter: 'translate',
+
+                    },
+                    {
+                        displayName: '{{"serialNumber"|translate}}',
+                        headerCellFilter: 'translate',
+                        field: 'serialNumber',
+                    },
+                    {
+                        displayName: '{{"matchedKeywords"|translate}}',
+                        headerCellFilter: 'translate',
+                        field: 'matchedKeywords',
+                    },
+                    {
+                        displayName: '{{"advanceOperation"|translate}}',
+                        headerCellFilter: 'translate',
+                        field: 'advanceOperation',
+                        cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio(row.entity)">{{"playback"|translate}}</a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail(row.entity)">{{"lookOver"|translate}}</a></div>'
+                    }
+                ],
+                data: self.datasource
+            };
+            $scope.playAudio = playAudio;
+            $scope.showAudioDetail = showAudioDetail;
+
+            function playAudio(entity) {
+                if (self.playAudio) self.playAudio(entity);
+            }
+
+            function showAudioDetail(entity) {
+                if (self.showAudioDetail) self.showAudioDetail(entity);
+            }
+        }
+        return directive
+    }
     function modelFilter() {//需修改
         var directive = {
             restrict: 'E',
@@ -1219,5 +1274,6 @@
         .directive('wavesurferTimeLine', wavesurferTimeLine)
         .directive('ngRepeatEnd', ['$timeout', ngRepeatEnd])
         .directive('playAudioFile', playAudioFile)
+        .directive('matchedReviewGrid', matchedReviewGrid)
 
 })();

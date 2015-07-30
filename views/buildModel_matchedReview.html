@@ -4,13 +4,15 @@
             <div class="row">
                 <div class="col-md-3">
                     <div ng-show="matchedReviewCtrl.isShowModelDetail">
-                        <h3 class="text-center">{{matchedReviewCtrl.modelTitle}}-{{"logicWord"|translate}}
+                        <h3 class="text-center">
+                            {{matchedReviewCtrl.modelTitle}}-{{"logicWord"|translate}}
                             <span class="btn btn-default btn-outline fa fa-undo"
                                   ng-click="matchedReviewCtrl.isShowModelDetail=!matchedReviewCtrl.isShowModelDetail"></span>
                         </h3>
                         <build-section datasource="matchedReviewCtrl.buildSections" title-property="{{::'name'}}"
                                        items-property="{{::'items'}}"
-                                       item-editable-property="{{::detailCtrl.itemInfoEditable}}">
+                                       item-editable-property="{{::detailCtrl.itemInfoEditable}}"
+                                       do-repeat-complete="matchedReviewCtrl.doRepeatComplete">
                             <item-template>
                                 <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}">
                                     {{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}
@@ -20,13 +22,12 @@
                     </div>
                     <div ng-hide="matchedReviewCtrl.isShowModelDetail">
                         <form class="form-group">
-                            <model-filter
-                                    auto-size="matchedReviewCtrl.dropdownAutoSize"
-                                    datasource="matchedReviewCtrl.queriesBinding.search"
-                                    tag-display-property="{{::'name'}}"
-                                    query-placeholder="{{::'queryPlaceholder'|translate}}"
-                                    tags-placeholder="{{::'tagsPlaceholder'|translate}}"
-                                    do-filter="matchedReviewCtrl.filterModelGroup">
+                            <model-filter auto-size="matchedReviewCtrl.dropdownAutoSize"
+                                          datasource="matchedReviewCtrl.queriesBinding.search"
+                                          tag-display-property="{{::'name'}}"
+                                          query-placeholder="{{::'queryPlaceholder'|translate}}"
+                                          tags-placeholder="{{::'tagsPlaceholder'|translate}}"
+                                          do-filter="matchedReviewCtrl.filterModelGroup">
                             </model-filter>
                         </form>
                         <div ng-show="matchedReviewCtrl.models.length>0">
@@ -41,7 +42,7 @@
                     </div>
                 </div>
                 <div class="col-md-9">
-                    <div ui-grid="matchedReviewCtrl.gridOptions"  ui-grid-auto-resize class="matched-review-grid"></div>
+                               <matched-review-grid datasource="matchedReviewCtrl.gridData" play-audio="matchedReviewCtrl.playAudio" show-audio-detail="matchedReviewCtrl.showAudioDetail"></matched-review-grid>
                 </div>
             </div>
         </div>

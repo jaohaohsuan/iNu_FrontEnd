@@ -151,13 +151,12 @@
             })
 
         }
-        function setPreview(previewLink, previewList) {
-            if (previewList.length > 0) previewList.length = 0;
-            var preview = { 'href': '', 'highlight': [], 'keywords': [] }
-            jsonMethodService.get(previewLink.href).then(function (collectionjson) {
-                console.log(collectionjson);
+        function setPreview(previewLink, successCallBack, errorCallback) {
+            var previewList = [];
+            $timeout(jsonMethodService.get(previewLink.href).then(function (collectionjson) {
                 angular.forEach(collectionjson.collection.items, function (datas) {
-                     preview['href'] = datas.href;
+                    var preview = { 'href': '', 'highlight': [], 'keywords': [] }
+                    preview['href'] = datas.href;
                     angular.forEach(datas.data, function (data) {
                         var value = data.value;
                         var name = data.name;
@@ -174,14 +173,13 @@
                         }
                         previewMapping[name]();
                     })
-                    console.log(preview)
                     previewList.push(preview);
-                    preview = { 'href': '', 'highlight': [], 'keywords': [] }
                 })
-                
-
+                if (successCallBack) successCallBack(angular.copy(previewList));
             }, function (data) {
-            })
+                if (errorCallback) errorCallback(data);
+            }))
+
         }
         function setQueriesBinding(href, queriesCollection, queriesBinding, successCallback) {
             jsonMethodService.get(href).then(function (collectionjson) {
@@ -199,45 +197,48 @@
             })
         }
 
-        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding, previews) {
+        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding, previews, successCallBack) {
             jsonMethodService.get(href).then(function (collectionjson) {
                 var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
-                setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding, previews);//設定temporary結構
+                setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding, function (previewList) {
+                    if (successCallBack) successCallBack(previewList);
+                });//設定temporary結構
             })
         }
 
-        function setTemporary(href, temporaryCollection, sections, editCollection, editBinding, previewList, successCallback) {
-            $timeout(function () {
-                jsonMethodService.get(href).then(function (collectionjson) {
-                    if (temporaryCollection) temporaryCollection.collection = angular.copy(collectionjson.collection);
-                    angular.forEach(collectionjson.collection.items, function (item) {
-                        var linksObj = jsonParseService.getLinksObjFromLinks(item.links, 'rel'); //將items裡面的links用rel分類
-                        var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
-                        var tmpSections = linksObj['section'];//用來增加查詢條件的(match near named)
-                        var tmpPreviews = linksObj['preview'];
-                        if (sections) {
-                            angular.forEach(tmpSections, function (section) {
-                                sections.push(section);
-                            })
-                            setModelSections(sections);//設定查詢條件的綁定
-                        }
-                        if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
-                        if (editBinding && editBinding.hasOwnProperty('configuration')) {
-                            setConfigurationTemporary(href, item.data, editBinding.configuration);//設定配置區塊的資料綁定
-                        }
-                        if (previewList) {
-                            angular.forEach(tmpPreviews, function (tmpPreview) {
-                                setPreview(tmpPreview, previewList);
+        function setTemporary(href, temporaryCollection, sections, editCollection, editBinding, successCallBack) {
 
-                            })
+            jsonMethodService.get(href).then(function (collectionjson) {
+                if (temporaryCollection) temporaryCollection.collection = angular.copy(collectionjson.collection);
+                angular.forEach(collectionjson.collection.items, function (item) {
+                    var linksObj = jsonParseService.getLinksObjFromLinks(item.links, 'rel'); //將items裡面的links用rel分類
+                    var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
+                    var tmpSections = linksObj['section'];//用來增加查詢條件的(match near named)
+                    var tmpPreviews = linksObj['preview'];
+                    if (sections) {
+                        angular.forEach(tmpSections, function (section) {
+                            sections.push(section);
+                        })
+                        setModelSections(sections);//設定查詢條件的綁定
+                    }
+                    if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
+                    if (editBinding && editBinding.hasOwnProperty('configuration')) {
+                        setConfigurationTemporary(href, item.data, editBinding.configuration);//設定配置區塊的資料綁定
+                    }
+                    if (successCallBack) {
+                        angular.forEach(tmpPreviews, function (tmpPreview) {
+                            setPreview(tmpPreview, function (previewList) {
+                                successCallBack(angular.copy(previewList));
+                            });
 
-                        }
-                    })
-
-                }, function () {
+                        })
+                    }
                 })
+
+            }, function () {
             })
-          
+
+
         }
 
         function sectionItemFormat(datas, queryProperty, syntaxProperty, slopProperty, editableProperty) {
