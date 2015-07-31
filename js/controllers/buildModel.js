@@ -283,10 +283,8 @@
             }, function (sure) {
                 if (!sure) {
                     data.isOnline = !data.isOnline;
-                    console.log(data)
                 }
                 else {
-                    console.log(data)
                 }
             });
         }
@@ -404,7 +402,6 @@
                             tab.active = true;
                             previewService.previewList = previewList;
                             previewService.sections = sections;
-                            console.log(sections);
                         }
                     })
                 });
@@ -624,10 +621,8 @@
             }, function (sure) {
                 if (!sure) {
                     entity.enabled = !entity.enabled;
-                    console.log(entity)
                 }
                 else {
-                    console.log(entity)
                 }
             });
         }

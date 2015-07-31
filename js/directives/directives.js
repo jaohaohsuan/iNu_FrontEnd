@@ -244,10 +244,14 @@
                         var keywords = keyword.split(' ');
                         var keywordsJSON = { 'keyword': keywords[1], 'time': keywords[0] };
                         self.keywords.push(keywordsJSON);
+                  
+                    })
+                    //self.keywords.push({ 'keyword': 'Last2', 'time': '00:07:17.20' })
+                    //self.keywords.push({ 'keyword': 'Last', 'time': '00:07:18.20' })
+                    self.keywords.sort(function (a, b) { //依時間排序關鍵字
+                        return ((a.time < b.time) ? -1 : (a.time > b.time) ? 1 : 0);
                     })
 
-                    self.keywords.push({ 'keyword': 'Last2', 'time': '00:07:17.20' })
-                    self.keywords.push({ 'keyword': 'Last', 'time': '00:07:18.20' })
                     self.vttHref = vttHref;
                     modalInstance.result.then('', modalClosing); //當modal被關掉時
                     function modalClosing() { //modal關閉後清空Wavesurfer
@@ -548,7 +552,6 @@
 
             function goForward() {
                 self.player.skipForward();
-                console.log(self.player.getCurrentTime())
                 //audio.currentTime = self.player.getCurrentTime();
                 if (self.player.getCurrentTime() === self.player.getDuration() || self.player.getCurrentTime() === 0) {
                     if (self.player.isPlaying()) {
@@ -759,7 +762,6 @@
             function onFinish() {
                 self.playing = false;
                 self.player.stop();
-                console.log(self.player.getCurrentTime())
                 markedhighlight(self.cues, self.player.getCurrentTime());
                 resetCueDivScrollTop();
                 $scope.$apply();
@@ -804,7 +806,6 @@
                     var currentSpan = $(videoKeywordDivName + i);//取得目前div內的span元素
                     var appendDiv = $(videoKeywordDivName + 0);//根據appendId取得div
                     var leftPosition = hmsfToSeconds(keyword.time) * self.perWidthSecond;//計算關鍵字起始位置
-
                     if (leftPosition + currentSpan.outerWidth() > self.player.drawer.width) { //當關鍵字超出音坡時 鎖在音波範圍內
                         leftPosition -= currentSpan.outerWidth()
                         overWaveKeywordSpan.push(currentSpan); //紀錄超出音波的關鍵字
@@ -824,8 +825,6 @@
                     lastPosition = leftPosition + currentSpan.outerWidth()
                     //if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                 }
-                console.log(overWaveKeywordSpan)
-                console.log(inWaveKeywordSpan)
                 if (overWaveKeywordSpan.length > 0) {
                     for (var j = overWaveKeywordSpan.length - 1; j >= 0; j--) {
                         if (j - 1 >= 0) {
@@ -841,7 +840,6 @@
                     for (var k = inWaveKeywordSpan.length - 1; k >= 0; k--) {
                         var inWaveLeftPosition = $(inWaveKeywordSpan[k]).position().left + $(inWaveKeywordSpan[k]).outerWidth();
                         var lastOutWaveKeywordSpanPosition = $(overWaveKeywordSpan[0]).position().left;
-                  
                         if (inWaveLeftPosition > lastOutWaveKeywordSpanPosition) {
                             $(inWaveKeywordSpan[k]).css({ left: $(overWaveKeywordSpan[0]).position().left - $(overWaveKeywordSpan[0]).outerWidth() +2 });
                         }
