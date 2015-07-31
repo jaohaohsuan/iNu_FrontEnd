@@ -15,7 +15,7 @@
         self.tabIndex = 0;
         self.tabs = [ //頁籤標題
             { title: 'createModel', active: true },
-            { title: 'matchedReview', active: false, select: matchedReviewSelect },
+            { title: 'matchedReview', active: false },
             { title: 'modelManagement', active: false },
             { title: 'modules', active: false }
         ];
@@ -34,9 +34,7 @@
                 self.tabs[self.tabIndex].tabName = title;
             }
         }
-        function matchedReviewSelect() {
-            $scope.$broadcast('tabChanged');;
-        }
+   
         function removeTab(tab) {
             $timeout(function () { //刪除tab 不知為何需要用timeout才不會讓網址跑掉
                 self.pagingIndex--;
@@ -385,29 +383,32 @@
             self.showUndo = false;
         }
         function viewTemporaryAudio() {
-    
+            var sections=[];
             if ($scope.$parent.tab.tabName) {
-                buildModelService.setTemporary(self.currentUrl, null, null, null, null, function (previewList) {
+                buildModelService.setTemporary(self.currentUrl, null, sections, null, null, function (previewList, sections) {
                     $scope.$parent.tab.active = false;
                     $scope.buildModelCtrl.tabs.forEach(function (tab) {
                         if (tab.title === 'matchedReview') {
                             tab.active = true;
                             previewService.previewList = previewList;
+                            previewService.sections = sections;
+            
                         }
                     })
                 });
             } else {
-                buildModelService.setTemplate(templateUrl, null, null, null, null, function (previewList) {
+                buildModelService.setTemplate(templateUrl, null, sections, null, null, function (previewList, sections) {
                     $scope.$parent.tab.active = false;
                     $scope.buildModelCtrl.tabs.forEach(function (tab) {
                         if (tab.title === 'matchedReview') {
                             tab.active = true;
                             previewService.previewList = previewList;
+                            previewService.sections = sections;
+                            console.log(sections);
                         }
                     })
                 });
-            }
-            ;
+            };
         }
         //////////////////不綁定區//////////////////
         function destroyListener(event) {
@@ -480,7 +481,7 @@
 
 
         buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);
-        $scope.$on('tabChanged', checkTemporaryAudio)
+        $scope.$on('tabClicked', checkTemporaryAudio)
 
 
         function filterModelGroup(queriesBinding) {
@@ -510,8 +511,10 @@
 
         ////////////////////不綁定區//////////////
         function checkTemporaryAudio() {
-            if (previewService.previewList) {
+            if (previewService.previewList && previewService.sections) {
                 setGridData(previewService.previewList);
+                self.buildSections = previewService.sections
+                self.isShowModelDetail = true;
             }
         }
         function setGridData(previews) {

@@ -201,8 +201,8 @@
         function setTemplate(href, temporaryCollection, sections, editCollection, editBinding,  successCallBack) {
             jsonMethodService.get(href).then(function (collectionjson) {
                 var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
-                setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding, function (previewList) {
-                    if (successCallBack) successCallBack(previewList);
+                setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding, function (previewList, sections) {
+                    if (successCallBack) successCallBack(previewList, sections);
                 });//設定temporary結構
             })
         }
@@ -227,9 +227,11 @@
                         setConfigurationTemporary(href, item.data, editBinding.configuration);//設定配置區塊的資料綁定
                     }
                     if (successCallBack) {
+                        var tmpPreviewList;
                         angular.forEach(tmpPreviews, function (tmpPreview) {
                             setPreview(tmpPreview, function (previewList) {
-                                successCallBack(angular.copy(previewList));
+                                console.log(sections)
+                                successCallBack(angular.copy(previewList),sections);
                             });
 
                         })

@@ -1,6 +1,6 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <tabset>
-        <tab class="animated fadeInUp" ng-repeat="tab in buildModelCtrl.tabs"  active="tab.active" ng-click="buildModelCtrl.tabClicked(tab)" select="tab.select()">
+        <tab class="animated fadeInUp" ng-repeat="tab in buildModelCtrl.tabs"  active="tab.active" select="buildModelCtrl.tabClicked(tab)">
            <tab-heading ng-switch on="tab.addable">
                <span ng-switch-default>
                    {{tab.title|translate}}
