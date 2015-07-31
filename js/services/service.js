@@ -304,7 +304,15 @@
 
     function previewService() {
         var self = this;
-      
+        self.setPreviewGridData = setPreviewGridData //設定匹配預覽要用的gridData
+        function setPreviewGridData(previewList, gridData) {
+            if (gridData.length > 0) gridData.length = 0;
+           angular.forEach(previewList, function (preview) {
+               gridData.push(
+                    { 'datasourceName': '123', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
+                    );
+           })
+        }
     }
     function templateLocation() {
         var self = this;

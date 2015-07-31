@@ -3,6 +3,7 @@
     <div class="col-md-4 col-xs-12  col-sm-12">
         <div class="ibox">
             <div class="ibox-title">
+
                 <h2>
                     {{"queryConditions"|translate}}
                     <span title="{{'undo'|translate}}"
@@ -10,7 +11,7 @@
                           ng-click="createModelCtrl.undo()"
                           ng-show="createModelCtrl.showUndo">
                     </span>
-                    <label class="pull-right btn btn-default" ng-click="createModelCtrl.viewTemporaryAudio()">{{'matchedReview'|translate}}</label>
+                    <label class="pull-right btn btn-default" ng-click="createModelCtrl.viewTemporaryAudio()">{{'matchedReviewTemplate'|translate}}</label>
                 </h2>
             </div>
             <div class="ibox-content">
@@ -27,7 +28,10 @@
                             {{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}
                         </div>
                     </item-template>
-                    <build-section>
+                </build-section>
+                <div ng-show="createModelCtrl.showPreview">
+                    <matched-review-grid datasource="createModelCtrl.previewData"></matched-review-grid>
+                </div>
             </div>
         </div>
     </div>

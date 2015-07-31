@@ -92,6 +92,7 @@
         self.isRounded = isRounded;
         self.modelInstanceSelected = modelInstanceSelected;
         self.nextToDo = nextToDo;
+        self.previewData = [];
         self.queriesCollection = {
             queries: []
         };
@@ -381,29 +382,15 @@
             self.showUndo = false;
         }
         function viewTemporaryAudio() {
-            var sections=[];
+            self.showPreview = true;
             if ($scope.$parent.tab.tabName) {
-                buildModelService.setTemporary(self.currentUrl, null, sections, null, null, function (previewList, sections) {
-                    $scope.$parent.tab.active = false;
-                    $scope.buildModelCtrl.tabs.forEach(function (tab) {
-                        if (tab.title === 'matchedReview') {
-                            tab.active = true;
-                            previewService.previewList = previewList;
-                            previewService.sections = sections;
-            
-                        }
-                    })
+                buildModelService.setTemporary(self.currentUrl, null, null, null, null, function (previewList, sections) {
+                        previewService.setPreviewGridData(previewList, self.previewData);
+          
                 });
             } else {
-                buildModelService.setTemplate(templateUrl, null, sections, null, null, function (previewList, sections) {
-                    $scope.$parent.tab.active = false;
-                    $scope.buildModelCtrl.tabs.forEach(function (tab) {
-                        if (tab.title === 'matchedReview') {
-                            tab.active = true;
-                            previewService.previewList = previewList;
-                            previewService.sections = sections;
-                        }
-                    })
+                buildModelService.setTemplate(templateUrl, null, null, null, null, function (previewList, sections) {
+                    previewService.setPreviewGridData(previewList, self.previewData);
                 });
             };
         }
@@ -417,15 +404,11 @@
                 self.editBinding.configuration.allTags = angular.copy(self.queriesBinding.search.tags);
                 if (!locationUrl)//location不存在代表為首頁template
                 {
-                    buildModelService.setTemplate(templateUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding, function (previewList) {
-                        previewService.previewList = previewList;
-                    });
+                    buildModelService.setTemplate(templateUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
 
                 } else {//設定Temporary
                     self.currentUrl = locationUrl;
-                    buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding, function (previewList) {
-                        previewService.previewList = previewList;
-                    });
+                    buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
 
                     self.isInstance = true;
 
@@ -478,7 +461,7 @@
 
 
         buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);
-        $scope.$on('tabClicked', checkTemporaryAudio)
+ 
 
 
         function filterModelGroup(queriesBinding) {
@@ -498,33 +481,15 @@
 
                     self.isShowModelDetail = true;
                     self.modelTitle = model.title;
-                    setGridData(previews)
+                    previewService.setPreviewGridData(previews, self.gridData);
                 })
             }, 300)
 
-
-
-        }
+         }
 
         ////////////////////不綁定區//////////////
-        function checkTemporaryAudio() {
-            if (previewService.previewList && previewService.sections) {
-                setGridData(previewService.previewList);
-                self.buildSections = previewService.sections
-                self.isShowModelDetail = true;
-                self.modelTitle = $translate.instant('editing');
-            }
-        }
-        function setGridData(previews) {
-            self.previewCollection = previews;
-            if (self.gridData.length > 0) self.gridData.length = 0;
-            angular.forEach(self.previewCollection, function (preview) {
-                self.gridData.push(
-                    { 'datasourceName': 'test', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
-                    );
-            })
-        }
-    }
+
+     }
 
     function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert, API_PATH) {
 
