@@ -515,6 +515,7 @@
                 setGridData(previewService.previewList);
                 self.buildSections = previewService.sections
                 self.isShowModelDetail = true;
+                self.modelTitle = $translate.instant('editing');
             }
         }
         function setGridData(previews) {

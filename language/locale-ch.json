@@ -27,6 +27,7 @@
   "dialogs": "全部",
   "dynamicModelAnalysis":"动态模型分析",
   "edit": "编辑",
+  "editing":"编辑中",
   "editingModel": "您正在編輯的模型是'{{modelName}}'",
   "editingTemplate": "您正在编辑的是样板",
   "eitherAccord": "提及任一关键词",

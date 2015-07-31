@@ -208,7 +208,6 @@
         }
 
         function setTemporary(href, temporaryCollection, sections, editCollection, editBinding, successCallBack) {
-
             jsonMethodService.get(href).then(function (collectionjson) {
                 if (temporaryCollection) temporaryCollection.collection = angular.copy(collectionjson.collection);
                 angular.forEach(collectionjson.collection.items, function (item) {
@@ -230,7 +229,6 @@
                         var tmpPreviewList;
                         angular.forEach(tmpPreviews, function (tmpPreview) {
                             setPreview(tmpPreview, function (previewList) {
-                                console.log(sections)
                                 successCallBack(angular.copy(previewList),sections);
                             });
 
