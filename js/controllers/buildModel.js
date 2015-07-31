@@ -1,8 +1,8 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', 'API_PATH','previewService', createModelController])
-        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', '$translate', '$timeout','previewService', matchedReviewedController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', 'API_PATH', 'previewService', createModelController])
+        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', '$translate', '$timeout', 'previewService', matchedReviewedController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', 'API_PATH', modelManagementController])
 
 
@@ -15,13 +15,12 @@
         self.tabIndex = 0;
         self.tabs = [ //頁籤標題
             { title: 'createModel', active: true },
-            { title: 'matchedReview' },
-            { title: 'modelManagement' },
-            { title: 'modules' }
+            { title: 'matchedReview', active: false, select: matchedReviewSelect },
+            { title: 'modelManagement', active: false },
+            { title: 'modules', active: false }
         ];
         self.tabClicked = tabClicked;
         $scope.$on('addTab', addTab);
-        $scope.$on('changeTabName', changeTabName);
 
         function addTab(event, tab) { //接收增加頁籤的廣播
             if (tab) {
@@ -35,7 +34,9 @@
                 self.tabs[self.tabIndex].tabName = title;
             }
         }
-
+        function matchedReviewSelect() {
+            $scope.$broadcast('tabChanged');;
+        }
         function removeTab(tab) {
             $timeout(function () { //刪除tab 不知為何需要用timeout才不會讓網址跑掉
                 self.pagingIndex--;
@@ -64,6 +65,7 @@
         self.addToSectionFromSyntax = addToSectionFromSyntax;
         self.addToSectionFromComponent = addToSectionFromComponent;
         self.autoTips = autoTips;
+        self.currentUrl = ''; //紀錄如果有新增tab後的url
         self.deleteModel = deleteModel;
         self.editBinding = {
             syntax: {
@@ -199,6 +201,7 @@
             var template = { template: angular.copy(self.editCollection[syntaxIdentity].template) };
             var occurrence = self.editBinding.syntax.occurrence;
             var successCallback = function () {
+
                 syntaxInputClear();
             }
             buildModelService.addToCurrentSection(href, template, self.sections, occurrence, successCallback);
@@ -382,9 +385,29 @@
             self.showUndo = false;
         }
         function viewTemporaryAudio() {
-            buildModelService.setTemplate(templateUrl, null, null, null, null, function (previewList) {
-                previewService.previewList = previewList;
-            });
+    
+            if ($scope.$parent.tab.tabName) {
+                buildModelService.setTemporary(self.currentUrl, null, null, null, null, function (previewList) {
+                    $scope.$parent.tab.active = false;
+                    $scope.buildModelCtrl.tabs.forEach(function (tab) {
+                        if (tab.title === 'matchedReview') {
+                            tab.active = true;
+                            previewService.previewList = previewList;
+                        }
+                    })
+                });
+            } else {
+                buildModelService.setTemplate(templateUrl, null, null, null, null, function (previewList) {
+                    $scope.$parent.tab.active = false;
+                    $scope.buildModelCtrl.tabs.forEach(function (tab) {
+                        if (tab.title === 'matchedReview') {
+                            tab.active = true;
+                            previewService.previewList = previewList;
+                        }
+                    })
+                });
+            }
+            ;
         }
         //////////////////不綁定區//////////////////
         function destroyListener(event) {
@@ -396,10 +419,15 @@
                 self.editBinding.configuration.allTags = angular.copy(self.queriesBinding.search.tags);
                 if (!locationUrl)//location不存在代表為首頁template
                 {
-                    buildModelService.setTemplate(templateUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
+                    buildModelService.setTemplate(templateUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding, function (previewList) {
+                        previewService.previewList = previewList;
+                    });
 
                 } else {//設定Temporary
-                    buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
+                    self.currentUrl = locationUrl;
+                    buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding, function (previewList) {
+                        previewService.previewList = previewList;
+                    });
 
                     self.isInstance = true;
 
@@ -452,6 +480,8 @@
 
 
         buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);
+        $scope.$on('tabChanged', checkTemporaryAudio)
+
 
         function filterModelGroup(queriesBinding) {
             buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
@@ -459,22 +489,18 @@
             })
         }
 
-    
-   
+
+
         function showModelDetail(model) {
             if (doFilterTimer) $timeout.cancel(doFilterTimer);
             doFilterTimer = $timeout(function () {
                 if (self.buildSections.length > 0) self.buildSections.length = 0;
-                if (self.gridData.length > 0) self.gridData.length = 0;
+
                 buildModelService.setTemporary(model.href, null, self.buildSections, null, null, function (previews) {
-                    self.previewCollection = previews;
+
                     self.isShowModelDetail = true;
                     self.modelTitle = model.title;
-                    angular.forEach(self.previewCollection, function (preview) {
-                        self.gridData.push(
-                            { 'datasourceName': model.title, 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
-                            );
-                    })
+                    setGridData(previews)
                 })
             }, 300)
 
@@ -483,6 +509,20 @@
         }
 
         ////////////////////不綁定區//////////////
+        function checkTemporaryAudio() {
+            if (previewService.previewList) {
+                setGridData(previewService.previewList);
+            }
+        }
+        function setGridData(previews) {
+            self.previewCollection = previews;
+            if (self.gridData.length > 0) self.gridData.length = 0;
+            angular.forEach(self.previewCollection, function (preview) {
+                self.gridData.push(
+                    { 'datasourceName': 'test', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
+                    );
+            })
+        }
     }
 
     function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert, API_PATH) {
@@ -603,8 +643,7 @@
             if (self.gridOptions.data) self.gridOptions.data.length = 0;
             buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 angular.forEach(items, function (item) {
-                    console.log(item)
-                    var data = setGridData(item);
+                   var data = setGridData(item);
                     self.gridOptions.data.push(data);
                 })
             })
