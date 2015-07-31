@@ -19,9 +19,9 @@
             { title: 'modelManagement', active: false },
             { title: 'modules', active: false }
         ];
-        self.tabClicked = tabClicked;
+        self.tabChanged = tabChanged;
         $scope.$on('addTab', addTab);
-
+        $scope.$on('changeTabName', changeTabName);
         function addTab(event, tab) { //接收增加頁籤的廣播
             if (tab) {
                 self.tabs.splice(++self.pagingIndex, 0, tab);
@@ -46,7 +46,7 @@
             }, 0);
         }
 
-        function tabClicked(tab) {
+        function tabChanged(tab) {
             var index = self.tabs.indexOf(tab);
             self.tabIndex = index;
             $scope.$broadcast('tabClicked');
@@ -476,9 +476,7 @@
             if (doFilterTimer) $timeout.cancel(doFilterTimer);
             doFilterTimer = $timeout(function () {
                 if (self.buildSections.length > 0) self.buildSections.length = 0;
-
-                buildModelService.setTemporary(model.href, null, self.buildSections, null, null, function (previews) {
-
+                buildModelService.setTemporary(model.href, null, self.buildSections, null, null, function (previews) { //取得邏輯詞組與preview
                     self.isShowModelDetail = true;
                     self.modelTitle = model.title;
                     previewService.setPreviewGridData(previews, self.gridData);
