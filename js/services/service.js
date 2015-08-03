@@ -225,7 +225,7 @@
                     if (editBinding && editBinding.hasOwnProperty('configuration')) {
                         setConfigurationTemporary(href, item.data, editBinding.configuration);//設定配置區塊的資料綁定
                     }
-                    if (successCallBack) {
+                    if (successCallBack) { //用Callback傳出priview內容
                         var tmpPreviewList;
                         angular.forEach(tmpPreviews, function (tmpPreview) {
                             setPreview(tmpPreview, function (previewList) {
@@ -308,7 +308,7 @@
         function setPreviewGridData(previewList, gridData) {
             if (gridData.length > 0) gridData.length = 0;
            angular.forEach(previewList, function (preview) {
-               gridData.push(
+               gridData.push( 
                     { 'datasourceName': '123', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
                     );
            })

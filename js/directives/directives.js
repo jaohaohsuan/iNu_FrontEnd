@@ -245,7 +245,7 @@
                         var keywords = keyword.split(' ');
                         var keywordsJSON = { 'keyword': keywords[1], 'time': keywords[0] };
                         self.keywords.push(keywordsJSON);
-                  
+
                     })
                     //self.keywords.push({ 'keyword': 'Last2', 'time': '00:07:17.20' })
                     //self.keywords.push({ 'keyword': 'Last', 'time': '00:07:18.20' })
@@ -817,11 +817,6 @@
                     } else {
                         inWaveKeywordSpan.push(currentSpan);
                     }
-
-
-
-                    //childSpan.appendTo(appendDiv);//將子元素移動到appendDiv
-                    //appendId++;
                     currentSpan.css({ left: leftPosition });//設定正確位置
                     lastPosition = leftPosition + currentSpan.outerWidth()
                     //if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
@@ -837,12 +832,12 @@
 
                         }
                     }
-                    var inWaveLastPosition =$(inWaveKeywordSpan[inWaveKeywordSpan.length-1]).position().left;
+                    var inWaveLastPosition = $(inWaveKeywordSpan[inWaveKeywordSpan.length - 1]).position().left;
                     for (var k = inWaveKeywordSpan.length - 1; k >= 0; k--) {
                         var inWaveLeftPosition = $(inWaveKeywordSpan[k]).position().left + $(inWaveKeywordSpan[k]).outerWidth();
                         var lastOutWaveKeywordSpanPosition = $(overWaveKeywordSpan[0]).position().left;
                         if (inWaveLeftPosition > lastOutWaveKeywordSpanPosition) {
-                            $(inWaveKeywordSpan[k]).css({ left: $(overWaveKeywordSpan[0]).position().left - $(overWaveKeywordSpan[0]).outerWidth() +2 });
+                            $(inWaveKeywordSpan[k]).css({ left: $(overWaveKeywordSpan[0]).position().left - $(overWaveKeywordSpan[0]).outerWidth() + 2 });
                         }
                         inWaveLastPosition = $(overWaveKeywordSpan[0]).position().left;
                     }
@@ -1343,7 +1338,7 @@
         .directive('setClassWithWidth', setClassWithWidth)
         .directive('wavesurfer', wavesurfer) //音波圖
         .directive('wavesurferTimeLine', wavesurferTimeLine) //音波圖時間軸
-        .directive('ngRepeatEnd', ['$timeout', ngRepeatEnd]) 
+        .directive('ngRepeatEnd', ['$timeout', ngRepeatEnd])
         .directive('playAudioFile', playAudioFile) //播放音檔內容
         .directive('matchedReviewGrid', matchedReviewGrid) //瀏覽音檔Grid
 
