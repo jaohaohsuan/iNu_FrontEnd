@@ -171,8 +171,8 @@ wavesurfer {
     height: 30px;
     padding-top: 1px;
     padding-bottom: 2px;
-    margin-top: -15px;
-    margin-left: 10px;
+    margin-top: 10px;
+    margin-left: 145px;
     float: none;
 }
 
@@ -187,9 +187,9 @@ wavesurfer {
 }
 
 .matched-view-advance-operation-div > a {
-    margin-left: 5px;
+    margin-left: 20%;
     margin-top: 8px;
-    font-size: 14px;
+    font-size: 20px;
 }
 
 .matched-review-grid {

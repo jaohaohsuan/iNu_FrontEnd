@@ -179,12 +179,12 @@
                 showAudioDetail: '='
             },
             template: '<div ui-grid="matchedReviewGridCtrl.gridOptions"  ui-grid-auto-resize class="matched-review-grid"></div>',
-            controller: ['$scope', '$modal', matchedReviewGridController],
+            controller: ['$scope', '$modal', '$translate', matchedReviewGridController],
             controllerAs: 'matchedReviewGridCtrl',
             bindToController: true
 
         }
-        function matchedReviewGridController($scope, $modal) {
+        function matchedReviewGridController($scope, $modal, $translate) {
             var self = this;
             self.gridOptions = {
                 columnDefs: [
@@ -203,18 +203,22 @@
                         displayName: '{{"matchedKeywords"|translate}}',
                         headerCellFilter: 'translate',
                         field: 'matchedKeywords',
+                        minWidth: 120
                     },
                     {
                         displayName: '{{"advanceOperation"|translate}}',
                         headerCellFilter: 'translate',
                         field: 'advanceOperation',
-                        cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio(row.entity)">{{"playback"|translate}}</a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail(row.entity)">{{"lookOver"|translate}}</a></div>',
-                        minWidth: 120
+                        cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio(row.entity)" title="{{grid.appScope.playbackTitle}}"></a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail(row.entity)" title="{{grid.appScope.playbackTitle}}"></a></div>',
+                        maxWidth: 120
+
                     }
                 ],
                 data: self.datasource
             };
+            $scope.lookOverTitle = $translate.instant("lookOver")
             $scope.playAudio = playAudio;
+            $scope.playbackTitle = $translate.instant("playback")
             $scope.showAudioDetail = showAudioDetail;
 
             function playAudio(entity) {
@@ -244,7 +248,7 @@
                     angular.forEach(highlightKeywords, function (keyword) {
                         var keywords = keyword.split(' ');
                         var timespan = keywords.shift();
-                        keywords.forEach(function(keyword){
+                        keywords.forEach(function (keyword) {
                             var keywordsJSON = { 'keyword': keyword, 'time': timespan };
                             self.keywords.push(keywordsJSON);
                         })
@@ -804,11 +808,18 @@
                 var lastPosition = 0;
                 var inWaveKeywordSpan = [];
                 var overWaveKeywordSpan = [];
+                var currentTime = 0;
+                var keywordReplaceCount = 0;
                 for (var i = 0 ; i < self.keywords.length; i++) {
                     var keyword = self.keywords[i];
                     var currentSpan = $(videoKeywordDivName + i);//取得目前div內的span元素
-                    var appendDiv = $(videoKeywordDivName + 0);//根據appendId取得div
+                    var appendDiv = $(videoKeywordDivName + (i - 1));//根據appendId取得div
                     var leftPosition = hmsfToSeconds(keyword.time) * self.perWidthSecond;//計算關鍵字起始位置
+                    //if (hmsfToSeconds(keyword.time) === currentTime) {
+                    //    keywordReplaceCount++;
+                    //    currentSpan.css({ top: currentSpan.outerHeight() * keywordReplaceCount});//設定正確位置
+                    //    currentSpan.css({ left: leftPosition });//設定正確位置
+                    //} else {
                     if (leftPosition + currentSpan.outerWidth() > self.player.drawer.width) { //當關鍵字超出音坡時 鎖在音波範圍內
                         leftPosition -= currentSpan.outerWidth()
                         overWaveKeywordSpan.push(currentSpan); //紀錄超出音波的關鍵字
@@ -820,7 +831,10 @@
                         inWaveKeywordSpan.push(currentSpan);
                     }
                     currentSpan.css({ left: leftPosition });//設定正確位置
+                    //}
+
                     lastPosition = leftPosition + currentSpan.outerWidth()
+                    currentTime = hmsfToSeconds(keyword.time);
                     //if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                 }
                 if (overWaveKeywordSpan.length > 0) {
