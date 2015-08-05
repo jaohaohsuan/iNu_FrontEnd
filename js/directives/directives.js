@@ -243,9 +243,11 @@
                     self.keywords = []; //改成由API取得
                     angular.forEach(highlightKeywords, function (keyword) {
                         var keywords = keyword.split(' ');
-                        var keywordsJSON = { 'keyword': keywords[1], 'time': keywords[0] };
-                        self.keywords.push(keywordsJSON);
-
+                        var timespan = keywords.shift();
+                        keywords.forEach(function(keyword){
+                            var keywordsJSON = { 'keyword': keyword, 'time': timespan };
+                            self.keywords.push(keywordsJSON);
+                        })
                     })
                     //self.keywords.push({ 'keyword': 'Last2', 'time': '00:07:17.20' })
                     //self.keywords.push({ 'keyword': 'Last', 'time': '00:07:18.20' })
