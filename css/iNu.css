@@ -74,7 +74,12 @@ wavesurfer {
 .audio-contoller-div {
     display: inline-block;
 }
-
+.audio-contoller-div >button:first-child{
+    margin-left:6px;
+}
+.audio-contoller-div >button{
+    margin-left:3px;
+}
 .border-radius {
     border-radius: 6px;
 }
@@ -126,9 +131,7 @@ wavesurfer {
 
     .cues:hover {
         position: relative;
-        top: 2px;
-        left: 2px;
-        font-size: 160%;
+        background-color:lightgray
     }
 
 .cue-highlight {
