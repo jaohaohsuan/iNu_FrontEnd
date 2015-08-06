@@ -247,7 +247,10 @@
                   
                     self.keywords = []; //改成由API取得
                     angular.forEach(highlightKeywords, function (keyword) {
-                        var keywords = keyword.split(' ');
+                        var keywords = keyword.split(/\s+/).reduce(function(p, c) {
+                            if (p.indexOf(c) < 0) p.push(c);
+                            return p;
+                        }, []);//去除重複
                         var timespan = keywords.shift();
                         keywords.forEach(function (keyword) {
                             var keywordsJSON = { 'keyword': keyword, 'time': timespan };
