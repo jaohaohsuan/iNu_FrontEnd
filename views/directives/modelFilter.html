@@ -2,9 +2,9 @@
 <span ng-class="{false:'model-filter-auto-size'}[modelFilterCtrl.autoSize]" class="btn-group" dropdown
       auto-close="outsideClick">
      <button ng-class="{false:'model-filter-auto-size'}[modelFilterCtrl.autoSize]"
-             class="btn btn-default dropdown-toggle model-filter-dropdown-multi-select" dropdown-toggle
+             class="btn btn-info dropdown-toggle model-filter-dropdown-multi-select" dropdown-toggle
              ng-disabled="disabled">
-         <label translate="{{modelFilterCtrl.selectedText}}"
+         <label class="model-filter-label" translate="{{modelFilterCtrl.selectedText}}"
                 translate-values="{selectedLength:'{{modelFilterCtrl.selectedItems.length}}'}"></label>
          <span class="fa fa-caret-down fa-lg"></span>
      </button>

@@ -242,7 +242,9 @@ wavesurfer {
 .model-filter-dropdown-multi-select {
     margin-right: 5px;
 }
-
+.model-filter-label{
+    font-weight:500;
+}
 .model-instance-changeable {
     padding: 5px;
     border-bottom: inset 2px #696969;
