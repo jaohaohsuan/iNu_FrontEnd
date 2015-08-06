@@ -1,21 +1,23 @@
 <div ng-class="buildSectionCtrl.setClass($index)" ng-repeat="section in buildSectionCtrl.datasource">
     <div class="panel-heading build-section-head">
-        <h3> {{section[buildSectionCtrl.titleProperty]}}
+        <h3>
+            {{section[buildSectionCtrl.titleProperty]}}
             <span ng-if="buildSectionCtrl.clear" class="btn clear-button  btn-sm pull-right"
-                  ng-click="buildSectionCtrl.clear(section,section)">{{buildSectionCtrl.clearAllText}}</span></h3>
+                  ng-click="buildSectionCtrl.clear(section,section)">{{buildSectionCtrl.clearAllText}}</span>
+        </h3>
     </div>
     <div nested-scroll class="panel-body build-section-body"
          ng-class="{true:'model-preview'}[section[buildSectionCtrl.itemsProperty].length>4]"
-            ng-show="section[buildSectionCtrl.itemsProperty].length>0">
-        <div
-                ng-repeat="item in section[buildSectionCtrl.itemsProperty]"
-                ng-class="buildSectionCtrl.deepFind(item,buildSectionCtrl.itemEditableProperty) == false?'btn btn-block animated fadeInRight btn-success btn-outline':'btn btn-primary btn-outline btn-block animated fadeInRight'"
-                ng-dblclick="buildSectionCtrl.itemDoubleClick(item)">
+         ng-show="section[buildSectionCtrl.itemsProperty].length>0">
+        <div ng-repeat="item in section[buildSectionCtrl.itemsProperty]"
+             ng-class="buildSectionCtrl.deepFind(item,buildSectionCtrl.itemEditableProperty) == false?'btn btn-block animated fadeInRight btn-success btn-outline section-content-div-words':'btn btn-primary btn-outline btn-block animated fadeInRight section-content-div-named'"
+             ng-dblclick="buildSectionCtrl.itemDoubleClick(item)">
             <!--瀏覽區塊-->
             <span ng-transclude inject></span>
             <span ng-if="buildSectionCtrl.clear" class="btn btn-danger btn-xs right"
-                  ng-click="buildSectionCtrl.clear(section,item)" ng-dblclick="$event.stopPropagation()"><i
-                    class="fa fa-close"></i></span>
+                  ng-click="buildSectionCtrl.clear(section,item)" ng-dblclick="$event.stopPropagation()">
+                <i class="fa fa-close"></i>
+            </span>
         </div>
     </div>
 </div>

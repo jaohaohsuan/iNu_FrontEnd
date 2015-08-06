@@ -102,14 +102,12 @@ wavesurfer {
 }
 
 .build-model-logic > div > .select-section .btn-success:hover, .build-model-logic .select-section > div > .btn-success.active {
-      background-color: rgb(20,132,198);
+    background-color: rgb(20,132,198);
     border-color: rgb(20,132,198);
 }
 
 .select-section > div > .btn-success {
- 
-
-     background-color: rgba(28,132,198,0.5);
+    background-color: rgba(28,132,198,0.5);
     border-color: rgba(28,132,198,0.7);
 }
 
@@ -413,6 +411,24 @@ wavesurfer {
     width: 90%;
 }
 
+.section-content-div-named {
+    cursor: default;
+}
+
+    .section-content-div-named:hover {
+        background: none;
+        color: #39BDA2 !important;
+    }
+
+.section-content-div-words {
+    cursor: default;
+}
+
+    .section-content-div-words:hover {
+        background: none;
+        color: #2E8ECA !important;
+    }
+
 .sweetAlert {
     top: 40% !important;
     left: 65% !important;
@@ -483,7 +499,8 @@ wavesurfer {
         margin-left: 4px;
         margin-right: 8px;
     }
-    #reuseModel >label{
-         display: block;
+
+#reuseModel > label {
+    display: block;
     margin-bottom: 4px;
-    }
+}
