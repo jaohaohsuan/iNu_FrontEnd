@@ -103,7 +103,10 @@
 
                 <hr />
                 <div class="row select-section">
-                    <button class="col-xs-3 btn btn-success btn-rounded  "
+                    <button class="col-xs-3 btn btn-rounded"
+                            ng-class="{'must':'btn-primary',
+                                       'must_not': 'btn-danger',
+                                       'should': 'btn-warning'}[createModelCtrl.editBinding.syntax.occurrence]"
                             ng-click="createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
                             ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">
                         <i set-class-with-width base-width="992" more-width-class="fa fa-arrow-left fa-lg"
@@ -153,7 +156,10 @@
                 </div>
                 <hr />
                 <div class="row  select-section">
-                    <button class="col-xs-3 btn btn-success  btn-rounded"
+                    <button class="col-xs-3 btn btn-rounded"
+                            ng-class="{'must':'btn-primary',
+                                       'must_not': 'btn-danger',
+                                       'should': 'btn-warning'}[createModelCtrl.editBinding.component.occurrence]"
                             ng-disabled="createModelCtrl.editBinding.component.selected.length <= 0"
                             ng-click="createModelCtrl.addToSectionFromComponent()">
                         <i set-class-with-width base-width="992" more-width-class="fa fa-arrow-left fa-lg"
