@@ -209,8 +209,8 @@
                         displayName: '{{"advanceOperation"|translate}}',
                         headerCellFilter: 'translate',
                         field: 'advanceOperation',
-                        cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio(row.entity)" title="{{grid.appScope.playbackTitle}}"></a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail(row.entity)" title="{{grid.appScope.playbackTitle}}"></a></div>',
-                        minWidth: 80
+                        cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio(row.entity)" title="{{grid.appScope.playbackTitle}}"></a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail(row.entity)" title="{{grid.appScope.lookOverTitle}}"></a></div>',
+                        minWidth: 60
 
                     }
                 ],
