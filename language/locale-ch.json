@@ -68,7 +68,7 @@
   "newModelsName": "请输入模型组名称",
   "must": "必须皆成立",
   "must_not": "不可成立",
-  "next": "接下来您可以将样板转存...",
+  "next": "接下来您可以转存...",
   "offline": "下线",
   "offlineModel": "下线此模型?",
   "online": "上线",

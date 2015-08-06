@@ -132,7 +132,7 @@
         <!--可復用的模型組件-->
         <div class="ibox">
             <div class="ibox-title ">
-                <h2>{{"addNestingModel"|translate}}<label class="pull-right btn btn-success" ng-click="createModelCtrl.addTab()">{{'add'|translate}}</label></h2>
+                <h2>{{"addNestingModel"|translate}}<label class="pull-right btn btn-success fa fa-plus" ng-click="createModelCtrl.addTab()"></label></h2>
             </div>
             <div class="ibox-content">
                 <form class="form-group">
@@ -144,14 +144,15 @@
                                   do-filter="createModelCtrl.filterModelGroup">
                     </model-filter>
                 </form>
-                <div nested-scroll class="btn-group btn-group-vertical btn-block "
+                <div id="reuseModel" nested-scroll class="btn-group btn-group-vertical btn-block checkbox "
                      ng-class="{true:'model-preview'}[createModelCtrl.editBinding.component.items.length>5]">
-                    <label class="btn btn-success btn-outline  animated fadeInLeft"
-                           ng-repeat="item in createModelCtrl.editBinding.component.items"
-                           ng-model="item.checked"
-                           ng-click="createModelCtrl.toggleSelection(createModelCtrl.editBinding.component.selected,item)"
-                           btn-checkbox>
-                        {{item.title}}
+                   <label class=" text-left animated fadeInLeft"   ng-repeat="item in createModelCtrl.editBinding.component.items">
+                     <input type="checkbox" 
+                            ng-model="item.checked"
+                            ng-checked="item.checked"
+                           ng-change="createModelCtrl.toggleSelection(createModelCtrl.editBinding.component.selected,item)"
+                           iCheck>
+                       <span> {{item.title}}</span>
                     </label>
                 </div>
                 <hr />

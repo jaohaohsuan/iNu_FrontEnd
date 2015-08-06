@@ -483,3 +483,7 @@ wavesurfer {
         margin-left: 4px;
         margin-right: 8px;
     }
+    #reuseModel >label{
+         display: block;
+    margin-bottom: 4px;
+    }
