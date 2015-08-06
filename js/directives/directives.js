@@ -210,7 +210,7 @@
                         headerCellFilter: 'translate',
                         field: 'advanceOperation',
                         cellTemplate: '<div class="matched-view-advance-operation-div"><a class="fa fa-music" ng-click="grid.appScope.playAudio(row.entity)" title="{{grid.appScope.playbackTitle}}"></a><a class="fa fa-file-text" ng-click="grid.appScope.showAudioDetail(row.entity)" title="{{grid.appScope.playbackTitle}}"></a></div>',
-                        maxWidth: 120
+                        minWidth: 80
 
                     }
                 ],
@@ -244,6 +244,7 @@
                 function playVideoController(audioHref, vttHref, highlightKeywords) {
                     var self = this;
                     self.audioHref = audioHref;
+                  
                     self.keywords = []; //改成由API取得
                     angular.forEach(highlightKeywords, function (keyword) {
                         var keywords = keyword.split(' ');
@@ -253,18 +254,19 @@
                             self.keywords.push(keywordsJSON);
                         })
                     })
+                  
                     //self.keywords.push({ 'keyword': 'Last2', 'time': '00:07:17.20' })
                     //self.keywords.push({ 'keyword': 'Last', 'time': '00:07:18.20' })
                     self.keywords.sort(function (a, b) { //依時間排序關鍵字
-                        return ((a.time < b.time) ? -1 : (a.time > b.time) ? 1 : 0);
+                       return ((a.time <= b.time) ? -1 : (a.time > b.time) ? 1 : 0);
                     })
-
                     self.vttHref = vttHref;
                     modalInstance.result.then('', modalClosing); //當modal被關掉時
                     function modalClosing() { //modal關閉後清空Wavesurfer
                         self.player.empty()
                     }
                 }
+             
             }
 
             function showAudioDetail(entity) {
@@ -378,6 +380,7 @@
             self.tagClicked = tagClicked;
             self.required = false;
             $scope.$on('$destroy', destroyListener);
+            console.log(self.datasource)
             function add(datasource) {
                 self.isDisabled = false;
                 if (self.addTags) self.addTags(function () {

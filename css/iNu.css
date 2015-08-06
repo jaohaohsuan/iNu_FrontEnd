@@ -74,12 +74,15 @@ wavesurfer {
 .audio-contoller-div {
     display: inline-block;
 }
-.audio-contoller-div >button:first-child{
-    margin-left:6px;
-}
-.audio-contoller-div >button{
-    margin-left:3px;
-}
+
+    .audio-contoller-div > button:first-child {
+        margin-left: 6px;
+    }
+
+    .audio-contoller-div > button {
+        margin-left: 3px;
+    }
+
 .border-radius {
     border-radius: 6px;
 }
@@ -131,7 +134,7 @@ wavesurfer {
 
     .cues:hover {
         position: relative;
-        background-color:lightgray
+        background-color: lightgray;
     }
 
 .cue-highlight {
@@ -145,9 +148,11 @@ wavesurfer {
 .customer0 {
     color: purple;
 }
-.coross-analysis-div{
-    width:98%;
+
+.coross-analysis-div {
+    width: 98%;
 }
+
 .dropdown-multi-select {
     height: 30px;
     top: -1px;
@@ -242,9 +247,11 @@ wavesurfer {
 .model-filter-dropdown-multi-select {
     margin-right: 5px;
 }
-.model-filter-label{
-    font-weight:500;
+
+.model-filter-label {
+    font-weight: 500;
 }
+
 .model-instance-changeable {
     padding: 5px;
     border-bottom: inset 2px #696969;
@@ -424,7 +431,7 @@ wavesurfer {
     position: absolute;
     margin-top: 3px;
     width: auto;
-      cursor: pointer;
+    cursor: pointer;
 }
 
 
@@ -453,3 +460,13 @@ wavesurfer {
     max-width: 100%;
     margin: auto;
 }
+
+#modelInstanceTags > label {
+    display: block;
+        margin-bottom:4px;
+}
+
+    #modelInstanceTags > label > span {
+        margin-left:4px;
+            margin-right:8px;
+    }
