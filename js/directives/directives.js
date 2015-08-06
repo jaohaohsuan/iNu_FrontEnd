@@ -463,12 +463,13 @@
                 size: '='
             },
             controller: numberPickerController,
-            template: '<div class="number-picker"><input type="text" size="{{size||2}}" ng-model="number" value="0"  class="number-input  text-center" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/><div class="number-arrow"><span><a href="javascript: void(0)" ng-click="up()" class="fa fa-caret-up fa-2x"></a></span><span><a href="javascript: void(0)" ng-click="down()" class="fa fa-caret-down fa-2x"></a></span></div></div>'
+            template: '<div class="number-picker"><input type="text" size="{{size||2}}" ng-model="number" ng-change="setInt(number)" value="0"  class="number-input  text-center" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/><div class="number-arrow"><span><a href="javascript: void(0)" ng-click="up()" class="fa fa-caret-up fa-2x"></a></span><span><a href="javascript: void(0)" ng-click="down()" class="fa fa-caret-down fa-2x"></a></span></div></div>'
 
         };
 
         function numberPickerController($scope, $element) {
             $scope.down = down;
+            $scope.setInt = setInt;
             $scope.up = up;
             $element.bind("mousewheel", function (event, delta) {
                 if (delta > 0) up();
@@ -479,7 +480,10 @@
             function down() {
                 if ($scope.number > 0) $scope.number--;
             }
-
+            function setInt(number) {
+                $scope.number = parseInt(number);
+                console.log($scope.number)
+            }
             function up() {
                 $scope.number++;
             }
