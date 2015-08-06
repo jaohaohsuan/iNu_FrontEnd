@@ -185,6 +185,7 @@
                     });
                     $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
                     templateLocation.path = inputValue; //設定URL Service的path變數
+             
                 });
 
         }

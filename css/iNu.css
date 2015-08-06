@@ -101,14 +101,22 @@ wavesurfer {
     margin-top: -15px;
 }
 
-.build-model-logic .select-section .btn-success:hover,.build-model-logic .select-section .btn-success.active {
-    background-color: rgba(28,132,190,0.6);
-    border-color: rgba(28,132,190,0.6);
+.build-model-logic > div > .select-section .btn-success:hover, .build-model-logic .select-section > div > .btn-success.active {
+      background-color: rgb(20,132,198);
+    border-color: rgb(20,132,198);
+}
+
+.select-section > div > .btn-success {
+ 
+
+     background-color: rgba(28,132,198,0.5);
+    border-color: rgba(28,132,198,0.7);
 }
 
 .checkOnline {
     position: relative;
     bottom: 10px;
+    `;
 }
 
 .clear-button {
