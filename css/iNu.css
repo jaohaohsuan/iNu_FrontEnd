@@ -101,6 +101,11 @@ wavesurfer {
     margin-top: -15px;
 }
 
+.build-model-logic .select-section .btn-success:hover,.build-model-logic .select-section .btn-success.active {
+    background-color: rgba(28,132,190,0.6);
+    border-color: rgba(28,132,190,0.6);
+}
+
 .checkOnline {
     position: relative;
     bottom: 10px;
@@ -463,10 +468,10 @@ wavesurfer {
 
 #modelInstanceTags > label {
     display: block;
-        margin-bottom:4px;
+    margin-bottom: 4px;
 }
 
     #modelInstanceTags > label > span {
-        margin-left:4px;
-            margin-right:8px;
+        margin-left: 4px;
+        margin-right: 8px;
     }

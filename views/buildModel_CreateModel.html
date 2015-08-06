@@ -102,7 +102,7 @@
                         ng-options="field as field|translate for field in  createModelCtrl.editBinding.syntax.fields"></select>
 
                 <hr />
-                <div class="row">
+                <div class="row select-section">
                     <button class="col-xs-3 btn btn-success btn-rounded  "
                             ng-click="createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
                             ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">
@@ -152,8 +152,8 @@
                     </label>
                 </div>
                 <hr />
-                <div class="row">
-                    <button class="col-xs-3 btn btn-success  btn-rounded "
+                <div class="row  select-section">
+                    <button class="col-xs-3 btn btn-success  btn-rounded"
                             ng-disabled="createModelCtrl.editBinding.component.selected.length <= 0"
                             ng-click="createModelCtrl.addToSectionFromComponent()">
                         <i set-class-with-width base-width="992" more-width-class="fa fa-arrow-left fa-lg"
