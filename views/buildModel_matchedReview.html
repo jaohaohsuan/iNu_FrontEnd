@@ -11,11 +11,11 @@
                         </h3>
                         <build-section datasource="matchedReviewCtrl.buildSections" title-property="{{::'name'}}"
                                        items-property="{{::'items'}}"
-                                       item-editable-property="{{::detailCtrl.itemInfoEditable}}"
+                                       item-editable-property="{{::'itemInfo.editable'}}"
                                        do-repeat-complete="matchedReviewCtrl.doRepeatComplete">
                             <item-template>
-                                <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}">
-                                    {{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}
+                                <div ng-class="{'agent*':'agent0','customer*':'customer0','dialogs':'dialogs'}[item.itemInfo.field.value]" title="{{item.itemInfo.field.display|translate}}:&nbsp;{{item.itemInfo.query.display}}&nbsp;{{item.itemInfo.syntax.display}}&nbsp;{{item.itemInfo.slop.display}}">
+                                    {{item.itemInfo.query.display}}&nbsp;{{item.itemInfo.syntax.display}}&nbsp;{{item.itemInfo.slop.display}}
                                 </div>
                             </item-template>
                         </build-section>

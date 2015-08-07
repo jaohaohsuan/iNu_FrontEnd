@@ -377,6 +377,19 @@
 
         function sectionsDblclick(item) {
             console.log(item)
+            self.editBinding.syntax.query = item.itemInfo.query.value.split(' ');
+            self.editBinding.syntax.field = item.itemInfo.field.value;
+            if (typeof item.itemInfo.syntax.value === 'boolean') {
+           
+                    self.editBinding.syntax.syntaxIdentity = 'near';
+                    self.editBinding.syntax.slop = item.itemInfo.slop.value;
+                    self.editBinding.syntax.operator = 'AND';
+                    self.editBinding.syntax.inOrder = item.itemInfo.syntax.value
+
+               
+            } else {
+                self.editBinding.syntax.operator = item.itemInfo.syntax.value;
+            }
         }
 
 

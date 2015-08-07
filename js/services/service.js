@@ -11,7 +11,7 @@
                     var location = response.headers('Location');
                     var item = {
                         href: location,
-                        itemInfo: sectionItemFormat(template.template.data, 'query', 'syntax', 'slop', 'editable','field')//格式化前端需顯示的文字
+                        itemInfo: sectionItemFormat(template.template.data, 'query', 'syntax', 'slop', 'editable', 'field')//格式化前端需顯示的文字
                     };
                     if (!currentSection.items) currentSection.items = [];
                     currentSection.items.push(item);//post成功後前端加入格式化後的item
@@ -146,7 +146,7 @@
                     section.items = collectionjson.collection.items;
                     section.name = $translate.instant(section.name);
                     angular.forEach(section.items, function (item) {
-                        item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable','field');//格式化成前端顯示文字
+                        item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable', 'field');//格式化成前端顯示文字
                     })
                 })
             })
@@ -154,7 +154,7 @@
         }
         function setPreview(previewLink, successCallBack, errorCallback) {
             var previewList = [];
-          jsonMethodService.get(previewLink.href).then(function (collectionjson) {
+            jsonMethodService.get(previewLink.href).then(function (collectionjson) {
                 angular.forEach(collectionjson.collection.items, function (datas) {
                     var preview = { 'href': '', 'highlight': [], 'keywords': [] }
                     preview['href'] = datas.href;
@@ -198,7 +198,7 @@
             })
         }
 
-        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding,  successCallBack) {
+        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding, successCallBack) {
             jsonMethodService.get(href).then(function (collectionjson) {
                 var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
                 setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding, function (previewList, sections) {
@@ -229,7 +229,7 @@
                         var tmpPreviewList;
                         angular.forEach(tmpPreviews, function (tmpPreview) {
                             setPreview(tmpPreview, function (previewList) {
-                                successCallBack(angular.copy(previewList),sections);
+                                successCallBack(angular.copy(previewList), sections);
                             });
 
                         })
@@ -242,7 +242,7 @@
 
         }
 
-        function sectionItemFormat(datas, queryProperty, syntaxProperty, slopProperty, editableProperty,fieldProperty) {
+        function sectionItemFormat(datas, queryProperty, syntaxProperty, slopProperty, editableProperty, fieldProperty) {
             var itemInfoStruct = {};
             itemInfoStruct[editableProperty] = true;
             datas.forEach(function (data) {
@@ -250,26 +250,28 @@
                 var name = data.name;
                 var mappingDefine = {
                     "query": function () {
-                        itemInfoStruct[queryProperty] = value
+                        itemInfoStruct[queryProperty] = { display: value, value: value }
                     },
                     "storedQueryTitle": function () {
-                        itemInfoStruct[queryProperty] = value;
+                        itemInfoStruct[queryProperty] = { display: value, value: value };
                         itemInfoStruct[editableProperty] = false;
                     },
                     "inOrder": function () {
                         var text = "";
-                        if (value) text = $translate.instant(name);
+                        if (value) {
+                            text = $translate.instant(name);
+                        }
                         text += $translate.instant("AND");
-                        itemInfoStruct[syntaxProperty] = text;
+                        itemInfoStruct[syntaxProperty] = {display:text,value:value};
                     },
                     "operator": function () {//AND OR
-                        itemInfoStruct[syntaxProperty] = $translate.instant(value);
+                        itemInfoStruct[syntaxProperty] ={display: $translate.instant(value),value:value};
                     },
                     "slop": function () {
-                        itemInfoStruct[slopProperty] = $translate.instant(slopProperty) + "(" + value + ")";
+                        itemInfoStruct[slopProperty] = { display: $translate.instant(slopProperty) + "(" + value + ")", value: value };
                     },
                     "field": function () {
-                        itemInfoStruct[fieldProperty] = value;
+                        itemInfoStruct[fieldProperty] = {display:value, value:value};
                     }
                 }
                 if (!mappingDefine.hasOwnProperty(name)) {
@@ -311,11 +313,11 @@
         self.setPreviewGridData = setPreviewGridData //設定匹配預覽要用的gridData
         function setPreviewGridData(previewList, gridData) {
             if (gridData.length > 0) gridData.length = 0;
-           angular.forEach(previewList, function (preview) {
-               gridData.push( 
-                    { 'datasourceName': '123', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
-                    );
-           })
+            angular.forEach(previewList, function (preview) {
+                gridData.push(
+                     { 'datasourceName': '123', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
+                     );
+            })
         }
     }
     function templateLocation() {
