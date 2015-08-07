@@ -383,7 +383,6 @@
             self.tagClicked = tagClicked;
             self.required = false;
             $scope.$on('$destroy', destroyListener);
-            console.log(self.datasource)
             function add(datasource) {
                 self.isDisabled = false;
                 if (self.addTags) self.addTags(function () {
@@ -482,7 +481,6 @@
             }
             function setInt(number) {
                 $scope.number = parseInt(number);
-                console.log($scope.number)
             }
             function up() {
                 $scope.number++;

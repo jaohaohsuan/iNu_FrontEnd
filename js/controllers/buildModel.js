@@ -406,7 +406,6 @@
                 if (!locationUrl)//location不存在代表為首頁template
                 {
                     buildModelService.setTemplate(templateUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
-
                 } else {//設定Temporary
                     self.currentUrl = locationUrl;
                     buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);

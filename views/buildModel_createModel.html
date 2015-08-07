@@ -3,7 +3,7 @@
     <div class="col-md-4 col-xs-12  col-sm-12">
         <div class="ibox">
             <div class="ibox-title">
- 
+
                 <h2>
                     {{"queryConditions"|translate}}
                     <span title="{{'undo'|translate}}"
@@ -103,30 +103,17 @@
 
                 <hr />
                 <div class="row select-section">
-                    <button class="col-xs-3 btn btn-rounded"
-                            ng-class="{'must':'btn-primary',
-                                       'must_not': 'btn-danger',
-                                       'should': 'btn-warning'}[createModelCtrl.editBinding.syntax.occurrence]"
-                            ng-click="createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
-                            ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">
-                        <i set-class-with-width base-width="992" more-width-class="fa fa-arrow-left fa-lg"
-                           less-width-class="fa fa-arrow-up fa-lg"></i>{{"join"|translate}}
-                    </button>
-                    <div class="pull-right" ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
-                        <label class="col-xs-4 section-button  btn btn-success "
+                    <div class="pull-left" ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
+                        <label class="col-xs-4 section-button  btn btn-primary "
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.editBinding.syntax.occurrence"
-                               btn-radio="'must'">{{"must"|translate}}</label>
-                        <label class="col-xs-4  btn btn-success "
-                               ng-model="createModelCtrl.editBinding.syntax.occurrence"
-                               btn-radio="'must_not'">{{"must_not"|translate}}</label>
-                        <label class="col-xs-4  btn btn-success "
+                               ng-click="createModelCtrl.editBinding.syntax.occurrence='must';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)">{{"must"|translate}}</label>
+                        <label class="col-xs-4  btn btn-danger "
+                               ng-click="createModelCtrl.editBinding.syntax.occurrence='must_not';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)">{{"must_not"|translate}}</label>
+                        <label class="col-xs-4  btn btn-warning "
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.editBinding.syntax.occurrence"
-                               btn-radio="'should'">{{"should"|translate}}</label>
+                               ng-click="createModelCtrl.editBinding.syntax.occurrence='should';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)">{{"should"|translate}}</label>
                     </div>
                 </div>
-
             </div>
         </div>
         <!--可復用的模型組件-->
@@ -146,38 +133,27 @@
                 </form>
                 <div id="reuseModel" nested-scroll class="btn-group btn-group-vertical btn-block checkbox "
                      ng-class="{true:'model-preview'}[createModelCtrl.editBinding.component.items.length>5]">
-                   <label class=" text-left animated fadeInLeft"   ng-repeat="item in createModelCtrl.editBinding.component.items">
-                     <input type="checkbox" 
-                            ng-model="item.checked"
-                            ng-checked="item.checked"
-                           ng-change="createModelCtrl.toggleSelection(createModelCtrl.editBinding.component.selected,item)"
-                           iCheck>
-                       <span> {{item.title}}</span>
+                    <label class=" text-left animated fadeInLeft" ng-repeat="item in createModelCtrl.editBinding.component.items">
+                        <input type="checkbox"
+                               ng-model="item.checked"
+                               ng-checked="item.checked"
+                               ng-change="createModelCtrl.toggleSelection(createModelCtrl.editBinding.component.selected,item)"
+                               iCheck>
+                        <span> {{item.title}}</span>
                     </label>
                 </div>
                 <hr />
                 <div class="row  select-section">
-                    <button class="col-xs-3 btn btn-rounded"
-                            ng-class="{'must':'btn-primary',
-                                       'must_not': 'btn-danger',
-                                       'should': 'btn-warning'}[createModelCtrl.editBinding.component.occurrence]"
-                            ng-disabled="createModelCtrl.editBinding.component.selected.length <= 0"
-                            ng-click="createModelCtrl.addToSectionFromComponent()">
-                        <i set-class-with-width base-width="992" more-width-class="fa fa-arrow-left fa-lg"
-                           less-width-class="fa fa-arrow-up fa-lg"></i>{{"join"|translate}}
-                    </button>
-                    <div class="pull-right" ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
-                        <label class="col-xs-4 btn btn-success"
+
+                    <div class="pull-left" ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
+                        <label class="col-xs-4 btn btn-primary"
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.editBinding.component.occurrence"
-                               btn-radio="'must'">{{"must"|translate}}</label>
-                        <label class="col-xs-4  btn btn-success"
-                               ng-model="createModelCtrl.editBinding.component.occurrence"
-                               btn-radio="'must_not'">{{"must_not"|translate}}</label>
-                        <label class="col-xs-4 btn btn-success "
+                               ng-click="createModelCtrl.editBinding.component.occurrence='must';createModelCtrl.addToSectionFromComponent()">{{"must"|translate}}</label>
+                        <label class="col-xs-4  btn btn-danger"
+                               ng-click="createModelCtrl.editBinding.component.occurrence='must_not';createModelCtrl.addToSectionFromComponent()">{{"must_not"|translate}}</label>
+                        <label class="col-xs-4 btn btn-warning "
                                ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
-                               ng-model="createModelCtrl.editBinding.component.occurrence"
-                               btn-radio="'should'">{{"should"|translate}}</label>
+                               ng-click="createModelCtrl.editBinding.component.occurrence='should';createModelCtrl.addToSectionFromComponent()">{{"should"|translate}}</label>
                     </div>
                 </div>
             </div>
