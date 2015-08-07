@@ -24,7 +24,7 @@
                                item-editable-property="{{::'itemInfo.editable'}}"
                                item-dblclick="createModelCtrl.sectionsDblclick">
                     <item-template>
-                        <div title="{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}">
+                        <div ng-class="{'agent*':'agent0','customer*':'customer0','dialogs':'dialogs'}[item.itemInfo.field]" title="{{item.itemInfo.field|translate}}:&nbsp;{{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}">
                             {{item.itemInfo.query}}&nbsp;{{item.itemInfo.syntax}}&nbsp;{{item.itemInfo.slop}}
                         </div>
                     </item-template>
@@ -103,7 +103,9 @@
 
                 <hr />
                 <div class="row select-section">
-                    <div class="pull-left">
+                    <span class="pull-left" set-class-with-width base-width="992" more-width-class="fa fa-arrow-left fa-2x"
+                       less-width-class="fa fa-arrow-up fa-2x"></span>
+                    <div class="inline-block">
                         <label class="col-xs-4 section-button  btn btn-primary "
                                ng-click="createModelCtrl.editBinding.syntax.occurrence='must';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
                                ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">{{"must"|translate}}</label>
@@ -145,7 +147,9 @@
                 </div>
                 <hr />
                 <div class="row  select-section">
-                    <div class="pull-left">
+                    <span class="pull-left" set-class-with-width base-width="992" more-width-class="fa fa-arrow-left fa-2x"
+                          less-width-class="fa fa-arrow-up fa-2x"></span>
+                    <div class="inline-block">
                         <label class="col-xs-4 btn btn-primary"
                                ng-click="createModelCtrl.editBinding.component.occurrence='must';createModelCtrl.addToSectionFromComponent()"
                                ng-disabled="createModelCtrl.editBinding.component.selected.length<=0">{{"must"|translate}}</label>

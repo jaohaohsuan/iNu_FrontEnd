@@ -11,7 +11,7 @@
                     var location = response.headers('Location');
                     var item = {
                         href: location,
-                        itemInfo: sectionItemFormat(template.template.data, 'query', 'syntax', 'slop', 'editable')//格式化前端需顯示的文字
+                        itemInfo: sectionItemFormat(template.template.data, 'query', 'syntax', 'slop', 'editable','field')//格式化前端需顯示的文字
                     };
                     if (!currentSection.items) currentSection.items = [];
                     currentSection.items.push(item);//post成功後前端加入格式化後的item
@@ -146,7 +146,7 @@
                     section.items = collectionjson.collection.items;
                     section.name = $translate.instant(section.name);
                     angular.forEach(section.items, function (item) {
-                        item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable');//格式化成前端顯示文字
+                        item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable','field');//格式化成前端顯示文字
                     })
                 })
             })
@@ -242,7 +242,7 @@
 
         }
 
-        function sectionItemFormat(datas, queryProperty, syntaxProperty, slopProperty, editableProperty) {
+        function sectionItemFormat(datas, queryProperty, syntaxProperty, slopProperty, editableProperty,fieldProperty) {
             var itemInfoStruct = {};
             itemInfoStruct[editableProperty] = true;
             datas.forEach(function (data) {
@@ -267,6 +267,9 @@
                     },
                     "slop": function () {
                         itemInfoStruct[slopProperty] = $translate.instant(slopProperty) + "(" + value + ")";
+                    },
+                    "field": function () {
+                        itemInfoStruct[fieldProperty] = value;
                     }
                 }
                 if (!mappingDefine.hasOwnProperty(name)) {
@@ -274,6 +277,7 @@
                 }
                 mappingDefine[name]();
             })
+            console.log(itemInfoStruct)
             return itemInfoStruct;
         }
 

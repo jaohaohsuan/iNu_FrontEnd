@@ -34,7 +34,7 @@
                 self.tabs[self.tabIndex].tabName = title;
             }
         }
-   
+
         function removeTab(tab) {
             $timeout(function () { //刪除tab 不知為何需要用timeout才不會讓網址跑掉
                 self.pagingIndex--;
@@ -185,7 +185,7 @@
                     });
                     $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
                     templateLocation.path = inputValue; //設定URL Service的path變數
-             
+
                 });
 
         }
@@ -204,6 +204,7 @@
 
                 syntaxInputClear();
             }
+            console.log(template);
             buildModelService.addToCurrentSection(href, template, self.sections, occurrence, successCallback);
         }
 
@@ -375,7 +376,7 @@
         }
 
         function sectionsDblclick(item) {
-            alert('editable');
+            console.log(item)
         }
 
 
@@ -392,8 +393,8 @@
             self.showPreview = true;
             if ($scope.$parent.tab.tabName) {
                 buildModelService.setTemporary(self.currentUrl, null, null, null, null, function (previewList, sections) {
-                        previewService.setPreviewGridData(previewList, self.previewData);
-          
+                    previewService.setPreviewGridData(previewList, self.previewData);
+
                 });
             } else {
                 buildModelService.setTemplate(templateUrl, null, null, null, null, function (previewList, sections) {
@@ -467,7 +468,7 @@
 
 
         buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);
- 
+
 
 
         function filterModelGroup(queriesBinding) {
@@ -489,11 +490,11 @@
                 })
             }, 300)
 
-         }
+        }
 
         ////////////////////不綁定區//////////////
 
-     }
+    }
 
     function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert, API_PATH) {
 
@@ -611,7 +612,7 @@
             if (self.gridOptions.data) self.gridOptions.data.length = 0;
             buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
                 angular.forEach(items, function (item) {
-                   var data = setGridData(item);
+                    var data = setGridData(item);
                     self.gridOptions.data.push(data);
                 })
             })

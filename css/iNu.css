@@ -106,10 +106,7 @@ wavesurfer {
     border-color: rgb(20,132,198);
 }
 
-.select-section > div > .btn-success {
-    background-color: rgba(28,132,198,0.5);
-    border-color: rgba(28,132,198,0.7);
-}
+
 
 .checkOnline {
     position: relative;
@@ -157,13 +154,15 @@ wavesurfer {
 }
 
 .customer0 {
-    color: purple;
+    color: blue;
 }
 
 .coross-analysis-div {
     width: 98%;
 }
-
+.dialogs{
+    color:black;
+}
 .dropdown-multi-select {
     height: 30px;
     top: -1px;
@@ -428,7 +427,14 @@ wavesurfer {
         background: none;
         color: #2E8ECA !important;
     }
-
+.select-section > div  {
+   margin-left:20px;
+}
+.select-section > span{
+    color:darkgray;
+    position:relative;
+    top:-8px;
+}
 .sweetAlert {
     top: 40% !important;
     left: 65% !important;
