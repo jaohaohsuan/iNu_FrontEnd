@@ -221,7 +221,13 @@
                     var successCallback = function () {
                         component.checked = false;
                     }
-                    buildModelService.addToCurrentSection(href, template, self.sections, occurrence, successCallback);
+                    var errorCallBack = function (response) {
+                        swal(
+                                 { title: 'Can not add same component', type: 'error', showConfirmButton: true, confirmButtonColor: '#DD6B55', }
+                             );
+                        component.checked = false;
+                    }
+                    buildModelService.addToCurrentSection(href, template, self.sections, occurrence, successCallback, errorCallBack);
                 })
             })
 
