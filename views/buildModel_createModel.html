@@ -103,14 +103,12 @@
 
                 <hr />
                 <div class="row select-section">
-                    <div class="pull-left" ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
+                    <div class="pull-left">
                         <label class="col-xs-4 section-button  btn btn-primary "
-                               ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
                                ng-click="createModelCtrl.editBinding.syntax.occurrence='must';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)">{{"must"|translate}}</label>
                         <label class="col-xs-4  btn btn-danger "
                                ng-click="createModelCtrl.editBinding.syntax.occurrence='must_not';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)">{{"must_not"|translate}}</label>
                         <label class="col-xs-4  btn btn-warning "
-                               ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
                                ng-click="createModelCtrl.editBinding.syntax.occurrence='should';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)">{{"should"|translate}}</label>
                     </div>
                 </div>
@@ -145,14 +143,12 @@
                 <hr />
                 <div class="row  select-section">
 
-                    <div class="pull-left" ng-class="{false:'btn-group'}[createModelCtrl.isRounded()]">
+                    <div class="pull-left" >
                         <label class="col-xs-4 btn btn-primary"
-                               ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
                                ng-click="createModelCtrl.editBinding.component.occurrence='must';createModelCtrl.addToSectionFromComponent()">{{"must"|translate}}</label>
                         <label class="col-xs-4  btn btn-danger"
                                ng-click="createModelCtrl.editBinding.component.occurrence='must_not';createModelCtrl.addToSectionFromComponent()">{{"must_not"|translate}}</label>
                         <label class="col-xs-4 btn btn-warning "
-                               ng-class="{false:'btn-rounded'}[createModelCtrl.isRounded()]"
                                ng-click="createModelCtrl.editBinding.component.occurrence='should';createModelCtrl.addToSectionFromComponent()">{{"should"|translate}}</label>
                     </div>
                 </div>
