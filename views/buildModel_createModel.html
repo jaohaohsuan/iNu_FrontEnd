@@ -105,11 +105,14 @@
                 <div class="row select-section">
                     <div class="pull-left">
                         <label class="col-xs-4 section-button  btn btn-primary "
-                               ng-click="createModelCtrl.editBinding.syntax.occurrence='must';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)">{{"must"|translate}}</label>
+                               ng-click="createModelCtrl.editBinding.syntax.occurrence='must';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
+                               ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">{{"must"|translate}}</label>
                         <label class="col-xs-4  btn btn-danger "
-                               ng-click="createModelCtrl.editBinding.syntax.occurrence='must_not';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)">{{"must_not"|translate}}</label>
+                               ng-click="createModelCtrl.editBinding.syntax.occurrence='must_not';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
+                               ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">{{"must_not"|translate}}</label>
                         <label class="col-xs-4  btn btn-warning "
-                               ng-click="createModelCtrl.editBinding.syntax.occurrence='should';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)">{{"should"|translate}}</label>
+                               ng-click="createModelCtrl.editBinding.syntax.occurrence='should';createModelCtrl.addToSectionFromSyntax(createModelCtrl.editBinding.syntax.syntaxIdentity)"
+                               ng-disabled="createModelCtrl.editBinding.syntax.query.length<=0 || !createModelCtrl.editBinding.syntax.operator">{{"should"|translate}}</label>
                     </div>
                 </div>
             </div>
@@ -142,14 +145,16 @@
                 </div>
                 <hr />
                 <div class="row  select-section">
-
-                    <div class="pull-left" >
+                    <div class="pull-left">
                         <label class="col-xs-4 btn btn-primary"
-                               ng-click="createModelCtrl.editBinding.component.occurrence='must';createModelCtrl.addToSectionFromComponent()">{{"must"|translate}}</label>
+                               ng-click="createModelCtrl.editBinding.component.occurrence='must';createModelCtrl.addToSectionFromComponent()"
+                               ng-disabled="createModelCtrl.editBinding.component.selected.length<=0">{{"must"|translate}}</label>
                         <label class="col-xs-4  btn btn-danger"
-                               ng-click="createModelCtrl.editBinding.component.occurrence='must_not';createModelCtrl.addToSectionFromComponent()">{{"must_not"|translate}}</label>
+                               ng-click="createModelCtrl.editBinding.component.occurrence='must_not';createModelCtrl.addToSectionFromComponent()"
+                               ng-disabled="createModelCtrl.editBinding.component.selected.length<=0">{{"must_not"|translate}}</label>
                         <label class="col-xs-4 btn btn-warning "
-                               ng-click="createModelCtrl.editBinding.component.occurrence='should';createModelCtrl.addToSectionFromComponent()">{{"should"|translate}}</label>
+                               ng-click="createModelCtrl.editBinding.component.occurrence='should';createModelCtrl.addToSectionFromComponent()"
+                               ng-disabled="createModelCtrl.editBinding.component.selected.length<=0">{{"should"|translate}}</label>
                     </div>
                 </div>
             </div>
