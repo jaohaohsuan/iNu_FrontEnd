@@ -78,6 +78,7 @@
 
         function searchByQueries(templateCollection, queryBinding, rel, successCallback, errorCallback) {
             var queries = angular.copy(templateCollection.collection.queries);
+            queryBinding = angular.copy(queryBinding);
             if (queryBinding.tags) {
                 queryBinding.tags = tagsJoinBySelected(queryBinding.tags);
             }
