@@ -250,7 +250,7 @@
                             if (p.indexOf(c) < 0) p.push(c);
                             return p;
                         }, []);//去除重複
-                        var timespan = keywords.shift();
+                        var timespan = keywords.shift();//第一個項目為timespan
                         keywords.forEach(function (keyword) {
                             var keywordsJSON = { 'keyword': keyword, 'time': timespan };
                             self.keywords.push(keywordsJSON);
