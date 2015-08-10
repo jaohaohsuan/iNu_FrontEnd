@@ -11,7 +11,7 @@
          ng-show="section[buildSectionCtrl.itemsProperty].length>0">
         <div ng-repeat="item in section[buildSectionCtrl.itemsProperty]"
              ng-class="buildSectionCtrl.deepFind(item,buildSectionCtrl.itemEditableProperty) == false?'btn btn-block animated fadeInRight btn-success btn-outline section-content-div-words':'btn btn-primary btn-outline btn-block animated fadeInRight section-content-div-named'"
-             ng-dblclick="buildSectionCtrl.itemDoubleClick(item)">
+             ng-dblclick="buildSectionCtrl.itemDoubleClick(section,item)">
             <!--瀏覽區塊-->
             <span ng-transclude inject></span>
             <span ng-if="buildSectionCtrl.clear" class="btn btn-danger btn-xs right"

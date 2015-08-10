@@ -376,8 +376,7 @@
             })
         }
 
-        function sectionsDblclick(item) {
-            console.log(item)
+        function sectionsDblclick(section,item) {
             self.editBinding.syntax.query = item.itemInfo.query.value.split(' ');
             self.editBinding.syntax.field = item.itemInfo.field.value;
             if (typeof item.itemInfo.syntax.value === 'boolean') {
@@ -391,6 +390,8 @@
             } else {
                 self.editBinding.syntax.operator = item.itemInfo.syntax.value;
             }
+            var idx = section.items.indexOf(item);
+            section.items.splice(idx, 1);
         }
 
 

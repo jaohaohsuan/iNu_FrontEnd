@@ -33,11 +33,10 @@
                 return current;
             }
 
-            function itemDoubleClick(item) {
+            function itemDoubleClick(section,item) {
                 var editable = deepFind(item, self.itemEditableProperty);
-                if (editable === false) return;
-                if (!self.itemDblclick) return;
-                self.itemDblclick(item);
+                if (editable === false || !self.itemDblclick) return;
+                self.itemDblclick(section,item);
             }
 
             function setClass(index) {
