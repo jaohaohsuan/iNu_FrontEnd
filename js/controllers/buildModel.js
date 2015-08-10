@@ -390,8 +390,7 @@
             } else {
                 self.editBinding.syntax.operator = item.itemInfo.syntax.value;
             }
-            var idx = section.items.indexOf(item);
-            section.items.splice(idx, 1);
+            sectionsClear(section,item);
         }
 
 
