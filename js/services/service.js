@@ -4,6 +4,23 @@
         .service('previewService', previewService)
         .service('templateLocation', templateLocation)
     function buildModelService(jsonMethodService, jsonParseService, $translate, $timeout) {
+
+        function addNewComponent(templateCollection,title,successCallback,errorCallback){
+            templateCollection = angular.copy(templateCollection);
+            var href = templateCollection.collection.href;
+            var kvTemplate = jsonParseService.getObjectMappingNameToValueFromDatas(templateCollection.collection.template.data);
+            kvTemplate.title.value = title;
+            var template = {template: angular.copy(templateCollection.collection.template)};
+            jsonMethodService.post(href,template).then(
+                function(response){
+                    if (successCallback) successCallback(response.headers('Location'));
+                },
+                function(response){
+                    if (errorCallback) errorCallback(response);
+                }
+            )
+        }
+
         function addToCurrentSection(href, template, sections, occurrence, successCallback, errorCallback) {
             jsonMethodService.post(href, template).then(
                 function (response) {
@@ -59,13 +76,13 @@
             })
         }
 
-        function searchByQueries(queriesCollection, queryBinding, rel, successCallback, errorCallback) {
-            queryBinding = angular.copy(queryBinding);
+        function searchByQueries(templateCollection, queryBinding, rel, successCallback, errorCallback) {
+            var queries = angular.copy(templateCollection.collection.queries);
             if (queryBinding.tags) {
                 queryBinding.tags = tagsJoinBySelected(queryBinding.tags);
             }
             var searchHref = '';
-            queriesCollection.queries.some(function (query) {
+            queries.some(function (query) {
                 if (query.rel === rel) {//匹配到指定的rel進行搜尋的url參數設定
                     searchHref = query.href + '?';
                     angular.forEach(query.data, function (data) {
@@ -182,9 +199,9 @@
             })
 
         }
-        function setQueriesBinding(href, queriesCollection, queriesBinding, successCallback) {
+        function setQueriesBinding(href, templateCollection, queriesBinding, successCallback) {
             jsonMethodService.get(href).then(function (collectionjson) {
-                if (queriesCollection) queriesCollection.queries = angular.copy(collectionjson.collection.queries);
+                if (templateCollection) templateCollection.collection = angular.copy(collectionjson.collection);
                 angular.forEach(collectionjson.collection.queries, function (query) {
                     angular.forEach(query.data, function (data) {
                         query[data.name] = data.prompt;
@@ -298,6 +315,7 @@
         }
 
         return {
+            addNewComponent: addNewComponent,
             addToCurrentSection: addToCurrentSection,
             saveAs: saveAs,
             saveConfiguration: saveConfiguration,

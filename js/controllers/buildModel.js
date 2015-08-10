@@ -93,9 +93,6 @@
         self.modelInstanceSelected = modelInstanceSelected;
         self.nextToDo = nextToDo;
         self.previewData = [];
-        self.queriesCollection = {
-            queries: []
-        };
         self.queriesBinding = {
             search: {}
         };
@@ -116,6 +113,9 @@
         self.tabIndex = 0;
         self.temporaryCollection = {
             collection: {}
+        };
+        self.templateCollection = {
+           collection: {}
         };
         self.toggleSelection = toggleSelection;
         self.undo = undo;
@@ -183,11 +183,13 @@
                         type: 'success',
                         showConfirmButton: false
                     });
-                    $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
-                    templateLocation.path = inputValue; //設定URL Service的path變數
-
+                    buildModelService.addNewComponent(self.templateCollection,inputValue,function(location){//成功新增新組件
+                       $timeout(function(){
+                           $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
+                           templateLocation.path = location; //設定URL Service的path變數
+                       },1000)
+                    })
                 });
-
         }
 
         function addToSectionFromSyntax(syntaxIdentity) {
@@ -201,10 +203,8 @@
             var template = { template: angular.copy(self.editCollection[syntaxIdentity].template) };
             var occurrence = self.editBinding.syntax.occurrence;
             var successCallback = function () {
-
                 syntaxInputClear();
             }
-            console.log(template);
             buildModelService.addToCurrentSection(href, template, self.sections, occurrence, successCallback);
         }
 
@@ -224,7 +224,7 @@
                     }
                     var errorCallBack = function (response) {
                         swal(
-                                 { title: 'Can not add same component', type: 'error', showConfirmButton: true, confirmButtonColor: '#DD6B55', }
+                                 { title: 'Can not add same component', type: 'error', showConfirmButton: true, confirmButtonColor: '#DD6B55' }
                              );
                         component.checked = false;
                     }
@@ -299,7 +299,7 @@
         }
 
         function filterModelGroup(queriesBinding) {//需修改
-            buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
+            buildModelService.searchByQueries(self.templateCollection, queriesBinding, 'search', function (items) {
                 self.editBinding.component.items = items;
                 self.editBinding.component.selected = [];
             })
@@ -421,7 +421,7 @@
         }
 
         function initial(locationUrl, templateUrl) {
-            buildModelService.setQueriesBinding(templateUrl + '/search', self.queriesCollection, self.queriesBinding, function () {
+            buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding, function () {
                 self.editBinding.configuration.allTags = angular.copy(self.queriesBinding.search.tags);
                 if (!locationUrl)//location不存在代表為首頁template
                 {
@@ -429,11 +429,9 @@
                 } else {//設定Temporary
                     self.currentUrl = locationUrl;
                     buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
-
                     self.isInstance = true;
-
                 }
-                buildModelService.searchByQueries(self.queriesCollection, self.queriesBinding.search, 'search', function (items) {
+                buildModelService.searchByQueries(self.templateCollection, self.queriesBinding.search, 'search', function (items) {
                     self.editBinding.component.items = items;
                     self.editBinding.component.selected = [];
                 })
@@ -472,7 +470,7 @@
             search: {}
         }
 
-        self.queriesCollection = {
+        self.templateCollection = {
             queries: []
         }
 
@@ -480,12 +478,12 @@
         self.showModelDetail = showModelDetail;
 
 
-        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);
+        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);
 
 
 
         function filterModelGroup(queriesBinding) {
-            buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
+            buildModelService.searchByQueries(self.templateCollection, queriesBinding, 'search', function (items) {
                 self.models = items;
             })
         }
@@ -573,13 +571,13 @@
         self.queriesBinding = {
             search: {}
         }
-        self.queriesCollection = {
+        self.templateCollection = {
             queries: []
         }
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
         $scope.showModelDetail = showModelDetail;
-        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.queriesCollection, self.queriesBinding);//需修改
+        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);//需修改
 
 
         function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
@@ -623,7 +621,7 @@
 
         function filterModel(queriesBinding) {
             if (self.gridOptions.data) self.gridOptions.data.length = 0;
-            buildModelService.searchByQueries(self.queriesCollection, queriesBinding, 'search', function (items) {
+            buildModelService.searchByQueries(self.templateCollection, queriesBinding, 'search', function (items) {
                 angular.forEach(items, function (item) {
                     var data = setGridData(item);
                     self.gridOptions.data.push(data);
