@@ -259,6 +259,7 @@
         }
 
         function deleteModel() {
+            console.log('delete')
             SweetAlert.swal({
                 title: $translate.instant('sureDelete'), //讀取多語系key
                 type: 'warning',
