@@ -245,23 +245,34 @@
                     self.audioHref = audioHref;
                   
                     self.keywords = []; //改成由API取得
-                    angular.forEach(highlightKeywords, function (keyword) {
-                        var keywords = keyword.split(/\s+/).reduce(function(p, c) {
-                            if (p.indexOf(c) < 0) p.push(c);
-                            return p;
-                        }, []);//去除重複
-                        var timespan = keywords.shift();//第一個項目為timespan
-                        keywords.forEach(function (keyword) {
-                            var keywordsJSON = { 'keyword': keyword, 'time': timespan };
-                            self.keywords.push(keywordsJSON);
+                    setKeywords();
+                    function setKeywords(){
+                        var keywordsMap = {};
+                        angular.forEach(highlightKeywords, function (highlightKeyword) {
+                            var keywords = highlightKeyword.split(/\s+/);//以空白切割字串
+                            var timespan = keywords.shift();//第一個項目為timespan
+                            if (keywordsMap[timespan]){//以時間當作群組存放關鍵字
+                                keywordsMap[timespan] = keywordsMap[timespan].concat(keywords);
+                            }else{
+                                keywordsMap[timespan] = keywords;
+                            }
                         })
-                    })
-                  
+                        Object.keys(keywordsMap).map(function(timespan){
+                            var uniqueKeywords = keywordsMap[timespan].reduce(function(p, c) {
+                                if (p.indexOf(c) < 0) p.push(c);
+                                return p;
+                            }, []);//去除重複
+                            var keywordObjArr = uniqueKeywords.map(function(value){
+                                return {'keyword': value,'time': timespan};
+                            })
+                            self.keywords = self.keywords.concat(keywordObjArr);
+                        })
+                        self.keywords.sort(function (a, b) { //依時間排序關鍵字
+                            return ((a.time <= b.time) ? -1 : (a.time > b.time) ? 1 : 0);
+                        })
+                    }
                     //self.keywords.push({ 'keyword': 'Last2', 'time': '00:07:17.20' })
                     //self.keywords.push({ 'keyword': 'Last', 'time': '00:07:18.20' })
-                    self.keywords.sort(function (a, b) { //依時間排序關鍵字
-                       return ((a.time <= b.time) ? -1 : (a.time > b.time) ? 1 : 0);
-                    })
                     self.vttHref = vttHref;
                     modalInstance.result.then('', modalClosing); //當modal被關掉時
                     function modalClosing() { //modal關閉後清空Wavesurfer
