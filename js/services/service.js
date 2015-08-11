@@ -209,10 +209,11 @@
                     })
                     delete query.data;
                     query.q = '';
-                    query.tags = tagsToArrayObject(query.tags, 'name');
+                    query.tags = tagsToArrayObject(query.tags);
                     queriesBinding[query.rel] = query;
+
                 })
-                if (successCallback) successCallback();
+                if (successCallback) successCallback(queriesBinding);
             })
         }
 
@@ -297,7 +298,6 @@
                 }
                 mappingDefine[name]();
             })
-            console.log(itemInfoStruct)
             return itemInfoStruct;
         }
 

@@ -10,7 +10,7 @@
      </button>
       <ul nested-scroll class="dropdown-menu models-drop">
           <li class="btn-group btn-group-vertical btn-block"
-              ng-repeat="item in modelFilterCtrl.datasource.tags track by $index">
+              ng-repeat="item in modelFilterCtrl.datasource.tags">
               <label btn-checkbox class="btn btn-success btn-outline animated fadeInLeft" ng-model="item.selected"
                      ng-click="modelFilterCtrl.itemClicked(item)">{{::item[modelFilterCtrl.tagDisplayProperty]}}</label>
           </li>

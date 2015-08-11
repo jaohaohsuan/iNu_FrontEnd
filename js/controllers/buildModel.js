@@ -8,10 +8,8 @@
 
     function buildModelController($scope, $timeout, $translate) {
         var self = this;
-        //self.modelBroadcast = modelBroadcast;
-
-        self.removeTab = removeTab;
         self.pagingIndex = 0;
+        self.removeTab = removeTab;
         self.tabIndex = 0;
         self.tabs = [ //頁籤標題
             { title: 'createModel', active: true },
@@ -22,12 +20,14 @@
         self.tabChanged = tabChanged;
         $scope.$on('addTab', addTab);
         $scope.$on('changeTabName', changeTabName);
+        $scope.$on('tagsChanged',tagsChanged);
         function addTab(event, tab) { //接收增加頁籤的廣播
             if (tab) {
                 self.tabs.splice(++self.pagingIndex, 0, tab);
                 self.tabIndex = self.pagingIndex;
             }
         }
+
 
         function changeTabName(event, title) {
             if (title) {
@@ -51,10 +51,15 @@
             self.tabIndex = index;
             $scope.$broadcast('tabClicked');
         }
+
+        function tagsChanged(){
+            $scope.$broadcast('resetQuery');
+        }
     }
 
     function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, API_PATH, previewService) {
         var modelGroupSelectedTimeout;
+        var resetQueryTimer;
         var templateUrl = API_PATH + '_query/template';
         var self = this;
 
@@ -122,6 +127,7 @@
         self.viewTemporaryAudio = viewTemporaryAudio
         initial(templateLocation.path, templateUrl);
         $scope.$on('$destroy', destroyListener);
+        $scope.$on('resetQuery',resetQuery);
         $scope.$on('tabClicked', tabClicked);
         function addTags(successCallback) {
             SweetAlert.swal({
@@ -148,11 +154,12 @@
                     })
                     buildModelService.saveConfiguration(self.temporaryCollection, self.editBinding.configuration, function () {
                         swal('Nice!', 'You wrote: ' + inputValue, 'success');
-                        self.queriesBinding.search.tags = angular.copy(self.editBinding.configuration.tags);
-                        self.queriesBinding.search.tags = self.queriesBinding.search.tags.map(function (tag) {
-                            return { name: tag.name }
-                        })
+//                        self.queriesBinding.search.tags = angular.copy(self.editBinding.configuration.tags);
+//                        self.queriesBinding.search.tags = self.queriesBinding.search.tags.map(function (tag) {
+//                            return { name: tag.name }
+//                        })
                         if (successCallback) successCallback();
+                        $scope.$emit('tagsChanged');
                     })
                 });
         }
@@ -319,6 +326,13 @@
             self.saveAsNameInputFocus = true;
         }
 
+        function resetQuery(){
+            if (resetQueryTimer) $timeout.cancel(resetQueryTimer);
+            resetQueryTimer = $timeout(function(){
+                buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding);
+            },1000)
+        }
+
         function resetTitle(e) { //讓input內容恢復binding的資料
             if (e.keyCode === 27) {
                 $scope.nextView.modelTile.$rollbackViewValue(); //formName.inputName
@@ -455,6 +469,7 @@
 
     function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH, $translate, $timeout, previewService) {
         var doFilterTimer;
+        var resetQueryTimer;
         var self = this;
 
         self.buildSections = [];
@@ -470,15 +485,13 @@
         self.queriesBinding = {
             search: {}
         }
-
         self.templateCollection = {
             queries: []
         }
 
         self.selectedItems = [];
         self.showModelDetail = showModelDetail;
-
-
+        $scope.$on('resetQuery', resetQuery);
         buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);
 
 
@@ -489,7 +502,12 @@
             })
         }
 
-
+        function resetQuery(){
+            if (resetQueryTimer) $timeout.cancel(resetQueryTimer);
+            resetQueryTimer = $timeout(function(){
+                buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);
+            },1000)
+        }
 
         function showModelDetail(model) {
             if (doFilterTimer) $timeout.cancel(doFilterTimer);
@@ -501,8 +519,9 @@
                     previewService.setPreviewGridData(previews, self.gridData);
                 })
             }, 300)
-
         }
+
+
 
         ////////////////////不綁定區//////////////
 
@@ -510,7 +529,7 @@
 
     function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert, API_PATH) {
 
-        var enableModelTimeout;
+        var resetQueryTimer;
         var self = this;
 
         $scope.changeModelStatus = changeModelStatus; //使用$scope綁定grid裡面
@@ -578,8 +597,8 @@
         $scope.saveAsModel = saveAsModel;
         self.selectedItems = [];
         $scope.showModelDetail = showModelDetail;
-        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);//需修改
-
+        $scope.$on('resetQuery', resetQuery);
+        buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);
 
         function changeModelStatus(entity) { //變更上下線，可直接變更該一列的資料
             //entity.enabled=!entity.enabled;
@@ -628,6 +647,13 @@
                     self.gridOptions.data.push(data);
                 })
             })
+        }
+
+        function resetQuery(){
+            if (resetQueryTimer) $timeout.cancel(resetQueryTimer);
+            resetQueryTimer = $timeout(function(){
+                buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);
+            },1000)
         }
 
         function saveAsModel(entity) { //打開modal另存模型
@@ -770,6 +796,7 @@
         function translateCol(title) {
             return $translate.instant(title)
         }
+
 
     }
 })();
