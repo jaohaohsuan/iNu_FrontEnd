@@ -318,7 +318,11 @@
         //}
 
         function modelInstanceSelected(configuration) {
-            if (!self.isInstance) buildModelService.saveConfiguration(self.temporaryCollection, configuration);
+            if (!self.isInstance) {
+                buildModelService.saveConfiguration(self.temporaryCollection, configuration,function(){
+                    $scope.$emit('tagsChanged');
+                });
+            }
         }
 
         function nextToDo() {
@@ -432,7 +436,7 @@
         }
         //////////////////不綁定區//////////////////
         function destroyListener(event) {
-            $timeout.cancel(modelGroupSelectedTimeout);
+            $timeout.cancel(modelGroupSelectedTimeout,resetQueryTimer);
         }
 
         function initial(locationUrl, templateUrl) {
