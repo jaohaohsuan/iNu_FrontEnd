@@ -751,8 +751,9 @@
             }
             function markedhighlight(cues, currentTime) {//標記highlight
                 //                if (!currentTime) return;
+
                 $timeout(function () {
-                    currentTime = floorDecimal(currentTime, floorDecimalPlaces);//無條件捨去到小數點N位
+                    currentTime = currentTime.toFixed(floorDecimalPlaces)//無條件捨去到小數點N位
                     if (currentTime <= cues[0].startTime) { //目前時間小於cues的第一筆時，將scroll top 拉到最前面
                         if (cueDiv[0]) {
                             cueDiv[0].scrollTop = 0;
