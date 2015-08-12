@@ -377,6 +377,7 @@
         function saveConfiguration(configuration) {
             buildModelService.saveConfiguration(self.temporaryCollection, configuration, function () {
                 $scope.$emit('changeTabName', configuration.title);
+                $scope.$emit('tagsChanged');
                 SweetAlert.swal('saved', '', 'success');
             });
 
@@ -729,6 +730,7 @@
                             })
                             buildModelService.saveConfiguration(self.temporaryCollection, self.editBinding.configuration, function () {
                                 swal('Nice!', 'You wrote: ' + inputValue, 'success');
+                                $scope.$emit('tagsChanged');
                                 if (successCallback) successCallback();
                             })
                         });
