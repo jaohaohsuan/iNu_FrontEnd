@@ -33,10 +33,10 @@
                 return current;
             }
 
-            function itemDoubleClick(section,item) {
+            function itemDoubleClick(section, item) {
                 var editable = deepFind(item, self.itemEditableProperty);
                 if (editable === false || !self.itemDblclick) return;
-                self.itemDblclick(section,item);
+                self.itemDblclick(section, item);
             }
 
             function setClass(index) {
@@ -243,27 +243,27 @@
                 function playVideoController(audioHref, vttHref, highlightKeywords) {
                     var self = this;
                     self.audioHref = audioHref;
-                  
+
                     self.keywords = []; //改成由API取得
                     setKeywords();
-                    function setKeywords(){
+                    function setKeywords() {
                         var keywordsMap = {};
                         angular.forEach(highlightKeywords, function (highlightKeyword) {
                             var keywords = highlightKeyword.split(/\s+/);//以空白切割字串
                             var timespan = keywords.shift();//第一個項目為timespan
-                            if (keywordsMap[timespan]){//以時間當作群組存放關鍵字
+                            if (keywordsMap[timespan]) {//以時間當作群組存放關鍵字
                                 keywordsMap[timespan] = keywordsMap[timespan].concat(keywords);
-                            }else{
+                            } else {
                                 keywordsMap[timespan] = keywords;
                             }
                         })
-                        Object.keys(keywordsMap).map(function(timespan){
-                            var uniqueKeywords = keywordsMap[timespan].reduce(function(p, c) {
+                        Object.keys(keywordsMap).map(function (timespan) {
+                            var uniqueKeywords = keywordsMap[timespan].reduce(function (p, c) {
                                 if (p.indexOf(c) < 0) p.push(c);
                                 return p;
                             }, []);//去除重複
-                            var keywordObjArr = uniqueKeywords.map(function(value){
-                                return {'keyword': value,'time': timespan};
+                            var keywordObjArr = uniqueKeywords.map(function (value) {
+                                return { 'keyword': value, 'time': timespan };
                             })
                             self.keywords = self.keywords.concat(keywordObjArr);
                         })
@@ -278,10 +278,10 @@
                     function modalClosing() { //modal關閉後清空Wavesurfer
                         self.player.empty();
                         self.player.destroy();
-                      
+
                     }
                 }
-             
+
             }
 
             function showAudioDetail(entity) {
@@ -659,7 +659,7 @@
                 if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
                     //console.log(cue.getCueAsHTML())
                     $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
-                    
+
                     cuesId.push(incue[0].id);
                 }
             }
@@ -695,15 +695,15 @@
                 })
                 return deferred.promise;
             }
-            function getScrollHeight(index,perScrollHeight) { //當前cue的index ,與平均一個cue的scrollHeight
+            function getScrollHeight(index, perScrollHeight) { //當前cue的index ,與平均一個cue的scrollHeight
                 var scrollHeight = 0;
                 if (index > 0) {
                     for (var i = 0; i < index; i++) {
                         var currentCueElement = $('#' + cuesId[i]); //取得當前綁定cue的element的高度
                         scrollHeight += perScrollHeight
-                  }
+                    }
                 }
-                return scrollHeight-(perScrollHeight*3);
+                return scrollHeight - (perScrollHeight * 3);
             }
 
             function getWavesurfer(e, wavesurfer) {
@@ -847,7 +847,7 @@
                         leftPosition -= currentSpan.outerWidth()
                         overWaveKeywordSpan.push(currentSpan); //紀錄超出音波的關鍵字
                     }
-                    else if (leftPosition < lastPosition) {
+                    else if (leftPosition < lastPosition) { //如果重複時
                         leftPosition = lastPosition + 1;
                         inWaveKeywordSpan.push(currentSpan);
                     } else {
@@ -860,7 +860,7 @@
                     currentTime = hmsfToSeconds(keyword.time);
                     //if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                 }
-                if (overWaveKeywordSpan.length > 0) {
+                if (overWaveKeywordSpan.length > 0 && inWaveKeywordSpan.length > 0) {
                     for (var j = overWaveKeywordSpan.length - 1; j >= 0; j--) {
                         if (j - 1 >= 0) {
                             var overWaveLeftPosition = $(overWaveKeywordSpan[j]).position().left  //取得倒數第j個的left
@@ -871,6 +871,7 @@
 
                         }
                     }
+
                     var inWaveLastPosition = $(inWaveKeywordSpan[inWaveKeywordSpan.length - 1]).position().left;
                     for (var k = inWaveKeywordSpan.length - 1; k >= 0; k--) {
                         var inWaveLeftPosition = $(inWaveKeywordSpan[k]).position().left + $(inWaveKeywordSpan[k]).outerWidth();
