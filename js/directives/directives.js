@@ -703,7 +703,7 @@
                         scrollHeight += perScrollHeight
                   }
                 }
-                return scrollHeight-(perScrollHeight*4);
+                return scrollHeight-(perScrollHeight*3);
             }
 
             function getWavesurfer(e, wavesurfer) {
