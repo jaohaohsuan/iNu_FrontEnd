@@ -276,7 +276,9 @@
                     self.vttHref = vttHref;
                     modalInstance.result.then('', modalClosing); //當modal被關掉時
                     function modalClosing() { //modal關閉後清空Wavesurfer
-                        self.player.empty()
+                        self.player.empty();
+                        self.player.destroy();
+                      
                     }
                 }
              
@@ -767,7 +769,6 @@
                             if (currentTime >= floorDecimal(cue.startTime, floorDecimalPlaces)) {//目前時間 >= cue的起始時間代表已搜尋到
                                 search.searched = true;
                                 if (self.autoScroll) $(cueDiv).animate({
-                                   
                                     scrollTop: getScrollHeight(idx, cueDiv[0].scrollHeight / cues.length)
                                 })
                             }
