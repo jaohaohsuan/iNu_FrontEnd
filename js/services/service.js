@@ -333,8 +333,10 @@
         function setPreviewGridData(previewList, gridData) {
             if (gridData.length > 0) gridData.length = 0;
             angular.forEach(previewList, function (preview) {
+                var rndSource = ['Log8000', 'QQ', 'Line']; //demo用之後要拿掉
+                var datasourceName = rndSource[Math.round(Math.random() * 2)];
                 gridData.push(
-                     { 'datasourceName': '123', 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
+                     { 'datasourceName': datasourceName, 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
                      );
             })
         }

@@ -141,7 +141,6 @@ wavesurfer {
 }
 
     .cues:hover {
-        position: relative;
         background-color: lightgray;
     }
 
