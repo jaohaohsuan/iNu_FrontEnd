@@ -192,9 +192,13 @@
                     });
                     buildModelService.addNewComponent(self.templateCollection,inputValue,function(location){//成功新增新組件
                        $timeout(function(){
-                           $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
+                           buildModelService.searchByQueries(self.templateCollection, self.queriesBinding.search, 'search', function (items) {//重新搜尋
+                               self.editBinding.component.items = items;
+                               self.editBinding.component.selected = [];
+                           })
                            templateLocation.path = location; //設定URL Service的path變數
-                       },1000)
+                           $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
+                       },2000)
                     })
                 });
         }
