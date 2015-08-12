@@ -860,7 +860,7 @@
                     currentTime = hmsfToSeconds(keyword.time);
                     //if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                 }
-                if (overWaveKeywordSpan.length > 0 && inWaveKeywordSpan.length > 0) {
+                if (overWaveKeywordSpan.length > 0  ) {
                     for (var j = overWaveKeywordSpan.length - 1; j >= 0; j--) {
                         if (j - 1 >= 0) {
                             var overWaveLeftPosition = $(overWaveKeywordSpan[j]).position().left  //取得倒數第j個的left
@@ -871,16 +871,18 @@
 
                         }
                     }
-
-                    var inWaveLastPosition = $(inWaveKeywordSpan[inWaveKeywordSpan.length - 1]).position().left;
-                    for (var k = inWaveKeywordSpan.length - 1; k >= 0; k--) {
-                        var inWaveLeftPosition = $(inWaveKeywordSpan[k]).position().left + $(inWaveKeywordSpan[k]).outerWidth();
-                        var lastOutWaveKeywordSpanPosition = $(overWaveKeywordSpan[0]).position().left;
-                        if (inWaveLeftPosition > lastOutWaveKeywordSpanPosition) {
-                            $(inWaveKeywordSpan[k]).css({ left: $(overWaveKeywordSpan[0]).position().left - $(overWaveKeywordSpan[0]).outerWidth() + 2 });
+                    if (inWaveKeywordSpan.length > 0) {
+                        var inWaveLastPosition = $(inWaveKeywordSpan[inWaveKeywordSpan.length - 1]).position().left;
+                        for (var k = inWaveKeywordSpan.length - 1; k >= 0; k--) {
+                            var inWaveLeftPosition = $(inWaveKeywordSpan[k]).position().left + $(inWaveKeywordSpan[k]).outerWidth();
+                            var lastOutWaveKeywordSpanPosition = $(overWaveKeywordSpan[0]).position().left;
+                            if (inWaveLeftPosition > lastOutWaveKeywordSpanPosition) {
+                                $(inWaveKeywordSpan[k]).css({ left: $(overWaveKeywordSpan[0]).position().left - $(overWaveKeywordSpan[0]).outerWidth() + 2 });
+                            }
+                            inWaveLastPosition = $(overWaveKeywordSpan[0]).position().left;
                         }
-                        inWaveLastPosition = $(overWaveKeywordSpan[0]).position().left;
                     }
+                   
                 }
 
 
