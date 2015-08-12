@@ -657,6 +657,7 @@
                 if (incue[0].innerText == '') { //如果有取到且裡面的內容是空白
                     //console.log(cue.getCueAsHTML())
                     $(incue).append(cue.getCueAsHTML()); //就將目前的cue的內容加進去
+                    
                     cuesId.push(incue[0].id);
                 }
             }
@@ -692,16 +693,15 @@
                 })
                 return deferred.promise;
             }
-            function getScrollHeight(index) { //當前cue的index
-
+            function getScrollHeight(index,perScrollHeight) { //當前cue的index ,與平均一個cue的scrollHeight
                 var scrollHeight = 0;
                 if (index > 0) {
                     for (var i = 0; i < index; i++) {
                         var currentCueElement = $('#' + cuesId[i]); //取得當前綁定cue的element的高度
-                        scrollHeight += (currentCueElement[0].offsetHeight + 4) + (i * 0.1);
-                    }
+                        scrollHeight += perScrollHeight
+                  }
                 }
-                return scrollHeight;
+                return scrollHeight-80;
             }
 
             function getWavesurfer(e, wavesurfer) {
@@ -766,7 +766,10 @@
                         if (!search.searched) {
                             if (currentTime >= floorDecimal(cue.startTime, floorDecimalPlaces)) {//目前時間 >= cue的起始時間代表已搜尋到
                                 search.searched = true;
-                                if (self.autoScroll) cueDiv[0].scrollTop = getScrollHeight(idx);
+                                if (self.autoScroll) $(cueDiv).animate({
+                                   
+                                    scrollTop: getScrollHeight(idx, cueDiv[0].scrollHeight / cues.length)
+                                })
                             }
                         }
                         if (search.searched) cue.highlight = true;//已經搜尋到的cues之後都標記highlight
