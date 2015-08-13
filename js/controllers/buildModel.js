@@ -270,7 +270,6 @@
         }
 
         function deleteModel() {
-            console.log('delete')
             SweetAlert.swal({
                 title: $translate.instant('sureDelete'), //讀取多語系key
                 type: 'warning',
@@ -427,17 +426,9 @@
             self.showUndo = false;
         }
         function viewTemporaryAudio() {
-            self.showPreview = true;
-            if ($scope.$parent.tab.tabName) {
-                buildModelService.setTemporary(self.currentUrl, null, null, null, null, function (previewList, sections) {
-                    previewService.setPreviewGridData(previewList, self.previewData);
-
-                });
-            } else {
-                buildModelService.setTemplate(templateUrl, null, null, null, null, function (previewList, sections) {
-                    previewService.setPreviewGridData(previewList, self.previewData);
-                });
-            };
+            previewService.setPreviewGridData(self.temporaryCollection,self.previewData,function(){
+                self.showPreview = true;
+            })
         }
         //////////////////不綁定區//////////////////
         function destroyListener(event) {
@@ -497,14 +488,11 @@
         self.templateCollection = {
             queries: []
         }
-
+        self.temporaryCollection = {};
         self.selectedItems = [];
         self.showModelDetail = showModelDetail;
         $scope.$on('resetQuery', resetQuery);
         buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);
-
-
-
         function filterModelGroup(queriesBinding) {
             buildModelService.searchByQueries(self.templateCollection, queriesBinding, 'search', function (items) {
                 self.models = items;
@@ -521,17 +509,15 @@
         function showModelDetail(model) {
             if (doFilterTimer) $timeout.cancel(doFilterTimer);
             doFilterTimer = $timeout(function () {
+                console.log('dd')
                 if (self.buildSections.length > 0) self.buildSections.length = 0;
-                buildModelService.setTemporary(model.href, null, self.buildSections, null, null, function (previews) { //取得邏輯詞組與preview
-                    self.isShowModelDetail = true;
-                    self.modelTitle = model.title;
-                    previewService.setPreviewGridData(previews, self.gridData);
+                buildModelService.setTemporary(model.href,self.temporaryCollection,self.buildSections,null,null,function(){
+                    previewService.setPreviewGridData(self.temporaryCollection,self.gridData,function(){
+                        self.showPreview = true;
+                    })
                 })
             }, 300)
         }
-
-
-
         ////////////////////不綁定區//////////////
 
     }
@@ -574,7 +560,7 @@
                     headerCellClass: 'model-management-grid-header',
                     cellClass: 'model-management-grid-cell',
                     enableColumnMenu: false
-                },
+                }
                 //{
 
                 //    field: 'status',

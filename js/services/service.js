@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .service('buildModelService', ['jsonMethodService', 'jsonParseService', '$translate', '$timeout', buildModelService])
-        .service('previewService', previewService)
+        .service('previewService', ['jsonMethodService','jsonParseService',previewService])
         .service('templateLocation', templateLocation)
     function buildModelService(jsonMethodService, jsonParseService, $translate, $timeout) {
 
@@ -158,48 +158,21 @@
             })
         }
 
-        function setModelSections(sections) {
-            angular.forEach(sections, function (section) {
-                jsonMethodService.get(section.href).then(function (collectionjson) {
-                    section.items = collectionjson.collection.items;
-                    section.name = $translate.instant(section.name);
-                    angular.forEach(section.items, function (item) {
+        function setModelSections(sections,sectionLinks) {
+            sections.length = 0;
+            angular.forEach(sectionLinks, function (sectionLink) {
+                jsonMethodService.get(sectionLink.href).then(function (collectionjson) {
+                    sectionLink.items = collectionjson.collection.items;
+                    sectionLink.name = $translate.instant(sectionLink.name);
+                    angular.forEach(sectionLink.items, function (item) {
                         item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable', 'field');//格式化成前端顯示文字
                     })
+                    sections.push(sectionLink);
                 })
             })
 
         }
-        function setPreview(previewLink, successCallBack, errorCallback) {
-            var previewList = [];
-            jsonMethodService.get(previewLink.href).then(function (collectionjson) {
-                angular.forEach(collectionjson.collection.items, function (datas) {
-                    var preview = { 'href': '', 'highlight': [], 'keywords': [] }
-                    preview['href'] = datas.href;
-                    angular.forEach(datas.data, function (data) {
-                        var value = data.value;
-                        var name = data.name;
-                        var previewMapping = {
-                            "highlight": function () {
-                                preview[name] = data.array;
-                            },
-                            "keywords": function () {
-                                preview[name] = data.value;
-                            }
-                        }
-                        if (!previewMapping.hasOwnProperty(name)) {
-                            return;
-                        }
-                        previewMapping[name]();
-                    })
-                    previewList.push(preview);
-                })
-                if (successCallBack) successCallBack(angular.copy(previewList));
-            }, function (data) {
-                if (errorCallback) errorCallback(data);
-            })
 
-        }
         function setQueriesBinding(href, templateCollection, queriesBinding, successCallback) {
             jsonMethodService.get(href).then(function (collectionjson) {
                 if (templateCollection) templateCollection.collection = angular.copy(collectionjson.collection);
@@ -216,49 +189,30 @@
                 if (successCallback) successCallback(queriesBinding);
             })
         }
-
-        function setTemplate(href, temporaryCollection, sections, editCollection, editBinding, successCallBack) {
+        function setTemplate(href,temporaryCollection,sections, editCollection, editBinding,successCallback,errorCallback){
             jsonMethodService.get(href).then(function (collectionjson) {
                 var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
-                setTemporary(temporaryUrl, temporaryCollection, sections, editCollection, editBinding, function (previewList, sections) {
-                    if (successCallBack) successCallBack(previewList, sections);
+                setTemporary(temporaryUrl, temporaryCollection,sections, editCollection, editBinding, function () {
+                    if (successCallback) successCallback();
                 });//設定temporary結構
             })
         }
-
-        function setTemporary(href, temporaryCollection, sections, editCollection, editBinding, successCallBack) {
+        function setTemporary(href,temporaryCollection,sections, editCollection, editBinding,successCallback,errorCallback){//將collection內的links轉成linksObj進行分類
             jsonMethodService.get(href).then(function (collectionjson) {
-                if (temporaryCollection) temporaryCollection.collection = angular.copy(collectionjson.collection);
-                angular.forEach(collectionjson.collection.items, function (item) {
+                if (!temporaryCollection) temporaryCollection = {};
+                temporaryCollection.collection = angular.copy(collectionjson.collection);
+                angular.forEach(temporaryCollection.collection.items, function (item) {
                     var linksObj = jsonParseService.getLinksObjFromLinks(item.links, 'rel'); //將items裡面的links用rel分類
-                    var editLinks = linksObj['edit'];//用來顯示查詢條件的(must must_not should)
-                    var tmpSections = linksObj['section'];//用來增加查詢條件的(match near named)
-                    var tmpPreviews = linksObj['preview'];
-                    if (sections) {
-                        angular.forEach(tmpSections, function (section) {
-                            sections.push(section);
-                        })
-                        setModelSections(sections);//設定查詢條件的綁定
-                    }
-                    if (editCollection) setEditTemporary(editLinks, editCollection, editBinding);//設定邏輯詞組及公用組件的綁定
-                    if (editBinding && editBinding.hasOwnProperty('configuration')) {
-                        setConfigurationTemporary(href, item.data, editBinding.configuration);//設定配置區塊的資料綁定
-                    }
-                    if (successCallBack) { //用Callback傳出priview內容
-                        var tmpPreviewList;
-                        angular.forEach(tmpPreviews, function (tmpPreview) {
-                            setPreview(tmpPreview, function (previewList) {
-                                successCallBack(angular.copy(previewList), sections);
-                            });
-
-                        })
+                    item.linksObj = linksObj;
+                    delete item.links;
+                    if (sections) setModelSections(sections,linksObj['section']);
+                    if (editCollection) setEditTemporary(linksObj['edit'],editCollection,editBinding);
+                    if (editBinding && editBinding.hasOwnProperty('configuration'))  setConfigurationTemporary(href, item.data, editBinding.configuration);//設定配置區塊的資料綁定
+                    if (successCallback) {
+                        successCallback();
                     }
                 })
-
-            }, function () {
             })
-
-
         }
 
         function sectionItemFormat(datas, queryProperty, syntaxProperty, slopProperty, editableProperty, fieldProperty) {
@@ -320,6 +274,9 @@
             addToCurrentSection: addToCurrentSection,
             saveAs: saveAs,
             saveConfiguration: saveConfiguration,
+            setConfigurationTemporary: setConfigurationTemporary,
+            setEditTemporary: setEditTemporary,
+            setModelSections: setModelSections,
             searchByQueries: searchByQueries,
             setQueriesBinding: setQueriesBinding,
             setTemplate: setTemplate,
@@ -327,18 +284,28 @@
         }
     }
 
-    function previewService() {
+    function previewService(jsonMethodService,jsonParseService) {
         var self = this;
         self.setPreviewGridData = setPreviewGridData //設定匹配預覽要用的gridData
-        function setPreviewGridData(previewList, gridData) {
+        function setPreviewGridData(temporaryCollection, gridData,successCallBack,errorCallBack) {
             if (gridData.length > 0) gridData.length = 0;
-            angular.forEach(previewList, function (preview) {
-                var rndSource = ['Log8000', 'QQ', 'Line']; //demo用之後要拿掉
-                var datasourceName = rndSource[Math.round(Math.random() * 2)];
-                gridData.push(
-                     { 'datasourceName': datasourceName, 'matchedKeywords': preview.keywords, 'vttHref': preview.href, 'highlight': preview.highlight }
-                     );
+            var rndSource = ['Log8000', 'QQ', 'Line']; //demo用之後要拿掉
+            angular.forEach(temporaryCollection.collection.items,function(temporaryItems){
+                var previewLinks = temporaryItems.linksObj.preview;
+                angular.forEach(previewLinks, function (previewLink) {
+                    jsonMethodService.get(previewLink.href).then(function(collectionjson){
+                        angular.forEach(collectionjson.collection.items,function(item){
+                            var previewObj = jsonParseService.getObjectMappingNameToValueFromDatas(item.data);
+                            var datasourceName = rndSource[Math.round(Math.random() * 2)];
+                            gridData.push(
+                                { 'datasourceName': datasourceName, 'matchedKeywords': previewObj.keywords.value, 'vttHref': item.href, 'highlight': previewObj.highlight.array }
+                            );
+                        })
+                        if (successCallBack) successCallBack();
+                    })
+                })
             })
+
         }
     }
     function templateLocation() {
