@@ -161,16 +161,19 @@
         function setModelSections(sections,sectionLinks) {
             sections.length = 0;
             angular.forEach(sectionLinks, function (sectionLink) {
-                jsonMethodService.get(sectionLink.href).then(function (collectionjson) {
-                    sectionLink.items = collectionjson.collection.items;
-                    sectionLink.name = $translate.instant(sectionLink.name);
-                    angular.forEach(sectionLink.items, function (item) {
-                        item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable', 'field');//格式化成前端顯示文字
+                $timeout(function(){
+                    jsonMethodService.get(sectionLink.href).then(function (collectionjson) {
+                        console.log(sectionLink.name);
+                        sectionLink.items = collectionjson.collection.items;
+                        sectionLink.name = $translate.instant(sectionLink.name);
+
+                        angular.forEach(sectionLink.items, function (item) {
+                            item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable', 'field');//格式化成前端顯示文字
+                        })
+                        sections.push(sectionLink);
                     })
-                    sections.push(sectionLink);
                 })
             })
-
         }
 
         function setQueriesBinding(href, templateCollection, queriesBinding, successCallback) {
