@@ -165,19 +165,21 @@
         }
 
         function setModelSections(sectionLinks,sections) {
-            sections.length = 0;
-            angular.forEach(sectionLinks, function (sectionLink) {
-                $timeout(function(){
-                    jsonMethodService.get(sectionLink.href).then(function (collectionjson) {
-                        sectionLink.items = collectionjson.collection.items;
-                        sectionLink.name = $translate.instant(sectionLink.name);
+            if (sections){
+                sections.length = 0;
+                angular.forEach(sectionLinks,function(sectionLink){
+                    sections.push(sectionLink);
+                })
+            }
+            angular.forEach(sections, function (section) {
+                    jsonMethodService.get(section.href).then(function (collectionjson) {
+                        section.items = collectionjson.collection.items;
+                        section.name = $translate.instant(section.name);
 
-                        angular.forEach(sectionLink.items, function (item) {
+                        angular.forEach(section.items, function (item) {
                             item.itemInfo = sectionItemFormat(item.data, 'query', 'syntax', 'slop', 'editable', 'field');//格式化成前端顯示文字
                         })
-                        sections.push(sectionLink);
                     })
-                },1)
             })
         }
 
