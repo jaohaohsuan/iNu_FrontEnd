@@ -241,7 +241,7 @@
                 enableRowSelection: true,
                 enableRowHeaderSelection: false,
                 multiSelect: false,
-                noUnselect:true
+                noUnselect: true
             };
             $scope.lookOverTitle = $translate.instant("lookOver")
             $scope.playAudio = playAudio;
@@ -858,6 +858,7 @@
                 var videoKeywordDivName = '#video-keywords';
                 var maxPosition = -1;
                 var lastPosition = 0;
+                var inSameCueCount = 1; //同一段裡面的關鍵字數量
                 var inWaveKeywordSpan = [];
                 var overWaveKeywordSpan = [];
                 var currentTime = 0;
@@ -872,7 +873,13 @@
                     //    currentSpan.css({ top: currentSpan.outerHeight() * keywordReplaceCount});//設定正確位置
                     //    currentSpan.css({ left: leftPosition });//設定正確位置
                     //} else {
-                    if (leftPosition + currentSpan.outerWidth() > self.player.drawer.width) { //當關鍵字超出音坡時 鎖在音波範圍內
+                    if (lastPosition == leftPosition + currentSpan.outerWidth()) {
+                        inSameCueCount++;
+                    } else {
+                        inSameCueCount = 1;
+                    }
+                    console.log(inSameCueCount)
+                    if (leftPosition + (currentSpan.outerWidth() * inSameCueCount) > self.player.drawer.width) { //當關鍵字超出音坡時 鎖在音波範圍內
                         leftPosition -= currentSpan.outerWidth()
                         overWaveKeywordSpan.push(currentSpan); //紀錄超出音波的關鍵字
                     }
