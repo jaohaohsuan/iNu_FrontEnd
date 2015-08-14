@@ -244,9 +244,7 @@
                 multiSelect: false,
                 noUnselect: true,
                 paginationPageSize: 10,
-                paginationPageSizes: [10, 20, 30],
-                useExternalPagination:true
-         
+                paginationPageSizes: [10, 20, 30]
             };
             $scope.lookOverTitle = $translate.instant("lookOver")
             $scope.playAudio = playAudio;
