@@ -201,7 +201,7 @@
                 playAudio: '=',
                 showAudioDetail: '='
             },
-            template: '<div ui-grid="matchedReviewGridCtrl.gridOptions"  ui-grid-auto-resize class="matched-review-grid"></div>',
+            template: '<div ui-grid="matchedReviewGridCtrl.gridOptions" ui-grid-selection ui-grid-auto-resize class="matched-review-grid"></div>',
             controller: ['$scope', '$modal', '$translate', matchedReviewGridController],
             controllerAs: 'matchedReviewGridCtrl',
             bindToController: true
@@ -237,7 +237,10 @@
 
                     }
                 ],
-                data: self.datasource
+                data: self.datasource,
+                enableRowSelection: true,
+                enableRowHeaderSelection: false,
+                multiSelect:false,
             };
             $scope.lookOverTitle = $translate.instant("lookOver")
             $scope.playAudio = playAudio;
@@ -302,7 +305,6 @@
                     function modalClosing() { //modal關閉後清空Wavesurfer
                         self.player.empty();
                         self.player.destroy();
-
                     }
                 }
 
@@ -967,12 +969,12 @@
         var directive = {
             restrict: 'E',
             scope: {
-                datasource:'='
+                datasource: '='
             },
             templateUrl: 'views/directives/singleModelGroupSelect.html',
             controller: singleModelGroupSelectController,
             controllerAs: 'singleModelGroupSelectCtrl',
-            bindToController:true
+            bindToController: true
         }
         function singleModelGroupSelectController() {
             var self = this;
