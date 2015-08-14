@@ -25,7 +25,7 @@
   "datasourceName": "数据源名称",
   "datasourceFilterConfig":"数据源筛选配置",
   "deleteModel": "删除此模型",
-  "dialogs": "全部",
+  "dialogs": "对话",
   "dynamicModelAnalysis":"动态模型分析",
   "edit": "编辑",
   "editing":"编辑中",
