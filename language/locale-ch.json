@@ -53,6 +53,7 @@
   "lookOver":"查看",
   "management": "管理",
   "matchableModels":"可匹配之模型",
+  "matchedCount":"匹配笔数",
   "matchedKeywords": "命中关键字",
   "matchedModels":"当前匹配之模型",
   "matchedReview": "匹配预览",
