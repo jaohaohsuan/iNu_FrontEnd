@@ -590,7 +590,8 @@
             enableGridMenu: true,
             gridMenuTitleFilter: translateCol,
             paginationPageSize: 8,
-            paginationPageSizes: [8, 20, 30]
+            paginationPageSizes: [8, 20, 30],
+            useExternalPagination: true
         };
         $scope.isModelOnline = false; //之後讀取API時需判斷此模型的上下線狀態
         $scope.onlineClass = 'online';

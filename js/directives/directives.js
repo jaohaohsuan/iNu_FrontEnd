@@ -202,7 +202,7 @@
                 showAudioDetail: '='
             },
             template: '<div ui-grid="matchedReviewGridCtrl.gridOptions" ui-grid-selection ui-grid-auto-resize ui-grid-resize-columns ui-grid-pagination class="matched-review-grid">'
-                + '<h4 class="pull-right">{{"matchedCount"|translate}}:{{matchedReviewGridCtrl.datasource.length}}</h4></div>',
+                + '<h4 ng-show="matchedReviewGridCtrl.datasource.length>0" class="pull-right">{{"matchedCount"|translate}}:{{matchedReviewGridCtrl.datasource.length}}</h4></div>',
             controller: ['$scope', '$modal', '$translate', matchedReviewGridController],
             controllerAs: 'matchedReviewGridCtrl',
             bindToController: true
