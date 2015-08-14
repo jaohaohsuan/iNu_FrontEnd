@@ -159,9 +159,11 @@ wavesurfer {
 .coross-analysis-div {
     width: 98%;
 }
-.dialogs{
-    color:black;
+
+.dialogs {
+    color: black;
 }
+
 .dropdown-multi-select {
     height: 30px;
     top: -1px;
@@ -198,6 +200,16 @@ wavesurfer {
 
 .iNu-logo-s {
     left: 0 !important;
+}
+
+.item-picker div.list-group {
+    height: 185px;
+    overflow: auto;
+    background-color: rgba(150,150,150,0.05);
+}
+
+.item-picker label {
+    height: 40px;
 }
 
 .matched-view-advance-operation-div > a {
@@ -426,14 +438,27 @@ wavesurfer {
         background: none;
         color: #2E8ECA !important;
     }
-.select-section > div  {
-   margin-left:20px;
+
+.select-section > div {
+    margin-left: 20px;
 }
-.select-section > span{
-    color:darkgray;
-    position:relative;
-    top:-8px;
+
+.select-section > span {
+    color: darkgray;
+    position: relative;
+    top: -8px;
 }
+
+.single-model-group-select div.list-group {
+    height: 185px;
+    overflow: auto;
+    background-color: rgba(150,150,150,0.05);
+}
+
+.single-model-group-select label {
+    height: 40px;
+}
+
 .sweetAlert {
     top: 40% !important;
     left: 65% !important;

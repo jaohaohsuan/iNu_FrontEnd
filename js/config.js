@@ -69,6 +69,15 @@
                 controllerAs: 'crossAnalysisCtrl',
                 data: {
                     title: 'crossAnalysis'
+                },
+                resolve: {
+                    loadPlugin: function ($ocLazyLoad) {
+                        return $ocLazyLoad.load([
+                            {
+                                files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                            }
+                        ])
+                    }
                 }
             })
             .state('main.buildModel', {

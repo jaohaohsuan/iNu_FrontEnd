@@ -1,0 +1,21 @@
+﻿<div class="item-picker">
+    <div class="col-md-6">
+        <h3>{{'matchableModels'|translate}}</h3>
+        <div nested-scroll class="checkbox  item-picker-left list-group">
+            <label class=" animated fadeInLeft list-group-item" ng-repeat="matchable in itemPickerCtrl.matchables">
+                <input type="checkbox"
+                       ng-model="itemPickCtrl.model"
+                       iCheck>
+                <span>({{matchable.count}})</span><span>{{matchable.name}}</span>
+            </label>
+        </div> 
+    </div>
+    <div class="col-md-6">
+        <h3>{{'matchedModels'|translate}}</h3>
+        <div nested-scroll class="item-picker-right list-group ">
+            <label class=" animated fadeInLeft list-group-item" ng-repeat="matched in itemPickerCtrl.matcheds">
+                <span>{{matched.name}}</span>
+            </label>
+        </div>
+    </div>
+</div>

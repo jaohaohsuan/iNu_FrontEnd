@@ -169,6 +169,30 @@
             }
         };
     }
+    function itemPicker() {
+        var directive = {
+            restrict: 'E',
+            scope: {
+                datasource: '='
+            },
+            templateUrl: 'views/directives/itemPicker.html',
+            controller: ['$scope', itemPickerController],
+            controllerAs: 'itemPickerCtrl',
+            bindToController: true
+        }
+        function itemPickerController($scope) {
+            var self = this;
+            self.matchables = [];
+            self.matcheds = [];
+            angular.forEach(self.datasource, function (data) {
+                if (data.matched === true) self.matcheds.push(data);
+                else self.matchables.push(data);
+            })
+            console.log(self.matchables)
+
+        }
+        return directive;
+    }
     function matchedReviewGrid() {
         var directive = {
             restrict: 'E',
@@ -700,10 +724,10 @@
                 if (index > 0) {
                     for (var i = 0; i < index; i++) {
                         var currentCueElementHeight = $('#' + cuesId[i]).outerHeight(); //取得當前綁定cue的element的高度
-                        scrollHeight += currentCueElementHeight+10;
+                        scrollHeight += currentCueElementHeight + 10;
                     }
                 }
-                return Math.ceil(scrollHeight) -50;
+                return Math.ceil(scrollHeight) - 50;
                 //return Math.ceil(scrollHeight -  ((tempHeight - perScrollHeight < 0 ? 0 : tempHeight - perScrollHeight) * count));
                 //return perScrollHeight * 7 * ((index + 1) / 8);
 
@@ -939,7 +963,23 @@
 
         return directive;
     }
-
+    function singleModelGroupSelect() {
+        var directive = {
+            restrict: 'E',
+            scope: {
+                datasource:'='
+            },
+            templateUrl: 'views/directives/singleModelGroupSelect.html',
+            controller: singleModelGroupSelectController,
+            controllerAs: 'singleModelGroupSelectCtrl',
+            bindToController:true
+        }
+        function singleModelGroupSelectController() {
+            var self = this;
+            console.log(self.datasource)
+        }
+        return directive;
+    }
     function wavesurfer() {
         var direcvive = {
             restrict: 'E',
@@ -1385,4 +1425,6 @@
         .directive('ngRepeatEnd', ['$timeout', ngRepeatEnd])
         .directive('playAudioFile', playAudioFile) //播放音檔內容
         .directive('matchedReviewGrid', matchedReviewGrid) //瀏覽音檔Grid
+        .directive('itemPicker', itemPicker)
+        .directive('singleModelGroupSelect', singleModelGroupSelect)
 })();
