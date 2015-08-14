@@ -201,7 +201,7 @@
                 playAudio: '=',
                 showAudioDetail: '='
             },
-            template: '<div ui-grid="matchedReviewGridCtrl.gridOptions" ui-grid-selection ui-grid-auto-resize class="matched-review-grid">'
+            template: '<div ui-grid="matchedReviewGridCtrl.gridOptions" ui-grid-selection ui-grid-auto-resize ui-grid-resize-columns ui-grid-pagination class="matched-review-grid">'
                 + '<h4 class="pull-right">{{"matchedCount"|translate}}:{{matchedReviewGridCtrl.datasource.length}}</h4></div>',
             controller: ['$scope', '$modal', '$translate', matchedReviewGridController],
             controllerAs: 'matchedReviewGridCtrl',
@@ -242,7 +242,9 @@
                 enableRowSelection: true,
                 enableRowHeaderSelection: false,
                 multiSelect: false,
-                noUnselect: true
+                noUnselect: true,
+                paginationPageSize: 10,
+                paginationPageSizes: [10, 20, 30]
             };
             $scope.lookOverTitle = $translate.instant("lookOver")
             $scope.playAudio = playAudio;
