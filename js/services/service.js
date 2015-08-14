@@ -177,7 +177,7 @@
                         })
                         sections.push(sectionLink);
                     })
-                })
+                },1)
             })
         }
 
