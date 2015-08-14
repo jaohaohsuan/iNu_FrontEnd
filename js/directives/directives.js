@@ -240,7 +240,8 @@
                 data: self.datasource,
                 enableRowSelection: true,
                 enableRowHeaderSelection: false,
-                multiSelect:false,
+                multiSelect: false,
+                noUnselect:true
             };
             $scope.lookOverTitle = $translate.instant("lookOver")
             $scope.playAudio = playAudio;
