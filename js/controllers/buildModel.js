@@ -518,6 +518,8 @@
                         self.showPreview = true;
                     })
                 })
+                self.isShowModelDetail = true;
+                self.modelTitle=model.title
             }, 300)
         }
         ////////////////////不綁定區//////////////
