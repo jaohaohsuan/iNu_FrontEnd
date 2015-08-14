@@ -158,12 +158,17 @@
             })
         }
 
-        function setModelSections(sections,sectionLinks) {
+        function setItemsBinding(items,bindingMethod){
+            angular.forEach(items,function(item){
+                if (bindingMethod) bindingMethod(item);
+            })
+        }
+
+        function setModelSections(sectionLinks,sections) {
             sections.length = 0;
             angular.forEach(sectionLinks, function (sectionLink) {
                 $timeout(function(){
                     jsonMethodService.get(sectionLink.href).then(function (collectionjson) {
-                        console.log(sectionLink.name);
                         sectionLink.items = collectionjson.collection.items;
                         sectionLink.name = $translate.instant(sectionLink.name);
 
@@ -192,15 +197,15 @@
                 if (successCallback) successCallback(queriesBinding);
             })
         }
-        function setTemplate(href,temporaryCollection,sections, editCollection, editBinding,successCallback,errorCallback){
+        function setTemplate(href,temporaryCollection,successCallback,errorCallback){
             jsonMethodService.get(href).then(function (collectionjson) {
                 var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
-                setTemporary(temporaryUrl, temporaryCollection,sections, editCollection, editBinding, function () {
-                    if (successCallback) successCallback();
+                setTemporary(temporaryUrl, temporaryCollection, function (items) {
+                    if (successCallback) successCallback(items);
                 });//設定temporary結構
             })
         }
-        function setTemporary(href,temporaryCollection,sections, editCollection, editBinding,successCallback,errorCallback){//將collection內的links轉成linksObj進行分類
+        function setTemporary(href,temporaryCollection,successCallback,errorCallback){//將collection內的links轉成linksObj進行分類
             jsonMethodService.get(href).then(function (collectionjson) {
                 if (!temporaryCollection) temporaryCollection = {};
                 temporaryCollection.collection = angular.copy(collectionjson.collection);
@@ -208,13 +213,11 @@
                     var linksObj = jsonParseService.getLinksObjFromLinks(item.links, 'rel'); //將items裡面的links用rel分類
                     item.linksObj = linksObj;
                     delete item.links;
-                    if (sections) setModelSections(sections,linksObj['section']);
-                    if (editCollection) setEditTemporary(linksObj['edit'],editCollection,editBinding);
-                    if (editBinding && editBinding.hasOwnProperty('configuration'))  setConfigurationTemporary(href, item.data, editBinding.configuration);//設定配置區塊的資料綁定
-                    if (successCallback) {
-                        successCallback();
-                    }
+//                    if (sections) setModelSections(sections,linksObj['section']);
+//                    if (editCollection) setEditTemporary(linksObj['edit'],editCollection,editBinding);
+//                    if (editBinding && editBinding.hasOwnProperty('configuration'))  setConfigurationTemporary(href, item.data, editBinding.configuration);//設定配置區塊的資料綁定
                 })
+                if (successCallback) successCallback(temporaryCollection.collection.items);
             })
         }
 
@@ -279,6 +282,7 @@
             saveConfiguration: saveConfiguration,
             setConfigurationTemporary: setConfigurationTemporary,
             setEditTemporary: setEditTemporary,
+            setItemsBinding: setItemsBinding,
             setModelSections: setModelSections,
             searchByQueries: searchByQueries,
             setQueriesBinding: setQueriesBinding,

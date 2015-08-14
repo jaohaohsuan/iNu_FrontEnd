@@ -2,7 +2,7 @@
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
         .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', 'API_PATH', 'previewService', createModelController])
-        .controller('matchedReviewedController', ['$scope', 'jsonMethodService', 'jsonParseService', '$modal', 'buildModelService', 'API_PATH', '$translate', '$timeout', 'previewService', matchedReviewedController])
+        .controller('matchedReviewedController', ['$scope', 'buildModelService', 'API_PATH', '$timeout', 'previewService', matchedReviewedController])
         .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', 'API_PATH', modelManagementController])
 
 
@@ -154,10 +154,6 @@
                     })
                     buildModelService.saveConfiguration(self.temporaryCollection, self.editBinding.configuration, function () {
                         swal('Nice!', 'You wrote: ' + inputValue, 'success');
-//                        self.queriesBinding.search.tags = angular.copy(self.editBinding.configuration.tags);
-//                        self.queriesBinding.search.tags = self.queriesBinding.search.tags.map(function (tag) {
-//                            return { name: tag.name }
-//                        })
                         if (successCallback) successCallback();
                         $scope.$emit('tagsChanged');
                     })
@@ -402,13 +398,10 @@
             self.editBinding.syntax.query = item.itemInfo.query.value.split(' ');
             self.editBinding.syntax.field = item.itemInfo.field.value;
             if (typeof item.itemInfo.syntax.value === 'boolean') {
-           
                     self.editBinding.syntax.syntaxIdentity = 'near';
                     self.editBinding.syntax.slop = item.itemInfo.slop.value;
                     self.editBinding.syntax.operator = 'AND';
                     self.editBinding.syntax.inOrder = item.itemInfo.syntax.value
-
-               
             } else {
                 self.editBinding.syntax.operator = item.itemInfo.syntax.value;
             }
@@ -438,12 +431,19 @@
         function initial(locationUrl, templateUrl) {
             buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding, function () {
                 self.editBinding.configuration.allTags = angular.copy(self.queriesBinding.search.tags);
+                var setBindingCallBack = function(items){
+                    buildModelService.setItemsBinding(items,function(item){
+                        buildModelService.setModelSections(item.linksObj.section,self.sections);//設定查詢條件區塊的資料綁定
+                        buildModelService.setEditTemporary(item.linksObj.edit,self.editCollection,self.editBinding);//設定邏輯詞組的資料綁定
+                        buildModelService.setConfigurationTemporary(item.href,item.data,self.editBinding.configuration);//設定配置區塊的資料綁定
+                    })
+                }
                 if (!locationUrl)//location不存在代表為首頁template
                 {
-                    buildModelService.setTemplate(templateUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
+                    buildModelService.setTemplate(templateUrl, self.temporaryCollection, setBindingCallBack);
                 } else {//設定Temporary
                     self.currentUrl = locationUrl;
-                    buildModelService.setTemporary(locationUrl, self.temporaryCollection, self.sections, self.editCollection, self.editBinding);
+                    buildModelService.setTemporary(locationUrl, self.temporaryCollection, setBindingCallBack);
                     self.isInstance = true;
                 }
                 buildModelService.searchByQueries(self.templateCollection, self.queriesBinding.search, 'search', function (items) {
@@ -467,7 +467,7 @@
         }
     }
 
-    function matchedReviewedController($scope, jsonMethodService, jsonParseService, $modal, buildModelService, API_PATH, $translate, $timeout, previewService) {
+    function matchedReviewedController($scope, buildModelService, API_PATH, $timeout, previewService) {
         var doFilterTimer;
         var resetQueryTimer;
         var self = this;
@@ -509,9 +509,11 @@
         function showModelDetail(model) {
             if (doFilterTimer) $timeout.cancel(doFilterTimer);
             doFilterTimer = $timeout(function () {
-                console.log('dd')
                 if (self.buildSections.length > 0) self.buildSections.length = 0;
-                buildModelService.setTemporary(model.href,self.temporaryCollection,self.buildSections,null,null,function(){
+                buildModelService.setTemporary(model.href,self.temporaryCollection,function(items){
+                    buildModelService.setItemsBinding(items,function(item){
+                        buildModelService.setModelSections(item.linksObj.section,self.buildSections);
+                    })
                     previewService.setPreviewGridData(self.temporaryCollection,self.gridData,function(){
                         self.showPreview = true;
                     })
@@ -685,7 +687,11 @@
                 }
                 buildModelService.setQueriesBinding(API_PATH + '_query/template/search', null, self.queryBinding, function () {
                     self.editBinding.configuration.allTags = angular.copy(self.queryBinding.search.tags);
-                    buildModelService.setTemporary(entity.href, self.temporaryCollection, null, null, self.editBinding);
+                    buildModelService.setTemporary(entity.href, self.temporaryCollection,function(items){
+                        buildModelService.setItemsBinding(items,function(item){
+                            buildModelService.setConfigurationTemporary(item.href,item.data,self.editBinding.configuration);
+                        })
+                    });
                 })
 
 
@@ -762,7 +768,11 @@
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
                 self.title = title;
-                buildModelService.setTemporary(entity.href, null, self.sections);
+                buildModelService.setTemporary(entity.href, null, function(items){
+                    buildModelService.setItemsBinding(items,function(item){
+                        buildModelService.setModelSections(item.linksObj.section,self.sections);
+                    })
+                });
                 function closeModal() {
                     $modalInstance.close();
                 }
