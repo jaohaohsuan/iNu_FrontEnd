@@ -125,7 +125,7 @@
         self.toggleSelection = toggleSelection;
         self.undo = undo;
         self.viewTemporaryAudio = viewTemporaryAudio
-        initial(templateLocation.path, templateUrl);
+        initial(templateUrl);
         $scope.$on('$destroy', destroyListener);
         $scope.$on('resetQuery',resetQuery);
         $scope.$on('tabClicked', tabClicked);
@@ -329,11 +329,17 @@
             self.saveAsNameInputFocus = true;
         }
 
-        function resetQuery(){
+        function resetQuery() {
             if (resetQueryTimer) $timeout.cancel(resetQueryTimer);
-            resetQueryTimer = $timeout(function(){
-                buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding);
-            },1000)
+            resetQueryTimer = $timeout(function () {
+                buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding,function(){
+                    buildModelService.setTemporary(templateLocation.path, self.temporaryCollection, function (items) {
+                        buildModelService.setItemsBinding(items, function (item) {
+                            buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration,self.queriesBinding.search.tags);//設定配置區塊的資料綁定
+                        })
+                    })
+                });
+            }, 1000)
         }
 
         function resetTitle(e) { //讓input內容恢復binding的資料
@@ -428,24 +434,26 @@
             $timeout.cancel(modelGroupSelectedTimeout,resetQueryTimer);
         }
 
-        function initial(locationUrl, templateUrl) {
+        function initial(templateUrl) {
             buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding, function () {
-                self.editBinding.configuration.allTags = angular.copy(self.queriesBinding.search.tags);
-                var setBindingCallBack = function(items){
-                    buildModelService.setItemsBinding(items,function(item){
-                        buildModelService.setModelSections(item.linksObj.section,self.sections);//設定查詢條件區塊的資料綁定
-                        buildModelService.setEditTemporary(item.linksObj.edit,self.editCollection,self.editBinding);//設定邏輯詞組的資料綁定
-                        buildModelService.setConfigurationTemporary(item.href,item.data,self.editBinding.configuration);//設定配置區塊的資料綁定
+                var setBindingCallBack = function (items) {
+                    buildModelService.setItemsBinding(items, function (item) {
+                        buildModelService.setModelSections(item.linksObj.section, self.sections);//設定查詢條件區塊的資料綁定
+                        buildModelService.setEditTemporary(item.linksObj.edit, self.editCollection, self.editBinding);//設定邏輯詞組的資料綁定
+                        buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration,self.queriesBinding.search.tags);//設定配置區塊的資料綁定
                     })
                 }
-                if (!locationUrl)//location不存在代表為首頁template
+                if (!templateLocation.path)//location不存在代表為首頁template
                 {
-                    buildModelService.setTemplate(templateUrl, self.temporaryCollection, setBindingCallBack);
-                } else {//設定Temporary
-                    self.currentUrl = locationUrl;
-                    buildModelService.setTemporary(locationUrl, self.temporaryCollection, setBindingCallBack);
+                    buildModelService.setTemporaryLocation(templateUrl, function (temporaryPath) {
+                        templateLocation.path = temporaryPath;
+                        buildModelService.setTemporary(templateLocation.path, self.temporaryCollection, setBindingCallBack);
+                    })
+                } else {
+                    buildModelService.setTemporary(templateLocation.path, self.temporaryCollection, setBindingCallBack);
                     self.isInstance = true;
                 }
+
                 buildModelService.searchByQueries(self.templateCollection, self.queriesBinding.search, 'search', function (items) {
                     self.editBinding.component.items = items;
                     self.editBinding.component.selected = [];
