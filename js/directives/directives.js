@@ -695,17 +695,19 @@
                 })
                 return deferred.promise;
             }
-            function getScrollHeight(index, perScrollHeight) { //當前cue的index ,與平均一個cue的scrollHeight
+            function getScrollHeight(index) { //當前cue的index ,與平均一個cue的scrollHeight
                 var scrollHeight = 0;
                 if (index > 0) {
                     for (var i = 0; i < index; i++) {
-                        var currentCueElement = $('#' + cuesId[i]); //取得當前綁定cue的element的高度
-                        scrollHeight += perScrollHeight
+                        var currentCueElementHeight = $('#' + cuesId[i]).outerHeight(); //取得當前綁定cue的element的高度
+                        scrollHeight += currentCueElementHeight+10;
                     }
                 }
-                return scrollHeight - (perScrollHeight * 3);
-            }
+                return Math.ceil(scrollHeight) -50;
+                //return Math.ceil(scrollHeight -  ((tempHeight - perScrollHeight < 0 ? 0 : tempHeight - perScrollHeight) * count));
+                //return perScrollHeight * 7 * ((index + 1) / 8);
 
+            }
             function getWavesurfer(e, wavesurfer) {
                 self.player = wavesurfer; //指定Wavesurfer
                 cueDiv = document.getElementsByClassName('cue-div'); //取到cue存放的div
@@ -769,7 +771,7 @@
                             if (currentTime >= floorDecimal(cue.startTime, floorDecimalPlaces)) {//目前時間 >= cue的起始時間代表已搜尋到
                                 search.searched = true;
                                 if (self.autoScroll) $(cueDiv).animate({
-                                    scrollTop: getScrollHeight(idx, cueDiv[0].scrollHeight / cues.length)
+                                    scrollTop: getScrollHeight(idx)
                                 })
                             }
                         }
@@ -860,7 +862,7 @@
                     currentTime = hmsfToSeconds(keyword.time);
                     //if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                 }
-                if (overWaveKeywordSpan.length > 0  ) {
+                if (overWaveKeywordSpan.length > 0) {
                     for (var j = overWaveKeywordSpan.length - 1; j >= 0; j--) {
                         if (j - 1 >= 0) {
                             var overWaveLeftPosition = $(overWaveKeywordSpan[j]).position().left  //取得倒數第j個的left
@@ -882,7 +884,7 @@
                             inWaveLastPosition = $(overWaveKeywordSpan[0]).position().left;
                         }
                     }
-                   
+
                 }
 
 
@@ -1383,5 +1385,4 @@
         .directive('ngRepeatEnd', ['$timeout', ngRepeatEnd])
         .directive('playAudioFile', playAudioFile) //播放音檔內容
         .directive('matchedReviewGrid', matchedReviewGrid) //瀏覽音檔Grid
-
 })();
