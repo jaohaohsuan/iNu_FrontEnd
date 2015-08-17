@@ -585,7 +585,6 @@
             $scope.$on('wavesurferInit', getWavesurfer); //當wavesurfer準備好後
             $scope.$on('ngRepeatEnd', setKeywordsPosition) //keywords repeat完後
             function changeCue(cue) {
-                //audio.currentTime = cue.startTime;
                 self.player.seekTo(cue.startTime / self.player.getDuration())
             }
             function floorDecimal(num, places) {//無條件捨去小數點N位
@@ -596,7 +595,6 @@
             function goBackward() {
                 self.player.skipBackward();
                 self.showSpeed = true;
-                //audio.currentTime = self.player.getCurrentTime();
             }
 
             function goBackwardFast(value) {
@@ -611,14 +609,12 @@
 
             function goForward() {
                 self.player.skipForward();
-                //audio.currentTime = self.player.getCurrentTime();
                 if (self.player.getCurrentTime() === self.player.getDuration() || self.player.getCurrentTime() === 0) {
                     if (self.player.isPlaying()) {
                         self.player.play();
                     } else {
                         self.player.seekTo(0);
                     }
-                    //self.playing = false;
                 }
             }
 
@@ -639,10 +635,6 @@
 
 
             function mute() {
-                //if (audio.muted == true)
-                //    audio.muted = false;
-                //else
-                //    audio.muted = true;
 
                 if (volume === 0) { //當靜音時恢復原本的音量
                     self.player.setVolume(tempVolume);
@@ -656,13 +648,11 @@
 
             function playPause() {
                 if (self.player.isPlaying()) { //當播放時
-                    //audio.play();
                     self.playPauseText = $translate.instant('play');
                     self.player.pause();
                     self.playing = false;
                 }
                 else {
-                    //audio.pause();
                     self.playPauseText = $translate.instant('pause');
                     self.player.play();
                     self.playing = true;
@@ -672,7 +662,7 @@
                 second = hmsfToSeconds(second);
                 self.player.seekTo(second / self.player.getDuration()); //切換
             }
-            function setPanner() {
+            function setPanner() { //設定左右聲道
                 var xDeg = parseInt(self.pannerValue);
                 var zDeg = xDeg + 90;
                 if (zDeg > 90) {
@@ -727,20 +717,20 @@
                 })
                 return deferred.promise;
             }
-            function getScrollHeight(index) { //當前cue的index ,與平均一個cue的scrollHeight
+            function getScrollHeight(index) { //當前cue的index 
                 var scrollHeight = 0;
                 if (index > 0) {
                     for (var i = 0; i < index; i++) {
                         var currentCueElementHeight = $('#' + cuesId[i]).outerHeight(); //取得當前綁定cue的element的高度
-                        scrollHeight += currentCueElementHeight + 10;
+                        scrollHeight += currentCueElementHeight + 10; //+10 為加上 上下的間距
                     }
                 }
-                return Math.ceil(scrollHeight) - 50;
+                return Math.ceil(scrollHeight) - 50; //讓字幕不會固定在第一行
                 //return Math.ceil(scrollHeight -  ((tempHeight - perScrollHeight < 0 ? 0 : tempHeight - perScrollHeight) * count));
                 //return perScrollHeight * 7 * ((index + 1) / 8);
 
             }
-            function getWavesurfer(e, wavesurfer) {
+            function getWavesurfer(e, wavesurfer) { //接收到wavesurfer廣播後
                 self.player = wavesurfer; //指定Wavesurfer
                 cueDiv = document.getElementsByClassName('cue-div'); //取到cue存放的div
                 if (!self.audioHref) {
@@ -883,7 +873,6 @@
                     } else {
                         inSameCueCount = 1;
                     }
-                    console.log(inSameCueCount)
                     if (leftPosition + (currentSpan.outerWidth() * inSameCueCount) > self.player.drawer.width) { //當關鍵字超出音坡時 鎖在音波範圍內
                         leftPosition -= currentSpan.outerWidth()
                         overWaveKeywordSpan.push(currentSpan); //紀錄超出音波的關鍵字
@@ -901,6 +890,7 @@
                     currentTime = hmsfToSeconds(keyword.time);
                     //if (maxPosition < lastPosition) maxPosition = lastPosition;//設定長度最長的位置
                 }
+    
                 if (overWaveKeywordSpan.length > 0) {
                     for (var j = overWaveKeywordSpan.length - 1; j >= 0; j--) {
                         if (j - 1 >= 0) {
@@ -929,22 +919,7 @@
 
             }
 
-            //function setKeywordTop(index1, index2) {
-            //    if (index1 < 0) return 0;
-            //    else {
-            //        var div1 = $('#video-keywords' + index1);
-            //        var div2 = $('#video-keywords' + index2);
-            //        var childElement = $('#video-keywords' + index2 + ' > span');
-            //        console.log(div1)
-            //        console.log(div2[0].children[0].offsetLeft, div1[0].children[0].offsetLeft,div1[0].children[0].offsetWidth)
-            //        if ((div2[0].children[0].offsetLeft - div1[0].children[0].offsetLeft) > div1[0].children[0].offsetWidth) {
-            //            console.log(childElement.offset().left)
-            //            childElement.offset({ left: childElement.offset().left - div1[0].children[0].offsetWidth })
-            //            childElement.appendTo(div1)
-            //                                        div2.animate({ top: '0px' });
-            //        }
-            //    }
-            //}
+
         }
         return directive;
     }
