@@ -2,7 +2,7 @@
     angular.module('iNu')
         .service('buildModelService', ['jsonMethodService', 'jsonParseService', '$translate', '$timeout', buildModelService])
         .service('previewService', ['jsonMethodService','jsonParseService',previewService])
-        .service('templateLocation', templateLocation)
+        .service('temporaryLocation', temporaryLocation)
     function buildModelService(jsonMethodService, jsonParseService, $translate, $timeout) {
 
         function addNewComponent(templateCollection,title,successCallback,errorCallback){
@@ -315,11 +315,11 @@
 
         }
     }
-    function templateLocation() {
+    function temporaryLocation() {
         var self = this;
     }
 
-    Object.defineProperty(templateLocation.prototype, 'path', {
+    Object.defineProperty(temporaryLocation.prototype, 'path', {
         configurable: false,
         get: function () {
             return this._path;

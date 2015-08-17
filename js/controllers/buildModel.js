@@ -1,9 +1,9 @@
 (function () {
     angular.module('iNu')
         .controller('buildModelController', ['$scope', '$timeout', '$translate', buildModelController])
-        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'templateLocation', 'buildModelService', 'API_PATH', 'previewService', createModelController])
+        .controller('createModelController', ['$scope', 'jsonMethodService', 'jsonParseService', '$timeout', 'SweetAlert', '$translate', 'temporaryLocation', 'buildModelService', 'API_PATH', 'previewService', createModelController])
         .controller('matchedReviewedController', ['$scope', 'buildModelService', 'API_PATH', '$timeout', 'previewService', matchedReviewedController])
-        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'templateLocation', '$translate', '$modal', '$timeout', 'SweetAlert', 'API_PATH', modelManagementController])
+        .controller('modelManagementController', ['$scope', 'jsonMethodService', 'jsonParseService', 'buildModelService', 'temporaryLocation', '$translate', '$modal', '$timeout', 'SweetAlert', 'API_PATH', modelManagementController])
 
 
     function buildModelController($scope, $timeout, $translate) {
@@ -57,7 +57,8 @@
         }
     }
 
-    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, templateLocation, buildModelService, API_PATH, previewService) {
+    function createModelController($scope, jsonMethodService, jsonParseService, $timeout, SweetAlert, $translate, temporaryLocation, buildModelService, API_PATH, previewService) {
+        var currentTemporaryUrl = '';
         var modelGroupSelectedTimeout;
         var resetQueryTimer;
         var templateUrl = API_PATH + '_query/template';
@@ -194,7 +195,7 @@
                                 self.editBinding.component.items = items;
                                 self.editBinding.component.selected = [];
                             })
-                            templateLocation.path = location; //設定URL Service的path變數
+                            temporaryLocation.path = location; //設定URL Service的path變數
                             $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
                         }, 2000)
                     })
@@ -233,8 +234,8 @@
                     }
                     var errorCallBack = function (response) {
                         swal(
-                                 { title: 'Can not add same component', type: 'error', showConfirmButton: true, confirmButtonColor: '#DD6B55' }
-                             );
+                             { title: 'Can not add same component', type: 'error', showConfirmButton: true, confirmButtonColor: '#DD6B55' }
+                            );
                         component.checked = false;
                     }
                     buildModelService.addToCurrentSection(href, template, self.sections, occurrence, successCallback, errorCallBack);
@@ -335,7 +336,7 @@
             if (resetQueryTimer) $timeout.cancel(resetQueryTimer);
             resetQueryTimer = $timeout(function () {
                 buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding, function () {
-                    buildModelService.setTemporary(templateLocation.path, self.temporaryCollection, function (items) {
+                    buildModelService.setTemporary(currentTemporaryUrl, self.temporaryCollection, function (items) {
                         buildModelService.setItemsBinding(items, function (item) {
                             buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration, self.queriesBinding.search.tags);//設定配置區塊的資料綁定
                         })
@@ -363,7 +364,7 @@
                                     tabName: self.editBinding.expansion.title
                                 });
                             }, 1000)
-                            templateLocation.path = location;
+                            temporaryLocation.path = location;
                         })
                     },
                     'online': function () {
@@ -438,11 +439,12 @@
         //////////////////不綁定區//////////////////
         function destroyListener(event) {
             $timeout.cancel(modelGroupSelectedTimeout, resetQueryTimer);
-            templateLocation.path = null;
+            temporaryLocation.path = null;
         }
 
         function initial(templateUrl) {
             buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding, function () {
+                currentTemporaryUrl = temporaryLocation.path;
                 var setBindingCallBack = function (items) {
                     buildModelService.setItemsBinding(items, function (item) {
                         buildModelService.setModelSections(item.linksObj.section, self.sections);//設定查詢條件區塊的資料綁定
@@ -450,14 +452,15 @@
                         buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration, self.queriesBinding.search.tags);//設定配置區塊的資料綁定
                     })
                 }
-                if (!templateLocation.path)//location不存在代表為首頁template
+                if (!temporaryLocation.path)//location不存在代表為首頁template
                 {
                     buildModelService.setTemporaryLocation(templateUrl, function (temporaryPath) {
-                        templateLocation.path = temporaryPath;
-                        buildModelService.setTemporary(templateLocation.path, self.temporaryCollection, setBindingCallBack);
+                        temporaryLocation.path = temporaryPath;
+                        currentTemporaryUrl = temporaryPath;
+                        buildModelService.setTemporary(temporaryLocation.path, self.temporaryCollection, setBindingCallBack);
                     })
                 } else {
-                    buildModelService.setTemporary(templateLocation.path, self.temporaryCollection, setBindingCallBack);
+                    buildModelService.setTemporary(temporaryLocation.path, self.temporaryCollection, setBindingCallBack);
                     self.isInstance = true;
                 }
 
@@ -465,6 +468,7 @@
                     self.editBinding.component.items = items;
                     self.editBinding.component.selected = [];
                 })
+
             });
         }
 
@@ -541,7 +545,7 @@
 
     }
 
-    function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, templateLocation, $translate, $modal, $timeout, SweetAlert, API_PATH) {
+    function modelManagementController($scope, jsonMethodService, jsonParseService, buildModelService, temporaryLocation, $translate, $modal, $timeout, SweetAlert, API_PATH) {
 
         var resetQueryTimer;
         var self = this;
@@ -651,7 +655,7 @@
                 addable: true,
                 tabName: entity.modelName
             });
-            templateLocation.path = entity.href;
+            temporaryLocation.path = entity.href;
         }
 
         function filterModel(queriesBinding) {
