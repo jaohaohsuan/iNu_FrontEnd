@@ -123,9 +123,9 @@
             allTags = angular.copy(allTags);
             angular.forEach(datas, function (data) {
                 if (data.name === 'tags') {
-                    var selectedTags = tagsToArrayObject(data.value);
+                    var selectedTags = tagsToArrayObject(data.value);//將已選取的標籤文字轉換成arrayObject的結構
                     if (allTags) {
-                        data.value = markedSelectedTags(allTags, selectedTags);
+                        data.value = markedSelectedTags(allTags, selectedTags);//對allTags進行標記已選取的標籤
                     } else data.value = selectedTags;
                 }
                 configurationBinding[data.name] = data.value;
@@ -146,16 +146,16 @@
             })
         }
 
-        function setEditTemporary(editLinks, editCollection, editBinding) {
+        function setEditTemporary(editLinks, syntaxCollection, editBinding) {
             angular.forEach(editLinks, function (editlink) {
                 jsonMethodService.get(editlink.href).then(function (collectionjson) {
-                    var syntaxIdentity = editlink.href.match(/(match|near|named)/g)[0];
+                    var syntaxIdentity = editlink.href.match(/(match|near|named)/g)[0];//從連結中獲取syntax類型的識別字
                     var bindGroup;
                     if (!syntaxIdentity) return;
-                    if (['match', 'near'].indexOf(syntaxIdentity) != -1) bindGroup = 'syntax';
-                    else if (syntaxIdentity == 'named') bindGroup = 'component';
+                    if (['match', 'near'].indexOf(syntaxIdentity) != -1) bindGroup = 'syntax';//match、near屬於syntax
+                    else if (syntaxIdentity == 'named') bindGroup = 'component';//named屬於component
                     setEditBinding(editBinding, bindGroup, collectionjson.collection.template.data);
-                    editCollection[syntaxIdentity] = collectionjson.collection;
+                    syntaxCollection[syntaxIdentity] = collectionjson.collection;
                 })
             })
         }
@@ -168,12 +168,12 @@
 
         function setModelSections(sectionLinks,sections) {
             if (sections){
-                sections.length = 0;
-                angular.forEach(sectionLinks,function(sectionLink){
+                sections.length = 0;//清空條件容器區塊
+                angular.forEach(sectionLinks,function(sectionLink){//根據links重新加入sections
                     sections.push(sectionLink);
                 })
             }
-            angular.forEach(sections, function (section) {
+            angular.forEach(sections, function (section) {//根據每個section的link取得collection，並設定需綁定的property
                     jsonMethodService.get(section.href).then(function (collectionjson) {
                         section.items = collectionjson.collection.items;
                         section.name = $translate.instant(section.name);
@@ -214,7 +214,7 @@
             })
         }
 
-        function setTemporaryLocation(templateUrl,successCallback){
+        function setTemporaryLocation(templateUrl,successCallback){//從template的collection中取得temporary的link並callback給外部進行設定
             jsonMethodService.get(templateUrl).then(function (collectionjson) {
                 var temporaryUrl = jsonParseService.findItemValueFromArray(collectionjson.collection.links, "href", "temporary").href;//由links內取得temporary的href
                 if (successCallback) successCallback(temporaryUrl);

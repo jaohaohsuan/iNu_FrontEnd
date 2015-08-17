@@ -87,11 +87,7 @@
                 title: ''
             }
         };
-        self.editCollection = {
-            match: {},
-            near: {},
-            named: {}
-        };
+
         self.enabledModel = enabledModel;
         self.filterModelGroup = filterModelGroup;
         self.isInstance = false;
@@ -116,6 +112,11 @@
         self.sectionsDblclick = sectionsDblclick;
         self.selectedNestingItems = [];
         self.showUndo = false;
+        self.syntaxCollection = {
+            match: {},
+            near: {},
+            named: {}
+        };
         self.tabIndex = 0;
         self.temporaryCollection = {
             collection: {}
@@ -201,14 +202,14 @@
         }
 
         function addToSectionFromSyntax(syntaxIdentity) {
-            angular.forEach(self.editCollection[syntaxIdentity].template.data, function (data) { //從template取出資料後，一一做綁定
+            angular.forEach(self.syntaxCollection[syntaxIdentity].template.data, function (data) { //從template取出資料後，一一做綁定
                 if (data.name === 'query') data.value = self.editBinding.syntax[data.name].map(function (element) {
                     return element.text
                 }).join(' ');
                 else data.value = self.editBinding.syntax[data.name]
             })
-            var href = self.editCollection[syntaxIdentity].href;
-            var template = { template: angular.copy(self.editCollection[syntaxIdentity].template) };
+            var href = self.syntaxCollection[syntaxIdentity].href;
+            var template = { template: angular.copy(self.syntaxCollection[syntaxIdentity].template) };
             var occurrence = self.editBinding.syntax.occurrence;
             var successCallback = function () {
                 syntaxInputClear();
@@ -217,15 +218,15 @@
         }
 
         function addToSectionFromComponent() {
-            var kvDatas = jsonParseService.getObjectMappingNameToValueFromDatas(self.editCollection.named.template.data, "name");
+            var kvDatas = jsonParseService.getObjectMappingNameToValueFromDatas(self.syntaxCollection.named.template.data, "name");
             kvDatas.occurrence.value = self.editBinding.component.occurrence;
             angular.forEach(self.editBinding.component.selected, function (component) {
                 $timeout(function () {
                     var id = component.href.substr(component.href.lastIndexOf('/') + 1);
                     kvDatas.storedQueryId.value = id;
                     kvDatas.storedQueryTitle.value = component.title;
-                    var template = { template: angular.copy(self.editCollection.named.template) };
-                    var href = self.editCollection.named.href;
+                    var template = { template: angular.copy(self.syntaxCollection.named.template) };
+                    var href = self.syntaxCollection.named.href;
                     var occurrence = self.editBinding.component.occurrence;
                     var successCallback = function () {
                         component.checked = false;
@@ -444,7 +445,7 @@
                 var setBindingCallBack = function (items) {
                     buildModelService.setItemsBinding(items, function (item) {
                         buildModelService.setModelSections(item.linksObj.section, self.sections);//設定查詢條件區塊的資料綁定
-                        buildModelService.setEditTemporary(item.linksObj.edit, self.editCollection, self.editBinding);//設定邏輯詞組的資料綁定
+                        buildModelService.setEditTemporary(item.linksObj.edit, self.syntaxCollection, self.editBinding);//設定邏輯詞組的資料綁定
                         buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration, self.queriesBinding.search.tags);//設定配置區塊的資料綁定
                     })
                 }
