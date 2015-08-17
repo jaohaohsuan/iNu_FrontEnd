@@ -20,7 +20,7 @@
         self.tabChanged = tabChanged;
         $scope.$on('addTab', addTab);
         $scope.$on('changeTabName', changeTabName);
-        $scope.$on('tagsChanged',tagsChanged);
+        $scope.$on('tagsChanged', tagsChanged);
         function addTab(event, tab) { //接收增加頁籤的廣播
             if (tab) {
                 self.tabs.splice(++self.pagingIndex, 0, tab);
@@ -52,7 +52,7 @@
             $scope.$broadcast('tabClicked');
         }
 
-        function tagsChanged(){
+        function tagsChanged() {
             $scope.$broadcast('resetQuery');
         }
     }
@@ -61,6 +61,7 @@
         var modelGroupSelectedTimeout;
         var resetQueryTimer;
         var templateUrl = API_PATH + '_query/template';
+        var temporaryAudioTimeout;
         var self = this;
 
         self.addTags = addTags; //增加模型組
@@ -120,14 +121,14 @@
             collection: {}
         };
         self.templateCollection = {
-           collection: {}
+            collection: {}
         };
         self.toggleSelection = toggleSelection;
         self.undo = undo;
         self.viewTemporaryAudio = viewTemporaryAudio
         initial(templateUrl);
         $scope.$on('$destroy', destroyListener);
-        $scope.$on('resetQuery',resetQuery);
+        $scope.$on('resetQuery', resetQuery);
         $scope.$on('tabClicked', tabClicked);
         function addTags(successCallback) {
             SweetAlert.swal({
@@ -186,15 +187,15 @@
                         type: 'success',
                         showConfirmButton: false
                     });
-                    buildModelService.addNewComponent(self.templateCollection,inputValue,function(location){//成功新增新組件
-                       $timeout(function(){
-                           buildModelService.searchByQueries(self.templateCollection, self.queriesBinding.search, 'search', function (items) {//重新搜尋
-                               self.editBinding.component.items = items;
-                               self.editBinding.component.selected = [];
-                           })
-                           templateLocation.path = location; //設定URL Service的path變數
-                           $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
-                       },2000)
+                    buildModelService.addNewComponent(self.templateCollection, inputValue, function (location) {//成功新增新組件
+                        $timeout(function () {
+                            buildModelService.searchByQueries(self.templateCollection, self.queriesBinding.search, 'search', function (items) {//重新搜尋
+                                self.editBinding.component.items = items;
+                                self.editBinding.component.selected = [];
+                            })
+                            templateLocation.path = location; //設定URL Service的path變數
+                            $scope.$emit('addTab', { title: 'createModel', active: true, addable: true, tabName: inputValue });
+                        }, 2000)
                     })
                 });
         }
@@ -318,7 +319,7 @@
 
         function modelInstanceSelected(configuration) {
             if (!self.isInstance) {
-                buildModelService.saveConfiguration(self.temporaryCollection, configuration,function(){
+                buildModelService.saveConfiguration(self.temporaryCollection, configuration, function () {
                     $scope.$emit('tagsChanged');
                 });
             }
@@ -332,10 +333,10 @@
         function resetQuery() {
             if (resetQueryTimer) $timeout.cancel(resetQueryTimer);
             resetQueryTimer = $timeout(function () {
-                buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding,function(){
+                buildModelService.setQueriesBinding(templateUrl + '/search', self.templateCollection, self.queriesBinding, function () {
                     buildModelService.setTemporary(templateLocation.path, self.temporaryCollection, function (items) {
                         buildModelService.setItemsBinding(items, function (item) {
-                            buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration,self.queriesBinding.search.tags);//設定配置區塊的資料綁定
+                            buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration, self.queriesBinding.search.tags);//設定配置區塊的資料綁定
                         })
                     })
                 });
@@ -400,18 +401,18 @@
             })
         }
 
-        function sectionsDblclick(section,item) {
+        function sectionsDblclick(section, item) {
             self.editBinding.syntax.query = item.itemInfo.query.value.split(' ');
             self.editBinding.syntax.field = item.itemInfo.field.value;
             if (typeof item.itemInfo.syntax.value === 'boolean') {
-                    self.editBinding.syntax.syntaxIdentity = 'near';
-                    self.editBinding.syntax.slop = item.itemInfo.slop.value;
-                    self.editBinding.syntax.operator = 'AND';
-                    self.editBinding.syntax.inOrder = item.itemInfo.syntax.value
+                self.editBinding.syntax.syntaxIdentity = 'near';
+                self.editBinding.syntax.slop = item.itemInfo.slop.value;
+                self.editBinding.syntax.operator = 'AND';
+                self.editBinding.syntax.inOrder = item.itemInfo.syntax.value
             } else {
                 self.editBinding.syntax.operator = item.itemInfo.syntax.value;
             }
-            sectionsClear(section,item);
+            sectionsClear(section, item);
         }
 
 
@@ -425,13 +426,17 @@
             self.showUndo = false;
         }
         function viewTemporaryAudio() {
-            previewService.setPreviewGridData(self.temporaryCollection,self.previewData,function(){
-                self.showPreview = true;
-            })
+            if (temporaryAudioTimeout) $timeout.cancel(temporaryAudioTimeout);
+            temporaryAudioTimeout =$timeout(function () {
+                previewService.setPreviewGridData(self.temporaryCollection, self.previewData, function () {
+                    self.showPreview = true;
+                })
+            }, 1000)
+
         }
         //////////////////不綁定區//////////////////
         function destroyListener(event) {
-            $timeout.cancel(modelGroupSelectedTimeout,resetQueryTimer);
+            $timeout.cancel(modelGroupSelectedTimeout, resetQueryTimer);
         }
 
         function initial(templateUrl) {
@@ -440,7 +445,7 @@
                     buildModelService.setItemsBinding(items, function (item) {
                         buildModelService.setModelSections(item.linksObj.section, self.sections);//設定查詢條件區塊的資料綁定
                         buildModelService.setEditTemporary(item.linksObj.edit, self.editCollection, self.editBinding);//設定邏輯詞組的資料綁定
-                        buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration,self.queriesBinding.search.tags);//設定配置區塊的資料綁定
+                        buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration, self.queriesBinding.search.tags);//設定配置區塊的資料綁定
                     })
                 }
                 if (!templateLocation.path)//location不存在代表為首頁template
@@ -507,27 +512,27 @@
             })
         }
 
-        function resetQuery(){
+        function resetQuery() {
             if (resetQueryTimer) $timeout.cancel(resetQueryTimer);
-            resetQueryTimer = $timeout(function(){
+            resetQueryTimer = $timeout(function () {
                 buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);
-            },1000)
+            }, 1000)
         }
 
         function showModelDetail(model) {
             if (doFilterTimer) $timeout.cancel(doFilterTimer);
             doFilterTimer = $timeout(function () {
                 if (self.buildSections.length > 0) self.buildSections.length = 0;
-                buildModelService.setTemporary(model.href,self.temporaryCollection,function(items){
-                    buildModelService.setItemsBinding(items,function(item){
-                        buildModelService.setModelSections(item.linksObj.section,self.buildSections);
+                buildModelService.setTemporary(model.href, self.temporaryCollection, function (items) {
+                    buildModelService.setItemsBinding(items, function (item) {
+                        buildModelService.setModelSections(item.linksObj.section, self.buildSections);
                     })
-                    previewService.setPreviewGridData(self.temporaryCollection,self.gridData,function(){
+                    previewService.setPreviewGridData(self.temporaryCollection, self.gridData, function () {
                         self.showPreview = true;
                     })
                 })
                 self.isShowModelDetail = true;
-                self.modelTitle=model.title
+                self.modelTitle = model.title
             }, 300)
         }
         ////////////////////不綁定區//////////////
@@ -657,11 +662,11 @@
             })
         }
 
-        function resetQuery(){
+        function resetQuery() {
             if (resetQueryTimer) $timeout.cancel(resetQueryTimer);
-            resetQueryTimer = $timeout(function(){
+            resetQueryTimer = $timeout(function () {
                 buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.templateCollection, self.queriesBinding);
-            },1000)
+            }, 1000)
         }
 
         function saveAsModel(entity) { //打開modal另存模型
@@ -698,9 +703,9 @@
                 }
                 buildModelService.setQueriesBinding(API_PATH + '_query/template/search', null, self.queryBinding, function () {
                     self.editBinding.configuration.allTags = angular.copy(self.queryBinding.search.tags);
-                    buildModelService.setTemporary(entity.href, self.temporaryCollection,function(items){
-                        buildModelService.setItemsBinding(items,function(item){
-                            buildModelService.setConfigurationTemporary(item.href,item.data,self.editBinding.configuration);
+                    buildModelService.setTemporary(entity.href, self.temporaryCollection, function (items) {
+                        buildModelService.setItemsBinding(items, function (item) {
+                            buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration);
                         })
                     });
                 })
@@ -779,9 +784,9 @@
                 self.itemInfoEditable = 'itemInfo.editable';
                 self.sections = [];
                 self.title = title;
-                buildModelService.setTemporary(entity.href, null, function(items){
-                    buildModelService.setItemsBinding(items,function(item){
-                        buildModelService.setModelSections(item.linksObj.section,self.sections);
+                buildModelService.setTemporary(entity.href, null, function (items) {
+                    buildModelService.setItemsBinding(items, function (item) {
+                        buildModelService.setModelSections(item.linksObj.section, self.sections);
                     })
                 });
                 function closeModal() {
