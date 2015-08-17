@@ -438,6 +438,7 @@
         //////////////////不綁定區//////////////////
         function destroyListener(event) {
             $timeout.cancel(modelGroupSelectedTimeout, resetQueryTimer);
+            templateLocation.path = null;
         }
 
         function initial(templateUrl) {
