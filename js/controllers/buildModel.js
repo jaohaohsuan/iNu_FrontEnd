@@ -498,7 +498,10 @@
         self.datasource = [];
         self.dropdownAutoSize = false;
         self.filterModelGroup = filterModelGroup;
-        self.gridData = [];
+        self.previewBinding = {
+            items:[],
+            count: ''
+        };
         self.isShowModelDetail = false;
         self.modelKeyword = '';
         self.models = [];
@@ -536,7 +539,7 @@
                     buildModelService.setItemsBinding(items, function (item) {
                         buildModelService.setModelSections(item.linksObj.section, self.buildSections);
                     })
-                    previewService.setPreviewGridData(self.temporaryCollection, self.gridData, function () {
+                    previewService.setPreviewGridData(self.temporaryCollection, self.previewBinding, function () {
                         self.showPreview = true;
                     })
                 })
