@@ -193,7 +193,7 @@
         }
         return directive;
     }
-    function matchedReviewGrid() {
+    function matchedPreviewGrid() {
         var directive = {
             restrict: 'E',
             scope: {
@@ -283,12 +283,12 @@
                         var keywordsMap = {};
                         angular.forEach(highlightKeywords, function (highlightKeyword) {
                             var keywords = highlightKeyword.split(/\s+/);//以空白切割字串
-                            var timespan = keywords.shift();//第一個項目為timespan
-                            if (keywordsMap[timespan]) {//以時間當作群組存放關鍵字
-                                keywordsMap[timespan] = keywordsMap[timespan].concat(keywords);
-                            } else {
-                                keywordsMap[timespan] = keywords;
-                            }
+                                var timespan = keywords.shift();//第一個項目為timespan
+                                if (keywordsMap[timespan]) {//以時間當作群組存放關鍵字
+                                    keywordsMap[timespan] = keywordsMap[timespan].concat(keywords);
+                                } else {
+                                    keywordsMap[timespan] = keywords;
+                                }
                         })
                         Object.keys(keywordsMap).map(function (timespan) {
                             var uniqueKeywords = keywordsMap[timespan].reduce(function (p, c) {
@@ -1414,7 +1414,7 @@
         .directive('wavesurferTimeLine', wavesurferTimeLine) //音波圖時間軸
         .directive('ngRepeatEnd', ['$timeout', ngRepeatEnd])
         .directive('playAudioFile', playAudioFile) //播放音檔內容
-        .directive('matchedReviewGrid', matchedReviewGrid) //瀏覽音檔Grid
+        .directive('matchedPreviewGrid', matchedPreviewGrid) //瀏覽音檔Grid
         .directive('itemPicker', itemPicker)
         .directive('singleModelGroupSelect', singleModelGroupSelect)
 })();

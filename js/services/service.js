@@ -294,8 +294,8 @@
     function previewService(jsonMethodService,jsonParseService) {
         var self = this;
         self.setPreviewGridData = setPreviewGridData //設定匹配預覽要用的gridData
-        function setPreviewGridData(temporaryCollection, gridData,successCallBack,errorCallBack) {
-            if (gridData.length > 0) gridData.length = 0;
+        function setPreviewGridData(temporaryCollection, previewData,successCallBack,errorCallBack) {
+            if (previewData.length > 0) previewData.length = 0;
             var rndSource = ['Log8000', 'QQ', 'Line']; //demo用之後要拿掉
             angular.forEach(temporaryCollection.collection.items,function(temporaryItems){
                 var previewLinks = temporaryItems.linksObj.preview;
@@ -303,12 +303,12 @@
                     jsonMethodService.get(previewLink.href).then(function(collectionjson){
                         var statusLink = jsonParseService.getRELTemplateValidate(collectionjson.collection.links,'status');
                         setStatusCount(statusLink.href,function(count){
-                            gridData.count = count;
+                            previewData.count = count;
                         })
                         angular.forEach(collectionjson.collection.items,function(item){
                             var previewObj = jsonParseService.getObjectMappingNameToValueFromDatas(item.data);
                             var datasourceName = rndSource[Math.round(Math.random() * 2)];
-                            gridData.items.push(
+                            previewData.items.push(
                                 { 'datasourceName': datasourceName, 'matchedKeywords': previewObj.keywords.value, 'vttHref': item.href, 'highlight': previewObj.highlight.array }
                             );
                         })
