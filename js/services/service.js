@@ -295,7 +295,7 @@
         var self = this;
         self.setPreviewGridData = setPreviewGridData //設定匹配預覽要用的gridData
         function setPreviewGridData(temporaryCollection, previewData,successCallBack,errorCallBack) {
-            if (previewData.length > 0) previewData.length = 0;
+            if (previewData.items.length > 0) previewData.items.length = 0;
             var rndSource = ['Log8000', 'QQ', 'Line']; //demo用之後要拿掉
             angular.forEach(temporaryCollection.collection.items,function(temporaryItems){
                 var previewLinks = temporaryItems.linksObj.preview;
