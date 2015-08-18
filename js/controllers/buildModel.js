@@ -713,16 +713,13 @@
                 self.temporaryCollection = {
                     collection: {}
                 }
-                buildModelService.setQueriesBinding(API_PATH + '_query/template/search', null, self.queryBinding, function () {
-                    self.editBinding.configuration.allTags = angular.copy(self.queryBinding.search.tags);
+                buildModelService.setQueriesBinding(API_PATH + '_query/template/search', self.temporaryCollection, self.queryBinding, function () {
                     buildModelService.setTemporary(entity.href, self.temporaryCollection, function (items) {
                         buildModelService.setItemsBinding(items, function (item) {
-                            buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration);
+                            buildModelService.setConfigurationTemporary(item.href, item.data, self.editBinding.configuration ,self.queryBinding.search.tags);
                         })
                     });
                 })
-
-
                 self.closeModal = closeModal;
                 function closeModal() {
                     $modalInstance.close();
@@ -745,13 +742,14 @@
                             if (inputValue === false) return false;
                             if (inputValue === '' || !inputValue.trim().length) {
                                 swal.showInputError('You need to write something!');
-                                return false
+                                return false;
                             }
 
                             self.editBinding.configuration.tags.push({
                                 name: inputValue,
                                 selected: true
                             })
+
                             buildModelService.saveConfiguration(self.temporaryCollection, self.editBinding.configuration, function () {
                                 swal('Nice!', 'You wrote: ' + inputValue, 'success');
                                 $scope.$emit('tagsChanged');
