@@ -87,7 +87,8 @@
             getDatasFromCollectionJson: getDatasFromCollectionJson,
             getEditorLinkFromLinks: getEditorLinkFromLinks,
             getLinksObjFromLinks: getLinksObjFromLinks,
-            getObjectMappingNameToValueFromDatas: getObjectMappingNameToValueFromDatas
+            getObjectMappingNameToValueFromDatas: getObjectMappingNameToValueFromDatas,
+            getRELTemplateValidate: getRELTemplateValidate
         };
     }
 })();

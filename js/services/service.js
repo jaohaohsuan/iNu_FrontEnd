@@ -301,10 +301,14 @@
                 var previewLinks = temporaryItems.linksObj.preview;
                 angular.forEach(previewLinks, function (previewLink) {
                     jsonMethodService.get(previewLink.href).then(function(collectionjson){
+                        var statusLink = jsonParseService.getRELTemplateValidate(collectionjson.collection.links,'status');
+                        setStatusCount(statusLink.href,function(count){
+                            gridData.count = count;
+                        })
                         angular.forEach(collectionjson.collection.items,function(item){
                             var previewObj = jsonParseService.getObjectMappingNameToValueFromDatas(item.data);
                             var datasourceName = rndSource[Math.round(Math.random() * 2)];
-                            gridData.push(
+                            gridData.items.push(
                                 { 'datasourceName': datasourceName, 'matchedKeywords': previewObj.keywords.value, 'vttHref': item.href, 'highlight': previewObj.highlight.array }
                             );
                         })
@@ -312,7 +316,21 @@
                     })
                 })
             })
-
+        }
+        function setStatusCount(statusHref,successCallback){
+            jsonMethodService.get(statusHref).then(function(collectionjson){//拆成一個function
+                var resultCount;
+                angular.forEach(collectionjson.collection.items,function(item){
+                    var dataArr = item.data;
+                    dataArr.some(function(data){
+                        if (data.name === 'count'){
+                            resultCount = data.value;
+                            return true;
+                        }
+                    })
+                })
+                successCallback(resultCount);
+            })
         }
     }
     function temporaryLocation() {

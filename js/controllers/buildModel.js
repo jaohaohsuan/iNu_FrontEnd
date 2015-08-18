@@ -95,7 +95,10 @@
         //self.isRounded = isRounded;
         self.modelInstanceSelected = modelInstanceSelected;
         self.nextToDo = nextToDo;
-        self.previewData = [];
+        self.previewBinding = {
+            items: [],
+            count: ''
+        };
         self.queriesBinding = {
             search: {}
         };
@@ -430,7 +433,7 @@
         function viewTemporaryAudio() {
             if (temporaryAudioTimeout) $timeout.cancel(temporaryAudioTimeout);
             temporaryAudioTimeout =$timeout(function () {
-                previewService.setPreviewGridData(self.temporaryCollection, self.previewData, function () {
+                previewService.setPreviewGridData(self.temporaryCollection, self.previewBinding, function () {
                     self.showPreview = true;
                 })
             }, 1000)
