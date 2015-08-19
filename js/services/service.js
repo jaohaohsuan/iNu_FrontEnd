@@ -1,7 +1,7 @@
 (function () {
     angular.module('iNu')
         .service('buildModelService', ['jsonMethodService', 'jsonParseService', '$translate', '$timeout', buildModelService])
-        .service('previewService', ['jsonMethodService','jsonParseService',previewService])
+        .service('previewService', ['jsonMethodService','jsonParseService','$translate',previewService])
         .service('temporaryLocation', temporaryLocation)
     function buildModelService(jsonMethodService, jsonParseService, $translate, $timeout) {
 
@@ -291,12 +291,16 @@
         }
     }
 
-    function previewService(jsonMethodService,jsonParseService) {
+    function previewService(jsonMethodService,jsonParseService,$translate) {
         var self = this;
         self.setPreviewGridData = setPreviewGridData //設定匹配預覽要用的gridData
         function setPreviewGridData(temporaryCollection, previewData,successCallBack,errorCallBack) {
             if (previewData.items.length > 0) previewData.items.length = 0;
             var rndSource = ['Log8000', 'QQ', 'Line']; //demo用之後要拿掉
+            var fakeSource = {
+                cht: $translate.instant('cht'),
+                ytx: $translate.instant('ytx')
+            }
             angular.forEach(temporaryCollection.collection.items,function(temporaryItems){
                 var previewLinks = temporaryItems.linksObj.preview;
                 angular.forEach(previewLinks, function (previewLink) {
@@ -307,7 +311,10 @@
                         })
                         angular.forEach(collectionjson.collection.items,function(item){
                             var previewObj = jsonParseService.getObjectMappingNameToValueFromDatas(item.data);
-                            var datasourceName = rndSource[Math.round(Math.random() * 2)];
+                            //yyyy.mm.dd/(sourceName)/
+                            var sourcePattern = /\d{4}.\d{2}.\d\d\/(.*?)\//
+                            var source = item.href.match(sourcePattern)[1];
+                            var datasourceName = fakeSource[source];
                             previewData.items.push(
                                 { 'datasourceName': datasourceName, 'matchedKeywords': previewObj.keywords.value, 'vttHref': item.href, 'highlight': previewObj.highlight.array }
                             );

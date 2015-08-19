@@ -13,6 +13,7 @@
   "cancel": "取消",
   "change": "变更",
   "changeConfig": "变更配置",
+   "cht": "中华电信",
   "clearAll": "全部清除",
   "components": "组件",
   "config": "配置",
@@ -110,5 +111,6 @@
   "volumeDown": "调低音量",
   "volumeUp": "调高音量",
   "welcome": "欢迎进入如意系统，您当前登陆的用户组为：",
-  "wordDistance": "限定跨词距离"
+  "wordDistance": "限定跨词距离",
+  "ytx": "银天下"
 }
