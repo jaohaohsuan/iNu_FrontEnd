@@ -363,7 +363,12 @@
       self.itemClicked = itemClicked;
       self.modelKeyword = '';
       $scope.$on( '$destroy', destroyListener );
-
+      $scope.$watch('modelFilterCtrl.datasource',function(newVal){
+          if (newVal) {
+              self.selectedText = self.tagsPlaceholder;
+              self.selectedItems.length = 0;
+          }
+      })
       function changeSelectedText( selectedItems ) {
         if ( selectedItems.length <= 0 ) self.selectedText = self.tagsPlaceholder;
         else {
