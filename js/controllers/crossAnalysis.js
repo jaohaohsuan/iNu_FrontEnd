@@ -1,14 +1,35 @@
-﻿(function () {
+﻿(function() {
     angular.module('iNu')
-        .controller('crossAnalysisController', ['$scope', crossAnalysisController])
+        .controller('crossAnalysisController', ['API_PATH', '$scope', 'buildModelService', crossAnalysisController])
 
-    function crossAnalysisController($scope) {
+    function crossAnalysisController(API_PATH, $scope, buildModelService) {
+        var templateUrl = API_PATH + '_query/template';
+
         var self = this;
-        self.modelGroup = ['123','1234'];
+        self.queriesBinding = {};
+        self.modelGroupSelectDataSource = [];
+        self.modelGroupSelectedItems = '';
         self.matchedDatasource = [
-            { name: 'Sony', count: 20, matched: true },
-            { name: 'HTC', count: 25, matched: false },
-            { name: 'Apple', count: 120, matched:false }
+            {
+                name: 'Sony',
+                count: 20,
+                matched: true
+            },
+            {
+                name: 'HTC',
+                count: 25,
+                matched: false
+            },
+            {
+                name: 'Apple',
+                count: 120,
+                matched: false
+            }
         ]
+        buildModelService.setQueriesBinding(templateUrl, {}, self.queriesBinding, function(queriesBinding) {
+            angular.forEach(queriesBinding.search.tags, function(tag) {
+                self.modelGroupSelectDataSource.push(tag.name);
+            });
+        })
     }
 })()

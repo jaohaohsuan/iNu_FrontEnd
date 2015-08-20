@@ -2,7 +2,7 @@
     <h3>{{'selecteAnalysisModelGroup'|translate}}</h3>
     <div nested-scroll class="radio  list-group">
         <label class=" animated fadeInLeft list-group-item" ng-repeat="modelGroup in singleModelGroupSelectCtrl.datasource">
-            <input icheck type="radio" ng-model="singleModelGroupSelectCtrl.modelGroup" value="{{modelGroup}}">
+            <input icheck type="radio" ng-model="singleModelGroupSelectCtrl.selectedItem" value="{{modelGroup}}">
             {{modelGroup}}
         </label>
     </div>
